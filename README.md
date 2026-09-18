@@ -12,7 +12,7 @@ for how it works and [the roadmap](docs/roadmap.md) for what is being built.
 ```
 site/     the Hugo site, the templates, and the Decap configuration
 proxy/    the service that lets editors sign in with a Prodeko account
-tools/    one-off scripts, such as reading the old Django database
+tools/    the site audit, the front-matter fixer, and one-off importers
 docs/     design, roadmap and the written deliverables
 ```
 
@@ -78,4 +78,25 @@ stale published resources, so deploys copy with `rsync --delete`.
 Templates can tell the two apart through `site.Params.members`, which is set in
 the member build and in local preview and unset in the public build. A
 navigation entry into the member section belongs behind that condition until
-Caddy enforces the login.
+Caddy enforces the login. `data/megamenu.yaml` marks such an entry with
+`members: true`, and the header renders it as plain text where there is no
+member tree.
+
+## Checking the site
+
+`hugo` exits zero on a page nothing links to, a link to a page that no longer
+exists, and a page wider than a phone. The audit catches all three:
+
+```
+hugo -s site --environment development
+python3 -m http.server 1313 --directory site/public-preview &
+node tools/audit-site.mjs http://localhost:1313 site/public-preview
+```
+
+It needs `playwright`, and it runs in CI against the built site.
+[docs/content-audit.md](docs/content-audit.md) is what it found on the migrated
+content.
+
+`tools/fix-front-matter.py` quotes front-matter values containing a colon,
+which YAML reads as a nested mapping and Hugo fails the whole build over. Run
+it after a bulk edit; `--check` reports without writing.
