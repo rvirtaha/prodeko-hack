@@ -6,8 +6,12 @@
 # written to, which is confusing to debug.
 backend:
   name: github
-  repo: prodeko/prodeko-hack
-  branch: main
+  repo: rvirtaha/prodeko-hack
+
+  # A throwaway branch, never main. Saving here writes real commits and opens
+  # real pull requests, and the proxy refuses any ref other than the one it is
+  # pinned to, so a branch that does not match GITHUB_BRANCH fails on save.
+  branch: cms-e2e
 
   # base_url must be a bare origin. Decap compares the popup's
   # window.postMessage event origin against this string exactly, and an event
@@ -20,6 +24,11 @@ backend:
 # There is no local_backend key here on purpose. Decap's local backend
 # bypasses the proxy entirely, so testing with it exercises none of the login
 # path while appearing to work.
+
+# Saving opens a pull request instead of writing the branch, which is what the
+# real site does. Without this there is no pull request, no workflow tab and no
+# status labels, so the dev stack exercises a different path from production.
+publish_mode: editorial_workflow
 
 media_folder: site/static/uploads
 public_folder: /uploads
