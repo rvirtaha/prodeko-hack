@@ -1,4 +1,4 @@
-name: Check proxy
+name: Proxy
 
 on:
   push:
@@ -6,10 +6,15 @@ on:
     paths:
       - "proxy/**"
       - ".github/workflows/proxy.yml"
+      - ".github/known_hosts"
   pull_request:
     paths:
       - "proxy/**"
       - ".github/workflows/proxy.yml"
+      - ".github/known_hosts"
+
+permissions:
+  contents: read
 
 jobs:
   check:
@@ -73,3 +78,83 @@ jobs:
       # pushed; the build failing is the whole result.
       - name: Build the image
         run: DOCKER_BUILDKIT=0 docker build -t cms-auth-proxy:ci .
+
+  # Pushes the image to the registry prodeko-vm2 pulls from, then asks the VM
+  # to deploy it. A registry rather than the streamed tarball the site uses,
+  # because a compiled service in a container has a natural place to live and
+  # because ilmo and prodeko-org already ship this way; see
+  # ansible/roles/cms_auth_proxy in the infra-prodeko repository, which owns
+  # everything on the far side of the SSH command below.
+  deploy:
+    needs: check
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    # The environment, not the if: above, is the load-bearing part. Fork pull
+    # requests never get secrets, but same-repo branch pull requests do. An
+    # environment whose deployment branch policy allows only main turns branch
+    # protection into credential protection.
+    environment: production
+    # Queue rather than cancel. Two deploys racing would have the VM pull two
+    # tags and the one that finishes last wins, which need not be the newer
+    # commit.
+    concurrency:
+      group: deploy-cms-auth-proxy
+      cancel-in-progress: false
+    env:
+      REGISTRY: prodekoregistry.azurecr.io
+      IMAGE: prodekoregistry.azurecr.io/cms-auth-proxy
+      # The ACR admin user. Not a secret, and the same name the VM logs in
+      # with; its password is the Key Vault secret acr-admin-password.
+      REGISTRY_USERNAME: prodekoregistry
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Log in to the container registry
+        env:
+          REGISTRY_PASSWORD: ${{ secrets.ACR_PASSWORD }}
+        run: |
+          printf '%s' "$REGISTRY_PASSWORD" \
+            | docker login "$REGISTRY" -u "$REGISTRY_USERNAME" --password-stdin
+
+      # Two tags for one image. sha-<40 hex> is what the deploy asks for and
+      # what .image-tag on the VM records, so a rollback names an exact build.
+      # main is the floating pointer deploy.sh falls back to when the host has
+      # never deployed before and has no .image-tag to read.
+      #
+      # DOCKER_BUILDKIT=0 matches the check job above: the image that ships is
+      # built by the same builder that proved the Dockerfile stays free of
+      # BuildKit-only syntax.
+      - name: Build and push the image
+        working-directory: proxy
+        env:
+          SHA: ${{ github.sha }}
+        run: |
+          DOCKER_BUILDKIT=0 docker build \
+            -t "$IMAGE:sha-$SHA" \
+            -t "$IMAGE:main" \
+            .
+          docker push "$IMAGE:sha-$SHA"
+          docker push "$IMAGE:main"
+
+      # Plain openssh-client from the runner image, no marketplace action, for
+      # the reasons set out at length in build.yml. The host key is committed
+      # to .github/known_hosts and the SSH target is the apex, so a future VM
+      # move fails closed on the pin instead of deploying to the wrong host.
+      #
+      # The command is the only one the deploy key is allowed to run: sshd
+      # forces ssh-deploy-wrapper.sh, whose regex accepts this line and
+      # nothing else.
+      - name: Deploy on prodeko-vm2
+        env:
+          DEPLOY_KEY: ${{ secrets.CMS_AUTH_PROXY_DEPLOY_KEY }}
+          SHA: ${{ github.sha }}
+        run: |
+          key="$RUNNER_TEMP/deploy_key"
+          install -m 600 /dev/null "$key"
+          printf '%s\n' "$DEPLOY_KEY" > "$key"
+          ssh -i "$key" \
+            -o IdentitiesOnly=yes \
+            -o StrictHostKeyChecking=yes \
+            -o UserKnownHostsFile=.github/known_hosts \
+            deploy-cms-auth-proxy@prodeko.org \
+            "IMAGE_TAG=sha-$SHA /srv/www/cms-auth-proxy/deploy.sh"
