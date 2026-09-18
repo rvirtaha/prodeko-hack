@@ -12,21 +12,23 @@ reached without a login.
 
 Three places:
 
-- A new repository, prodeko-org, holding the website. Inside it, `site/` is the
-  Hugo site and the Decap configuration, `proxy/` is the editor login service,
-  and `tools/migrate/` is the one-off converter from the old database.
+- This repository, prodeko-hack, holding the website. `site/` is the Hugo site
+  and the Decap configuration, `proxy/` is the editor login service and its
+  container, `tools/` is one-off scripts, and `docs/` is the written work.
 - infra-prodeko, for anything that provisions or configures a machine: the
-  Caddy configuration, the storage container, DNS, and the proxy container's
-  deployment.
+  storage container in Terraform, and an Ansible role that deploys the proxy
+  container and the Caddy configuration. This follows the split Prodeko already
+  uses, where application repositories carry a Dockerfile and the
+  infrastructure repository deploys it.
 - Keycloak at id.prodeko.org, configured by hand through the admin console.
   Production clients there are not managed by a script.
 
-One repository for the website rather than three is a deliberate choice. The
-proxy is a few hundred lines and is meaningless without the site it edits, and
-a single repository means one pull request when the two change together. The
-cost is that editor commits and developer commits land in the same history.
-Decap only ever writes to `site/content/` and `site/assets/`, so they stay easy
-to tell apart.
+One repository for the website rather than one per service is a deliberate
+choice. The proxy is a few hundred lines and is meaningless without the site it
+edits, and a single repository means one pull request when the two change
+together. The cost is that editor commits and developer commits land in the
+same history. Decap only ever writes to `site/content/` and `site/assets/`, so
+they stay easy to tell apart.
 
 ## Work items
 
