@@ -1,0 +1,15 @@
+# SSH host key of prodeko-vm2, pinned for the deploy step in
+# .github/workflows/build.yml. Public data, committed rather than kept as a
+# secret so the pin is reviewable and rotatable by pull request.
+#
+# Until a line is added below, the deploy step fails closed: ssh with
+# StrictHostKeyChecking=yes refuses an unknown host.
+#
+# Fill it in from a trusted machine, and check the fingerprint against the one
+# an existing operator sees:
+#
+#   ssh-keyscan -t ed25519 prodeko.org
+#   ssh-keygen -lf <(ssh-keyscan -t ed25519 prodeko.org)
+#
+# Paste the keyscan output here, without the leading comment lines it prints on
+# stderr. Rotate by replacing the line in a pull request.

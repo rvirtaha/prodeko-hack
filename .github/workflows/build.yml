@@ -6,10 +6,15 @@ on:
     paths:
       - "site/**"
       - ".github/workflows/build.yml"
+      - ".github/known_hosts"
   pull_request:
     paths:
       - "site/**"
       - ".github/workflows/build.yml"
+      - ".github/known_hosts"
+
+permissions:
+  contents: read
 
 jobs:
   build:
@@ -43,14 +48,88 @@ jobs:
         working-directory: site
         run: ./check-trees.sh
 
-      - uses: actions/upload-artifact@v5
-        with:
-          name: site-public
-          path: site/public/
-          if-no-files-found: error
+      # One tarball rather than two directory artifacts. upload-artifact skips
+      # hidden files by default and rewrites every file to 644 and every
+      # directory to 755, so a directory artifact silently drops anything Hugo
+      # emits under a dot-directory such as .well-known/. Inside a tar the
+      # artifact is byte for byte what ships, and the deploy job becomes one
+      # command with no recursive copy of its own.
+      #
+      # The two top-level names are the contract with publish.sh on the server:
+      # it extracts exactly `public` and `members`, discards everything else in
+      # the archive, and exits 2 if either is missing. The two trees travel in
+      # one file so the public and the member site can never be from different
+      # builds.
+      - name: Assemble the deploy bundle
+        run: |
+          mkdir dist
+          mv site/public dist/public
+          mv site/public-members dist/members
+          tar -czf site-bundle.tar.gz -C dist public members
+          echo "bundle: $(du -h site-bundle.tar.gz | cut -f1)"
+          tar -tzf site-bundle.tar.gz | sed -n '1p;/^members\/$/p'
 
       - uses: actions/upload-artifact@v5
         with:
-          name: site-members
-          path: site/public-members/
+          name: site-bundle
+          path: site-bundle.tar.gz
           if-no-files-found: error
+
+  # Streams the bundle into one SSH command on prodeko-vm2, where the key is
+  # pinned to a forced command that can do nothing else. The server owns the
+  # release, the atomic switch, the health check and the rollback; see
+  # ansible/roles/prodeko_site in the infra-prodeko repository.
+  deploy:
+    needs: build
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    # The environment, not the if: above, is the load-bearing part. Fork pull
+    # requests never get secrets, but same-repo branch pull requests do. An
+    # environment whose deployment branch policy allows only main turns branch
+    # protection into credential protection.
+    environment: production
+    # Queue rather than cancel. Two publishes racing both succeed on the
+    # server, and the one that swaps last wins, which need not be the newer
+    # commit.
+    concurrency:
+      group: deploy-prodeko-site
+      cancel-in-progress: false
+    steps:
+      # Only for .github/known_hosts. The site itself comes from the artifact.
+      - uses: actions/checkout@v5
+
+      - uses: actions/download-artifact@v5
+        with:
+          name: site-bundle
+
+      # Plain openssh-client from the runner image, no marketplace action. Not
+      # a maintenance argument: appleboy/ssh-action downloads its drone-ssh
+      # binary at run time from a release URL and hands it the private key, so
+      # pinning the action to a commit does not pin the code that touches the
+      # key, and Burnett01/rsync-deployments ssh-keyscans the host at deploy
+      # time. tj-actions/changed-files is the recent precedent for the cost.
+      #
+      # The host key is committed to .github/known_hosts rather than kept as a
+      # secret: it is public data, and committing it makes the pin reviewable
+      # and rotatable by pull request. On an ephemeral runner with an empty
+      # known_hosts, accept-new and no would behave identically on every run.
+      #
+      # The SSH target is the apex, not uusi.prodeko.org and not the bare IP.
+      # The apex already points at this VM and will keep pointing at whatever
+      # machine serves the site, so the cutover changes nothing here, and a
+      # future VM move fails closed on the pin instead of publishing to the
+      # wrong host.
+      - name: Publish to prodeko-vm2
+        env:
+          DEPLOY_KEY: ${{ secrets.PRODEKO_SITE_DEPLOY_KEY }}
+          SHA: ${{ github.sha }}
+        run: |
+          key="$RUNNER_TEMP/deploy_key"
+          install -m 600 /dev/null "$key"
+          printf '%s\n' "$DEPLOY_KEY" > "$key"
+          ssh -i "$key" \
+            -o IdentitiesOnly=yes \
+            -o StrictHostKeyChecking=yes \
+            -o UserKnownHostsFile=.github/known_hosts \
+            deploy-prodeko-site@prodeko.org \
+            "publish $SHA" < site-bundle.tar.gz
