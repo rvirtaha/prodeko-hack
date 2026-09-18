@@ -10,7 +10,8 @@ Nothing here touches id.prodeko.org. The one real credential is a GitHub token.
 ## Bring it up
 
 ```bash
-cp .env.example .env            # paste a GitHub token into GITHUB_TOKEN
+cp .env.example .env            # paste a GitHub token into GITHUB_TOKEN, and
+                                # set GITHUB_BRANCH to a throwaway branch
 DOCKER_BUILDKIT=0 docker compose up --build
 ```
 
