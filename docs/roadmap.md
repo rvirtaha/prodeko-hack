@@ -15,9 +15,8 @@ Three places:
 - This repository, prodeko-hack, holding the website. `site/` is the Hugo site
   and the Decap configuration, `proxy/` is the editor login service and its
   container, `tools/` is one-off scripts, and `docs/` is the written work.
-- infra-prodeko, for anything that provisions or configures a machine: the
-  storage container in Terraform, and an Ansible role that deploys the proxy
-  container and the Caddy configuration. This follows the split Prodeko already
+- infra-prodeko, for anything that configures a machine: an Ansible role that
+  deploys the proxy container and the Caddy configuration. This follows the split Prodeko already
   uses, where application repositories carry a Dockerfile and the
   infrastructure repository deploys it.
 - Keycloak at id.prodeko.org, configured by hand through the admin console.
@@ -42,10 +41,10 @@ fetch it.
 
 ### B. Hosting
 
-An Azure storage container holds the built site, and Caddy on prodeko-vm2
-serves it at a real address through the existing Ansible setup. The container
-is private and only the proxy reads it, so member content has no public address
-even before the gate in item G exists.
+The build is copied to prodeko-vm2 over SSH, the way Prodeko already deploys,
+and Caddy serves it from disk at a real address through the existing Ansible
+setup. The build lands in two directories, public and members, so member
+content has no public address even before the gate in item G exists.
 
 Lands in infra-prodeko. Done when the page from item A is reachable over HTTPS.
 
@@ -102,8 +101,8 @@ should not be squeezed.
 ### G. Member-only section
 
 Caddy asks Keycloak who the visitor is and requires the membership role before
-serving anything under the members section. The storage container is private,
-so there is no public address to guess.
+serving anything under the members section. That directory is outside the
+public web root, so there is no public address to guess.
 
 Lands in infra-prodeko alongside item B. Done when a member page returns a
 sign-in redirect to a stranger and the page itself to a member.
@@ -156,7 +155,8 @@ Three things need a human with access rather than a developer with time:
 - A Keycloak client for the CMS, registered in the admin console at
   id.prodeko.org, following the existing guide in the membership-registry
   repository. Blocks item C.
-- An Azure storage container and credentials for it. Blocks item B.
+- A deploy key or equivalent so GitHub Actions can copy the built site to
+  prodeko-vm2 over SSH. Blocks item B.
 - A bot GitHub account and a fine-grained access token scoped to the one
   repository. Blocks item C.
 

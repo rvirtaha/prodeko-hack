@@ -3,8 +3,8 @@
 ## Summary
 
 The new prodeko.org is a set of text files in a git repository, turned into
-plain HTML pages by [Hugo](https://gohugo.io/), uploaded to Azure storage, and
-served through a small proxy that handles login for member-only pages.
+plain HTML pages by [Hugo](https://gohugo.io/), copied onto a server, and
+served by Caddy, which handles login for member-only pages.
 
 Editors never see git. They log in at prodeko.org/admin with their normal
 Prodeko account, edit a page in a browser form, and press save. Behind the
@@ -55,11 +55,11 @@ flowchart TB
 
     subgraph build[Building]
         G --> CI[GitHub Actions runs Hugo]
-        CI --> B[(Azure storage, private)]
+        CI --> B[Copy over SSH to prodeko-vm2]
     end
 
     subgraph serve[Serving]
-        V[Visitor] --> C[Caddy proxy on prodeko-vm2]
+        V[Visitor] --> C[Caddy on prodeko-vm2]
         C --> B
         C --> K2[Keycloak id.prodeko.org]
     end
@@ -73,12 +73,16 @@ Four pieces:
 - cms-auth-proxy is the only new backend service. It logs editors in against
   Prodeko's existing Keycloak, checks they are allowed to edit, talks to GitHub
   on their behalf, and stamps their name on each commit.
-- Caddy on prodeko-vm2 serves the built site out of Azure storage and enforces
-  login on member-only pages. Prodeko already runs Caddy on this machine under
-  Ansible.
+- Caddy on prodeko-vm2 serves the built site from disk and enforces login on
+  member-only pages. Prodeko already runs Caddy on this machine under Ansible.
 
-The storage container is private. Nothing reads it except the proxy, so a
-member-only page has no public address that could be guessed.
+The build lands in two directories. Public pages go where Caddy serves them
+freely. Member pages go somewhere Caddy only reads after a successful login, so
+they have no public address that could be guessed.
+
+Serving from disk rather than object storage keeps the moving parts to a
+minimum: the site is a few megabytes of HTML on a machine Prodeko already runs.
+Putting a cache in front of it later is a configuration change, not a redesign.
 
 ## Editing and publishing
 
@@ -101,7 +105,7 @@ sequenceDiagram
     H-->>D: preview link appears in the editor
     E->>D: publish
     P->>G: merge pull request
-    G->>H: build site, upload to storage
+    G->>H: build site, copy to the server
 ```
 
 Saving a draft opens a pull request rather than changing the live site. A build
@@ -144,15 +148,15 @@ development mode that bypasses the proxy entirely, which must stay switched off
 so that testing exercises the real login path.
 
 Member-only pages work the same way at the other end. Caddy asks Keycloak for
-the visitor's identity, requires the membership role, and only then fetches the
-page from storage.
+the visitor's identity, requires the membership role, and only then reads the
+page off disk.
 
 ```mermaid
 flowchart LR
     V[Visitor] --> C{Caddy}
-    C -->|public page| S[(Storage)]
+    C -->|public page| S[Public directory]
     C -->|member page| K[Ask Keycloak who this is]
-    K -->|has membership role| S
+    K -->|has membership role| M[Member directory]
     K -->|does not| X[Send to sign-in]
 ```
 
@@ -268,7 +272,7 @@ Phases:
 |---|---|---|---|---|
 | Easy to maintain | Text files, no database | Two unsupported versions behind | Hosted, no upkeep | Needs a database and a server |
 | Own login | Yes, via the proxy | Yes, already built | Enterprise plan only | Editors only, no member login |
-| Hosting cost | Storage and an existing VM | Existing VM | Paid per month, per editor | VM plus a database |
+| Hosting cost | An existing VM | Existing VM | Paid per month, per editor | VM plus a database |
 | Customisability | Full, it is our own templates | Full | Limited outside the editor | Full |
 
 Payload is what Tietokilta chose, which makes it worth looking at honestly.
@@ -293,7 +297,8 @@ is built around.
   end. That is the first thing we prove, not the last.
 - Images live in git, which is fine for photos and bad for large documents. The
   current freshman guide is a 90 MB PDF. The build rejects any committed file
-  over 5 MB, and documents stay in storage.
+  over 5 MB, and large documents stay on static.prodeko.org where they already
+  live.
 - Event photos are on kuvat.fi, a third-party service. Migrating them is a
   separate question; linking to them is not.
 - Editors have to learn a new screen. It is a form rather than a page builder,

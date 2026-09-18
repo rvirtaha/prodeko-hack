@@ -16,8 +16,9 @@ tools/    one-off scripts, such as reading the old Django database
 docs/     design, roadmap and the written deliverables
 ```
 
-Deployment lives in the separate infra-prodeko repository: Terraform for the
-storage container, and an Ansible role for Caddy and the proxy container.
+Deployment lives in the separate infra-prodeko repository: an Ansible role for
+Caddy and the proxy container. The built site is copied to the server over SSH
+and served from disk.
 
 ## Running the site locally
 
