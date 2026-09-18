@@ -109,7 +109,7 @@ func run(cfg *config.Config, log *slog.Logger) error {
 		DiscoveryURL: cfg.Keycloak.DiscoveryURL,
 		ClientID:     cfg.Keycloak.ClientID,
 		ClientSecret: cfg.Keycloak.ClientSecret,
-		EditorRole:   cfg.Keycloak.EditorRole,
+		EditorRoles:  cfg.Keycloak.EditorRoles,
 		PublicURL:    cfg.PublicURL,
 		CMSOrigins:   cfg.CMSOrigins,
 		Scopes:       cfg.Keycloak.Scopes,
@@ -129,11 +129,11 @@ func run(cfg *config.Config, log *slog.Logger) error {
 	}
 
 	github, err := forward.New(forward.Config{
-		Owner:      cfg.GitHub.Owner,
-		Repo:       cfg.GitHub.Repo,
-		Branch:     cfg.GitHub.Branch,
-		Token:      cfg.GitHub.Token,
-		EditorRole: cfg.Keycloak.EditorRole,
+		Owner:       cfg.GitHub.Owner,
+		Repo:        cfg.GitHub.Repo,
+		Branch:      cfg.GitHub.Branch,
+		Token:       cfg.GitHub.Token,
+		EditorRoles: cfg.Keycloak.EditorRoles,
 		Committer: forward.Author{
 			Name:  cfg.GitHub.CommitterName,
 			Email: cfg.GitHub.CommitterEmail,
@@ -185,11 +185,11 @@ func routes(
 
 	// Order matters. CORS is outermost so that a preflight, which carries no
 	// Authorization header by definition, is answered instead of 401'd.
-	// RequireRole is redundant with the check inside forward and with the one
+	// RequireRoles is redundant with the check inside forward and with the one
 	// at sign-in; rule 1 is cheap enough to state three times.
 	editors := cors(cfg.CMSOrigins, log,
 		session.Middleware(sessions)(
-			session.RequireRole(cfg.Keycloak.EditorRole)(github)))
+			session.RequireRoles(cfg.Keycloak.EditorRoles)(github)))
 	mux.Handle(githubPrefix+"/", editors)
 	mux.Handle(githubPrefix, editors)
 

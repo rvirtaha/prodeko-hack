@@ -27,7 +27,7 @@ sequenceDiagram
     K-->>P: identity and roles
     P-->>B: session token via postMessage
     B->>P: GitHub API call with session token
-    P->>P: check session, check role, pin repository
+    P->>P: check session, check roles, pin repository
     P->>G: same call, GitHub credentials attached, author replaced
     G-->>B: response
 ```
@@ -37,7 +37,7 @@ sequenceDiagram
 - `GET /auth` starts the sign-in. Opens the Keycloak login and remembers where
   to return.
 - `GET /callback` finishes it. Verifies the Keycloak response, checks the
-  editor role, creates a session, and hands the session token back to the
+  editor roles, creates a session, and hands the session token back to the
   opener window with `postMessage`.
 - `ANY /github/*` forwards to the GitHub API. Everything under here requires a
   valid session.
@@ -46,8 +46,12 @@ sequenceDiagram
 
 ## Rules the implementation must follow
 
-- Require an editor role from the Keycloak token. Without this, anyone with a
-  Prodeko account can edit the website.
+- Require every role in `EDITOR_ROLES` from the Keycloak token, not any one of
+  them. Without this, anyone with a Prodeko account can edit the website. The
+  conjunction is the safety property: `membership` is maintained by the
+  membership registry and lapses on its own, `prodeko-org-admin` is granted by
+  hand, and requiring both means the hand-granted permission expires with the
+  automatic one instead of waiting to be revoked.
 - Replace the author on every write with the name and email from the Keycloak
   session. Never trust an author supplied by the browser.
 - Pin the repository. The owner and repository name come from configuration and
@@ -88,7 +92,8 @@ service on a partial configuration and reports every problem in one pass.
 Required:
 
 - `KEYCLOAK_ISSUER`, `KEYCLOAK_CLIENT_ID`, `KEYCLOAK_CLIENT_SECRET`
-- `EDITOR_ROLE`, the realm role required to edit
+- `EDITOR_ROLES`, comma-separated, the realm roles required to edit. All of
+  them are required and at least one must be named
 - `GITHUB_TOKEN`, a fine-grained token on a bot account, scoped to one
   repository with contents, pull request and issue write access
 - `GITHUB_OWNER`, `GITHUB_REPO`, `GITHUB_BRANCH`

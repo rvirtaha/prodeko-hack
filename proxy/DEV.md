@@ -26,10 +26,14 @@ Four addresses:
 | Keycloak              | <http://localhost:8180>                           |
 | Keycloak admin console| <http://localhost:8180/admin> — `admin` / `admin` |
 
-Two users exist. `editor@prodeko.org` has the `cms-editor` realm role and gets
-in. `member@prodeko.org` does not and must be refused — a perfectly valid
-Prodeko account with no business editing the website. Both use the password
-`kananugetti`. If the member can edit, the first of the four rules is broken.
+Editing requires both the `membership` and the `prodeko-org-admin` realm role,
+and three users demonstrate what that means. Only `editor@prodeko.org`, who has
+both, gets in. `member@prodeko.org` has `membership` alone: a perfectly valid
+Prodeko account with no business editing the website. `lapsed@prodeko.org` has
+`prodeko-org-admin` alone, which is what an editor looks like after their guild
+membership runs out, and is refused for it — that is the whole reason both are
+required. All three use the password `kananugetti`. If either of the last two
+can edit, the first of the four rules is broken.
 
 ## `DOCKER_BUILDKIT=0`
 
@@ -146,7 +150,7 @@ CMS_ORIGINS=http://localhost:1313 \
 KEYCLOAK_ISSUER=http://localhost:8180/realms/membership-registry \
 KEYCLOAK_CLIENT_ID=cms-auth-proxy \
 KEYCLOAK_CLIENT_SECRET=dev-secret-cms-auth-proxy \
-EDITOR_ROLE=cms-editor \
+EDITOR_ROLES=membership,prodeko-org-admin \
 SESSION_SECRET=dev-session-secret-not-for-production-use-0000000 \
 LOG_LEVEL=debug \
 go run ./cmd/proxy

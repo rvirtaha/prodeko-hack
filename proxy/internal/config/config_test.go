@@ -17,7 +17,7 @@ func validEnv() map[string]string {
 		EnvIssuer:       "https://id.prodeko.org/realms/membership-registry",
 		EnvClientID:     "cms-auth-proxy",
 		EnvClientSecret: "s3cret",
-		EnvEditorRole:   "cms-editor",
+		EnvEditorRoles:  "membership,prodeko-org-admin",
 		EnvGitHubToken:  "github_pat_11ABCDEFG",
 		EnvGitHubOwner:  "prodeko",
 		EnvGitHubRepo:   "prodeko-hack",
@@ -472,8 +472,49 @@ func TestScopes(t *testing.T) {
 	}
 }
 
+// EDITOR_ROLES names every role an editor must hold, and there has to be at
+// least one. A proxy that starts with none would let every Prodeko account
+// edit the website, so each of these has to stop it starting.
+func TestEditorRoles(t *testing.T) {
+	tests := []struct {
+		name string
+		in   *string
+		want []string // nil means the value must be rejected
+	}{
+		{"the production pair", set("membership,prodeko-org-admin"), []string{"membership", "prodeko-org-admin"}},
+		{"a single role", set("prodeko-org-admin"), []string{"prodeko-org-admin"}},
+		{"spaces around the entries", set(" membership , prodeko-org-admin "), []string{"membership", "prodeko-org-admin"}},
+		{"order is kept and duplicates dropped", set("b,a,b"), []string{"b", "a"}},
+		{"trailing comma", set("membership,"), []string{"membership"}},
+		{"unset", nil, nil},
+		{"empty", set(""), nil},
+		{"whitespace only", set("   "), nil},
+		{"commas and spaces only", set(" , , "), nil},
+	}
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			cfg, err := loadWith(t, map[string]*string{EnvEditorRoles: tc.in})
+			if tc.want == nil {
+				if err == nil {
+					t.Fatal("accepted, want rejected: nobody may edit without a required role")
+				}
+				if got := errVars(t, err); len(got) != 1 || got[0] != EnvEditorRoles {
+					t.Fatalf("offending vars = %v, want [%s]", got, EnvEditorRoles)
+				}
+				return
+			}
+			if err != nil {
+				t.Fatalf("rejected: %v", err)
+			}
+			if got := strings.Join(cfg.Keycloak.EditorRoles, ","); got != strings.Join(tc.want, ",") {
+				t.Errorf("EditorRoles = %v, want %v", cfg.Keycloak.EditorRoles, tc.want)
+			}
+		})
+	}
+}
+
 func TestRequiredStrings(t *testing.T) {
-	for _, name := range []string{EnvClientID, EnvClientSecret, EnvEditorRole, EnvGitHubToken} {
+	for _, name := range []string{EnvClientID, EnvClientSecret, EnvGitHubToken} {
 		for _, val := range []*string{nil, set(""), set("   ")} {
 			_, err := loadWith(t, map[string]*string{name: val})
 			if err == nil {
@@ -593,7 +634,7 @@ func TestAllProblemsReportedAtOnce(t *testing.T) {
 	}
 	got := errVars(t, err)
 	want := []string{
-		EnvCMSOrigins, EnvEditorRole, EnvGitHubBranch, EnvGitHubOwner,
+		EnvCMSOrigins, EnvEditorRoles, EnvGitHubBranch, EnvGitHubOwner,
 		EnvGitHubRepo, EnvGitHubToken, EnvClientID, EnvClientSecret,
 		EnvIssuer, EnvPublicURL, EnvSessionKey,
 	}

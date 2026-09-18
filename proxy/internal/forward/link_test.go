@@ -8,12 +8,12 @@ import (
 func testHandler(t *testing.T, publicBase string) *Handler {
 	t.Helper()
 	cfg := Config{
-		Owner:      "prodeko",
-		Repo:       "prodeko-hack",
-		Branch:     testBranch,
-		Token:      "ghp_secret",
-		EditorRole: "website-editor",
-		Committer:  testCommitter,
+		Owner:       "prodeko",
+		Repo:        "prodeko-hack",
+		Branch:      testBranch,
+		Token:       "ghp_secret",
+		EditorRoles: testRoles,
+		Committer:   testCommitter,
 	}
 	if publicBase != "" {
 		parsed, err := url.Parse(publicBase)

@@ -1,7 +1,7 @@
 // Package auth owns editor sign-in: GET /auth and GET /callback.
 //
 // /auth redirects the Decap popup to Keycloak. /callback verifies the
-// response, requires the configured realm role, mints a proxy session through
+// response, requires every configured realm role, mints a proxy session through
 // an [Issuer], and completes Decap's two-step postMessage handshake. Both the
 // success and the failure path complete that handshake; see handshake.go.
 package auth
@@ -39,7 +39,10 @@ type Config struct {
 
 	ClientID     string // KEYCLOAK_CLIENT_ID
 	ClientSecret string // KEYCLOAK_CLIENT_SECRET; empty selects a public client
-	EditorRole   string // EDITOR_ROLE; a realm role, required, must be non-empty
+
+	// EditorRoles are the realm roles from EDITOR_ROLES. An editor must hold
+	// every one of them; at least one must be configured.
+	EditorRoles []string
 
 	// PublicURL is where this service is reachable. It must be a bare origin:
 	// scheme://host[:port], no path, no trailing slash. Decap compares the
@@ -139,7 +142,7 @@ func New(ctx context.Context, cfg Config, sessions Issuer) (*Handler, error) {
 		"discovery_url", cfg.DiscoveryURL,
 		"client_id", cfg.ClientID,
 		"client_type", map[bool]string{true: "public (PKCE only)", false: "confidential"}[cfg.ClientSecret == ""],
-		"editor_role", cfg.EditorRole,
+		"editor_roles", cfg.EditorRoles,
 		"redirect_uri", h.oauth.RedirectURL,
 		"decap_base_url", cfg.PublicURL,
 		"cms_origins", cfg.CMSOrigins,
@@ -287,12 +290,14 @@ func (h *Handler) Callback(w http.ResponseWriter, r *http.Request) {
 		Roles:    roles,
 	}
 
-	if !id.HasRole(h.cfg.EditorRole) {
-		h.log.Warn("sign-in refused: missing editor role",
-			"sub", id.Subject, "user", id.Username, "required", h.cfg.EditorRole)
+	if missing := id.MissingRoles(h.cfg.EditorRoles); len(missing) > 0 {
+		h.log.Warn("sign-in refused: missing editor roles",
+			"sub", id.Subject, "user", id.Username,
+			"required", h.cfg.EditorRoles, "missing", missing)
 		h.writeFailure(w, provider, fmt.Sprintf(
-			"Your Prodeko account does not have the %q role, which is required to edit the website. "+
-				"Ask the guild's IT team to grant it.", h.cfg.EditorRole))
+			"Editing the website requires the roles %s, and your Prodeko account is missing %s. "+
+				"A lapsed guild membership is the usual cause; otherwise ask the guild's IT team to grant the rest.",
+			strings.Join(h.cfg.EditorRoles, ", "), strings.Join(missing, ", ")))
 		return
 	}
 	// Rule 2 needs a real name and a real address on every commit, and a commit
@@ -343,7 +348,7 @@ func (h *Handler) realmRoles(ctx context.Context, idClaims identityClaims, acces
 	}
 
 	missing := fmt.Errorf("neither the Keycloak ID token nor the access token contains realm_access.roles, "+
-		"so the editor role cannot be checked. Add the built-in \"realm roles\" mapper to the %s client "+
+		"so the editor roles cannot be checked. Add the built-in \"realm roles\" mapper to the %s client "+
 		"(client scope \"roles\", mapper \"realm roles\", claim realm_access.roles) and make sure it is "+
 		"included in the access token", h.cfg.ClientID)
 
@@ -400,10 +405,21 @@ func normalise(cfg Config) (Config, error) {
 	if cfg.ClientID == "" {
 		return cfg, errors.New("auth: KEYCLOAK_CLIENT_ID must be set")
 	}
-	cfg.EditorRole = strings.TrimSpace(cfg.EditorRole)
-	if cfg.EditorRole == "" {
-		return cfg, errors.New("auth: EDITOR_ROLE must be set; without it any Prodeko member could edit the website")
+	seenRoles := make(map[string]bool, len(cfg.EditorRoles))
+	roles := make([]string, 0, len(cfg.EditorRoles))
+	for _, role := range cfg.EditorRoles {
+		role = strings.TrimSpace(role)
+		if role == "" || seenRoles[role] {
+			continue
+		}
+		seenRoles[role] = true
+		roles = append(roles, role)
 	}
+	if len(roles) == 0 {
+		return cfg, errors.New("auth: EDITOR_ROLES must name at least one realm role; " +
+			"without one any Prodeko member could edit the website")
+	}
+	cfg.EditorRoles = roles
 
 	origin, err := parseOrigin(cfg.PublicURL)
 	if err != nil {

@@ -23,6 +23,9 @@ const (
 	editorRole = "cms-editor"
 )
 
+// editorRoles is the required set: a session has to carry all of them.
+var editorRoles = []string{"membership", editorRole}
+
 // stubSignin stands in for auth.Handler, whose constructor does OIDC discovery.
 // The wiring only needs it to claim two routes.
 type stubSignin struct{ registered []string }
@@ -41,7 +44,7 @@ func testConfig() *config.Config {
 	return &config.Config{
 		PublicURL:  "https://cms.prodeko.org",
 		CMSOrigins: []string{cmsOrigin},
-		Keycloak:   config.Keycloak{EditorRole: editorRole},
+		Keycloak:   config.Keycloak{EditorRoles: editorRoles},
 	}
 }
 
@@ -49,30 +52,40 @@ func testConfig() *config.Config {
 // real forward handler, with only sign-in stubbed out.
 func testRoutes(t *testing.T) (http.Handler, *session.Store, *stubSignin) {
 	t.Helper()
-	cfg := testConfig()
-
 	store, err := session.NewStore(session.Options{Secret: []byte(strings.Repeat("k", 32))})
 	if err != nil {
 		t.Fatalf("NewStore: %v", err)
 	}
+	h, signin := routesFor(t, store, editorRoles)
+	return h, store, signin
+}
+
+// routesFor is testRoutes with the session store and the required role set
+// chosen by the caller, so a session can outlive the configuration it was
+// issued under.
+func routesFor(t *testing.T, store *session.Store, roles []string) (http.Handler, *stubSignin) {
+	t.Helper()
+	cfg := testConfig()
+	cfg.Keycloak.EditorRoles = roles
+
 	publicBase, _ := url.Parse(cfg.PublicURL)
 	github, err := forward.New(forward.Config{
-		Owner:      "prodeko",
-		Repo:       "prodeko-hack",
-		Branch:     "main",
-		Token:      "ghp_not-a-real-token",
-		EditorRole: editorRole,
-		Committer:  forward.Author{Name: config.DefaultCommitterName, Email: config.DefaultCommitterEmail},
-		PublicBase: publicBase,
-		Prefix:     githubPrefix,
-		Logger:     slog.New(slog.DiscardHandler),
+		Owner:       "prodeko",
+		Repo:        "prodeko-hack",
+		Branch:      "main",
+		Token:       "ghp_not-a-real-token",
+		EditorRoles: roles,
+		Committer:   forward.Author{Name: config.DefaultCommitterName, Email: config.DefaultCommitterEmail},
+		PublicBase:  publicBase,
+		Prefix:      githubPrefix,
+		Logger:      slog.New(slog.DiscardHandler),
 	})
 	if err != nil {
 		t.Fatalf("forward.New: %v", err)
 	}
 
 	signin := &stubSignin{}
-	return routes(cfg, slog.New(slog.DiscardHandler), signin, store, github), store, signin
+	return routes(cfg, slog.New(slog.DiscardHandler), signin, store, github), signin
 }
 
 func tokenFor(t *testing.T, store *session.Store, roles ...string) string {
@@ -141,17 +154,77 @@ func TestGitHubRequiresASession(t *testing.T) {
 	}
 }
 
-// Rule 1: a valid Prodeko session without the editor role must not get through.
-func TestGitHubRequiresTheEditorRole(t *testing.T) {
-	h, store, _ := testRoutes(t)
+// Rule 1: a valid Prodeko session that is short of any one required role must
+// not get through, however many of the others it carries.
+func TestGitHubRequiresEveryEditorRole(t *testing.T) {
+	tests := []struct {
+		name  string
+		roles []string
+		// wantNamed is the role the refusal has to name, so the editor can act
+		// on it without reading the proxy's logs.
+		wantNamed string
+	}{
+		{"no editor roles at all", []string{"prodeko-external-member"}, "membership"},
+		{"membership but no editing permission", []string{"membership"}, editorRole},
+		{"editing permission but membership lapsed", []string{editorRole}, "membership"},
+	}
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			h, store, _ := testRoutes(t)
 
+			req := httptest.NewRequest(http.MethodGet, githubPrefix+"/user", nil)
+			req.Header.Set("Authorization", "token "+tokenFor(t, store, tc.roles...))
+			rec := httptest.NewRecorder()
+			h.ServeHTTP(rec, req)
+
+			if rec.Code != http.StatusForbidden {
+				t.Fatalf("status = %d, want 403", rec.Code)
+			}
+			if !strings.Contains(rec.Body.String(), tc.wantNamed) {
+				t.Errorf("403 body does not name the missing role %q: %q", tc.wantNamed, rec.Body.String())
+			}
+		})
+	}
+}
+
+// The role check on a forwarded request is not the one at sign-in: it runs on
+// every call, against the roles sealed into the session. A session minted while
+// one role was required stops being accepted the moment EDITOR_ROLES names a
+// second, without the editor signing in again.
+//
+// What this cannot do is notice a role removed in Keycloak after sign-in. The
+// session carries the roles the editor held at that moment and the proxy keeps
+// no Keycloak token to re-ask with, so that change lands when the session
+// expires (SESSION_TTL) or when session.Store.Revoke is called. README says the
+// same under "Sessions outlive role changes".
+func TestSessionIssuedUnderALooserRoleSetIsRefused(t *testing.T) {
+	store, err := session.NewStore(session.Options{Secret: []byte(strings.Repeat("k", 32))})
+	if err != nil {
+		t.Fatalf("NewStore: %v", err)
+	}
+
+	// Signed in when membership alone was enough.
+	token := tokenFor(t, store, "membership")
+	loose, _ := routesFor(t, store, []string{"membership"})
 	req := httptest.NewRequest(http.MethodGet, githubPrefix+"/user", nil)
-	req.Header.Set("Authorization", "token "+tokenFor(t, store, "member"))
+	req.Header.Set("Authorization", "token "+token)
 	rec := httptest.NewRecorder()
-	h.ServeHTTP(rec, req)
+	loose.ServeHTTP(rec, req)
+	if rec.Code != http.StatusOK {
+		t.Fatalf("status = %d under the loose role set, want 200: %s", rec.Code, rec.Body.String())
+	}
 
+	// The same token, still cryptographically valid, against the tightened set.
+	if _, err := store.Verify(token); err != nil {
+		t.Fatalf("the session itself should still verify: %v", err)
+	}
+	strict, _ := routesFor(t, store, editorRoles)
+	req = httptest.NewRequest(http.MethodGet, githubPrefix+"/user", nil)
+	req.Header.Set("Authorization", "token "+token)
+	rec = httptest.NewRecorder()
+	strict.ServeHTTP(rec, req)
 	if rec.Code != http.StatusForbidden {
-		t.Fatalf("status = %d, want 403", rec.Code)
+		t.Fatalf("status = %d for a session short of %q, want 403: %s", rec.Code, editorRole, rec.Body.String())
 	}
 	if !strings.Contains(rec.Body.String(), editorRole) {
 		t.Errorf("403 body does not name the missing role: %q", rec.Body.String())
@@ -166,7 +239,7 @@ func TestSignedInEditorReachesForward(t *testing.T) {
 
 	req := httptest.NewRequest(http.MethodGet, githubPrefix+"/user", nil)
 	req.Header.Set("Origin", cmsOrigin)
-	req.Header.Set("Authorization", "token "+tokenFor(t, store, editorRole))
+	req.Header.Set("Authorization", "token "+tokenFor(t, store, editorRoles...))
 	rec := httptest.NewRecorder()
 	h.ServeHTTP(rec, req)
 
@@ -197,7 +270,7 @@ func TestUnlistedOriginGetsNoCORSHeaders(t *testing.T) {
 
 	req := httptest.NewRequest(http.MethodGet, githubPrefix+"/user", nil)
 	req.Header.Set("Origin", "https://evil.example")
-	req.Header.Set("Authorization", "token "+tokenFor(t, store, editorRole))
+	req.Header.Set("Authorization", "token "+tokenFor(t, store, editorRoles...))
 	rec := httptest.NewRecorder()
 	h.ServeHTTP(rec, req)
 

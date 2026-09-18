@@ -259,6 +259,35 @@ func TestHasRole(t *testing.T) {
 	}
 }
 
+// Editing requires every role in the set. Anything that reports "nothing
+// missing" for an editor holding only some of them hands the website to
+// whoever kept one role after losing the other.
+func TestMissingRoles(t *testing.T) {
+	required := []string{"membership", "prodeko-org-admin"}
+	tests := []struct {
+		name  string
+		roles []string
+		want  []string
+	}{
+		{"both roles", []string{"membership", "prodeko-org-admin"}, nil},
+		{"both plus unrelated extras", []string{"admin", "prodeko-org-admin", "offline_access", "membership"}, nil},
+		{"membership only", []string{"membership"}, []string{"prodeko-org-admin"}},
+		{"admin only, membership lapsed", []string{"prodeko-org-admin"}, []string{"membership"}},
+		{"neither", []string{"prodeko-external-member"}, required},
+		{"no roles at all", nil, required},
+		{"near miss", []string{"membership", "prodeko-org-admins"}, []string{"prodeko-org-admin"}},
+		{"case mismatch", []string{"membership", "Prodeko-Org-Admin"}, []string{"prodeko-org-admin"}},
+	}
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			got := Identity{Roles: tc.roles}.MissingRoles(required)
+			if strings.Join(got, ",") != strings.Join(tc.want, ",") {
+				t.Errorf("MissingRoles(%v) = %v, want %v", tc.roles, got, tc.want)
+			}
+		})
+	}
+}
+
 // Tokens outlive the process that issued them, which is the whole point of
 // sealing them rather than keeping a server-side table.
 func TestTokensSurviveRestart(t *testing.T) {

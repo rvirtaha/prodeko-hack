@@ -53,6 +53,23 @@ func (i Identity) HasRole(role string) bool {
 	return false
 }
 
+// MissingRoles returns those of required the editor did not hold at sign-in,
+// in the order given. Empty means the editor held every one of them.
+//
+// Editing requires all of the configured roles, never any of them. The
+// conjunction is the point: the hand-granted permission to edit stops working
+// the moment the automatically maintained membership role lapses, rather than
+// waiting for somebody to remember to revoke it.
+func (i Identity) MissingRoles(required []string) []string {
+	var missing []string
+	for _, role := range required {
+		if !i.HasRole(role) {
+			missing = append(missing, role)
+		}
+	}
+	return missing
+}
+
 var (
 	ErrNoToken      = errors.New("session: no token")
 	ErrInvalidToken = errors.New("session: invalid token")

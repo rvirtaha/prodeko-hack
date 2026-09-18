@@ -23,6 +23,12 @@ const (
 	testPublicURL  = "https://cms.prodeko.org"
 )
 
+// testEditorRoles is the required set. Every one of them has to be present:
+// membership is maintained automatically and lapses on its own, cms-editor is
+// granted by hand, and requiring both is what makes the hand-granted half
+// expire with the automatic one.
+var testEditorRoles = []string{"membership", testEditorRole}
+
 func discardLogger() *slog.Logger { return slog.New(slog.DiscardHandler) }
 
 func newTestHandler(t *testing.T, idp *fakeIdP, mutate func(*Config)) (*Handler, *session.Store) {
@@ -35,7 +41,7 @@ func newTestHandler(t *testing.T, idp *fakeIdP, mutate func(*Config)) (*Handler,
 		Issuer:       idp.issuer(),
 		ClientID:     testClientID,
 		ClientSecret: "s3cret",
-		EditorRole:   testEditorRole,
+		EditorRoles:  testEditorRoles,
 		PublicURL:    testPublicURL,
 		CMSOrigins:   []string{"https://prodeko.org"},
 		HTTPClient:   idp.srv.Client(),
@@ -190,7 +196,7 @@ func TestCallbackSuccessWithRolesInAccessToken(t *testing.T) {
 		return http.StatusOK, map[string]any{
 			"token_type":   "Bearer",
 			"expires_in":   300,
-			"access_token": idp.sign(accessTokenClaims([]string{"membership", testEditorRole})),
+			"access_token": idp.sign(accessTokenClaims(testEditorRoles)),
 			"id_token":     idp.sign(idTokenClaims(q.Get("nonce"))),
 		}
 	})
@@ -217,8 +223,8 @@ func TestCallbackSuccessWithRolesInAccessToken(t *testing.T) {
 		id.Email != "aino@prodeko.org" || id.Username != "aino" {
 		t.Errorf("identity = %+v", id)
 	}
-	if !id.HasRole(testEditorRole) {
-		t.Errorf("roles = %v, want to include %q", id.Roles, testEditorRole)
+	if missing := id.MissingRoles(testEditorRoles); len(missing) > 0 {
+		t.Errorf("roles = %v, want to include %v", id.Roles, testEditorRoles)
 	}
 }
 
@@ -229,7 +235,7 @@ func TestCallbackSuccessWithRolesInIDToken(t *testing.T) {
 
 	q := startSignIn(t, h)
 	claims := idTokenClaims(q.Get("nonce"))
-	claims["realm_access"] = map[string]any{"roles": []string{testEditorRole}}
+	claims["realm_access"] = map[string]any{"roles": testEditorRoles}
 	idp.setTokenResponse(func(url.Values) (int, map[string]any) {
 		return http.StatusOK, map[string]any{
 			"token_type": "Bearer",
@@ -249,8 +255,40 @@ func TestCallbackSuccessWithRolesInIDToken(t *testing.T) {
 	}
 }
 
-// Rule 1: no editor role, no session. Every one of these must end with an error
-// payload that still completes the handshake, and must mint nothing.
+// Every required role has to be present; anything else the realm hands out is
+// none of this proxy's business.
+func TestCallbackSuccessWithUnrelatedExtraRoles(t *testing.T) {
+	idp := newFakeIdP(t)
+	h, store := newTestHandler(t, idp, nil)
+
+	q := startSignIn(t, h)
+	idp.setTokenResponse(func(url.Values) (int, map[string]any) {
+		return http.StatusOK, map[string]any{
+			"token_type": "Bearer",
+			"access_token": idp.sign(accessTokenClaims([]string{
+				"default-roles-membership-registry", testEditorRole,
+				"offline_access", "membership", "prodeko-external-member",
+			})),
+			"id_token": idp.sign(idTokenClaims(q.Get("nonce"))),
+		}
+	})
+
+	status, payload := handshakeOutcome(t, callback(t, h, url.Values{"state": {q.Get("state")}, "code": {"abc"}}).Body.String())
+	if status != "success" {
+		t.Fatalf("status = %s, payload = %v", status, payload)
+	}
+	id, err := store.Verify(payload["token"])
+	if err != nil {
+		t.Fatalf("the issued token does not verify: %v", err)
+	}
+	if missing := id.MissingRoles(testEditorRoles); len(missing) > 0 {
+		t.Errorf("roles = %v, missing %v", id.Roles, missing)
+	}
+}
+
+// Rule 1: short of any one editor role, no session. Every one of these must end
+// with an error payload that still completes the handshake, and must mint
+// nothing.
 func TestCallbackRefusals(t *testing.T) {
 	tests := []struct {
 		name string
@@ -263,7 +301,7 @@ func TestCallbackRefusals(t *testing.T) {
 		wantMessage string
 	}{
 		{
-			name: "member without the editor role",
+			name: "member who was never granted the editor role",
 			tokens: func(idp *fakeIdP, nonce string) map[string]any {
 				return map[string]any{
 					"access_token": idp.sign(accessTokenClaims([]string{"membership"})),
@@ -271,6 +309,28 @@ func TestCallbackRefusals(t *testing.T) {
 				}
 			},
 			wantMessage: testEditorRole,
+		},
+		// The case the conjunction exists for: the hand-granted role is still
+		// there, the automatically maintained membership is not.
+		{
+			name: "editor whose guild membership has lapsed",
+			tokens: func(idp *fakeIdP, nonce string) map[string]any {
+				return map[string]any{
+					"access_token": idp.sign(accessTokenClaims([]string{testEditorRole, "offline_access"})),
+					"id_token":     idp.sign(idTokenClaims(nonce)),
+				}
+			},
+			wantMessage: "membership",
+		},
+		{
+			name: "neither role",
+			tokens: func(idp *fakeIdP, nonce string) map[string]any {
+				return map[string]any{
+					"access_token": idp.sign(accessTokenClaims([]string{"prodeko-external-member"})),
+					"id_token":     idp.sign(idTokenClaims(nonce)),
+				}
+			},
+			wantMessage: "missing membership, " + testEditorRole,
 		},
 		{
 			name: "no realm_access.roles anywhere",
@@ -287,7 +347,7 @@ func TestCallbackRefusals(t *testing.T) {
 		{
 			name: "access token issued to another client",
 			tokens: func(idp *fakeIdP, nonce string) map[string]any {
-				at := accessTokenClaims([]string{testEditorRole})
+				at := accessTokenClaims(testEditorRoles)
 				at["azp"] = "some-other-client"
 				return map[string]any{
 					"access_token": idp.sign(at),
@@ -302,7 +362,7 @@ func TestCallbackRefusals(t *testing.T) {
 				c := idTokenClaims(nonce)
 				c["aud"] = "a-different-client"
 				return map[string]any{
-					"access_token": idp.sign(accessTokenClaims([]string{testEditorRole})),
+					"access_token": idp.sign(accessTokenClaims(testEditorRoles)),
 					"id_token":     idp.sign(c),
 				}
 			},
@@ -314,7 +374,7 @@ func TestCallbackRefusals(t *testing.T) {
 				c := idTokenClaims(nonce)
 				c["iss"] = "https://evil.example"
 				return map[string]any{
-					"access_token": idp.sign(accessTokenClaims([]string{testEditorRole})),
+					"access_token": idp.sign(accessTokenClaims(testEditorRoles)),
 					"id_token":     idp.sign(c),
 				}
 			},
@@ -326,7 +386,7 @@ func TestCallbackRefusals(t *testing.T) {
 				c := idTokenClaims(nonce)
 				c["exp"] = time.Now().Add(-time.Hour).Unix()
 				return map[string]any{
-					"access_token": idp.sign(accessTokenClaims([]string{testEditorRole})),
+					"access_token": idp.sign(accessTokenClaims(testEditorRoles)),
 					"id_token":     idp.sign(c),
 				}
 			},
@@ -336,7 +396,7 @@ func TestCallbackRefusals(t *testing.T) {
 			name: "replayed id token from a different sign-in",
 			tokens: func(idp *fakeIdP, nonce string) map[string]any {
 				return map[string]any{
-					"access_token": idp.sign(accessTokenClaims([]string{testEditorRole})),
+					"access_token": idp.sign(accessTokenClaims(testEditorRoles)),
 					"id_token":     idp.sign(idTokenClaims("a-nonce-from-another-login")),
 				}
 			},
@@ -345,7 +405,7 @@ func TestCallbackRefusals(t *testing.T) {
 		{
 			name: "no id token at all",
 			tokens: func(idp *fakeIdP, nonce string) map[string]any {
-				return map[string]any{"access_token": idp.sign(accessTokenClaims([]string{testEditorRole}))}
+				return map[string]any{"access_token": idp.sign(accessTokenClaims(testEditorRoles))}
 			},
 			wantMessage: "no ID token",
 		},
@@ -355,7 +415,7 @@ func TestCallbackRefusals(t *testing.T) {
 				c := idTokenClaims(nonce)
 				delete(c, "email")
 				return map[string]any{
-					"access_token": idp.sign(accessTokenClaims([]string{testEditorRole})),
+					"access_token": idp.sign(accessTokenClaims(testEditorRoles)),
 					"id_token":     idp.sign(c),
 				}
 			},
@@ -368,7 +428,7 @@ func TestCallbackRefusals(t *testing.T) {
 				delete(c, "name")
 				delete(c, "preferred_username")
 				return map[string]any{
-					"access_token": idp.sign(accessTokenClaims([]string{testEditorRole})),
+					"access_token": idp.sign(accessTokenClaims(testEditorRoles)),
 					"id_token":     idp.sign(c),
 				}
 			},
@@ -451,7 +511,7 @@ func TestCallbackStateIsSingleUse(t *testing.T) {
 	idp.setTokenResponse(func(url.Values) (int, map[string]any) {
 		return http.StatusOK, map[string]any{
 			"token_type":   "Bearer",
-			"access_token": idp.sign(accessTokenClaims([]string{testEditorRole})),
+			"access_token": idp.sign(accessTokenClaims(testEditorRoles)),
 			"id_token":     idp.sign(idTokenClaims(q.Get("nonce"))),
 		}
 	})
@@ -529,7 +589,7 @@ func TestPKCEVerifierMatchesChallenge(t *testing.T) {
 	idp.setTokenResponse(func(url.Values) (int, map[string]any) {
 		return http.StatusOK, map[string]any{
 			"token_type":   "Bearer",
-			"access_token": idp.sign(accessTokenClaims([]string{testEditorRole})),
+			"access_token": idp.sign(accessTokenClaims(testEditorRoles)),
 			"id_token":     idp.sign(idTokenClaims(q.Get("nonce"))),
 		}
 	})
@@ -565,7 +625,7 @@ func TestPublicClientSendsNoSecret(t *testing.T) {
 	idp.setTokenResponse(func(url.Values) (int, map[string]any) {
 		return http.StatusOK, map[string]any{
 			"token_type":   "Bearer",
-			"access_token": idp.sign(accessTokenClaims([]string{testEditorRole})),
+			"access_token": idp.sign(accessTokenClaims(testEditorRoles)),
 			"id_token":     idp.sign(idTokenClaims(q.Get("nonce"))),
 		}
 	})
@@ -609,7 +669,7 @@ func TestSplitHorizonDiscovery(t *testing.T) {
 
 	q := startSignIn(t, h)
 	idp.setTokenResponse(func(url.Values) (int, map[string]any) {
-		at := accessTokenClaims([]string{testEditorRole})
+		at := accessTokenClaims(testEditorRoles)
 		at["iss"] = frontChannel
 		id := idTokenClaims(q.Get("nonce"))
 		id["iss"] = frontChannel
@@ -631,7 +691,7 @@ func TestSplitHorizonDiscovery(t *testing.T) {
 	// A token carrying the back-channel issuer must still be refused.
 	q = startSignIn(t, h)
 	idp.setTokenResponse(func(url.Values) (int, map[string]any) {
-		at := accessTokenClaims([]string{testEditorRole})
+		at := accessTokenClaims(testEditorRoles)
 		at["iss"] = frontChannel
 		return http.StatusOK, map[string]any{
 			"token_type":   "Bearer",
@@ -649,12 +709,12 @@ func TestNewRejectsBadConfig(t *testing.T) {
 	idp := newFakeIdP(t)
 	base := func() Config {
 		return Config{
-			Issuer:     idp.issuer(),
-			ClientID:   testClientID,
-			EditorRole: testEditorRole,
-			PublicURL:  testPublicURL,
-			HTTPClient: idp.srv.Client(),
-			Logger:     discardLogger(),
+			Issuer:      idp.issuer(),
+			ClientID:    testClientID,
+			EditorRoles: testEditorRoles,
+			PublicURL:   testPublicURL,
+			HTTPClient:  idp.srv.Client(),
+			Logger:      discardLogger(),
 		}
 	}
 	tests := []struct {
@@ -664,8 +724,9 @@ func TestNewRejectsBadConfig(t *testing.T) {
 		{"no issuer", func(c *Config) { c.Issuer = "" }},
 		{"issuer is not a url", func(c *Config) { c.Issuer = "id.prodeko.org" }},
 		{"no client id", func(c *Config) { c.ClientID = "" }},
-		{"no editor role", func(c *Config) { c.EditorRole = "" }},
-		{"blank editor role", func(c *Config) { c.EditorRole = "   " }},
+		{"no editor roles", func(c *Config) { c.EditorRoles = nil }},
+		{"an empty list of editor roles", func(c *Config) { c.EditorRoles = []string{} }},
+		{"blank editor roles", func(c *Config) { c.EditorRoles = []string{"", "   "} }},
 		{"no public url", func(c *Config) { c.PublicURL = "" }},
 		{"public url with a path", func(c *Config) { c.PublicURL = "https://prodeko.org/cms" }},
 		{"public url with a query", func(c *Config) { c.PublicURL = "https://prodeko.org?a=1" }},

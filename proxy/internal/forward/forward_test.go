@@ -18,12 +18,15 @@ const (
 	testToken = "github_pat_secret"
 )
 
+// testRoles is the required set: an editor has to hold every one of them.
+var testRoles = []string{"membership", testRole}
+
 var editorIdentity = session.Identity{
 	Subject:  "b2c3-uuid",
 	Name:     "Aino Editor",
 	Email:    "aino@prodeko.org",
 	Username: "aino",
-	Roles:    []string{"membership", testRole},
+	Roles:    testRoles,
 }
 
 // capture records what the fake GitHub saw, so tests can assert on the
@@ -65,16 +68,16 @@ func newProxy(t *testing.T, upstream http.HandlerFunc) (*Handler, *capture, *htt
 		t.Fatal(err)
 	}
 	h, err := New(Config{
-		Owner:      "prodeko",
-		Repo:       "prodeko-hack",
-		Branch:     testBranch,
-		Token:      testToken,
-		EditorRole: testRole,
-		Committer:  testCommitter,
-		APIRoot:    apiRoot,
-		PublicBase: publicBase,
-		Client:     server.Client(),
-		Logger:     slog.New(slog.DiscardHandler),
+		Owner:       "prodeko",
+		Repo:        "prodeko-hack",
+		Branch:      testBranch,
+		Token:       testToken,
+		EditorRoles: testRoles,
+		Committer:   testCommitter,
+		APIRoot:     apiRoot,
+		PublicBase:  publicBase,
+		Client:      server.Client(),
+		Logger:      slog.New(slog.DiscardHandler),
 	})
 	if err != nil {
 		t.Fatal(err)
@@ -97,8 +100,10 @@ func request(t *testing.T, h *Handler, id *session.Identity, method, target, bod
 	return w
 }
 
-// Rule 1: no session, no editor role, no access.
-func TestRequiresASessionAndTheEditorRole(t *testing.T) {
+// Rule 1: no session, or a session short of any one required role, no access.
+// A session holding some of the roles is the interesting case: it is what a
+// lapsed membership leaves behind.
+func TestRequiresASessionAndEveryEditorRole(t *testing.T) {
 	h, _, _ := newProxy(t, nil)
 
 	tests := []struct {
@@ -107,10 +112,21 @@ func TestRequiresASessionAndTheEditorRole(t *testing.T) {
 		want     int
 	}{
 		{"no session at all", nil, http.StatusUnauthorized},
-		{"signed in with the role", &editorIdentity, http.StatusOK},
+		{"signed in with both roles", &editorIdentity, http.StatusOK},
 		{
-			"signed in without the role",
+			"both roles plus unrelated ones",
+			&session.Identity{Subject: "x", Name: "Ossi", Email: "ossi@prodeko.org",
+				Roles: []string{"admin", testRole, "offline_access", "membership"}},
+			http.StatusOK,
+		},
+		{
+			"membership but not the editor role",
 			&session.Identity{Subject: "x", Name: "Ossi", Email: "ossi@prodeko.org", Roles: []string{"membership"}},
+			http.StatusForbidden,
+		},
+		{
+			"the editor role but membership lapsed",
+			&session.Identity{Subject: "x", Name: "Ossi", Email: "ossi@prodeko.org", Roles: []string{testRole}},
 			http.StatusForbidden,
 		},
 		{
@@ -120,7 +136,7 @@ func TestRequiresASessionAndTheEditorRole(t *testing.T) {
 		},
 		{
 			"a role that merely looks similar",
-			&session.Identity{Subject: "x", Roles: []string{"website-editors"}},
+			&session.Identity{Subject: "x", Roles: []string{"membership", "website-editors"}},
 			http.StatusForbidden,
 		},
 	}
@@ -135,8 +151,8 @@ func TestRequiresASessionAndTheEditorRole(t *testing.T) {
 	}
 }
 
-// The role is re-checked on writes too, not just on the first read.
-func TestRoleIsCheckedOnWrites(t *testing.T) {
+// The roles are re-checked on writes too, not just on the first read.
+func TestRolesAreCheckedOnWrites(t *testing.T) {
 	h, seen, _ := newProxy(t, nil)
 	id := session.Identity{Subject: "x", Name: "Ossi", Email: "ossi@prodeko.org", Roles: []string{"membership"}}
 	w := request(t, h, &id, "POST", "/github/repos/prodeko/prodeko-hack/git/commits",
@@ -207,7 +223,7 @@ func TestCommitAuthorIsTheKeycloakIdentity(t *testing.T) {
 // would defeat the point of rule 2, so the write is refused.
 func TestCommitWithoutAnEmailIsRefused(t *testing.T) {
 	h, seen, _ := newProxy(t, nil)
-	id := session.Identity{Subject: "x", Name: "Aino", Username: "aino", Roles: []string{testRole}}
+	id := session.Identity{Subject: "x", Name: "Aino", Username: "aino", Roles: testRoles}
 	w := request(t, h, &id, "POST", "/github/repos/prodeko/prodeko-hack/git/commits",
 		`{"message":"m","tree":"t","parents":[]}`)
 	if w.Code != http.StatusBadRequest {
@@ -662,7 +678,7 @@ func TestUpstreamFailureIsABadGateway(t *testing.T) {
 func TestNewValidatesConfig(t *testing.T) {
 	valid := Config{
 		Owner: "prodeko", Repo: "prodeko-hack", Branch: "main",
-		Token: "t", EditorRole: "r", Committer: testCommitter,
+		Token: "t", EditorRoles: testRoles, Committer: testCommitter,
 	}
 	tests := []struct {
 		name    string
@@ -674,7 +690,9 @@ func TestNewValidatesConfig(t *testing.T) {
 		{"no repo", func(c *Config) { c.Repo = "" }, true},
 		{"no branch", func(c *Config) { c.Branch = "" }, true},
 		{"no token", func(c *Config) { c.Token = "" }, true},
-		{"no editor role", func(c *Config) { c.EditorRole = "" }, true},
+		{"no editor roles", func(c *Config) { c.EditorRoles = nil }, true},
+		{"an empty list of editor roles", func(c *Config) { c.EditorRoles = []string{} }, true},
+		{"blank editor roles", func(c *Config) { c.EditorRoles = []string{"", "  "} }, true},
 		{"no committer", func(c *Config) { c.Committer = Author{} }, true},
 		{"committer without an email", func(c *Config) { c.Committer = Author{Name: "Bot"} }, true},
 		{"a slash in the owner", func(c *Config) { c.Owner = "a/b" }, true},
@@ -709,7 +727,7 @@ func TestPrefixDefaultsAndNormalises(t *testing.T) {
 		t.Run(tc.in, func(t *testing.T) {
 			h, err := New(Config{
 				Owner: "prodeko", Repo: "r", Branch: "main", Token: "t",
-				EditorRole: "role", Committer: testCommitter, Prefix: tc.in,
+				EditorRoles: testRoles, Committer: testCommitter, Prefix: tc.in,
 			})
 			if err != nil {
 				t.Fatal(err)

@@ -4,7 +4,7 @@
 //
 // Four rules hold everywhere in here:
 //
-//  1. Every request needs a session carrying the configured realm role.
+//  1. Every request needs a session carrying every configured realm role.
 //  2. Every commit is authored by that session's name and email. Nothing the
 //     browser sends about authorship is trusted.
 //  3. Owner and repo come from config and are substituted into the forwarded
@@ -79,12 +79,16 @@ func canonicalSet(names ...string) map[string]bool {
 // Config pins the repository and holds the credential. APIRoot, Prefix, Client
 // and Logger default when zero; every other field is required.
 type Config struct {
-	Owner      string // GITHUB_OWNER, substituted into every forwarded path
-	Repo       string // GITHUB_REPO
-	Branch     string // GITHUB_BRANCH, the only ref writable outside cms/*
-	Token      string // GITHUB_TOKEN, never sent to the browser
-	EditorRole string // EDITOR_ROLE, re-checked on every forwarded request
-	Committer  Author // bot identity recorded as the git committer
+	Owner  string // GITHUB_OWNER, substituted into every forwarded path
+	Repo   string // GITHUB_REPO
+	Branch string // GITHUB_BRANCH, the only ref writable outside cms/*
+	Token  string // GITHUB_TOKEN, never sent to the browser
+
+	// EditorRoles are the realm roles from EDITOR_ROLES, all of which are
+	// re-checked on every forwarded request. At least one is required.
+	EditorRoles []string
+
+	Committer Author // bot identity recorded as the git committer
 
 	APIRoot      *url.URL     // nil => https://api.github.com
 	PublicBase   *url.URL     // PUBLIC_URL; nil => paginated Link headers are dropped
@@ -97,12 +101,12 @@ type Config struct {
 // Handler serves GET {prefix}/user and ANY {prefix}/repos/{owner}/{repo}/...
 // It expects a session.Identity in the request context; without one it is a 401.
 type Handler struct {
-	owner      string
-	repo       string
-	branch     string
-	token      string
-	editorRole string
-	committer  Author
+	owner       string
+	repo        string
+	branch      string
+	token       string
+	editorRoles []string
+	committer   Author
 
 	apiRoot    *url.URL
 	publicBase *url.URL
@@ -119,15 +123,25 @@ type Handler struct {
 func New(cfg Config) (*Handler, error) {
 	missing := []string{}
 	for name, value := range map[string]string{
-		"Owner":      cfg.Owner,
-		"Repo":       cfg.Repo,
-		"Branch":     cfg.Branch,
-		"Token":      cfg.Token,
-		"EditorRole": cfg.EditorRole,
+		"Owner":  cfg.Owner,
+		"Repo":   cfg.Repo,
+		"Branch": cfg.Branch,
+		"Token":  cfg.Token,
 	} {
 		if strings.TrimSpace(value) == "" {
 			missing = append(missing, name)
 		}
+	}
+	// An empty role set would wave every signed-in Prodeko account through, so
+	// it is a configuration error rather than a permissive default.
+	editorRoles := make([]string, 0, len(cfg.EditorRoles))
+	for _, role := range cfg.EditorRoles {
+		if role = strings.TrimSpace(role); role != "" {
+			editorRoles = append(editorRoles, role)
+		}
+	}
+	if len(editorRoles) == 0 {
+		missing = append(missing, "EditorRoles")
 	}
 	if !cfg.Committer.valid() {
 		missing = append(missing, "Committer")
@@ -177,18 +191,18 @@ func New(cfg Config) (*Handler, error) {
 	}
 
 	h := &Handler{
-		owner:      cfg.Owner,
-		repo:       cfg.Repo,
-		branch:     cfg.Branch,
-		token:      cfg.Token,
-		editorRole: cfg.EditorRole,
-		committer:  cfg.Committer,
-		apiRoot:    apiRoot,
-		publicBase: cfg.PublicBase,
-		prefix:     prefix,
-		client:     client,
-		log:        logger,
-		maxBody:    maxBody,
+		owner:       cfg.Owner,
+		repo:        cfg.Repo,
+		branch:      cfg.Branch,
+		token:       cfg.Token,
+		editorRoles: editorRoles,
+		committer:   cfg.Committer,
+		apiRoot:     apiRoot,
+		publicBase:  cfg.PublicBase,
+		prefix:      prefix,
+		client:      client,
+		log:         logger,
+		maxBody:     maxBody,
 	}
 	if cfg.PublicBase != nil {
 		h.publicRepoPrefix = strings.TrimSuffix(cfg.PublicBase.String(), "/") + prefix +
@@ -211,9 +225,13 @@ func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		h.fail(w, r, http.StatusUnauthorized, "not signed in")
 		return
 	}
-	if !hasRole(identity, h.editorRole) {
-		h.log.Warn("forward: editor role missing",
-			"subject", identity.Subject, "role", h.editorRole, "path", r.URL.EscapedPath())
+	// Re-checked on every forwarded request, against the roles the session was
+	// sealed with. Tightening EDITOR_ROLES therefore bites the sessions already
+	// issued; a role removed in Keycloak does not, until the session expires.
+	if missing := identity.MissingRoles(h.editorRoles); len(missing) > 0 {
+		h.log.Warn("forward: editor roles missing",
+			"subject", identity.Subject, "required", h.editorRoles, "missing", missing,
+			"path", r.URL.EscapedPath())
 		h.fail(w, r, http.StatusForbidden, "your Prodeko account is not allowed to edit the website")
 		return
 	}
@@ -444,15 +462,6 @@ func authorFor(id session.Identity) Author {
 		name = loginFor(id)
 	}
 	return Author{Name: name, Email: strings.TrimSpace(id.Email)}
-}
-
-func hasRole(id session.Identity, role string) bool {
-	for _, r := range id.Roles {
-		if r == role {
-			return true
-		}
-	}
-	return false
 }
 
 // fail writes a denial Decap can read. It must be JSON with a message field:

@@ -53,7 +53,7 @@ services:
       CMS_CLIENT_SECRET: dev-secret-cms-auth-proxy
       CMS_REDIRECT_URI: http://localhost:8080/callback
       CMS_WEB_ORIGIN: http://localhost:1313
-      EDITOR_ROLE: cms-editor
+      EDITOR_ROLES: membership,prodeko-org-admin
     volumes:
       - ./dev/keycloak:/setup:ro
     depends_on:
@@ -88,7 +88,11 @@ services:
       KEYCLOAK_DISCOVERY_URL: http://keycloak:8180/realms/membership-registry
       KEYCLOAK_CLIENT_ID: cms-auth-proxy
       KEYCLOAK_CLIENT_SECRET: dev-secret-cms-auth-proxy
-      EDITOR_ROLE: cms-editor
+
+      # Every one of these realm roles is required. membership is maintained by
+      # the membership registry and lapses on its own, which is what makes the
+      # hand-granted prodeko-org-admin stop working with it.
+      EDITOR_ROLES: membership,prodeko-org-admin
 
       # Dev placeholder. config.Load rejects this value outright unless
       # PUBLIC_URL is local, so it cannot quietly reach production.

@@ -21,7 +21,8 @@ Environment:
     CMS_CLIENT_SECRET   its secret                (default dev-secret-cms-auth-proxy)
     CMS_REDIRECT_URI    exact OAuth callback      (default http://localhost:8080/callback)
     CMS_WEB_ORIGIN      browser origin of the CMS (default http://localhost:1313)
-    EDITOR_ROLE         realm role required to edit (default cms-editor)
+    EDITOR_ROLES        comma-separated realm roles required to edit, all of
+                        them (default membership,prodeko-org-admin)
 """
 
 from __future__ import annotations
@@ -43,26 +44,37 @@ CLIENT_ID = os.environ.get("CMS_CLIENT_ID", "cms-auth-proxy")
 CLIENT_SECRET = os.environ.get("CMS_CLIENT_SECRET", "dev-secret-cms-auth-proxy")
 REDIRECT_URI = os.environ.get("CMS_REDIRECT_URI", "http://localhost:8080/callback")
 WEB_ORIGIN = os.environ.get("CMS_WEB_ORIGIN", "http://localhost:1313")
-EDITOR_ROLE = os.environ.get("EDITOR_ROLE", "cms-editor")
-
-# Realm roles. The first three match the production realm; cms-editor is the
-# one this proxy gates on.
-REALM_ROLES = [
-    ("admin", "Administrator"),
-    ("membership", "Guild member"),
-    ("prodeko-external-member", "External member"),
-    (EDITOR_ROLE, "May edit the website through Decap CMS"),
+EDITOR_ROLES = [
+    r.strip()
+    for r in os.environ.get("EDITOR_ROLES", "membership,prodeko-org-admin").split(",")
+    if r.strip()
 ]
+if not EDITOR_ROLES:
+    sys.exit("EDITOR_ROLES names no role; the proxy would refuse to start.")
 
-# Test users. The second one exists to prove the role check denies: it is a
-# perfectly valid Prodeko account with no editor role, and it must not get in.
+# Realm roles, matching the production realm. The proxy requires every role in
+# EDITOR_ROLES at once, so any of them not listed here is created too.
+ROLE_DESCRIPTIONS = {
+    "admin": "Administrator",
+    "membership": "Guild member",
+    "prodeko-external-member": "External member",
+    "prodeko-org-admin": "May edit the prodeko.org website",
+}
+REALM_ROLES = [(name, description) for name, description in ROLE_DESCRIPTIONS.items()]
+REALM_ROLES += [(name, "Required to edit the website")
+                for name in EDITOR_ROLES if name not in ROLE_DESCRIPTIONS]
+
+# Test users. Only the first gets in. The other two each hold one of the two
+# required roles and must be refused, which is the property worth demonstrating:
+# membership lapses on its own in the registry, and when it does, the
+# hand-granted permission to edit stops working with it.
 TEST_USERS = [
     {
         "email": "editor@prodeko.org",
         "password": "kananugetti",
         "first": "Erkki",
         "last": "Editor",
-        "roles": ["membership", EDITOR_ROLE],
+        "roles": EDITOR_ROLES,
     },
     {
         "email": "member@prodeko.org",
@@ -70,6 +82,13 @@ TEST_USERS = [
         "first": "Meeri",
         "last": "Member",
         "roles": ["membership"],
+    },
+    {
+        "email": "lapsed@prodeko.org",
+        "password": "kananugetti",
+        "first": "Lasse",
+        "last": "Lapsed",
+        "roles": [r for r in EDITOR_ROLES if r != "membership"],
     },
 ]
 
@@ -126,6 +145,12 @@ class Admin:
             self._request("PUT", self._admin_url(path), body=body)
         except urllib.error.HTTPError as e:
             raise RuntimeError(f"PUT {path} -> {e.code}: {e.read().decode()}") from e
+
+    def delete(self, path: str, body) -> None:
+        try:
+            self._request("DELETE", self._admin_url(path), body=body)
+        except urllib.error.HTTPError as e:
+            raise RuntimeError(f"DELETE {path} -> {e.code}: {e.read().decode()}") from e
 
     # -- lifecycle --
 
@@ -243,6 +268,7 @@ def configure_client(kc: Admin) -> None:
 def configure_users(kc: Admin) -> None:
     print("Test users:", flush=True)
     all_roles = {r["name"]: r for r in kc.get("/roles")}
+    managed = {name for name, _ in REALM_ROLES}
     for spec in TEST_USERS:
         email = spec["email"]
         payload = {
@@ -268,7 +294,16 @@ def configure_users(kc: Admin) -> None:
         wanted = [all_roles[n] for n in spec["roles"] if n in all_roles]
         if wanted:
             kc.post(f"/users/{user_id}/role-mappings/realm", wanted)
-        print(f"  {email} / {spec['password']}  roles: {', '.join(spec['roles'])}", flush=True)
+        # Converge rather than accumulate. A user is only a demonstration of the
+        # role check denying while they still lack the role, so a mapping left
+        # over from an earlier run with a different EDITOR_ROLES has to go.
+        held = kc.get(f"/users/{user_id}/role-mappings/realm") or []
+        stale = [r for r in held if r["name"] in managed and r["name"] not in spec["roles"]]
+        if stale:
+            kc.delete(f"/users/{user_id}/role-mappings/realm", stale)
+        granted = ", ".join(spec["roles"]) or "none"
+        verdict = "edits" if all(r in spec["roles"] for r in EDITOR_ROLES) else "refused"
+        print(f"  {email} / {spec['password']}  roles: {granted}  -> {verdict}", flush=True)
 
 
 def main() -> None:
@@ -290,7 +325,7 @@ def main() -> None:
     # not by the URL this script happened to use.
     print(f"  configured via: {BASE_URL}/realms/{REALM}", flush=True)
     print(f"  client:         {CLIENT_ID} / {CLIENT_SECRET}", flush=True)
-    print(f"  editor role:    {EDITOR_ROLE}", flush=True)
+    print(f"  editor roles:   {', '.join(EDITOR_ROLES)} (all required)", flush=True)
 
 
 if __name__ == "__main__":

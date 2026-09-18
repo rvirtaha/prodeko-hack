@@ -149,9 +149,11 @@ func TestMiddlewareExpiredMessageIsDistinct(t *testing.T) {
 	}
 }
 
-func TestRequireRole(t *testing.T) {
-	const role = "cms-editor"
-	handler := RequireRole(role)(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+// Every configured role is required, not any of them. "Half the roles is
+// enough" is the one way this middleware can fail open.
+func TestRequireRoles(t *testing.T) {
+	required := []string{"membership", "prodeko-org-admin"}
+	handler := RequireRoles(required)(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusTeapot)
 	}))
 
@@ -160,11 +162,25 @@ func TestRequireRole(t *testing.T) {
 		identity   *Identity
 		wantStatus int
 	}{
-		{"has the role", &Identity{Subject: "a", Roles: []string{"membership", role}}, http.StatusTeapot},
-		{"lacks the role", &Identity{Subject: "a", Roles: []string{"membership"}}, http.StatusForbidden},
+		{"has both roles", &Identity{Subject: "a", Roles: required}, http.StatusTeapot},
+		{
+			"has both plus unrelated roles",
+			&Identity{Subject: "a", Roles: []string{"admin", "prodeko-org-admin", "membership"}},
+			http.StatusTeapot,
+		},
+		{"membership only", &Identity{Subject: "a", Roles: []string{"membership"}}, http.StatusForbidden},
+		{"editing permission only", &Identity{Subject: "a", Roles: []string{"prodeko-org-admin"}}, http.StatusForbidden},
 		{"no roles at all", &Identity{Subject: "a"}, http.StatusForbidden},
-		{"near miss", &Identity{Subject: "a", Roles: []string{"cms-editors"}}, http.StatusForbidden},
-		{"case mismatch", &Identity{Subject: "a", Roles: []string{"CMS-Editor"}}, http.StatusForbidden},
+		{
+			"near miss",
+			&Identity{Subject: "a", Roles: []string{"membership", "prodeko-org-admins"}},
+			http.StatusForbidden,
+		},
+		{
+			"case mismatch",
+			&Identity{Subject: "a", Roles: []string{"membership", "Prodeko-Org-Admin"}},
+			http.StatusForbidden,
+		},
 		{"no identity in context", nil, http.StatusUnauthorized},
 	}
 	for _, tc := range tests {
@@ -179,6 +195,22 @@ func TestRequireRole(t *testing.T) {
 				t.Fatalf("status = %d, want %d", rec.Code, tc.wantStatus)
 			}
 		})
+	}
+}
+
+// A required set that ended up empty must refuse everyone rather than let
+// everyone through. config.Load makes this unreachable; the cost of being sure
+// is one test.
+func TestRequireRolesWithNoRolesRefusesEveryone(t *testing.T) {
+	handler := RequireRoles(nil)(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusTeapot)
+	}))
+	req := httptest.NewRequest(http.MethodGet, "/github/user", nil)
+	req = req.WithContext(NewContext(req.Context(), Identity{Subject: "a", Roles: []string{"membership"}}))
+	rec := httptest.NewRecorder()
+	handler.ServeHTTP(rec, req)
+	if rec.Code != http.StatusForbidden {
+		t.Fatalf("status = %d, want 403", rec.Code)
 	}
 }
 

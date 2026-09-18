@@ -30,7 +30,7 @@ const (
 	EnvDiscoveryURL = "KEYCLOAK_DISCOVERY_URL"
 	EnvClientID     = "KEYCLOAK_CLIENT_ID"
 	EnvClientSecret = "KEYCLOAK_CLIENT_SECRET"
-	EnvEditorRole   = "EDITOR_ROLE"
+	EnvEditorRoles  = "EDITOR_ROLES"
 	EnvOAuthScope   = "OAUTH_SCOPE"
 	EnvGitHubToken  = "GITHUB_TOKEN"
 	EnvGitHubOwner  = "GITHUB_OWNER"
@@ -126,10 +126,15 @@ type Keycloak struct {
 	// oidc.InsecureIssuerURLContext.
 	DiscoveryURL string
 
-	ClientID     string   // KEYCLOAK_CLIENT_ID
-	ClientSecret string   // KEYCLOAK_CLIENT_SECRET
-	EditorRole   string   // EDITOR_ROLE, the realm role required to edit
-	Scopes       []string // OAUTH_SCOPE, default {"openid", "profile", "email"}
+	ClientID     string // KEYCLOAK_CLIENT_ID
+	ClientSecret string // KEYCLOAK_CLIENT_SECRET
+
+	// EditorRoles are the realm roles an editor must hold, from EDITOR_ROLES.
+	// Every one of them is required, never any of them, and there is always at
+	// least one.
+	EditorRoles []string
+
+	Scopes []string // OAUTH_SCOPE, default {"openid", "profile", "email"}
 
 	// RedirectURL is derived: PublicURL + "/callback". It must be registered
 	// verbatim on the Keycloak client.
@@ -183,7 +188,7 @@ func (c *Config) String() string {
 	line("keycloak_split_horizon", fmt.Sprint(c.SplitHorizon()))
 	line("keycloak_client_id", c.Keycloak.ClientID)
 	line("keycloak_client_secret", redacted)
-	line("editor_role", c.Keycloak.EditorRole)
+	line("editor_roles", strings.Join(c.Keycloak.EditorRoles, ","))
 	line("oauth_scope", strings.Join(c.Keycloak.Scopes, " "))
 	line("redirect_url", c.Keycloak.RedirectURL)
 	line("github_slug", c.GitHub.Slug())
@@ -257,7 +262,7 @@ func LoadFrom(lookup func(string) (string, bool)) (*Config, error) {
 		Issuer:       l.issuer(EnvIssuer, "", true),
 		ClientID:     l.required(EnvClientID),
 		ClientSecret: l.required(EnvClientSecret),
-		EditorRole:   l.required(EnvEditorRole),
+		EditorRoles:  l.editorRoles(),
 		Scopes:       l.scopes(),
 	}
 	cfg.Keycloak.DiscoveryURL = l.issuer(EnvDiscoveryURL, cfg.Keycloak.Issuer, false)
@@ -326,6 +331,37 @@ func (l *loader) required(name string) string {
 		return ""
 	}
 	return v
+}
+
+// editorRoles reads the comma-separated realm roles an editor must hold. All
+// of them are required, so an editor who has lost any one of them is refused;
+// that is what makes the hand-granted permission to edit lapse together with
+// the automatically maintained membership. At least one role has to be
+// configured, because an empty set would admit every Prodeko account.
+func (l *loader) editorRoles() []string {
+	raw, ok := l.get(EnvEditorRoles)
+	if !ok {
+		l.fail(EnvEditorRoles, "is required but not set; list every realm role an editor must hold, "+
+			"comma-separated, e.g. membership,prodeko-org-admin. All of them are required, and without "+
+			"any of them every Prodeko account could edit the website")
+		return nil
+	}
+	var out []string
+	seen := map[string]bool{}
+	for _, part := range strings.Split(raw, ",") {
+		part = strings.TrimSpace(part)
+		if part == "" || seen[part] {
+			continue
+		}
+		seen[part] = true
+		out = append(out, part)
+	}
+	if len(out) == 0 {
+		l.fail(EnvEditorRoles, fmt.Sprintf("is set but names no role (got %q); "+
+			"at least one realm role has to be required to edit", raw))
+		return nil
+	}
+	return out
 }
 
 // origin validates a bare origin: scheme://host[:port], nothing else.

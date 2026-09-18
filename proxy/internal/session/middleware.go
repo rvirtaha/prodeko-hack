@@ -65,9 +65,11 @@ func Middleware(v Verifier) func(http.Handler) http.Handler {
 	}
 }
 
-// RequireRole rejects requests whose Identity lacks role. Defence in depth:
-// the role was already required at sign-in.
-func RequireRole(role string) func(http.Handler) http.Handler {
+// RequireRoles rejects requests whose Identity lacks any of required. Every
+// one of the roles has to be present. Defence in depth: the same set was
+// already required at sign-in.
+func RequireRoles(required []string) func(http.Handler) http.Handler {
+	roles := append([]string(nil), required...)
 	return func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			id, ok := FromContext(r.Context())
@@ -76,9 +78,18 @@ func RequireRole(role string) func(http.Handler) http.Handler {
 					"Not signed in. Open /admin and sign in with your Prodeko account.")
 				return
 			}
-			if !id.HasRole(role) {
+			// An empty required set would let everyone through, so it refuses
+			// everyone instead. config.Load will not start the proxy without
+			// EDITOR_ROLES, which is what keeps this unreachable.
+			if len(roles) == 0 {
+				writeError(w, http.StatusForbidden,
+					"This proxy has no editor roles configured, so nobody may edit the website.")
+				return
+			}
+			if missing := id.MissingRoles(roles); len(missing) > 0 {
 				writeError(w, http.StatusForbidden, fmt.Sprintf(
-					"Your Prodeko account does not have the %q role required to edit the website.", role))
+					"Your Prodeko account is missing the roles required to edit the website: %s.",
+					strings.Join(missing, ", ")))
 				return
 			}
 			next.ServeHTTP(w, r)
