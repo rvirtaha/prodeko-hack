@@ -1,0 +1,8 @@
+<header>
+  <a href="{{ "/" | relLangURL }}">{{ .Site.Title }}</a>
+  <nav>
+    {{ range .Site.Home.AllTranslations }}
+      <a href="{{ .Permalink }}">{{ .Language.Label }}</a>
+    {{ end }}
+  </nav>
+</header>

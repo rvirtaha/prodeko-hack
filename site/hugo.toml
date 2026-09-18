@@ -1,0 +1,29 @@
+baseURL = "https://prodeko.org/"
+title = "Prodeko"
+enableRobotsTXT = true
+
+# The current site serves every page under /fi/ or /en/. Keeping that means
+# existing addresses can be preserved rather than redirected.
+defaultContentLanguage = "fi"
+defaultContentLanguageInSubdir = true
+
+# Tags and categories are not part of the content model.
+disableKinds = ["taxonomy", "term", "rss"]
+
+[markup.goldmark.renderer]
+  # Editors paste embed snippets for ilmo, the gallery and the webshop.
+  unsafe = true
+
+[markup.tableOfContents]
+  startLevel = 2
+  endLevel = 3
+
+[languages]
+  [languages.fi]
+    label = "Suomi"
+    weight = 1
+    contentDir = "content/fi"
+  [languages.en]
+    label = "English"
+    weight = 2
+    contentDir = "content/en"
