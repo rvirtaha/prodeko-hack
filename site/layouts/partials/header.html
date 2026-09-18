@@ -24,6 +24,9 @@
       </div>
       <a class="btn btn-secondary" href="/admin/">{{ if eq .Language.Lang "fi" }}Kirjaudu{{ else }}Log in{{ end }}</a>
     </div>
+    <button type="button" class="nav-toggle" aria-expanded="false" aria-controls="site-header" aria-label="{{ if eq .Language.Lang "fi" }}Valikko{{ else }}Menu{{ end }}">
+      <span class="nav-toggle-bars"></span>
+    </button>
   </div>
 
   {{ range $key, $columns := $megamenu }}

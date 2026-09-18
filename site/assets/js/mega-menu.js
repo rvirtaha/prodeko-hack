@@ -33,4 +33,15 @@
   document.addEventListener("click", function (e) {
     if (!header.contains(e.target)) closeAll();
   });
+
+  // Mobile nav toggle: below 860px (see main.css) the nav list and the
+  // language/login block are hidden behind this button instead of shown
+  // inline, since there's no room for them next to the logo.
+  var toggle = header.querySelector(".nav-toggle");
+  if (toggle) {
+    toggle.addEventListener("click", function () {
+      var isOpen = header.classList.toggle("nav-open");
+      toggle.setAttribute("aria-expanded", isOpen ? "true" : "false");
+    });
+  }
 })();

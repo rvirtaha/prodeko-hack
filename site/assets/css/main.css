@@ -20,6 +20,7 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  overflow-x: hidden;
 }
 
 img { display: block; max-width: 100%; }
@@ -97,6 +98,8 @@ a.btn, a.btn:hover { border-bottom: none; }
 .site-header .bar {
   display: flex;
   align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
   gap: var(--space-10);
   height: 76px;
 }
@@ -128,6 +131,54 @@ a.btn, a.btn:hover { border-bottom: none; }
 .site-header .nav-list li.current a {
   border-bottom-color: var(--pd-blue);
 }
+
+.nav-toggle {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  background: none;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-ui);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.nav-toggle-bars,
+.nav-toggle-bars::before,
+.nav-toggle-bars::after {
+  content: "";
+  display: block;
+  width: 18px;
+  height: 2px;
+  background: var(--pd-blue);
+}
+.nav-toggle-bars { position: relative; }
+.nav-toggle-bars::before { position: absolute; top: -6px; left: 0; }
+.nav-toggle-bars::after { position: absolute; top: 6px; left: 0; }
+
+/* Below this width the logo + five nav items + language pill + login
+   button no longer fit on one line, so they collapse behind a toggle. */
+@media (max-width: 860px) {
+  .site-header .bar { height: auto; padding-block: var(--space-4); row-gap: var(--space-4); }
+  .nav-toggle { display: flex; }
+  .site-header nav,
+  .site-header .side { display: none; width: 100%; }
+  .site-header.nav-open nav,
+  .site-header.nav-open .side { display: flex; }
+  .site-header .nav-list { flex-direction: column; align-items: stretch; gap: 0; width: 100%; }
+  .site-header .nav-list a { width: 100%; padding: var(--space-3) 0; border-bottom: 1px solid var(--border-subtle); }
+  .site-header .nav-list a:hover,
+  .site-header .nav-list li.current a { border-bottom-color: var(--border-subtle); color: var(--pd-blue-light); }
+  .site-header .side { flex-direction: column; align-items: stretch; gap: var(--space-4); }
+  .site-header .side .btn { width: 100%; }
+  .lang-switch { align-self: flex-start; }
+  /* The mega-menu is a hover affordance; on touch it never opens, so the
+     flat nav-list above is the only way to reach these pages on mobile. */
+  .mega-panel { display: none !important; }
+}
+
 /* ===== Mega menu (layouts/partials/header.html + assets/js/mega-menu.js) ===== */
 
 @keyframes pdFade { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
@@ -198,7 +249,7 @@ a.btn, a.btn:hover { border-bottom: none; }
 .site-footer { background: var(--pd-blue-dark); color: var(--pd-white-1); }
 .site-footer .cols {
   display: grid;
-  grid-template-columns: minmax(220px,1.2fr) repeat(3,minmax(140px,1fr));
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
   gap: var(--space-10);
   padding: var(--space-12) 0 var(--space-10);
 }
