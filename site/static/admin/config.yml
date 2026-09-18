@@ -171,6 +171,303 @@ collections:
       - *owner
       - *body
 
+  # Five fixed pages (the front page plus the Guild, Prospective students,
+  # Corporate relations and Alumni hubs) built from the raw-website/ design
+  # export. Unlike pages_fi/pages_en above, these are not an open collection
+  # an editor can add to - each is a specific file with its own field shape,
+  # matching one of site/layouts/{home,guild-hub,prospective-hub,
+  # corporate-hub,alumni-hub}.html. A `files` collection is Decap's way to
+  # edit a fixed set of files rather than an open folder of them.
+  - name: special_pages
+    label: "Erikoissivut"
+    label_singular: "Erikoissivu"
+    description: >-
+      Etusivu ja neljä pääsivua. Näiden ulkoasu tulee malleista (layouts/),
+      ei tästä lomakkeesta - täällä muokataan vain niiden tekstisisältöä.
+    files:
+      - name: home_fi
+        label: "Etusivu (suomeksi)"
+        file: site/content/fi/_index.md
+        fields: &homeFields
+          - *title
+          - name: layout
+            widget: hidden
+            required: false
+          - name: source
+            widget: hidden
+            required: false
+          - label: "Käännösavain"
+            name: translationKey
+            widget: string
+          - label: "Yläotsikko (hero)"
+            name: heroKicker
+            widget: string
+          - label: "Otsikko (hero)"
+            name: heroTitle
+            widget: string
+          - label: "\"Hae jäseneksi\" -painike: teksti"
+            name: ctaJoin
+            widget: string
+          - label: "\"Hae jäseneksi\" -painike: osoite"
+            name: ctaJoinUrl
+            widget: string
+          - label: "\"Yrityksille\" -painike: teksti"
+            name: ctaCompanies
+            widget: string
+          - label: "\"Yrityksille\" -painike: osoite"
+            name: ctaCompaniesUrl
+            widget: string
+          - label: "Ajankohtaista-nosto"
+            name: announcement
+            widget: object
+            fields:
+              - {label: "Yläotsikko", name: kicker, widget: string}
+              - {label: "Otsikko", name: title, widget: string}
+              - {label: "Teksti", name: body, widget: text}
+              - {label: "Linkin teksti", name: linkText, widget: string}
+          - label: "Kohderyhmäkortit"
+            name: audiences
+            widget: list
+            summary: "{{title}}"
+            fields:
+              - {label: "Yläotsikko", name: kicker, widget: string}
+              - {label: "Otsikko", name: title, widget: string}
+              - {label: "Teksti", name: body, widget: text}
+              - {label: "Linkin teksti", name: linkText, widget: string}
+              - {label: "Osoite", name: url, widget: string}
+          - label: "Arvot-osion otsikko"
+            name: valuesTitle
+            widget: string
+          - label: "Arvot-osion alaotsikko"
+            name: valuesSub
+            widget: string
+          - label: "Arvot"
+            name: values
+            widget: list
+            summary: "{{name}}"
+            hint: >-
+              Kuva haetaan nimen perusteella (esim. "Think big" ->
+              assets/images/values/arvo-think-big.jpg). Kuvaa ei ladata tästä.
+            fields:
+              - {label: "Nimi", name: name, widget: string}
+          - label: "Kuvapalkin otsikko"
+            name: bandTitle
+            widget: string
+          - label: "Kuvapalkin teksti"
+            name: bandSub
+            widget: string
+          - label: "Yhteistyö-osion otsikko"
+            name: partnersTitle
+            widget: string
+          - label: "Yhteistyö-osion linkin teksti"
+            name: partnersLinkText
+            widget: string
+          - label: "Yhteistyö-osion linkin osoite"
+            name: partnersLinkUrl
+            widget: string
+          - label: "Hero-teksti (leipäteksti)"
+            name: body
+            widget: markdown
+            required: false
+
+      - name: home_en
+        label: "Etusivu (englanniksi)"
+        file: site/content/en/_index.md
+        fields: *homeFields
+
+      - name: guild_hub_fi
+        label: "Kilta-sivu (suomeksi)"
+        file: site/content/fi/guild/_index.md
+        fields: &guildHubFields
+          - *title
+          - {name: layout, widget: hidden, required: false}
+          - {name: source, widget: hidden, required: false}
+          - {label: "Käännösavain", name: translationKey, widget: string}
+          - {label: "Yläotsikko", name: guildKicker, widget: string}
+          - {label: "Otsikko", name: guildTitle, widget: string}
+          - label: "Tunnusluvut"
+            name: numbers
+            widget: list
+            summary: "{{value}} — {{label}}"
+            fields:
+              - {label: "Arvo", name: value, widget: string}
+              - {label: "Selite", name: label, widget: string}
+          - label: "Osiot"
+            name: sections
+            widget: list
+            summary: "{{title}}"
+            fields:
+              - {label: "Otsikko", name: title, widget: string}
+              - {label: "Teksti", name: body, widget: text}
+              - label: "Kortit"
+                name: items
+                widget: list
+                summary: "{{name}}"
+                fields:
+                  - {label: "Nimi", name: name, widget: string}
+                  - {label: "Kuvaus", name: desc, widget: text}
+          - {label: "Kiltahuone-otsikko", name: guildRoomTitle, widget: string}
+          - {label: "Kiltahuone-teksti", name: guildRoomBody, widget: text}
+          - {label: "Asiakirjat-otsikko", name: docsTitle, widget: string}
+          - label: "Asiakirjat (linkkien nimet)"
+            name: docs
+            widget: list
+          - {label: "Yhteystiedot-otsikko", name: contactTitle, widget: string}
+          - label: "Osoite"
+            name: contactAddress
+            widget: text
+            hint: "Yksi rivi per rivinvaihto, esim. katuosoite omalla rivillään."
+          - label: "Ingressi"
+            name: body
+            widget: markdown
+            required: false
+
+      - name: guild_hub_en
+        label: "Guild page (English)"
+        file: site/content/en/guild/_index.md
+        fields: *guildHubFields
+
+      - name: prospective_hub_fi
+        label: "Abeille-sivu (suomeksi)"
+        file: site/content/fi/abit/_index.md
+        fields: &prospectiveHubFields
+          - *title
+          - {name: layout, widget: hidden, required: false}
+          - {name: source, widget: hidden, required: false}
+          - {label: "Käännösavain", name: translationKey, widget: string}
+          - {label: "Yläotsikko", name: prospKicker, widget: string}
+          - {label: "Otsikko", name: prospTitle, widget: string}
+          - {label: "\"Opinnot\"-otsikko", name: whatTitle, widget: string}
+          - {label: "\"Opinnot\", 1. kappale", name: whatBody1, widget: text}
+          - {label: "\"Opinnot\", 2. kappale", name: whatBody2, widget: text}
+          - {label: "Hakeminen-otsikko", name: applyTitle, widget: string}
+          - label: "Hakemisen vaiheet"
+            name: applySteps
+            widget: list
+            summary: "{{n}}. {{title}}"
+            fields:
+              - {label: "Numero", name: n, widget: string}
+              - {label: "Otsikko", name: title, widget: string}
+              - {label: "Teksti", name: body, widget: text}
+          - {label: "Opiskelijaelämä-otsikko", name: lifeTitle, widget: string}
+          - label: "Opiskelijaelämä-kortit"
+            name: life
+            widget: list
+            summary: "{{title}}"
+            fields:
+              - {label: "Otsikko", name: title, widget: string}
+              - {label: "Teksti", name: body, widget: text}
+          - {label: "UKK-otsikko", name: faqTitle, widget: string}
+          - label: "Usein kysytyt kysymykset"
+            name: faq
+            widget: list
+            summary: "{{q}}"
+            fields:
+              - {label: "Kysymys", name: q, widget: string}
+              - {label: "Vastaus", name: a, widget: text}
+          - {label: "Abivastaavat-yläotsikko", name: captainsKicker, widget: string}
+          - {label: "Abivastaavat-otsikko", name: captainsTitle, widget: string}
+          - {label: "Abivastaavat-teksti", name: captainsBody, widget: text}
+          - {label: "Abivastaavat-sähköposti", name: captainsEmail, widget: string}
+          - label: "Ingressi"
+            name: body
+            widget: markdown
+            required: false
+
+      - name: prospective_hub_en
+        label: "Prospective students page (English)"
+        file: site/content/en/prospective-students.md
+        fields: *prospectiveHubFields
+
+      - name: corporate_hub_fi
+        label: "Yrityksille-sivu (suomeksi)"
+        file: site/content/fi/yrityssuhteet/_index.md
+        fields: &corporateHubFields
+          - *title
+          - {name: layout, widget: hidden, required: false}
+          - {name: source, widget: hidden, required: false}
+          - {label: "Käännösavain", name: translationKey, widget: string}
+          - {label: "Yläotsikko", name: corpKicker, widget: string}
+          - {label: "Otsikko", name: corpTitle, widget: string}
+          - {label: "Yhteydenotto-painikkeen teksti", name: corpCta, widget: string}
+          - {label: "Yhteydenoton sähköposti", name: corpContactEmail, widget: string}
+          - label: "Tunnusluvut"
+            name: corpNumbers
+            widget: list
+            summary: "{{value}} — {{label}}"
+            fields:
+              - {label: "Arvo", name: value, widget: string}
+              - {label: "Selite", name: label, widget: string}
+          - {label: "Yhteistyö-otsikko (sivupalkki)", name: partnersTitle, widget: string}
+          - {label: "Yhteystiedot-otsikko", name: contactTitle, widget: string}
+          - {label: "Yhteistyömuodot-otsikko", name: offerTitle, widget: string}
+          - label: "Yhteistyömuodot"
+            name: offers
+            widget: list
+            summary: "{{title}}"
+            fields:
+              - {label: "Otsikko", name: title, widget: string}
+              - {label: "Teksti", name: body, widget: text}
+          - {label: "Yhteyshenkilön rooli", name: corpContactName, widget: string}
+          - {label: "Yhteyshenkilön kausi", name: corpContactRole, widget: string}
+          - {label: "Yhteyshenkilön teksti", name: corpContactBody, widget: text}
+          - label: "Ingressi"
+            name: body
+            widget: markdown
+            required: false
+
+      - name: corporate_hub_en
+        label: "Companies page (English)"
+        file: site/content/en/yrityssuhteet/_index.md
+        fields: *corporateHubFields
+
+      - name: alumni_hub_fi
+        label: "Alumni-sivu (suomeksi)"
+        file: site/content/fi/alumni/_index.md
+        fields: &alumniHubFields
+          - *title
+          - {name: layout, widget: hidden, required: false}
+          - {name: source, widget: hidden, required: false}
+          - {label: "Käännösavain", name: translationKey, widget: string}
+          - {label: "Yläotsikko", name: alumniKicker, widget: string}
+          - {label: "Otsikko", name: alumniTitle, widget: string}
+          - label: "Tunnusluvut"
+            name: alumniNumbers
+            widget: list
+            summary: "{{value}} — {{label}}"
+            fields:
+              - {label: "Arvo", name: value, widget: string}
+              - {label: "Selite", name: label, widget: string}
+          - label: "Osiot"
+            name: sections
+            widget: list
+            summary: "{{title}}"
+            fields:
+              - {label: "Otsikko", name: title, widget: string}
+              - {label: "Teksti", name: body, widget: text}
+          - {label: "Liity-nosto: yläotsikko", name: alumniJoinKicker, widget: string}
+          - {label: "Liity-nosto: otsikko", name: alumniJoinTitle, widget: string}
+          - {label: "Liity-nosto: teksti", name: alumniJoinBody, widget: text}
+          - {label: "Liity-nosto: sähköposti", name: alumniJoinEmail, widget: string}
+          - {label: "Linkkilistan otsikko", name: alumniLinksTitle, widget: string}
+          - label: "Linkkilista (nimet)"
+            name: alumniLinks
+            widget: list
+          - {label: "Yhteystiedot-otsikko", name: contactTitle, widget: string}
+          - label: "Osoite"
+            name: contactAddress
+            widget: text
+            hint: "Yksi rivi per rivinvaihto."
+          - label: "Ingressi"
+            name: body
+            widget: markdown
+            required: false
+
+      - name: alumni_hub_en
+        label: "Alumni page (English)"
+        file: site/content/en/alumni/_index.md
+        fields: *alumniHubFields
+
   - name: member_pages_en
     label: "VAIN JÄSENILLE – Sivut (englanniksi)"
     label_singular: "Jäsensivu"
