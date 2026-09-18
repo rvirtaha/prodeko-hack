@@ -1,0 +1,38 @@
+# Decap configuration for the local dev stack only.
+#
+# repo and branch must match GITHUB_OWNER/GITHUB_REPO/GITHUB_BRANCH in .env.
+# The proxy pins the repository server-side regardless, but a mismatch makes
+# the editing screen describe a different repository than the one being
+# written to, which is confusing to debug.
+backend:
+  name: github
+  repo: prodeko/prodeko-hack
+  branch: main
+
+  # base_url must be a bare origin. Decap compares the popup's
+  # window.postMessage event origin against this string exactly, and an event
+  # origin never has a path, so a trailing slash or a /path here makes login
+  # hang with no error. Same value as the proxy's PUBLIC_URL.
+  base_url: http://localhost:8080
+  auth_endpoint: auth
+  api_root: http://localhost:8080/github
+
+# There is no local_backend key here on purpose. Decap's local backend
+# bypasses the proxy entirely, so testing with it exercises none of the login
+# path while appearing to work.
+
+media_folder: site/static/uploads
+public_folder: /uploads
+
+collections:
+  - name: pages
+    label: Pages
+    label_singular: Page
+    folder: site/content/fi
+    create: true
+    extension: md
+    format: frontmatter
+    slug: "{{slug}}"
+    fields:
+      - { label: Title, name: title, widget: string }
+      - { label: Body, name: body, widget: markdown }
