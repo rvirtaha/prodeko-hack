@@ -3,9 +3,9 @@
 The service that lets Decap CMS use Prodeko accounts instead of GitHub
 accounts. It is the only new backend component in the design.
 
-Nothing is implemented yet. This file is the contract the implementation has to
-meet, written down so the work can start without waiting on a design
-discussion. The language and framework are still open.
+Written in Go, runs in Docker. `DEV.md` describes the local stack; `cmd/proxy`
+is the binary and `internal/` holds the four pieces it wires together:
+configuration, sign-in, sessions and the GitHub forwarder.
 
 ## What it does
 
@@ -41,6 +41,8 @@ sequenceDiagram
   opener window with `postMessage`.
 - `ANY /github/*` forwards to the GitHub API. Everything under here requires a
   valid session.
+- `GET /healthz` says the process is listening. Unauthenticated, and it makes
+  no claim about Keycloak or GitHub being reachable.
 
 ## Rules the implementation must follow
 
@@ -60,17 +62,51 @@ sequenceDiagram
   objects, pull requests, and the current user. Not collaborators, webhooks or
   secrets.
 
+## Operational constraints
+
+Two pieces of state live in memory, which bounds how this may be deployed.
+
+**One replica.** The half-finished sign-ins between `/auth` and `/callback` are
+held in process. A second replica, or a restart mid-login, fails that sign-in
+with "This sign-in was not recognised". Scaling past one container needs a
+shared state store first.
+
+**Sessions outlive role changes.** A session token is a self-contained sealed
+blob carrying the roles the editor held at sign-in, and Decap never renews a
+login. Removing an editor's realm role in Keycloak takes effect when their
+session expires (`SESSION_TTL`, 8h by default). `session.Store.Revoke` cuts one
+session short, but no endpoint is mounted to call it and its deny-list is in
+memory; the blunt instrument is rotating `SESSION_SECRET`, which signs everyone
+out.
+
 ## Configuration
 
-Expected as environment variables:
+Expected as environment variables. Every one of them, with its validation
+rule, is documented in `.env.example`; `internal/config` refuses to start the
+service on a partial configuration and reports every problem in one pass.
+
+Required:
 
 - `KEYCLOAK_ISSUER`, `KEYCLOAK_CLIENT_ID`, `KEYCLOAK_CLIENT_SECRET`
 - `EDITOR_ROLE`, the realm role required to edit
 - `GITHUB_TOKEN`, a fine-grained token on a bot account, scoped to one
-  repository with contents and pull request write access
+  repository with contents, pull request and issue write access
 - `GITHUB_OWNER`, `GITHUB_REPO`, `GITHUB_BRANCH`
-- `SESSION_SECRET`
-- `PUBLIC_URL`, the address this service is reachable at
+- `SESSION_SECRET`, at least 32 bytes
+- `PUBLIC_URL`, the address this service is reachable at, as a bare origin
+- `CMS_ORIGINS`, the origins the editing screen is served from. Decap's calls
+  to `api_root` come from the browser, cross-origin, so these are the origins
+  CORS allows. `*` is refused.
+
+Optional:
+
+- `LISTEN_ADDR`, `LOG_LEVEL`, `SESSION_TTL`, `OAUTH_SCOPE`, `GITHUB_API_ROOT`
+- `GITHUB_COMMITTER_NAME`, `GITHUB_COMMITTER_EMAIL`, the bot identity recorded
+  as the git committer. The author is the editor and is never configurable.
+- `KEYCLOAK_DISCOVERY_URL`, for split-horizon setups such as the dev compose
+  stack, where the browser and the proxy reach Keycloak at different
+  addresses. Discovery happens here; `iss` is still checked against
+  `KEYCLOAK_ISSUER`.
 
 ## How the site points at it
 

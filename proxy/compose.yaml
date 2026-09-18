@@ -1,0 +1,112 @@
+# Local development stack for the editor login proxy.
+#
+# Everything here is local: its own Keycloak, its own realm, its own throwaway
+# secrets. Nothing in this file may ever point at id.prodeko.org. The one real
+# credential is GITHUB_TOKEN, which you supply in .env.
+#
+#   cp .env.example .env     # then paste a GitHub token into it
+#   DOCKER_BUILDKIT=0 docker compose up --build
+#
+# See DEV.md.
+
+name: prodeko-cms-proxy
+
+services:
+  # Keycloak with a split horizon. The browser reaches it at localhost:8180
+  # and the proxy reaches it at keycloak:8180, but a token carries exactly one
+  # `iss`. KC_HOSTNAME fixes the front-channel (and therefore `iss`) on
+  # localhost, while KC_HOSTNAME_BACKCHANNEL_DYNAMIC lets the discovery
+  # document advertise the in-network address to in-network callers. The proxy
+  # then discovers at KEYCLOAK_DISCOVERY_URL and validates `iss` against
+  # KEYCLOAK_ISSUER. Matching the published port to the internal one keeps the
+  # two spellings identical apart from the host.
+  keycloak:
+    image: quay.io/keycloak/keycloak:26.5.4
+    command: ["start-dev", "--import-realm"]
+    environment:
+      KC_BOOTSTRAP_ADMIN_USERNAME: admin
+      KC_BOOTSTRAP_ADMIN_PASSWORD: admin
+      KC_HTTP_ENABLED: "true"
+      KC_HTTP_PORT: "8180"
+      KC_HOSTNAME: http://localhost:8180
+      KC_HOSTNAME_BACKCHANNEL_DYNAMIC: "true"
+    ports:
+      - "8180:8180"
+    volumes:
+      # An empty realm, exactly as membership-registry does it. Roles, the
+      # client, its protocol mappers and the test users are applied by
+      # kc-setup over the Admin API, because they are the parts that change.
+      - ./dev/keycloak/realm-export.json:/opt/keycloak/data/import/realm-export.json:ro
+
+  # One-shot realm bootstrap. It polls Keycloak itself, which is why nothing
+  # here needs a healthcheck. Standard library only, so no pip install.
+  kc-setup:
+    image: python:3.13-alpine
+    command: ["python", "/setup/setup.py"]
+    working_dir: /setup
+    environment:
+      KEYCLOAK_URL: http://keycloak:8180
+      KEYCLOAK_REALM: membership-registry
+      KC_ADMIN: admin
+      KC_ADMIN_PASSWORD: admin
+      CMS_CLIENT_ID: cms-auth-proxy
+      CMS_CLIENT_SECRET: dev-secret-cms-auth-proxy
+      CMS_REDIRECT_URI: http://localhost:8080/callback
+      CMS_WEB_ORIGIN: http://localhost:1313
+      EDITOR_ROLE: cms-editor
+    volumes:
+      - ./dev/keycloak:/setup:ro
+    depends_on:
+      - keycloak
+    restart: "no"
+
+  proxy:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    # .env carries the GitHub credential and the repository to pin. Copy it
+    # from .env.example; compose fails loudly if it is missing.
+    env_file:
+      - .env
+    environment:
+      LISTEN_ADDR: ":8080"
+      LOG_LEVEL: debug
+
+      # Must be a bare origin: Decap compares the popup's postMessage event
+      # origin against this string exactly.
+      PUBLIC_URL: http://localhost:8080
+
+      # Where the editing screen is served from. Decap's browser fetches to
+      # api_root are cross-origin, so this is what the CORS headers allow.
+      CMS_ORIGINS: http://localhost:1313
+
+      # The value of `iss` in every token, as the browser sees Keycloak.
+      KEYCLOAK_ISSUER: http://localhost:8180/realms/membership-registry
+      # Where the proxy fetches .well-known from, as the container sees it.
+      KEYCLOAK_DISCOVERY_URL: http://keycloak:8180/realms/membership-registry
+      KEYCLOAK_CLIENT_ID: cms-auth-proxy
+      KEYCLOAK_CLIENT_SECRET: dev-secret-cms-auth-proxy
+      EDITOR_ROLE: cms-editor
+
+      # Dev placeholder. config.Load rejects this value outright unless
+      # PUBLIC_URL is local, so it cannot quietly reach production.
+      SESSION_SECRET: dev-session-secret-not-for-production-use-0000000
+      SESSION_TTL: 8h
+    depends_on:
+      kc-setup:
+        condition: service_completed_successfully
+    # No healthcheck: the final image is distroless and has no shell, so
+    # there is no command to run inside it. Add one only if the binary grows a
+    # self-check mode.
+
+  # Stand-in for the real /admin until roadmap item D lands. Serving it on
+  # 1313 keeps the origin the same as a `hugo server`, so the CORS and
+  # postMessage configuration above is the configuration the real site needs.
+  admin:
+    image: nginx:alpine
+    ports:
+      - "1313:80"
+    volumes:
+      - ./dev/admin:/usr/share/nginx/html/admin:ro
