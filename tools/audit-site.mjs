@@ -170,8 +170,12 @@ await browser.close();
 // ---- report ----------------------------------------------------------------
 
 const crawled = new Set([...pages.keys()].map(pathOf));
+/** An alias is a generated meta-refresh stub standing in for a retired
+ *  address. Nothing links to one by design, so it is not an orphan. */
+const isAlias = (file) => /<meta[^>]+http-equiv=["']?refresh/i.test(fs.readFileSync(file, 'utf8').slice(0, 2000));
+
 const built = fs.existsSync(BUILD_DIR)
-  ? walk(BUILD_DIR).filter((f) => f.endsWith('index.html'))
+  ? walk(BUILD_DIR).filter((f) => f.endsWith('index.html') && !isAlias(f))
       .map((f) => '/' + path.relative(BUILD_DIR, f).replace(/index\.html$/, '').replace(/\\/g, '/'))
       .filter((u) => u !== '/')
   : [];
@@ -192,7 +196,11 @@ for (const p of pages.values()) {
 }
 
 const orphans = built.filter((b) => !crawled.has(b)).sort();
-const overflowing = [...pages.values()].filter((p) => p.mobile?.scrollWidth > p.mobile?.viewport + 1);
+/** /admin/ is Decap's own interface, which is not responsive and is not ours
+ *  to lay out. Editors use it on a laptop. */
+const overflowing = [...pages.values()]
+  .filter((p) => !pathOf(p.url).startsWith('/admin'))
+  .filter((p) => p.mobile?.scrollWidth > p.mobile?.viewport + 1);
 const badExternal = externalResults.filter((r) => (r.status >= 400 || r.status === 0) && !BOT_HOSTILE.test(new URL(r.url).hostname));
 const badImages = imageResults.filter((r) => r.status >= 400 || r.status === 0);
 
