@@ -1,5 +1,5 @@
 ---
-title: OPINNOT
+title: "Tärkeitä linkkejä"
 translationKey: opinnot-tarkeita-linkkeja
 sourceURL: https://prodeko.org/fi/opinnot/tarkeita-linkkeja/
 description: Kootut linkit tuotantotalouden opiskelijan tarvitsemiin opetussuunnitelmiin, kurssihakuun ja Aallon opintopalveluihin.

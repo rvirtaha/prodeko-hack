@@ -22,7 +22,7 @@ A part of activities is versatile collaboration with Aalto University's Departme
 
 Prodeko Alumni was born when Prodekoians own alumni association was first talked years. Later autumn in 1998 Prodeo invited its old members to have establishment meeting to the alumni organization. First name of the association was "Prodeko's senior guild" but this was changed some years later. In the first meeting there were ten to twenty members and nowadays Prodeko Alumni has over 2000 members.
 
-More information about association, its rules, events and joining it can be found on its own pages: [https://alumni.prodeko.org](https://alumni.prodeko.org).
+More information about association, its rules, events and joining it can be found on its own pages: [alumni.prodeko.org](https://alumni.prodeko.org).
 
 Prodeko Alumni Board 2026
 

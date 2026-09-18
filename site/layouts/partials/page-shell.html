@@ -5,7 +5,14 @@
      own .Content, so the people and archive layouts can pass their generated
      markup through the same frame. */}}
 {{ $page := .page }}
-{{ $body := .body }}
+
+{{/* A paragraph that is nothing but a link is a row in a list of documents,
+     not prose — the alumni newsletter archive is 86 of them in a row. Marking
+     them here rather than with `p > a:only-child` in CSS is the difference
+     between "the paragraph holds only this link" and "the paragraph holds
+     exactly one link"; the second also matches a sentence with a link in it,
+     which would tear the sentence apart. */}}
+{{ $body := replaceRE `<p>(<a href="[^"]*"[^>]*>[^<]*</a>)</p>` `<p class="doc-link">$1</p>` (string .body) | safeHTML }}
 {{ $nav := partial "section-nav.html" $page }}
 {{ $hasNav := ne (trim (string $nav) " \n\t") "" }}
 <article class="page">

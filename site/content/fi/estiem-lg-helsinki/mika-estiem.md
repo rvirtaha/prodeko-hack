@@ -1,5 +1,5 @@
 ---
-title: ESTIEM LG Helsinki
+title: "Mikä on ESTIEM?"
 translationKey: estiem-lg-helsinki-mika-estiem
 description: Mikä ESTIEM on, mitä Local Group Helsinki tekee ja miksi tapahtumiin kannattaa lähteä mukaan.
 sourceURL: https://prodeko.org/fi/estiem-lg-helsinki/mika-estiem/

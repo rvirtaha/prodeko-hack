@@ -1,5 +1,5 @@
 ---
-title: OPINNOT
+title: "Usein kysyttyä opinnoista"
 translationKey: opinnot-usein-kysyttya-opinnoista
 sourceURL: https://prodeko.org/fi/opinnot/usein-kysyttya-opinnoista/
 description: Vastauksia yleisimpiin opintokysymyksiin harjoittelusta, hyväksiluvusta, kannustusstipendistä ja teknisistä sivuaineista.

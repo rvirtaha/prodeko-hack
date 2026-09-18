@@ -1,5 +1,5 @@
 ---
-title: MATRIKKELIN TIETOSUOJASELOSTE
+title: "Matrikkeli privacy notice"
 description: Privacy notice describing how personal data in Prodeko's member and alumni register and in the matrikkeli is collected and handled.
 translationKey: alumni-tietoa-alumnista-matrikkelin-tietosuojasleoste
 sourceURL: https://prodeko.org/en/alumni/about-alumni/matrikkeli-privacy-notice/

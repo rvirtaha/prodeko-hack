@@ -1,5 +1,5 @@
 ---
-title: Billing guidelines for Prodeko, the Guild of Industrial Engineering and Management
+title: "Billing information"
 description: How to invoice the guild by e-invoice, PDF or post, with our business ID, e-invoicing details and treasurer's contact.
 translationKey: yrityssuhteet-laskutustiedot
 sourceURL: https://prodeko.org/en/yrityssuhteet/billing/

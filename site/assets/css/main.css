@@ -813,6 +813,29 @@ a.btn, a.btn:hover { border-bottom: none; }
   hyphens: auto;
 }
 
+/* A list of documents, marked up in page-shell.html: a paragraph holding
+   nothing but a link. The alumni newsletter archive is 86 of them, and as
+   plain paragraphs they were 20px tall with nothing between them, which is
+   neither readable nor tappable. */
+.prose .doc-link { margin: 0; max-width: var(--content-max); }
+.prose .doc-link > a {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  min-height: 44px;
+  padding: var(--space-2) 0;
+  border-bottom: 1px solid var(--border-subtle);
+  overflow-wrap: anywhere;
+}
+.prose .doc-link > a::after {
+  content: "\2193";
+  flex-shrink: 0;
+  color: var(--pd-blue-light);
+  font-size: var(--size-sm);
+}
+.prose .doc-link + p:not(.doc-link) { margin-top: var(--space-8); }
+
 /* ===== Section index cards (layouts/section.html) ===== */
 
 .index-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: var(--space-4); margin-top: var(--space-8); }

@@ -1,5 +1,5 @@
 ---
-title: ATALENT
+title: "aTalent"
 description: aTalent is a recruitment company owned by Prodeko, Prodeko Alumni and KY that helps members find jobs and serves companies hiring.
 translationKey: yrityssuhteet-atalent
 sourceURL: https://prodeko.org/en/yrityssuhteet/atalent/

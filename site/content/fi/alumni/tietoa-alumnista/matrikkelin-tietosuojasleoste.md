@@ -1,5 +1,5 @@
 ---
-title: MATRIKKELIN TIETOSUOJASELOSTE
+title: "Matrikkelin tietosuojaseloste"
 translationKey: alumni-tietoa-alumnista-matrikkelin-tietosuojasleoste
 sourceURL: https://prodeko.org/fi/alumni/tietoa-alumnista/matrikkelin-tietosuojasleoste/
 description: Tietosuojaseloste siitä, miten Prodekon jäsen- ja alumnirekisterin sekä matrikkelin henkilötietoja kerätään ja käsitellään.
