@@ -25,6 +25,11 @@ than a phone, or a broken image.
 | pages wider than 390px | 5 | 0 |
 | broken images | 1 (on 5 pages) | 0 |
 | board years in the archive | 3 | 59 |
+| h6 headings left over from the scrape | 264 | 0 |
+| pages paired across both languages | 52 | 57 |
+
+The deployable public tree, which omits the four member pages, comes out at
+113 of 113 reachable with the same zero counts. The audit now runs in CI.
 
 ## What was wrong
 
@@ -72,6 +77,11 @@ was a blank rectangle. The embed now carries a card naming the service with a
 link to it and a placeholder behind the frame, so the page reads the same
 whether the frame paints or is refused.
 
+The alumni newsletter archive is 86 consecutive paragraphs each holding one
+link. As paragraphs they rendered 20px tall with nothing between them, which
+is neither readable nor tappable on a phone. A paragraph whose whole content
+is a link is now a row in a list of documents.
+
 ## Content that was wrong rather than missing
 
 Found while sweeping, and fixed:
@@ -90,6 +100,14 @@ Found while sweeping, and fixed:
 - A malformed mailto: `https://mailto:tarja.timonen@aalto.fi,/`.
 - Links to `djangocms.prodeko.org`, `studyguides.aalto.fi`, `pora.ayy.fi`,
   `varjoopintoopas.fi` and `new.abb.com`, all retired hosts.
+- A link labelled Sisu pointing at Oodi, and a MyCourses address split so its
+  last letter fell outside the link: `[https://mycourses.aalto.f](...)i.`
+- Seven pages carrying the old site's all-caps display styling as their actual
+  title. Two of them were titled OPINNOT — the section's name rather than the
+  page's — so the sidebar listed the same entry twice. The alumni register
+  notice was titled in Finnish on the English page.
+- The honours page was titled Kunniamaininnat, honourable mentions, on a page
+  listing honorary members and the Pro Prodeko badge.
 
 Left alone deliberately: hosts that answer a headless browser with 403 but
 serve a real one fine (aalto.fi, hsl.fi, nokia.com, ayy.fi, reittiopas.fi),
