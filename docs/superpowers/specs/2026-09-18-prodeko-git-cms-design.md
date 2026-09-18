@@ -80,9 +80,10 @@ The build lands in two directories. Public pages go where Caddy serves them
 freely. Member pages go somewhere Caddy only reads after a successful login, so
 they have no public address that could be guessed.
 
-Serving from disk rather than object storage keeps the moving parts to a
-minimum: the site is a few megabytes of HTML on a machine Prodeko already runs.
-Putting a cache in front of it later is a configuration change, not a redesign.
+Serving from disk keeps the moving parts to a minimum: the site is a few
+megabytes of HTML on a machine Prodeko already runs. There is no content
+delivery network and no object storage, because a guild website does not have
+the traffic to need either and both cost money every month.
 
 ## Editing and publishing
 
@@ -279,8 +280,9 @@ Payload is what Tietokilta chose, which makes it worth looking at honestly.
 Their site is good in places, and the state of it is also instructive: 27 of 87
 pages have not been edited since 2024, four English pages return 404 because of
 duplicated address fields, there is no sitemap, no robots file and no search,
-every page is served uncached even though almost all of it is static, and their
-media library holds seven separate uploads of the same freshman guide.
+every page is rebuilt by the application for every visitor even though almost
+all of it is static, and their media library holds seven separate uploads of
+the same freshman guide.
 
 Those are not failures of effort. They are what happens when the content lives
 in a database that only the running application can see. A repository of files
