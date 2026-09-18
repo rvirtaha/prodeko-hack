@@ -780,8 +780,11 @@ a.btn, a.btn:hover { border-bottom: none; }
 .prose ul, .prose ol { margin: 0 0 var(--space-4); padding-left: var(--space-6); }
 .prose li { margin-bottom: var(--space-2); }
 .prose li::marker { color: var(--pd-blue-light); }
-.prose a { color: var(--text-link); border-bottom: 1px solid rgb(0 46 125 / 0.25); }
-.prose a:hover { border-bottom-color: currentColor; }
+/* :not(.btn) because `.prose a` outweighs `.btn-primary`, and without it a
+   button inside page content took the link colour on its own blue ground —
+   0 53 160 on 0 46 125, which is a contrast ratio of 1.6. */
+.prose a:not(.btn) { color: var(--text-link); border-bottom: 1px solid rgb(0 46 125 / 0.25); }
+.prose a:not(.btn):hover { border-bottom-color: currentColor; }
 .prose blockquote {
   margin: var(--space-8) 0;
   padding: var(--space-2) 0 var(--space-2) var(--space-6);
