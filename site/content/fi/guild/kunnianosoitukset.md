@@ -1,6 +1,6 @@
 ---
-title: Kunniamaininnat
-description: Killan myöntämät kunniamaininnat ja niiden saajat vuodesta 1969 lähtien.
+title: Killan ansiomerkit ja kunnianosoitukset
+description: Killan myöntämät ansiomerkit ja kunnianosoitukset sekä niiden saajat vuodesta 1969 lähtien.
 translationKey: guild-kunnianosoitukset
 layout: archive
 dataset: honours
@@ -9,4 +9,4 @@ reviewed: 2026-09-18
 owner: hallitus
 ---
 
-Killan myöntämät kunniamaininnat vuodesta 1969 lähtien.
+Killan myöntämät ansiomerkit ja kunnianosoitukset vuodesta 1969 lähtien.
