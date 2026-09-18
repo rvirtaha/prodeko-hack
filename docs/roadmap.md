@@ -40,10 +40,10 @@ fetch it.
 
 ### B. Hosting
 
-Caddy on prodeko-vm2 serves the built site at a real address, through the
-existing Ansible setup. A storage container if credentials are at hand,
-otherwise the Action copies files to the VM and Caddy serves from disk. The
-swap between the two is small and should not block anything.
+An Azure storage container holds the built site, and Caddy on prodeko-vm2
+serves it at a real address through the existing Ansible setup. The container
+is private and only the proxy reads it, so member content has no public address
+even before the gate in item G exists.
 
 Lands in infra-prodeko. Done when the page from item A is reachable over HTTPS.
 
@@ -69,17 +69,23 @@ plus a few small editor components.
 
 Depends on the content model from item F being roughly settled.
 
-### E. Content converter
+### E. Seed content
 
-A script that reads the Django database dump and writes Markdown pages, YAML
-data files and a list of old address to new address.
+Enough real content to show the site working, not the whole migration. A
+handful of pages written by hand from the live site: the front page, two or
+three plain pages, the current board, and one member-only page.
 
-The three archive pages matter most: boards from 1967, officials from 2005, and
-honours from 1969. Those become data files with one entry per person. The
-roughly sixty plain pages are converted best-effort, and some will need hand
-tidying.
+One exception is worth scripting. The previous boards page holds 58 years of
+names and is the clearest demonstration of why a year archive should be a data
+file rather than hand-edited HTML. A short one-off parse of that single page
+gives us real data for the archive template without building the full
+converter.
 
-Done when the real page tree is in the repository in both languages.
+The full converter from the Django dump belongs to the migration plan in item
+H, as a described and costed step rather than something the MVP runs. The
+database dump is already available, so it stays cheap to do later.
+
+Done when the site has real Prodeko content on every template.
 
 ### F. Content model and templates
 
@@ -103,9 +109,13 @@ sign-in redirect to a stranger and the page itself to a member.
 ### H. Written deliverables
 
 The sitemap, the content inventory, the migration plan and the platform
-comparison. Most of this falls out of items E and F rather than being separate
-work. The content inventory in particular is the converter's output reviewed
-page by page.
+comparison.
+
+The content inventory already exists as a survey of the live site: roughly 95
+real pages, about sixty of them plain text, twelve that are only redirects, and
+three archive pages that hold more text than the other ninety combined. The
+migration plan describes the converter that item E does not build, phased
+against that inventory.
 
 ## Order and parallelism
 
@@ -113,40 +123,45 @@ page by page.
 flowchart LR
     A[A. Repository and build] --> B[B. Hosting]
     A --> C[C. Editor login proxy]
-    A --> E[E. Converter]
     A --> F[F. Templates]
+    F --> E[E. Seed content]
     F --> D[D. Decap configuration]
     C --> D
     B --> G[G. Member section]
     E --> H[H. Deliverables]
-    F --> H
 ```
 
 Item A is small and blocks everything, so it is done first and by one person.
-After that, C, E and F run in parallel and barely touch each other. The proxy
-knows nothing about templates, the converter writes files nobody else is
-editing yet, and the templates can be built against hand-written sample content
-until the converter catches up.
+After that there are three tracks that barely touch each other:
 
-B and G belong together and live in a different repository, which makes them a
-clean separate track.
+- The proxy, item C. Knows nothing about templates or content.
+- Hosting and the member gate, items B and G. A different repository entirely.
+- Templates and content, items F and E, then D once the model settles.
 
-D is the one item that waits on two others, because the editing screen has to
-describe a content model that exists and log in through a proxy that works.
+D is the only item waiting on two tracks, because the editing screen has to
+describe a content model that exists and log in through a proxy that works. It
+is also small, so whoever finishes first picks it up.
+
+Templates is the largest track and now the one with slack in it, since the full
+converter moved out of the MVP. That is deliberate. User experience and design
+carries the most weight of any single criterion, and it is the part no shortcut
+helps with.
 
 ## Start these now, outside the critical path
 
-Three things need a human with access rather than a developer with time, and
-all three block something later:
+Three things need a human with access rather than a developer with time:
 
-- Somebody with a member login lists the Proleko back issues and the meeting
-  minutes. Nobody outside can see them, and a cutover date cannot be set
-  without knowing how much is there.
 - A Keycloak client for the CMS, registered in the admin console at
   id.prodeko.org, following the existing guide in the membership-registry
-  repository.
+  repository. Blocks item C.
+- An Azure storage container and credentials for it. Blocks item B.
 - A bot GitHub account and a fine-grained access token scoped to the one
-  repository.
+  repository. Blocks item C.
+
+One more blocks nothing today but blocks any cutover date: somebody with a
+member login has to list the Proleko back issues and the meeting minutes.
+Nobody outside can see them, so their volume is the last real unknown in the
+migration plan.
 
 ## If time runs out
 
