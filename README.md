@@ -29,7 +29,53 @@ cd site
 hugo server
 ```
 
+That serves the whole site at http://localhost:1313/, public pages and member
+pages together, with no login. Hugo runs the server in its development
+environment, which mounts both content roots into one site. The server renders
+to `site/public-preview/`, so a preview never leaves member HTML in the
+directory that gets deployed.
+
 The site is bilingual, with Finnish under `content/fi/` and English under
 `content/en/`. Two pages are translations of each other when they share a
 `translationKey` in their front matter, which is what lets the Finnish and
 English addresses differ.
+
+## Public pages and member pages
+
+Some pages are for Prodeko members only: meeting minutes, back issues of the
+guild magazine. They live under `site/content-members/`, in a top-level section
+per language, `content-members/fi/jasenille/` and `content-members/en/members/`.
+Otherwise they are ordinary pages, with the same front matter, the same
+`translationKey` pairing and the same templates.
+
+The build produces two trees:
+
+```
+cd site
+hugo --minify --cleanDestinationDir                        # -> site/public/
+hugo --minify --cleanDestinationDir --environment members  # -> site/public-members/
+./check-trees.sh
+```
+
+`site/public/` is served to anyone. `site/public-members/` is copied to a
+directory outside the public web root and read only after a Keycloak login, so a
+member page has no public address to guess. The public build reads only
+`content/`, so a member page is never loaded into it: it is absent from the page
+list, from `sitemap.xml` and from anything else generated out of loaded pages.
+
+`check-trees.sh` fails the build if a member section appears in the public tree,
+is named anywhere inside it, or is missing from the member tree. Run it after
+both builds; CI runs it too.
+
+Neither build passes `--gc`. The two share one resource cache under
+`site/resources/`, and a garbage collecting pass deletes the cached image
+variants belonging to the other one.
+
+Both builds must start from a clean state. Hugo does not reliably delete output
+it no longer produces, and `--cleanDestinationDir` removes stale pages but not
+stale published resources, so deploys copy with `rsync --delete`.
+
+Templates can tell the two apart through `site.Params.members`, which is set in
+the member build and in local preview and unset in the public build. A
+navigation entry into the member section belongs behind that condition until
+Caddy enforces the login.

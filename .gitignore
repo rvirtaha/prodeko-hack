@@ -1,6 +1,8 @@
 .claude
 
 site/public/
+site/public-members/
+site/public-preview/
 site/resources/
 site/.hugo_build.lock
 
