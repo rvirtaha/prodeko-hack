@@ -17,7 +17,7 @@ jobs:
     env:
       HUGO_VERSION: 0.166.0
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Install Hugo
         run: |
@@ -26,12 +26,31 @@ jobs:
           tar xzf hugo.tar.gz hugo
           sudo mv hugo /usr/local/bin/
 
-      - name: Build
+      # Two trees. site/public/ is served to anyone; site/public-members/ is
+      # copied outside the public web root and read only after a login. Neither
+      # build passes --gc: the checkout is fresh so there is nothing to collect,
+      # and the two builds share one resource cache, where a collecting pass
+      # deletes the cached image variants belonging to the other one.
+      - name: Build the public tree
         working-directory: site
-        run: hugo --gc --minify
+        run: hugo --minify --cleanDestinationDir
 
-      - uses: actions/upload-artifact@v4
+      - name: Build the member tree
+        working-directory: site
+        run: hugo --minify --cleanDestinationDir --environment members
+
+      - name: Check no member page reaches the public tree
+        working-directory: site
+        run: ./check-trees.sh
+
+      - uses: actions/upload-artifact@v5
         with:
-          name: site
+          name: site-public
           path: site/public/
+          if-no-files-found: error
+
+      - uses: actions/upload-artifact@v5
+        with:
+          name: site-members
+          path: site/public-members/
           if-no-files-found: error
