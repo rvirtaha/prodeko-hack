@@ -3,9 +3,11 @@
      get a list of itself. */}}
 {{ $section := .CurrentSection }}
 {{ $siblings := $section.RegularPages }}
-{{/* At the root the "section" is the whole language, so its pages are the
-     handful of top-level ones and the list reads as a random assortment. */}}
-{{ if and (gt (len $siblings) 1) (not $section.IsHome) }}
+{{/* Skipped in two places. At the root the "section" is the whole language, so
+     its pages are the handful of top-level ones and the list reads as a random
+     assortment. On a section's own index the cards above already are this
+     list, and repeating it directly underneath reads as a mistake. */}}
+{{ if and (gt (len $siblings) 1) (not $section.IsHome) (ne $section.RelPermalink .RelPermalink) }}
   <nav class="section-nav" aria-label="{{ $section.Title }}">
     <div class="sidebar-list-title">{{ $section.Title }}</div>
     <ul class="sidebar-list">

@@ -1,0 +1,134 @@
+# Content audit
+
+Every page of the migrated site was crawled, rendered at a phone width and
+checked against the source in git. This records what was wrong, what changed,
+and what is deliberately still open.
+
+Run the audit yourself:
+
+```bash
+hugo -s site --environment development
+python3 -m http.server 1313 --directory site/public-preview &
+node tools/audit-site.mjs http://localhost:1313 site/public-preview
+```
+
+It exits non-zero on a broken internal link, an orphaned page, a page wider
+than a phone, or a broken image.
+
+## Where it started and where it is
+
+| | before | after |
+|---|---|---|
+| pages reachable by crawling | 75 of 112 | 117 of 117 |
+| broken internal links | 0 | 0 |
+| pages 404ing that the menu linked to | 2 | 0 |
+| pages wider than 390px | 5 | 0 |
+| broken images | 1 (on 5 pages) | 0 |
+| board years in the archive | 3 | 59 |
+
+## What was wrong
+
+The plain-page and section templates rendered a bare heading and the page
+body with no container. Around sixty migrated pages — the majority of the
+site — ran edge to edge at any window width, with no left margin and no
+readable line length. This was the single largest problem and is what the
+first commit fixes.
+
+On a phone the header collapsed into a four-row stack about 220px tall,
+because the rule hiding the language and login block was overridden by a
+later rule of equal specificity further down the stylesheet. Worse, the
+mega-menu opens on hover, which touch never fires, and was hidden outright
+below the breakpoint. Roughly thirty pages were only ever linked from the
+mega-menu, so on a phone they had no address a reader could reach. The
+mega-menu links are now repeated as accordions in a drawer.
+
+Two nested sections had no `_index.md`. Hugo generates a section page for a
+top-level directory without one but not for a nested directory, so
+`/fi/guild/guild-rules/` and `/en/guild/rules/` were 404s — and the mega-menu
+linked past them, straight to the first document. This is the guild-rules
+page that prompted the audit.
+
+Thirty-seven built pages had no inbound link from anywhere: both ESTIEM
+sections, the services pages, both privacy notices, the previous-boards
+archive, the decrees and guidelines, and several section indexes. The footer
+contributed to this — it iterated `navigation.yaml` looking for a `children`
+key that file has never had, so it rendered four headings and no links at
+all. It now reads `data/footer.yaml`.
+
+The hero texture was referenced from the stylesheet as `/images/brand/
+bg-texture-blue.png` but lives under `assets/`. Hugo only publishes an asset
+whose address a template resolves, and no template mentioned this one, so
+every blue hero 404'd behind its background colour. The address is now handed
+to the stylesheet as a custom property from `head.html`, which publishes it.
+
+The scrape flattened the heading hierarchy: 264 `######` headings against
+almost no `##`, because the old site styled h6 as its subheading. Subheadings
+rendered smaller than the body text around them. Heading levels were renumbered
+across every section into an actual outline.
+
+The service embeds send `frame-ancestors 'self'`, so a browser refuses to
+paint ilmo.prodeko.org inside this origin. The events page in both languages
+was a blank rectangle. The embed now carries a card naming the service with a
+link to it and a placeholder behind the frame, so the page reads the same
+whether the frame paints or is refused.
+
+## Content that was wrong rather than missing
+
+Found while sweeping, and fixed:
+
+- A harassment contact person's address linked to a different person's
+  mailbox: `[aino.soinio@aalto.fi](mailto:suvi.rinkineva@aalto.fi)`.
+- Two meeting-minutes links displayed the 2021 and 2022 PDF addresses while
+  pointing at the 2024 one. All three PDFs exist.
+- The billing page's title was two headings concatenated by the scrape:
+  "Tuotantotalouden Kilta Prodeko ry:n laskutustiedotYhdistyksen tiedot".
+- The English Studies section had two pages sharing one translation key, one
+  of them an older duplicate naming Oodi, which Aalto has retired in favour
+  of Sisu. The newer text is kept and the retired address survives as an alias.
+- A CMS edit URL had leaked into the content:
+  `new.prodeko.org/...?edit&language=en`.
+- A malformed mailto: `https://mailto:tarja.timonen@aalto.fi,/`.
+- Links to `djangocms.prodeko.org`, `studyguides.aalto.fi`, `pora.ayy.fi`,
+  `varjoopintoopas.fi` and `new.abb.com`, all retired hosts.
+
+Left alone deliberately: hosts that answer a headless browser with 403 but
+serve a real one fine (aalto.fi, hsl.fi, nokia.com, ayy.fi, reittiopas.fi),
+and Prodeko's own services, which are not resolvable from a build machine.
+
+## The board archive
+
+`site/data/boards/` held three years while the page said "boards from 1967
+onward". `tools/import-boards.py` reads the 58 collapsible panels off the live
+page and writes one data file per year: 1967 to 2025, 595 people. 1994 is
+absent from the source too, so it is absent here.
+
+This is the one-off parse [the roadmap](roadmap.md) describes as item E, and
+it is what makes a year-archive template worth having over a hand-edited page.
+The general converter from the Django dump is still item H.
+
+## Language parity
+
+57 pages are paired across Finnish and English. Two exist only in Finnish:
+the alumni newsletters and the orientation week page. None exist only in
+English.
+
+The five English Studies pages were written during this audit, translated from
+their Finnish originals, because four separate entries in the English mega-menu
+all pointed at the same page for want of them.
+
+Where a page has no counterpart the language switch falls back to the other
+language's front page rather than disappearing, which would otherwise leave a
+reader with no way across.
+
+## Still open
+
+- `ilmo.prodeko.org` cannot be framed. The fallback card is the fix available
+  from this side; removing the CSP or serving the embed from a subdomain of
+  prodeko.org is the fix available from theirs.
+- `data/officials/` holds one year against the boards' 59. The full officials
+  list runs to well over a hundred people per year and belongs with the
+  Django-dump converter.
+- `/admin/` is Decap's own interface and is not responsive. Editors use it on
+  a laptop. The audit skips it for that reason.
+- `www.abb.com` is not reachable from this build machine at all, so the
+  replacement for the retired `new.abb.com` is unverified.

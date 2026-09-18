@@ -731,6 +731,7 @@ a.btn, a.btn:hover { border-bottom: none; }
   align-items: start;
   padding: var(--space-12) var(--space-8) var(--space-20);
 }
+.page-body-wide { grid-template-columns: minmax(0, 1fr); }
 .page-aside { position: sticky; top: 96px; display: flex; flex-direction: column; gap: var(--space-6); }
 .section-nav .sidebar-list a { font-size: var(--size-sm); padding: var(--space-1) 0; }
 .section-nav .sidebar-list a.current { color: var(--pd-blue); font-weight: var(--weight-semibold); }
@@ -743,7 +744,18 @@ a.btn, a.btn:hover { border-bottom: none; }
    h6 regardless of depth, so the scale here deliberately does not fall away to
    nothing at the bottom: a h6 still has to read as a heading. */
 
-.prose { max-width: var(--content-max); }
+/* The measure is applied to the text, not to the column. A card grid, a table
+   or an embed inside a page should use the width the page has; only running
+   prose needs to stop at a readable line length. */
+.prose > p,
+.prose > ul,
+.prose > ol,
+.prose > blockquote,
+.prose > h2,
+.prose > h3,
+.prose > h4,
+.prose > h5,
+.prose > h6 { max-width: var(--content-max); }
 .prose > :first-child { margin-top: 0; }
 .prose > :last-child { margin-bottom: 0; }
 .prose p, .prose li { font-size: var(--size-md); font-weight: var(--weight-light); line-height: var(--leading-loose); }
