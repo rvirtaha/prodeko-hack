@@ -1,0 +1,70 @@
+name: Check proxy
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "proxy/**"
+      - ".github/workflows/proxy.yml"
+  pull_request:
+    paths:
+      - "proxy/**"
+      - ".github/workflows/proxy.yml"
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    # The module root is proxy/, not the repository root, so every Go command
+    # has to run from there.
+    defaults:
+      run:
+        working-directory: proxy
+    env:
+      # proxy/go.mod declares the 1.27 line; this is the patch release the
+      # module is developed against. The Dockerfile pins golang:1.27-bookworm
+      # for the image build, so the two have to move together.
+      GO_VERSION: "1.27.1"
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-go@v7
+        with:
+          go-version: ${{ env.GO_VERSION }}
+          # working-directory above does not reach an action, and the checksum
+          # file is not where setup-go looks by default.
+          cache-dependency-path: proxy/go.sum
+
+      # gofmt -l prints the offending files and still exits 0, so the exit code
+      # has to be built by hand. Without both halves of this the step is green
+      # whatever it finds: `|| exit 1` covers the file it could not parse, on
+      # which it prints nothing to stdout, and the -n test covers the rest.
+      - name: Check formatting
+        run: |
+          unformatted=$(gofmt -l .) || exit 1
+          if [ -n "$unformatted" ]; then
+            echo "gofmt would rewrite:"
+            echo "$unformatted"
+            exit 1
+          fi
+
+      # go test already runs a small set of analysers. Vet adds the rest, two of
+      # which cover things this service does on every request: contexts whose
+      # cancel is never called, and HTTP responses touched before the error is
+      # checked. Both compile and both pass the tests.
+      - name: Vet
+        run: go vet ./...
+
+      # This compiles every package and its tests, so there is no separate
+      # build step. -race, and only -race, because sessions and half-finished
+      # sign-ins are shared maps read by concurrent handlers; a race there
+      # hands one editor another's session.
+      - name: Test
+        run: go test -race ./...
+
+      # The image is how this service ships and nothing above looks at the
+      # Dockerfile. DOCKER_BUILDKIT=0 on purpose: DEV.md requires the file to
+      # stay buildable by the legacy builder for rootless Docker, and building
+      # it that way here is what keeps BuildKit-only syntax out. Nothing is
+      # pushed; the build failing is the whole result.
+      - name: Build the image
+        run: DOCKER_BUILDKIT=0 docker build -t cms-auth-proxy:ci .
