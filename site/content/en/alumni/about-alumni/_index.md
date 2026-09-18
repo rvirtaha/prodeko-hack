@@ -1,5 +1,6 @@
 ---
 title: Prodeko Alumni
+description: Prodeko Alumni's mission, history, board and contact details, plus how to sign up for events, join the mentoring programme and become a member.
 translationKey: alumni-tietoa-alumnista
 sourceURL: https://prodeko.org/en/alumni/about-alumni/
 ---

@@ -1,6 +1,7 @@
 ---
 title: Prodeko
 translationKey: home
+description: Prodeko is the guild of around 900 Industrial Engineering and Management students at Aalto University in Otaniemi.
 source: raw-website design export, Prodeko-site.dc.html
 heroKicker: "Industrial Engineering and Management · Aalto University"
 heroTitle: Think big. Get things done.

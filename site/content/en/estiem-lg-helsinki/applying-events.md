@@ -2,6 +2,7 @@
 title: Applying events
 translationKey: estiem-lg-helsinki-haku-tapahtumiin
 sourceURL: https://prodeko.org/en/estiem-lg-helsinki/applying-events/
+description: How to apply for ESTIEM events through the ESTIEM portal, and the travel grants the department and the guild offer for the trips.
 ---
 
 How do I apply for ESTIEM events?

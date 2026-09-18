@@ -1,5 +1,6 @@
 ---
 title: Alumni
+description: Prodeko Alumni is the association for IEM graduates of Aalto; it maintains the alumni network and runs events, with no membership fee.
 translationKey: alumni
 layout: alumni-hub
 source: raw-website design export, Prodeko-site.dc.html

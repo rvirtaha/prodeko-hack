@@ -1,5 +1,6 @@
 ---
 title: Prodeko Network
+description: Prodeko Network gathers leading Finnish companies that support the guild and are visible in students' everyday life since 1994.
 translationKey: yrityssuhteet-prodeko-network
 sourceURL: https://prodeko.org/en/yrityssuhteet/prodeko-network/
 ---
@@ -22,11 +23,11 @@ Prodeko Network companies:
 
 [Metso](https://www.mogroup.com/) (since 2006)
 
-[Vaisala](http://www.vaisala.fi/) (since 2010)
+[Vaisala](https://www.vaisala.fi/) (since 2010)
 
-[Neste](http://www.neste.fi/) (since 2012)
+[Neste](https://www.neste.fi/) (since 2012)
 
-[ABB](http://new.abb.com/fi) (since 2016)
+[ABB](https://new.abb.com/fi) (since 2016)
 
 [KONE](https://www.google.fi/url?sa=t&rct=j&q=&esrc=s&source=web&cd=1&cad=rja&uact=8&ved=0ahUKEwiq4NnjrPTRAhVkP5oKHeY3DzwQFggZMAA&url=http%3A%2F%2Fwww.kone.fi%2F&usg=AFQjCNFB0yaE6eohJ_UnOkp6SvdhTJKWng&sig2=BdhPdPGu6rgFN1jAPs61Sg) (since 2016)
 

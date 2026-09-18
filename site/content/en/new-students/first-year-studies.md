@@ -1,6 +1,7 @@
 ---
 title: First year studies
 translationKey: new-students-ensimmaisen-vuoden-opinnot
+description: How first-year IEM studies work in practice, with links to MyCourses, Sisu and the master's programme.
 sourceURL: https://prodeko.org/en/new-students/first-year-studies/
 ---
 

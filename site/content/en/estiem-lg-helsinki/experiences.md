@@ -2,6 +2,7 @@
 title: Experiences
 translationKey: estiem-lg-helsinki-kokemuksia
 sourceURL: https://prodeko.org/en/estiem-lg-helsinki2/experiences/
+description: Prodeko members describe their trips to ESTIEM events in Karlsruhe, Eindhoven and Montafon.
 ---
 
 **Eero Kere (II), Council Meeting Karlsruhe, Germany**

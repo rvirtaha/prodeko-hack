@@ -1,5 +1,6 @@
 ---
 title: Previous alumni boards
+description: A list of the members of Prodeko Alumni's boards and their contact addresses from 2009 onwards.
 translationKey: alumni-tietoa-alumnista-alumnin-hallitukset
 sourceURL: https://prodeko.org/en/alumni/about-alumni/previous-alumni-boards/
 ---

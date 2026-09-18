@@ -1,5 +1,6 @@
 ---
 title: MATRIKKELIN TIETOSUOJASELOSTE
+description: Privacy notice describing how personal data in Prodeko's member and alumni register and in the matrikkeli is collected and handled.
 translationKey: alumni-tietoa-alumnista-matrikkelin-tietosuojasleoste
 sourceURL: https://prodeko.org/en/alumni/about-alumni/matrikkeli-privacy-notice/
 ---
@@ -85,7 +86,7 @@ Tuotantotalouden Kilta Prodeko ry:n jäsenillä sekä Prodekon Alumni ry:n jäse
  yhdistyslain 11 § 2 mom. mukainen oikeus tutustua tietoon yhdistykseensä kuuluvien jäsenten
  nimistä ja kotipaikoista.
 
-## Tietojen jakaminen Aalto-yliopistolle
+### Tietojen jakaminen Aalto-yliopistolle
 
 Rekisterin tietoja voidaan luovuttaa Aalto-yliopistolle rekisterin käyttötarkoitusten mukaisesti.
  Luovutus perustuu rekisterinpitäjän oikeutettuun etuun sekä Prodekon ja Aalto-yliopiston

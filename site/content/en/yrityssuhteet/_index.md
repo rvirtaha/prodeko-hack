@@ -1,5 +1,6 @@
 ---
 title: For companies
+description: How companies can work with Prodeko's roughly 900 Industrial Engineering and Management students, and who to contact.
 translationKey: yrityssuhteet
 layout: corporate-hub
 source: raw-website design export, Prodeko-site.dc.html

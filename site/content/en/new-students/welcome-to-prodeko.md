@@ -1,6 +1,7 @@
 ---
 title: Prodeko for international students
 translationKey: new-students-welcome-to-prodeko
+description: "A guide for international and master's students: orientation week, the captain's contact details, guild information channels and life in Finland."
 sourceURL: https://prodeko.org/en/new-students/welcome-to-prodeko/
 ---
 
@@ -14,9 +15,9 @@ You can get the first taste of student life before the orientation week on **Mon
 
 If you have any questions or worries, just contact the Captain of Master and International Students! The Captain of Master and International Students for 2026 is **Touko Heinilä**. The quickest way to contact Leo is on Telegram **@prodekocaptain**. You can also send an email or call. His email address is **maisterikvkapteeni@prodeko.org** and phone number is +358 44 9700355.
 
-A short reminder about our information channels, all of which you can find from the top bar: Guild > [Information channels](https://new.prodeko.org/en/guild/services/information-channels/?edit&language=en). The most relevant information channel is **email**, so read it carefully. You will receive all guild-related information after you have been approved as a guild member in a meeting of the Prodeko board. More information about joining Prodeko can be found from Guild > Joining the guild. After joining, once a week, the Minister of Media and Information Technology will send you a weekly bulletin, where you can find all the upcoming events.
+A short reminder about our information channels, all of which you can find from the top bar: Guild > Information channels. The most relevant information channel is **email**, so read it carefully. You will receive all guild-related information after you have been approved as a guild member in a meeting of the Prodeko board. More information about joining Prodeko can be found from Guild > Joining the guild. After joining, once a week, the Minister of Media and Information Technology will send you a weekly bulletin, where you can find all the upcoming events.
 
-As earlier mentioned, another important channel is**Telegram**. It's similar to Whatsapp, but more commonly used within Aalto University. Just load it and check which other channels to join from [here](https://new.prodeko.org/en/guild/services/information-channels/?edit&language=en). On Telegram we have many relevant groups for you! Telegram is used for almost all Prodeko and student-to-student communication.
+As earlier mentioned, another important channel is**Telegram**. It's similar to Whatsapp, but more commonly used within Aalto University. Just load it and check which other channels to join from here. On Telegram we have many relevant groups for you! Telegram is used for almost all Prodeko and student-to-student communication.
 
  What is Prodeko?
 

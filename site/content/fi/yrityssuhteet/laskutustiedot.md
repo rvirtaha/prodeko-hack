@@ -1,5 +1,5 @@
 ---
-title: Tuotantotalouden Kilta Prodeko ry:n laskutustiedotYhdistyksen tiedot
+title: Laskutustiedot
 translationKey: yrityssuhteet-laskutustiedot
 sourceURL: https://prodeko.org/fi/yrityssuhteet/laskutustiedot/
 description: Killan laskutustiedot verkkolaskuille, pdf-laskuille ja paperilaskuille sekä rahastonhoitajan yhteystiedot lisätietoja varten.

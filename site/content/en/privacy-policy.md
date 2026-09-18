@@ -1,6 +1,7 @@
 ---
 title: Tuotantotalouden Kilta Prodeko ry:n tietosuojaseloste
 translationKey: tietosuoja
+description: Prodeko ry:n tietosuojaseloste siitä, miten kilta kerää, käyttää ja säilyttää henkilötietoja sähköisissä palveluissaan.
 sourceURL: https://prodeko.org/en/privacy-policy/
 ---
 
@@ -8,7 +9,7 @@ Tämä on Prodeko Ry:n henkilötietolain (10 ja 24 §) ja EU:n yleisen tietosuoj
 
 Tämä tietosuojaseloste kuvaa, kuinka Tuotantotalouden Kilta Prodeko ry kerää, käyttää ja käsittelee käyttäjien henkilötietoja. Sitä sovelletaan kaikkiin Prodekon sähköisiin palveluihin, jotka on eritelty tarkemmin dokumentin lopussa.
 
-### 1. Rekisterinpitäjä ja yhteystiedot
+## 1. Rekisterinpitäjä ja yhteystiedot
 
 Tuotantotalouden Kilta Prodeko ry
  Postiosoite: PL 15500, 00076 Aalto
@@ -16,7 +17,7 @@ Tuotantotalouden Kilta Prodeko ry
 
 Tietosuojaan ja omien tietojen käsittelyyn liittyvissä kysymyksissä voit olla yhteydessä yllä mainittuun sähköpostiosoitteeseen.
 
-### 2. Tietojen säilytys ja turvallisuus
+## 2. Tietojen säilytys ja turvallisuus
 
 Tietojen käsittelyssä noudatetaan huolellisuutta ja tiedot on suojattu asianmukaisesti. Sähköisten palveluiden sisältämät tiedot on suojattu palomuurein, salasanoin ja muin tietoturvatoimialan yleisesti hyväksyttävin teknisin keinoin. Fyysisesti ylläpidettävät aineistot, kuten hallituksen, kiltakokouksen ja vuosikokouksen pöytäkirjat, sijaitsevat lukituissa tiloissa, joihin asiattomilta on pääsy estetty.
 
@@ -24,21 +25,21 @@ Ellei palvelukohtaisesti toisin mainita, sähköiset palvelut sekä niihin liitt
 
 Käyttäessäsi Prodekon verkkosivuja palvelimellemme tallentuu teknisiä lokitietoja, kuten IP-osoite, käyttöjärjestelmän asetukset sekä selaimen tyyppi ja versio. Emme käytä näitä tietoja analytiikkaan, mainontaan tai käyttäjien yksilöimiseen, ellei palvelukohtaisessa erittelyssä ole toisin mainittu.
 
-### 3. Tietojen luovuttaminen ja kolmannet osapuolet
+## 3. Tietojen luovuttaminen ja kolmannet osapuolet
 
 Emme lähtökohtaisesti luovuta tietoja muille osapuolille tai EU- ja ETA-maiden ulkopuolelle. Käytämme kuitenkin toiminnassamme seuraavia ulkopuolisia palveluntarjoajia, jotka käsittelevät tietoja omien tietosuojaselosteidensa mukaisesti: Mailman, Mailchimp, SendGrid, Google Analytics, Google AdWords, Kide.app, Stripe, kululaskut.fi
 
 Kaikki käyttämämme palveluntarjoajat noudattavat EU:n tietosuoja-asetusta.
 
-#### Evästeiden käyttö
+### Evästeiden käyttö
 
 Sähköisiä palveluitamme käyttäessäsi hyväksyt, että laitteellesi saatetaan tallentaa evästeitä. Evästeet ovat pienikokoisia tekstitiedostoja, joita selain tallentaa käyttäjän päätelaitteelle. Hyödynnämme evästeitä esimerkiksi istuntojen ylläpitämiseen (käyttäjän ei tarvitse kirjautua sisään joka kerta uudestaan) sekä palveluiden toimivuuden varmistamiseen ja kävijämäärien seuraamiseen. Jotkin kolmannen osapuolen liitännäiset (esim. Googlen tilastopalvelut) voivat asettaa omia evästeitään. Voit halutessasi estää evästeiden käytön selaimesi asetuksista.
 
-### 4. Rekisteröidyn oikeudet
+## 4. Rekisteröidyn oikeudet
 
 Jokaisella rekisterissä olevalla henkilöllä on oikeus tarkistaa rekisteriin tallennetut tietonsa ja vaatia mahdollisen virheellisen tiedon korjaamista tai puutteellisen tiedon täydentämistä. Rekisterissä olevalla henkilöllä on myös oikeus pyytää häntä koskevien henkilötietojen poistamiseen rekisteristä. Henkilöillä on myös oikeus henkilötietojen käsittelyn rajoittamiseksi tietyissä tilanteissa. Mikäli henkilö haluaa tarkistaa hänestä tallennetut tiedot tai vaatia niihin oikaisua, pyyntö tulee lähettää kirjallisesti rekisterinpitäjän sähköpostiosoitteeseen (mediakeisari@prodeko.org).
 
-### 5. Rekisterin tietosisältö ja tietolähteet palveluittain
+## 5. Rekisterin tietosisältö ja tietolähteet palveluittain
 
 Tiettyjen palveluiden tai niiden osien käyttöä on rajoitettu käyttäjän sijainnin tai tunnistautumisen perusteella.
 

@@ -1,5 +1,6 @@
 ---
 title: Honorary Advisory Council of Prodeko
+description: What the Honorary Advisory Council of Prodeko does, how it came about and who served on the seventh council.
 translationKey: alumni-neuvottelukunta
 sourceURL: https://prodeko.org/en/alumni/honorary-advisory-council/
 ---

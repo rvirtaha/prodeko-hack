@@ -12,7 +12,7 @@
       {{ if eq .Language.Lang $lang }}{{ $target = . }}{{ end }}
     {{ end }}
     <a class="{{ if eq $lang $current.Language.Lang }}current{{ end }}"
-       href="{{ $target.Permalink }}" hreflang="{{ $lang }}"
+       href="{{ $target.RelPermalink }}" hreflang="{{ $lang }}"
        lang="{{ $lang }}">{{ $lang | upper }}</a>
   {{ end }}
 </div>

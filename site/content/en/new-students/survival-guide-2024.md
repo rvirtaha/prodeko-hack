@@ -1,6 +1,7 @@
 ---
 title: Survival Guide 2025
 translationKey: new-students-fuksiopas
+description: Download the Prodeko Survival Guide for master's students and for exchange students starting their studies.
 sourceURL: https://prodeko.org/en/new-students/survival-guide-2024/
 ---
 

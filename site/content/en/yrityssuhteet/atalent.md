@@ -1,5 +1,6 @@
 ---
 title: ATALENT
+description: aTalent is a recruitment company owned by Prodeko, Prodeko Alumni and KY that helps members find jobs and serves companies hiring.
 translationKey: yrityssuhteet-atalent
 sourceURL: https://prodeko.org/en/yrityssuhteet/atalent/
 ---
@@ -10,7 +11,7 @@ aTalent was founded in 2004 in Otaniemi and is still today fully owned by studen
 
 Supporting Prodekoians on trip towards dream jobs
 
-As a Prodeko member, you hear about job opportunities first. You can find summer jobs, short projects and trainee program starting from your first school day, and after graduation you find also permanent jobs in intresting companies. All job applicants got individual feedback and tips for job seeking, for example to better their application or CV or help with job interview. During the first year, every Prodekoian has the possibility to get comments on one's CV from aTalent professional. Contact information of the recruiting team can be found on [www.atalent.fi](http://www.atalent.fi).
+As a Prodeko member, you hear about job opportunities first. You can find summer jobs, short projects and trainee program starting from your first school day, and after graduation you find also permanent jobs in intresting companies. All job applicants got individual feedback and tips for job seeking, for example to better their application or CV or help with job interview. During the first year, every Prodekoian has the possibility to get comments on one's CV from aTalent professional. Contact information of the recruiting team can be found on [www.atalent.fi](https://www.atalent.fi).
 
 aTalent as a partner
 

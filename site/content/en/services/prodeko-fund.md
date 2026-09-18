@@ -1,6 +1,7 @@
 ---
 title: Prodeko fund
 translationKey: palvelut-prodeko-fund
+description: How to donate to the Prodeko Fund, which supports Industrial Engineering and Management teaching and research at Aalto.
 sourceURL: https://prodeko.org/en/services/prodeko-fund/
 ---
 

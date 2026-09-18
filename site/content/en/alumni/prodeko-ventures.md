@@ -1,5 +1,6 @@
 ---
 title: Prodeko Ventures
+description: A development company founded by Prodeko and Prodeko Alumni that makes early-stage venture investments in Prodeko-affiliated start-ups.
 translationKey: alumni-prodeko-ventures
 sourceURL: https://prodeko.org/en/alumni/prodeko-ventures/
 ---
@@ -10,7 +11,7 @@ The mission of Prodeko Ventures is to encourage and support Prodeko-affiliated i
 
 Founded in 2015, Prodeko Ventures is backed by funding from nearly 200 Prodeko alumni. The fund has invested in close to 50 Prodeko-related ventures and continuously screens new opportunities to invest in and contribute to the growth of the Prodeko start-up community.
 
-### Prodeko Ventures’ Investment Strategy and Criteria:
+## Prodeko Ventures’ Investment Strategy and Criteria:
 
 - • Stage: Usually participates in first round of external funding, e.g. pre-seed.
 - • Focus: High-growth-oriented start-ups

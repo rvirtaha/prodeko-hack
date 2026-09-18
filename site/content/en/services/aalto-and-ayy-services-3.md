@@ -1,6 +1,7 @@
 ---
 title: Aalto and AYY services
 translationKey: palvelut-aallon-ja-ayyn-palveluita-2
+description: Links to Aalto University and AYY services for housing, studying, well-being and free time activities.
 sourceURL: https://prodeko.org/en/services/aalto-and-ayy-services-3/
 ---
 
@@ -20,13 +21,13 @@ Study related links:
 
 - [Softwares for Aalto University students home computers](https://download.aalto.fi/student/index.html#)
 - [I](https://www.aalto.fi/fi/palvelut/it-kayttajatuki)[T Service Desk](https://www.aalto.fi/en/services/it-end-user-support)
-- [L](https://www.aalto.fi/fi/palvelut/kirjastopalvelut)[ibrary services](https://www.aalto.fi/en/services/library-services)
+- [Library services](https://www.aalto.fi/en/learning-centre)
 - [P](https://www.aalto.fi/fi/palvelut/tulostaminen-aalto-yliopistossa)[rinting at Aalto University](https://www.aalto.fi/en/services/printing-at-aalto-university)
 
 Well-being:
 
 - [A](https://www.ayy.fi/fi/palvelut-jasenille/hairintayhdyshenkilot)[YY's harrasment contact persons](https://www.ayy.fi/en/services-for-members/ayys-harassment-contact-persons)
-- [I](http://(https://www.aalto.fi/fi/palvelut/henkilokohtaiset-opintojarjestelyt)[ndividual study arrangements](https://www.aalto.fi/en/services/individual-study-arrangements)
+- [Individual study arrangements](https://www.aalto.fi/en/services/individual-study-arrangements)
 - [FSHS](https://www.yths.fi/en/frontpage/) (Finnish Students Health Services)
 - [S](https://into.aalto.fi/display/fiopisk/Opinto-+ja+uraohjauspsykologit)[tudy - and career plannin psychologists](https://into.aalto.fi/display/enopisk/Study-+and+career+planning+psychologists)
 - [Aalto chaplains](https://www.aalto.fi/en/services/aalto-chaplains-provide-services-for-everyone-at-aalto)

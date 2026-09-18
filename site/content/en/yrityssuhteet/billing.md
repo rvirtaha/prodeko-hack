@@ -1,15 +1,16 @@
 ---
 title: Billing guidelines for Prodeko, the Guild of Industrial Engineering and Management
+description: How to invoice the guild by e-invoice, PDF or post, with our business ID, e-invoicing details and treasurer's contact.
 translationKey: yrityssuhteet-laskutustiedot
 sourceURL: https://prodeko.org/en/yrityssuhteet/billing/
 ---
 
-### Information of organization
+## Information of organization
 
 Name: Tuotantotalouden Kilta Prodeko ry
  Business ID: 1721671-3
 
-### E-invoices
+## E-invoices
 
 We hope that you will send your invoices preferably as e-invoices. Our e-invoicing information:
 
@@ -19,13 +20,13 @@ Operator: Apix Messaging Oy
 
 NOTE! Our OVT-identifier is same as our e-invoice address.
 
-### PDF-invoices
+## PDF-invoices
 
 If you do not have the possibility to send invoices online, you can send pdf invoices to an email address:
 
 [rahastonhoitaja@prodeko.org](mailto:rahastonhoitaja@prodeko.org)
 
-### Paper bills
+## Paper bills
 
 If you are not yet able to send online or pdf invoices, please send paper invoices to:
 
@@ -33,7 +34,7 @@ Tuotantotalouden Kilta Prodeko ry
  PL 15500
  00076 Aalto
 
-### More information:
+## More information:
 
 For more information, please contact the treasurer
 

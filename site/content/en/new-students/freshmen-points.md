@@ -1,6 +1,7 @@
 ---
 title: Freshmen points
 translationKey: new-students-fuksipisteet
+description: The compulsory and optional freshmen points you collect during your first year to earn the teekkari cap at Wappu.
 sourceURL: https://prodeko.org/en/new-students/freshmen-points/
 ---
 

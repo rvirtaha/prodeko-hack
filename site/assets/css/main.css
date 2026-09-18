@@ -790,9 +790,16 @@ a.btn, a.btn:hover { border-bottom: none; }
 .prose pre { overflow-x: auto; padding: var(--space-4); background: var(--pd-white-2, #f1f1f1); border-radius: var(--radius-ui); }
 .prose pre code { background: none; padding: 0; }
 
-/* A scraped page can carry a bare URL as its own link text. Left alone that is
-   a single unbreakable word wider than a phone screen. */
+/* A scraped page can carry a bare URL as its own link text, and Finnish
+   builds compounds like PURKAUTUMISPÄÄTÖKSEN that are wider than a phone on
+   their own. `anywhere` rather than `break-word` because it also lowers the
+   element's min-content width, which is what a grid track measures. */
 .prose a, .prose li, .prose p, .prose td { overflow-wrap: anywhere; }
+.page-head h1,
+.prose h1, .prose h2, .prose h3, .prose h4, .prose h5, .prose h6 {
+  overflow-wrap: anywhere;
+  hyphens: auto;
+}
 
 /* ===== Section index cards (layouts/section.html) ===== */
 

@@ -1,5 +1,6 @@
 ---
 title: Lifelong learning
+description: A joint project of Prodeko and Prodeko Alumni that supports continuous learning in the Prodeko community after graduation.
 translationKey: alumni-lifelong-learning
 sourceURL: https://prodeko.org/en/alumni/lifelong-learning/
 ---

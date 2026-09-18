@@ -1,6 +1,7 @@
 ---
 title: Living
 translationKey: new-students-asuminen-ja-elaminen
+description: Practical advice on student apartments, student allowance, eating, public transport and health care in the Helsinki area.
 sourceURL: https://prodeko.org/en/new-students/living/
 ---
 
@@ -30,4 +31,4 @@ Health
 
 Student Healtcare Association YTHS helps with any health related issues. Special doctoral services and teeth services are not free but not that expensive as private health care or not that long queues as in public healthcare. Another services are free.
 
-Remember also do sports regurlary: [Unisport](http://unisport.fi/) offers affordable option to student to get in gym and group sport lessons in Otaniemi and in Helsinki. Also Prodeko's top organization [PoRa](http://pora.ayy.fi) offers sport activites all who are interested in.
+Remember also do sports regurlary: [Unisport](http://unisport.fi/) offers affordable option to student to get in gym and group sport lessons in Otaniemi and in Helsinki. Also Prodeko's top organization [PoRa](https://raittiusseura.org/) offers sport activites all who are interested in.

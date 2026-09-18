@@ -1,5 +1,6 @@
 ---
 title: Recruit a Prodekoian
+description: How a company can publish job advertisements to Prodeko members, and what kinds of positions the guild will pass on.
 translationKey: yrityssuhteet-rekrytointi
 sourceURL: https://prodeko.org/en/yrityssuhteet/recruiting/
 ---
@@ -10,4 +11,4 @@ Prodeko can make an agreement with a company and after that publish job advertis
 
 aTalent
 
-If you company need more comprehensive recruiting service as staff hiring, direct recruiting, headhuntig or better Employer Branding with trainee program or marketing, we recommend to check out[aTalent](http://atalent.fi/). It is owned by Prodeko's, Prodeko alumni and Aalto University's Business students (KY). More information on side bar.
+If you company need more comprehensive recruiting service as staff hiring, direct recruiting, headhuntig or better Employer Branding with trainee program or marketing, we recommend to check out[aTalent](https://atalent.fi/). It is owned by Prodeko's, Prodeko alumni and Aalto University's Business students (KY). More information on side bar.
