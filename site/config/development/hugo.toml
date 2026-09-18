@@ -1,0 +1,37 @@
+# Local preview: hugo server
+#
+# Hugo runs the server in the development environment, which mounts both content
+# roots into one site. A developer sees the public and the member pages together
+# at one address with no login, and links between them resolve. This environment
+# is never deployed.
+
+# hugo server writes rendered pages to disk. Sending them here keeps member HTML
+# out of public/, which is the directory that gets deployed.
+publishDir = "public-preview"
+
+[params]
+  members = true
+
+[[module.mounts]]
+  source = "content/fi"
+  target = "content"
+  [module.mounts.sites.matrix]
+    languages = ["fi"]
+
+[[module.mounts]]
+  source = "content-members/fi"
+  target = "content"
+  [module.mounts.sites.matrix]
+    languages = ["fi"]
+
+[[module.mounts]]
+  source = "content/en"
+  target = "content"
+  [module.mounts.sites.matrix]
+    languages = ["en"]
+
+[[module.mounts]]
+  source = "content-members/en"
+  target = "content"
+  [module.mounts.sites.matrix]
+    languages = ["en"]

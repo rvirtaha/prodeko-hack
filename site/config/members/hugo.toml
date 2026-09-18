@@ -1,0 +1,31 @@
+# The member build: hugo --environment members
+#
+# Same templates and same baseURL as the public build, but a different content
+# root and a different output directory. The public build reads only content/,
+# so it never loads a member page at all: member pages are absent from its page
+# list, from its sitemap, and from anything else generated out of loaded pages.
+#
+# Every top-level key has to stay above the [languages] table. A key written
+# after it is parsed as part of the last language and silently does nothing.
+
+publishDir = "public-members"
+
+# Static files are served from the public tree, which shares the origin. Copying
+# them here would be a second copy nothing reads.
+staticDir = []
+
+# Nothing crawls this tree, and a sitemap here would list the member addresses.
+enableRobotsTXT = false
+disableKinds = ["taxonomy", "term", "rss", "sitemap"]
+
+[params]
+  # Lets a template show something only where member pages are reachable, for
+  # example a navigation entry pointing into this tree. The public build leaves
+  # this unset, so such an entry cannot reach the public HTML.
+  members = true
+
+[languages]
+  [languages.fi]
+    contentDir = "content-members/fi"
+  [languages.en]
+    contentDir = "content-members/en"
