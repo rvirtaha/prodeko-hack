@@ -1,0 +1,9 @@
+{{- /*
+  Photo gallery.
+
+      {{< gallery >}}                       the gallery front page
+      {{< gallery album="fuksiaiset-2026" >}} one album
+*/ -}}
+{{- $album := .Get "album" | default "" -}}
+{{- $url := cond (ne $album "") (printf "https://gallery.prodeko.org/album/%s/" $album) "https://gallery.prodeko.org/" -}}
+{{ partial "embed.html" (dict "url" $url "label" "gallery.prodeko.org" "height" 900) }}

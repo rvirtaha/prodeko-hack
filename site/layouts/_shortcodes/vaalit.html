@@ -1,0 +1,9 @@
+{{- /*
+  Elections.
+
+      {{< vaalit >}}                   the elections in progress
+      {{< vaalit election="syysvaalit-2026" >}} one election
+*/ -}}
+{{- $election := .Get "election" | default "" -}}
+{{- $url := cond (ne $election "") (printf "https://vaalit.prodeko.org/%s/" $election) "https://vaalit.prodeko.org/" -}}
+{{ partial "embed.html" (dict "url" $url "label" "vaalit.prodeko.org" "height" 900) }}

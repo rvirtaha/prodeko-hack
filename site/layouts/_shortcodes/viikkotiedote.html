@@ -1,0 +1,9 @@
+{{- /*
+  Weekly bulletin.
+
+      {{< viikkotiedote >}}           the newest bulletin
+      {{< viikkotiedote issue="412" >}} one issue
+*/ -}}
+{{- $issue := .Get "issue" | default "" -}}
+{{- $url := cond (ne $issue "") (printf "https://viikkotiedote.prodeko.org/%s/" $issue) "https://viikkotiedote.prodeko.org/" -}}
+{{ partial "embed.html" (dict "url" $url "label" "viikkotiedote.prodeko.org" "height" 900) }}

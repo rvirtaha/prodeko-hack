@@ -1,0 +1,17 @@
+{{- /*
+  The frame every Prodeko service embed is rendered in.
+
+  Takes url, label and an optional height. The link below the frame is what a
+  visitor gets when the service refuses to be framed or the request fails, so
+  it is not decoration; the label is the service's address for that reason.
+
+  Styling belongs to the templates: this writes one embed class and nothing
+  else.
+*/ -}}
+{{- $url := .url -}}
+{{- $label := .label -}}
+{{- $height := .height | default 700 -}}
+<div class="embed">
+  <iframe src="{{ $url }}" title="{{ $label }}" width="100%" height="{{ $height }}" loading="lazy"></iframe>
+  <p><a href="{{ $url }}">{{ $label }}</a></p>
+</div>

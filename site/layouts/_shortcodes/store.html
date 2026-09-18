@@ -1,0 +1,9 @@
+{{- /*
+  Webshop.
+
+      {{< store >}}                        the whole shop
+      {{< store product="haalarimerkki" >}} one product
+*/ -}}
+{{- $product := .Get "product" | default "" -}}
+{{- $url := cond (ne $product "") (printf "https://store.prodeko.org/product/%s/" $product) "https://store.prodeko.org/" -}}
+{{ partial "embed.html" (dict "url" $url "label" "store.prodeko.org" "height" 900) }}

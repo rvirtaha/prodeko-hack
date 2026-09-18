@@ -1,0 +1,14 @@
+{{- /*
+  Event signup and calendar.
+
+      {{< ilmo >}}                        upcoming events
+      {{< ilmo event="kevatjuhla-2026" >}} one event
+
+  Editors insert this from the add button in the editing screen, not by hand.
+  The origin is the live service; the path below it is this site's assumption
+  about ilmo and is the one line to change if the service names events
+  differently.
+*/ -}}
+{{- $event := .Get "event" | default "" -}}
+{{- $url := cond (ne $event "") (printf "https://ilmo.prodeko.org/event/%s/" $event) "https://ilmo.prodeko.org/" -}}
+{{ partial "embed.html" (dict "url" $url "label" "ilmo.prodeko.org" "height" 900) }}
