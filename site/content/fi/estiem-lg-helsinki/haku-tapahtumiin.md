@@ -1,12 +1,13 @@
 ---
 title: Haku tapahtumiin
 translationKey: estiem-lg-helsinki-haku-tapahtumiin
+description: Ohjeet ESTIEM-tapahtumiin hakemiseen, portaaliin kirjautumiseen ja killan matkatukien hakemiseen.
 sourceURL: https://prodeko.org/fi/estiem-lg-helsinki/haku-tapahtumiin/
 ---
 
 Miten haen ESTIEM-tapahtumiin?
 
-ESTIEMillä on oma [portaali](https://estiem.org/events) jossa pääsee selailemaan tarjolla olevia tapahtumia. Mieleisen tapahtuman löydyttyä tapahtumiin voi hakea tapahtumakuvauksen kohdalta. Tapahtumiin on usein rajallinen osallistujamäärä. Järjestävä Local Group valitsee tapahtuman osallistujat ja usein yksittäisestä Local Groupista tapahtumaan voi päästä korkeintaan 2-3 henkeä. Kannattaa siis rohkeasti hakea myös kaverin kanssa! Osaan tapahtumista tulee kirjoittaa hieman motivaatiotekstiä, jossa perustellaan miksi olet oikea osallistuja tapahtumaan. Jos pääset mukaan, rekisteröinnistäsi osallistujaksi ilmoitetaan sinulle sähköpostiviestillä. Hakeminen Council Meetingeihin, Regional Coordination Meetingeihin ja Local Group Exchangeihin tapahtuu keskitetysti Local Groupin sisällä. Ota yhteyttä osoitteeseen ulkoministeri(at)prodeko.org, jos olet kiinnostunut näistä tapahtumista. Ota huomioon, että hakeaksesi tapahtumiin, sinun täytyy olla kirjautunut sisään!
+ESTIEMillä on oma [portaali](https://my.estiem.org/events) jossa pääsee selailemaan tarjolla olevia tapahtumia. Mieleisen tapahtuman löydyttyä tapahtumiin voi hakea tapahtumakuvauksen kohdalta. Tapahtumiin on usein rajallinen osallistujamäärä. Järjestävä Local Group valitsee tapahtuman osallistujat ja usein yksittäisestä Local Groupista tapahtumaan voi päästä korkeintaan 2-3 henkeä. Kannattaa siis rohkeasti hakea myös kaverin kanssa! Osaan tapahtumista tulee kirjoittaa hieman motivaatiotekstiä, jossa perustellaan miksi olet oikea osallistuja tapahtumaan. Jos pääset mukaan, rekisteröinnistäsi osallistujaksi ilmoitetaan sinulle sähköpostiviestillä. Hakeminen Council Meetingeihin, Regional Coordination Meetingeihin ja Local Group Exchangeihin tapahtuu keskitetysti Local Groupin sisällä. Ota yhteyttä osoitteeseen ulkoministeri(at)prodeko.org, jos olet kiinnostunut näistä tapahtumista. Ota huomioon, että hakeaksesi tapahtumiin, sinun täytyy olla kirjautunut sisään!
 
 Miten pääsen kirjautumaan ESTIEM-portaaliin?
 

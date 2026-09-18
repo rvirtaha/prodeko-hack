@@ -1,6 +1,7 @@
 ---
 title: Prodeko-rahasto
 translationKey: palvelut-prodeko-fund
+description: Tuotantotalouden Prodeko-rahasto ottaa vastaan lahjoituksia tuotantotalouden opetuksen ja tutkimuksen tueksi.
 sourceURL: https://prodeko.org/fi/palvelut/prodeko-fund/
 ---
 

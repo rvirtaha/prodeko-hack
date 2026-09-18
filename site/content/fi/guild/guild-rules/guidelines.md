@@ -1,5 +1,6 @@
 ---
 title: Killan ohjesäännöt
+description: Killan ohjesäännöt, niiden muuttamista koskeva sääntöpykälä ja linkit yksittäisiin ohjesääntöihin.
 translationKey: guild-guild-rules-guidelines
 sourceURL: https://prodeko.org/fi/guild/guild-rules/guidelines/
 ---

@@ -1,6 +1,7 @@
 ---
 title: Abeille
 translationKey: abit
+description: Abiturientille tietoa tuotantotalouden opinnoista, hakemisesta ja opiskelijaelämästä Aallossa.
 layout: prospective-hub
 source: raw-website design export, Prodeko-site.dc.html
 prospKicker: Abeille

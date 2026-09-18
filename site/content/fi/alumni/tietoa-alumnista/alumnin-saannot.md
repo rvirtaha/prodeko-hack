@@ -2,6 +2,7 @@
 title: PRODEKON ALUMNI RY SÄÄNNÖT
 translationKey: alumni-tietoa-alumnista-alumnin-saannot
 sourceURL: https://prodeko.org/fi/alumni/tietoa-alumnista/alumnin-saannot/
+description: Prodekon Alumni ry:n voimassa olevat säännöt jäsenyydestä, kokouksista, hallituksesta sekä yhdistyksen hallinnosta ja taloudesta.
 ---
 
 (Päivitetty 11.12.2024)

@@ -1,5 +1,6 @@
 ---
 title: Killan asetukset
+description: "Killan neljä voimassa olevaa asetusta: jonotus- ja ilmoittautumisohjesääntö, moderointiasetus, maksukorttiasetus ja brändiasetus."
 translationKey: guild-guild-rules-decrees
 sourceURL: https://prodeko.org/fi/guild/guild-rules/decrees/
 ---

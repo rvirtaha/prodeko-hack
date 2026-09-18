@@ -1,5 +1,6 @@
 ---
 title: Toimihenkilöt
+description: Prodekon nykyiset toimihenkilöt ja heidän virkansa.
 translationKey: guild-toimarit-toimihenkilot
 layout: people
 dataset: officials

@@ -2,6 +2,7 @@
 title: OPINNOT
 translationKey: opinnot-tarkeita-linkkeja
 sourceURL: https://prodeko.org/fi/opinnot/tarkeita-linkkeja/
+description: Kootut linkit tuotantotalouden opiskelijan tarvitsemiin opetussuunnitelmiin, kurssihakuun ja Aallon opintopalveluihin.
 ---
 
 ## Tärkeitä linkkejä
@@ -9,12 +10,12 @@ sourceURL: https://prodeko.org/fi/opinnot/tarkeita-linkkeja/
 - [Tutkintorakenteet ja sivuaineet](https://www.aalto.fi/fi/ohjelmat/teknistieteellinen-kandidaattiohjelma/opetussuunnitelma-2024-2026#38-tuotantotalous)
 
 - Valitsemalla pääaine- ja sivuaineosioista *Tuotantotalous*aukeavat oikeat rakenteet
-- [Kaikki Aallon kurssit](http://courses.aalto.fi/)
+- [Kaikki Aallon kurssit](https://courses.aalto.fi/)
 - [Ilmoittautuminen kursseille ja HOPS (Sisu)](http://sisu.aalto.fi/)
 
 - Sisussa pystyy ilmoittautumaan kursseille ja suunnittelemaan omaa henkilökohtaista opintosuunnitelmaansa
 - [Kurssikohtaiset tiedot (MyCourses)](http://mycourses.aalto.fi/)
-- [Kokemuksia kursseista](http://varjoopintoopas.fi/)
+- Kokemuksia kursseista
 
 - Varjo-opinto-opas on jokseenkin vanhentunut sivusto, mutta voi silti olla hyödyllinen tiedonlähde
 - [Teknillistieteellinen kandidaattiohjelma](http://www.aalto.fi/fi/ohjelmat/teknistieteellinen-kandidaattiohjelma)

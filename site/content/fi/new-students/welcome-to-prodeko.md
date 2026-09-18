@@ -2,6 +2,7 @@
 title: Tervetuloa tutalle!
 translationKey: new-students-welcome-to-prodeko
 sourceURL: https://prodeko.org/fi/new-students/welcome-to-prodeko/
+description: Fuksikapteenin tervehdys uusille tutalaisille sekä ohjeet ennen opintojen alkua, orientaatioviikosta ja killan tiedotuskanavista.
 ---
 
 ![](https://static.prodeko.org/media/filer_public_thumbnails/public/2020/07/07/sciski2018.jpg__3232x2424_q85_subsampling-2.jpg)

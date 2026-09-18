@@ -1,5 +1,6 @@
 ---
 title: Häirintäyhdyshenkilöt
+description: Prodekon häirintäyhdyshenkilöiden esittelyt ja yhteystiedot sekä ohjeet häirinnästä ilmoittamiseen.
 translationKey: guild-hairintayhdyshenkilot
 sourceURL: https://prodeko.org/fi/guild/hairintayhdyshenkilot/
 ---
@@ -28,7 +29,7 @@ Heipsuu! Mä oon Aino Soinio, kuudennen vuoden prodekolainen. Bailut on jees, mu
 
 Moikku! Mä oon Aino Salmi, Prodekon fuksi vuosimallia ’23. Vapaa-ajalla rakastan puuhailla kaikenlaista kavereiden kanssa, ja myös lenkkeily on ihan jees hyvänä päivänä ;) Tuu ihmeessä juttelemaan jos mikä tahansa mietityttää niin voidaan miettiä asiaa yhdessä!
 
-*[aino.e.salmi@aalto.fi](http://mailto:aino.e.salmi@aalto.fi)*
+*[aino.e.salmi@aalto.fi](mailto:aino.e.salmi@aalto.fi)*
 
 [+358 44 9297924]()
 

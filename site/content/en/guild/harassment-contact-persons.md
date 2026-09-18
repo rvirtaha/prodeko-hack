@@ -1,5 +1,6 @@
 ---
 title: Harassment Contact Persons
+description: Prodeko's five harassment contact persons introduce themselves and explain how to reach them confidentially.
 translationKey: guild-hairintayhdyshenkilot
 sourceURL: https://prodeko.org/en/guild/harassment-contact-persons/
 ---

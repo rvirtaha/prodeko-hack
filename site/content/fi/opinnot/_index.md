@@ -2,6 +2,7 @@
 title: Opinnot
 translationKey: opinnot
 sourceURL: https://prodeko.org/fi/opinnot/
+description: Opintojen koontisivu, jolta löytyvät usein kysytyt kysymykset, tärkeät linkit ja opintoasioiden yhteyshenkilöt.
 ---
 
 ## Opinnot
@@ -39,13 +40,13 @@ Keksi erittäin hyvät perustelut ja ota yhteys opintojen suunnittelija *Tarja T
 
 Tärkeitä linkkejä
 
-- [Tutkintorakenteet ja sivuaineet](http://studyguides.aalto.fi)
-- [Kaikki Aallon kurssit](http://courses.aalto.fi)
+- [Tutkintorakenteet ja sivuaineet](https://www.aalto.fi/fi/ohjelmat/teknistieteellinen-kandidaattiohjelma/opetussuunnitelma-2024-2026#38-tuotantotalous)
+- [Kaikki Aallon kurssit](https://courses.aalto.fi/)
 - [Ilmoittautuminen kursseille](http://oodi.aalto.fi)
 - [HOPS 2017 ja myöhemmin aloittaneille](https://sis-aalto-test.funidata.fi/student/login)
 - [HOPS 2016 ja aiemmin aloittaneille](http://oodi.aalto.fi)
 - [Kurssikohtaiset tiedot (MyCourses)](http://mycourses.aalto.fi)
-- [Kokemuksia kursseista](http://varjoopintoopas.fi)
+- Kokemuksia kursseista
 - [Teknistieteellinen kandidaattiohjelma Intossa](https://into.aalto.fi/display/fikandsci/Teknistieteellinen+kandidaattiohjelma)
 - [Tuotantotalouden maisteriohjelma Intossa](https://into.aalto.fi/display/eniem/Industrial+Engineering+and+Management)
 - [Yliopiston kirjastopalvelut](https://aalto.finna.fi/)
@@ -57,7 +58,7 @@ Tärkeitä linkkejä
 
 Keneen otan yhteyttä
 
-- **Tuotantotalouden opintosuunnittelija** *Tarja Timonen* ([tarja.timonen@aalto.fi,](mailto:tarja.timonen@aalto.fi,) +358 50 560 3078)
+- **Tuotantotalouden opintosuunnittelija** *Tarja Timonen* ([tarja.timonen@aalto.fi,](mailto:tarja.timonen@aalto.fi) +358 50 560 3078)
 
 - lukujärjestys
 - opintojen hyväksiluku

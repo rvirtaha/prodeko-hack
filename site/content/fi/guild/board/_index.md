@@ -1,5 +1,6 @@
 ---
 title: Hallituksen toiminta
+description: Hallituksen tehtävät, valinta vaalikokouksessa sekä jokaisen hallitusviran vastuualueet Prodekossa.
 translationKey: guild-board
 sourceURL: https://prodeko.org/fi/guild/board/
 ---
@@ -27,7 +28,7 @@ Yleiset hallitustehtävät koskevat kaikkia hallituksen jäseniä. Hallituksen j
 - Edustaa kiltaa
 - Vastata omien toimihenkilöiden hyvinvoinnista
 
-###### Puheenjohtaja
+## Puheenjohtaja
 
 - Valvoo, että killan toiminta on sääntöjen mukaista
 - Koordinoi hallituksen toimintaa ja virkistystoimintaa
@@ -39,7 +40,7 @@ Yleiset hallitustehtävät koskevat kaikkia hallituksen jäseniä. Hallituksen j
 - Huolehtii yhteydenpidosta alumnikoordinaattoriin
 - Toimii Prodeko Ventures –yhteyshenkilönä
 
-###### Varapuheenjohtaja
+## Varapuheenjohtaja
 
 - Valvoo ja kehittää killan toimintaa yhdessä Puheenjohtajan kanssa
 - Toimii puheenjohtajana Puheenjohtajan ollessa estyneenä
@@ -54,7 +55,7 @@ Yleiset hallitustehtävät koskevat kaikkia hallituksen jäseniä. Hallituksen j
 - Koordinoi vastuutoimareita
 - Edustaa Prodekoa AYY:n Teekkarikulttuuritoimikunnassa (TKTMK)
 
-###### Excumestari
+## Excumestari
 
 - Hoitaa kiltalaisten tutustuttamisen yritysmaailmaan mahdollisimman monipuolisesti
 - Vastaa killan excursiotoiminnasta ja puolipitkistä
@@ -62,7 +63,7 @@ Yleiset hallitustehtävät koskevat kaikkia hallituksen jäseniä. Hallituksen j
 - Johtaa Prodekon yrityssuhdetiimiä yhdessä Yrityssuhdevastaavan kanssa
 - Edustaa Prodekoa AYY:n Yrityssuhdetoimikunnassa (YTMK)
 
-###### Fuksikapteeni
+## Fuksikapteeni
 
 - Vastaa fuksien perehdyttämisestä killan toimintaan
 - Vastaa fuksien teekkarikulttuurikasvatuksesta
@@ -73,7 +74,7 @@ Yleiset hallitustehtävät koskevat kaikkia hallituksen jäseniä. Hallituksen j
 - Johtaa Prodekon fuksijaosta yhdessä Maisteri- ja KV-kapteenin kanssa
 - Edustaa Prodekoa AYY:n Fuksitoimikunnassa (FTMK)
 
-###### Maisteri- ja KV-kapteeni
+## Maisteri- ja KV-kapteeni
 
 - Vastaa maisterifuksien perehdytyksestä ja integroimisesta kiltaan
 - Vastaa vaihto-opiskelijoiden vastaanottamisesta ja perehdytyksestä kiltaan
@@ -82,7 +83,7 @@ Yleiset hallitustehtävät koskevat kaikkia hallituksen jäseniä. Hallituksen j
 - Johtaa fuksijaosta yhdessä Fuksikapteenin kanssa
 - Edustaa Prodekoa AYY:n Kansainvälisyystoimikunnassa (KvTMK)
 
-###### Mediakeisari
+## Mediakeisari
 
 - Vastaa killan sisäisestä ja ulkoisesta viestinnästä sekä Prodekon brändistä ja näiden kehittämisestä kokonaisuutena
 - Valvoo killan tietotekniikan kehittämistä
@@ -94,7 +95,7 @@ Yleiset hallitustehtävät koskevat kaikkia hallituksen jäseniä. Hallituksen j
  abitiimistä
 - Edustaa Prodekoa AYY:n Viestintätoimikunnassa (VTMK)
 
-###### Opintovastaava
+## Opintovastaava
 
 - Koordinoi ja toteuttaa killan edunvalvontaa yhdessä hallinnon opiskelijaedustajien eli
  hallopedien ja pääainevastaavien kanssa
@@ -105,7 +106,7 @@ Yleiset hallitustehtävät koskevat kaikkia hallituksen jäseniä. Hallituksen j
 - Johtaa Prodekon opintojaosta
 - Edustaa Prodekoa AYY:n Opintoneuvostossa (OPN)
 
-###### Rahastonhoitaja
+## Rahastonhoitaja
 
 - Vastaa killan maksuliikenteestä ja kirjanpidosta
 - Laatii talousarvion yhdessä muun hallituksen kanssa
@@ -119,7 +120,7 @@ Yleiset hallitustehtävät koskevat kaikkia hallituksen jäseniä. Hallituksen j
 - Johtaa Prodekon rahajaosta
 - Edustaa Prodekoa AYY:n Rahatoimikunnassa
 
-###### Yrityssuhdevastaava
+## Yrityssuhdevastaava
 
 - Vastaa Prodeko Networkistä sekä killan yrityssuhteista kokonaisuutena
 - Vastaa killan yrityssuhteisiin liittyvistä sopimuksista ja niiden toimeenpanosta
@@ -129,7 +130,7 @@ Yleiset hallitustehtävät koskevat kaikkia hallituksen jäseniä. Hallituksen j
 - Johtaa Prodekon yrityssuhdetiimiä (YS-tiimi) yhdessä Excumestarin kanssa
 - Edustaa Prodekoa AYY:n Yrityssuhdetoimikunnassa (YTMK)
 
-###### Sisä- ja kulttuuriministeri
+## Sisä- ja kulttuuriministeri
 
 - Ideoi ja järjestää killan tapahtumia yhdessä tapahtumajaoksen kanssa
 - Vastaa killan tapahtumakokonaisuudesta ja sen kehittämisestä yhdessä Isännän kanssa
@@ -139,7 +140,7 @@ Yleiset hallitustehtävät koskevat kaikkia hallituksen jäseniä. Hallituksen j
 - Vastaa killan kulttuuritapahtumista ja johtaa killan kulttuurijaosta
 - Edustaa Prodekoa AYY:n Isännistössä & Emännistössä (IE) yhdessä Isännän kanssa
 
-###### Isäntä
+## Isäntä
 
 - Ideoi ja järjestää killan tapahtumia yhdessä tapahtumajaoksen kanssa
 - Vastaa killan tapahtumakokonaisuudesta ja sen kehittämisestä yhdessä Sisä- ja kulttuuriministerin kanssa
@@ -151,7 +152,7 @@ Yleiset hallitustehtävät koskevat kaikkia hallituksen jäseniä. Hallituksen j
 - Vastaa killan tila- ja pakuvarauksista
 - Edustaa Prodekoa AYY:n Isännistössä & Emännistössä (IE) yhdessä Sisä- ja kulttuuriministerin kanssa
 
-###### Ulkoministeri
+## Ulkoministeri
 
 - Vastaa killan kansainvälisestä yhteistyöstä ja sen kehittämisestä
 - Vastaa Prodekon tapahtumayhteistyöstä Aalto-yhteisön ulkopuolella

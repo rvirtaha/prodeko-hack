@@ -2,6 +2,7 @@
 title: Alumnitiedotteet
 translationKey: alumni-tietoa-alumnista-alumnitiedotteet
 sourceURL: https://prodeko.org/fi/alumni/tietoa-alumnista/alumnitiedotteet/
+description: Arkisto Prodekon Alumnin jäsenilleen lähettämistä alumnitiedotteista vuodesta 2005 alkaen PDF-muodossa.
 ---
 
 [Alumnitiedote 3/2026](https://static.prodeko.org/media/public/2026/08/15/alumnitiedote_3_2026.pdf)

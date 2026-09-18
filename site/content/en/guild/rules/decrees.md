@@ -1,5 +1,6 @@
 ---
 title: Guild Decrees
+description: Unofficial English translations of the four decrees set by the guild's board.
 translationKey: guild-guild-rules-decrees
 sourceURL: https://prodeko.org/en/guild/rules/decrees/
 ---
@@ -14,7 +15,7 @@ III Decree on the guild's bank card
 
 IV Brand decree
 
-### I Queue decree and registration
+## I Queue decree and registration
 
 The queue decree defines how the queuing policy for registration for guild events works. This guideline is valid until further notice from 13.5.2025.
 
@@ -64,7 +65,7 @@ Ilmokilke is filled in in the order of the queue list. If you can bring a compan
 
 Any irregularities in the queuing or registration process may result in the cancellation of your registration. Such cancellations will always be decided by the Board of the Guild. A registration may also be cancelled if the registrant has failed to comply with the binding to participate in the previous events or has failed to arrive at the place reserved for him/her at free events without giving notice or without good cause.
 
-### II. Moderation Decree
+## II. Moderation Decree
 
 Board moderation policy:
 
@@ -92,10 +93,10 @@ Year classlists:
 
 - housewarmings, birthdays, other private parties
 
-### III Decree on the guild's bank card
+## III Decree on the guild's bank card
 
 (Not yet translated. You can contact the board if you want to know more. The decree can be found by switching the language of this site of Finnish)
 
-### IV Branding decree
+## IV Branding decree
 
 (Not yet translated. You can contact the board if you want to know more. The decree can be found by switching the language of this site of Finnish)

@@ -1,6 +1,7 @@
 ---
 title: Yrityksille
 translationKey: yrityssuhteet
+description: Prodekon yrityssuhdetoiminta ja yhteistyömuodot yrityksille excursioista sponsorointiin, rekrytointiin ja projektikursseihin.
 layout: corporate-hub
 source: raw-website design export, Prodeko-site.dc.html
 corpKicker: Yrityksille

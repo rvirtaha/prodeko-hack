@@ -2,6 +2,7 @@
 title: Prodekon neuvottelukunta
 translationKey: alumni-neuvottelukunta
 sourceURL: https://prodeko.org/fi/alumni/neuvottelukunta/
+description: Prodekon ja Prodekon Alumnin yhteisen neuvonantajaelimen taustaa, nykyinen kokoonpano sekä neuvottelukunnan ohjesääntö.
 ---
 
 Yleistä

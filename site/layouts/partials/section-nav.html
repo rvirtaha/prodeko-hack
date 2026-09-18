@@ -3,7 +3,9 @@
      get a list of itself. */}}
 {{ $section := .CurrentSection }}
 {{ $siblings := $section.RegularPages }}
-{{ if gt (len $siblings) 1 }}
+{{/* At the root the "section" is the whole language, so its pages are the
+     handful of top-level ones and the list reads as a random assortment. */}}
+{{ if and (gt (len $siblings) 1) (not $section.IsHome) }}
   <nav class="section-nav" aria-label="{{ $section.Title }}">
     <div class="sidebar-list-title">{{ $section.Title }}</div>
     <ul class="sidebar-list">

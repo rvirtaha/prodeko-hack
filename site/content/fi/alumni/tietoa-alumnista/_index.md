@@ -2,6 +2,7 @@
 title: Prodekon alumni
 translationKey: alumni-tietoa-alumnista
 sourceURL: https://prodeko.org/fi/alumni/tietoa-alumnista/
+description: Prodekon Alumnin missio, historia, hallitus ja yhteystiedot sekä ohjeet tapahtumiin ilmoittautumiseen, mentorointiin ja jäseneksi liittymiseen.
 ---
 
 Prodekon Alumni on prodekolaisten alumnijärjestö, jonka missio on

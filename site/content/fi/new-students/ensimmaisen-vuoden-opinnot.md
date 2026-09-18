@@ -2,6 +2,7 @@
 title: Ensimmäisen vuoden opinnot
 translationKey: new-students-ensimmaisen-vuoden-opinnot
 sourceURL: https://prodeko.org/fi/new-students/ensimmaisen-vuoden-opinnot/
+description: Tietoa fuksivuoden kursseista, opiskelumateriaalin hankkimisesta, kielten opinnoista ja yliopiston opiskelujärjestelmistä.
 ---
 
 ![](https://static.prodeko.org/media/filer_public_thumbnails/public/2020/07/07/kirjat.png__1428x940_subsampling-2.png)
@@ -10,7 +11,7 @@ Tällä sivulla on tietoa hyödyllisistä järjestelmistä, joita käytetään k
 
 Kurssit koostuvat luennoista, lasku- tai muista harjoituksista sekä laajemmista harjoitustöistä. Opiskelijoilla on akateeminen vapaus, johon kuitenkin liittyy myös paljon vastuuta. Enää sinulta ei tulla kyselemään, mitä olet tehnyt ja mitä aiot tehdä, vaan vastuu opinnoistasi on yksin sinulla. Opintojen eteen täytyy tehdä töitä, sillä ilman ajankäyttöä opintoihin on vaikea oppia juuri mitään. Kurssien sisältöjä voit tutkia [MyCourses](https://mycourses.aalto.fi/)-portaalissa, joka sisältää kaikkien kurssien kotisivut.
 
-Käy läpi myös [Tuotantotalouden opinto-opasta](http://studyguides.aalto.fi/sci/2017-kand/) ja [koulutusohjelman kotisivuja](https://into.aalto.fi/display/fituo/Etusivu). Niistä löytyy paljon tietoa, kursseista, tutkintorakenteesta ja sivuaineista. Sivut eivät ole aivan helppokäyttöisimmästä päästä, ja paljon hiljaista tietoa saa kyselemällä muilta opiskelijoilta esimerkiksi kiltiksellä. Kaikki jakavat vinkkejä opinnoissa onnistumiseen mielellään.
+Käy läpi myös [Tuotantotalouden opinto-opasta](https://www.aalto.fi/fi/ohjelmat/teknistieteellinen-kandidaattiohjelma/opetussuunnitelma-2026-2028) ja [koulutusohjelman kotisivuja](https://into.aalto.fi/display/fituo/Etusivu). Niistä löytyy paljon tietoa, kursseista, tutkintorakenteesta ja sivuaineista. Sivut eivät ole aivan helppokäyttöisimmästä päästä, ja paljon hiljaista tietoa saa kyselemällä muilta opiskelijoilta esimerkiksi kiltiksellä. Kaikki jakavat vinkkejä opinnoissa onnistumiseen mielellään.
 
 Kursseille ja tentteihin ilmoittaudutaan [Sisussa](https://sisu.aalto.fi/student/login). Sieltä löytyvät kaikkien kurssien tiedot (mm. luento- ja harjoitusajat sekä tenttien ajankohdat). Järjestelmän käyttö opetetaan Johdatus opiskeluun -kurssilla.
 

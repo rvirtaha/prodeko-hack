@@ -2,6 +2,7 @@
 title: Asuminen ja eläminen
 translationKey: new-students-asuminen-ja-elaminen
 sourceURL: https://prodeko.org/fi/new-students/asuminen-ja-elaminen/
+description: Käytännön tietoa opiskelija-asunnon hakemisesta, opintotuesta, opiskelijaruokailusta, liikkumisesta ja terveydenhuollosta pääkaupunkiseudulla.
 ---
 
 Täältä löydät lisää tietoa asunnon saamisesta, syömisestä ja muista elämän perusvälttämättömyyksistä, joista on hyvä pitää kiinni myös kaiken fuksivuoden hauskan keskellä.
@@ -30,4 +31,4 @@ Terveys
 
 Ylioppilaiden terveydenhoitosäätiö YTHS pitää huolen opiskelijoiden terveydestä. YTHS:n Otaniemen toimipiste sijaitsee Otakaarella, erikoislääkärikäyntejä varten saattaa joutua lähtemään esimerkiksi Töölön pisteelle. Opiskelijan täytyy maksaa [korkeakouluopiskelijan terveydenhoitomaksu](https://www.kela.fi/korkeakouluopiskelijan-terveydenhoitomaksu), vaikka ei käyttäisikään sen tarjoamia palveluita. Kela ei lähetä erillistä laskua, vaan se täytyy maksaa itse esimerkiksi OmaKelassa.
 
-Terveyden kannalta kannattaa muistaa myös urheilla säännöllisesti. [UniSport](https://unisport.fi/) tarjoaa Aallon ja Helsingin yliopiston opiskelijoille liikuntaa kohtuulliseen hintaan. Otaniemessä sijaitseva Otahalli tarjoaa monipuolisesti puuhaa. Kaikki palvelut löydät [täältä](https://unisport.fi/?page=liikumeilla) ja huomaat varmasti, ettei lajeista ole pulaa. Prodekon yläjärjestö [PoRa](https://pora.ayy.fi) tarjoaa myös urheilutoimintaa kiinnostuneille.
+Terveyden kannalta kannattaa muistaa myös urheilla säännöllisesti. [UniSport](https://unisport.fi/) tarjoaa Aallon ja Helsingin yliopiston opiskelijoille liikuntaa kohtuulliseen hintaan. Otaniemessä sijaitseva Otahalli tarjoaa monipuolisesti puuhaa. Kaikki palvelut löydät [täältä](https://unisport.fi/?page=liikumeilla) ja huomaat varmasti, ettei lajeista ole pulaa. Prodekon yläjärjestö [PoRa](https://raittiusseura.org/) tarjoaa myös urheilutoimintaa kiinnostuneille.

@@ -1,17 +1,38 @@
 {{- /*
   The frame every Prodeko service embed is rendered in.
 
-  Takes url, label and an optional height. The link below the frame is what a
-  visitor gets when the service refuses to be framed or the request fails, so
-  it is not decoration; the label is the service's address for that reason.
-
-  Styling belongs to the templates: this writes one embed class and nothing
-  else.
+  Takes {url, label, note, height}. The card above the frame is not decoration:
+  the services send `frame-ancestors 'self'`, so a browser refuses to paint them
+  inside another origin and the reader is left looking at a blank rectangle with
+  no clue what was meant to be there. The card names the service and links to
+  it, and the frame below sits over a placeholder, so the page reads the same
+  whether the frame paints or is refused.
 */ -}}
 {{- $url := .url -}}
 {{- $label := .label -}}
+{{- $note := .note | default "" -}}
 {{- $height := .height | default 700 -}}
+{{- $isFi := eq page.Language.Lang "fi" -}}
 <div class="embed">
-  <iframe src="{{ $url }}" title="{{ $label }}" width="100%" height="{{ $height }}" loading="lazy"></iframe>
-  <p><a href="{{ $url }}">{{ $label }}</a></p>
+  <div class="embed-head">
+    <div>
+      <span class="kicker">{{ if $isFi }}Prodekon palvelu{{ else }}A Prodeko service{{ end }}</span>
+      <div class="embed-title">{{ $label }}</div>
+      {{ with $note }}<p class="embed-note">{{ . }}</p>{{ end }}
+    </div>
+    <a class="btn btn-primary" href="{{ $url }}" target="_blank" rel="noopener">
+      {{ if $isFi }}Avaa palvelu{{ else }}Open the service{{ end }} <span aria-hidden="true">→</span>
+    </a>
+  </div>
+  <div class="embed-frame" style="min-height:{{ $height }}px">
+    <p class="embed-fallback">
+      {{ if $isFi }}
+        Palvelu avautuu omassa ikkunassaan, jos se ei lataudu tähän.
+      {{ else }}
+        The service opens in its own window if it does not load here.
+      {{ end }}
+      <a href="{{ $url }}" target="_blank" rel="noopener">{{ $url }}</a>
+    </p>
+    <iframe src="{{ $url }}" title="{{ $label }}" height="{{ $height }}" loading="lazy"></iframe>
+  </div>
 </div>

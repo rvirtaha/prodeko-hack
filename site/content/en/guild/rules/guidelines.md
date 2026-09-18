@@ -1,5 +1,6 @@
 ---
 title: Guild Guidelines
+description: How the guild's guidelines supplement its rules, with the Code of Conduct and Safer Space Policy.
 translationKey: guild-guild-rules-guidelines
 sourceURL: https://prodeko.org/en/guild/rules/guidelines/
 ---

@@ -11,7 +11,7 @@
 </section>
 
 <div class="container">
-  <section style="padding:72px 0 24px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:64px;align-items:start">
+  <section class="two-col">
     <div>
       <h2 class="section-title">{{ .Params.whatTitle }}</h2>
       <p>{{ .Params.whatBody1 }}</p>
@@ -33,7 +33,7 @@
     </div>
   </section>
 
-  <section style="padding:56px 0 24px">
+  <section class="hub-section">
     <h2 class="section-title">{{ .Params.lifeTitle }}</h2>
     <div class="card-grid">
       {{ range .Params.life }}
@@ -48,7 +48,7 @@
     </div>
   </section>
 
-  <section class="hub-body" style="padding-top:56px">
+  <section class="hub-body">
     <div>
       <h2 class="section-title">{{ .Params.faqTitle }}</h2>
       {{ range .Params.faq }}

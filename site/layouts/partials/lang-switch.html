@@ -5,7 +5,7 @@
      across at all. */}}
 {{ $current := . }}
 <div class="lang-switch">
-  {{ range .Sites }}
+  {{ range hugo.Sites }}
     {{ $lang := .Language.Lang }}
     {{ $target := .Home }}
     {{ range $current.AllTranslations }}

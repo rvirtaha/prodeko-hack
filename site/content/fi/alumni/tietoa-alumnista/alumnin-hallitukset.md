@@ -2,6 +2,7 @@
 title: Alumnin hallitukset
 translationKey: alumni-tietoa-alumnista-alumnin-hallitukset
 sourceURL: https://prodeko.org/fi/alumni/tietoa-alumnista/alumnin-hallitukset/
+description: Luettelo Prodekon Alumnin hallitusten jäsenistä ja heidän yhteystiedoistaan vuodesta 2009 alkaen.
 ---
 
 **Hallituksen jäsenet 2026:**

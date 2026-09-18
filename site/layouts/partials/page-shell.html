@@ -23,12 +23,6 @@
     </div>
     <aside class="page-aside">
       {{ partial "section-nav.html" $page }}
-      {{ with $page.Params.sourceURL }}
-        <p class="source-note">
-          {{ if eq $page.Language.Lang "fi" }}Sisältö siirretty osoitteesta{{ else }}Content migrated from{{ end }}
-          <a href="{{ . }}">prodeko.org</a>
-        </p>
-      {{ end }}
     </aside>
   </div>
 </article>

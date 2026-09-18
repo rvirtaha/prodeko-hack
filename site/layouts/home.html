@@ -37,7 +37,7 @@
     <div class="audiences">
       {{ range . }}
         <a class="audience-card" href="{{ .url }}">
-          <div class="bar" style="background:var(--pd-blue)"></div>
+          <div class="bar"></div>
           <div class="body">
             {{ with .kicker }}<span class="kicker">{{ . }}</span>{{ end }}
             <div class="title">{{ .title }}</div>
@@ -82,7 +82,7 @@
   <div class="container">
     <div class="section-title-row">
       <h2 class="section-title">{{ .Params.partnersTitle }}</h2>
-      {{ with .Params.partnersLinkUrl }}<a class="sub" href="{{ . }}" style="border-bottom:none;color:var(--pd-blue-light)">{{ $.Params.partnersLinkText }} →</a>{{ end }}
+      {{ with .Params.partnersLinkUrl }}<a class="sub sub-link" href="{{ . }}">{{ $.Params.partnersLinkText }} →</a>{{ end }}
     </div>
     <div class="partners-grid">
       {{ range hugo.Data.partners }}

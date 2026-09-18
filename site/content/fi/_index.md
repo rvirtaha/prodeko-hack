@@ -2,6 +2,8 @@
 title: Prodeko
 source: raw-website design export, Prodeko-site.dc.html
 translationKey: home
+description: Prodeko ry on Aalto-yliopiston tuotantotalouden opiskelijoiden kilta
+  ja ainejärjestö.
 heroKicker: Tuotantotalouden kilta · Aalto-yliopisto
 heroTitle: Tervetuloa opiskelemaan Aallon tutalle
 ctaJoin: Hae jäseneksi

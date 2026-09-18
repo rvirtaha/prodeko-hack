@@ -35,7 +35,11 @@
           <div class="mega-col">
             <div class="mega-col-title">{{ .title }}</div>
             {{ range .links }}
-              {{ if .url }}
+              {{ if and .members (not site.Params.members) }}
+                {{/* A link into the member tree, in a build that has no member
+                     tree. Naming the address here would publish it. */}}
+                <span class="mega-link-disabled">{{ .label }}</span>
+              {{ else if .url }}
                 <a href="{{ .url }}"><span>{{ .label }}</span><span aria-hidden="true">→</span></a>
               {{ else }}
                 <span class="mega-link-disabled">{{ .label }}</span>
@@ -70,7 +74,9 @@
                      twice in a row, so it is left out. */}}
                 {{ if ne .title $groupTitle }}<div class="m-col-title">{{ .title }}</div>{{ end }}
                 {{ range .links }}
-                  {{ if .url }}
+                  {{ if and .members (not site.Params.members) }}
+                    <span class="m-link-disabled">{{ .label }}</span>
+                  {{ else if .url }}
                     <a href="{{ .url }}"><span>{{ .label }}</span><span aria-hidden="true">→</span></a>
                   {{ else }}
                     <span class="m-link-disabled">{{ .label }}</span>

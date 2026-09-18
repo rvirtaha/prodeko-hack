@@ -1,5 +1,6 @@
 ---
 title: Hallitus vuosittain
+description: Luettelo Prodekon hallituksista ja niiden jäsenistä vuodesta 1967 lähtien.
 translationKey: guild-board-edelliset-hallitukset
 layout: archive
 dataset: boards

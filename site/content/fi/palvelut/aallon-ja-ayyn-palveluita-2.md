@@ -1,6 +1,7 @@
 ---
 title: Aallon ja AYY:n palveluita
 translationKey: palvelut-aallon-ja-ayyn-palveluita-2
+description: Linkkejä Aalto-yliopiston ja AYY:n palveluihin, jotka liittyvät asumiseen, opiskeluun, hyvinvointiin ja harrastuksiin.
 sourceURL: https://prodeko.org/fi/palvelut/aallon-ja-ayyn-palveluita-2/
 ---
 

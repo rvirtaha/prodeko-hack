@@ -1,5 +1,6 @@
 ---
 title: Kilta
+description: "Prodeko on Aalto-yliopiston tuotantotalouden opiskelijoiden kilta: hallitus, toimarit, jäsenyys, kiltahuone ja killan säännöt."
 translationKey: guild
 layout: guild-hub
 source: raw-website design export, Prodeko-site.dc.html

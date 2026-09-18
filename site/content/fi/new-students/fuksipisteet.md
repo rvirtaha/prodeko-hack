@@ -2,6 +2,7 @@
 title: Fuksipisteistä
 translationKey: new-students-fuksipisteet
 sourceURL: https://prodeko.org/fi/new-students/fuksipisteet/
+description: Fuksipistekortin pakolliset ja valinnaiset pisteet sekä säännöt, joilla fuksi saa esteettömyyden teekkarilakkiin.
 ---
 
 Fuksipistekortin tarkoituksena on ohjata fuksia taipaleellaan teekkariksi, eli tutustuttaa sinut Prodekoon ja teekkarikulttuuriin.

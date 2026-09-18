@@ -1,5 +1,6 @@
 ---
 title: Kunniamaininnat
+description: Killan myöntämät kunniamaininnat ja niiden saajat vuodesta 1969 lähtien.
 translationKey: guild-kunnianosoitukset
 layout: archive
 dataset: honours

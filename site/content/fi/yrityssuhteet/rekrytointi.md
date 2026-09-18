@@ -2,6 +2,7 @@
 title: Rekrytoi prodekolainen
 translationKey: yrityssuhteet-rekrytointi
 sourceURL: https://prodeko.org/fi/yrityssuhteet/rekrytointi/
+description: Ohjeet yrityksille työpaikkailmoituksen julkaisemiseen Prodekon rekryfoorumilla sekä tietoa aTalentin rekrytointipalveluista.
 ---
 
 Aalto-yliopiston tuotantotalouden koulutusohjelma sisältää lukuisia yrityksille ryhmissä tehtäviä harjoitustöitä. Yhdessä tämän, killan yhteisöllisen ilmapiirin sekä koko Suomen korkeimpien tekniikan alan sisäänpääsyvaatimusten ansiosta prodekolaisen rekrytoiminen on erittäin hyvä investointi.
@@ -10,4 +11,4 @@ Sovittaessa Prodeko julkaisee työpaikkailmoituksia erillisellä työpaikkailmoi
 
 aTalent
 
-Kaipaako yrityksenne kokonaisvaltaisempaa rekrytointipalvelua, kuten henkilöstövuokrausta, suorarekrytointia, headhuntingia tai onko yrityksenne Employer Brandingin parissa vielä tehtävää esimerkiksi trainee-ohjelman ja markkinoinnin suhteen? Prodeko suosittelee lämpimästi tutustumaan yritykseen nimeltä [aTalent](https://atalent.fi/). aTalent on Prodekon, Prodekon alumnien ja Aalto-yliopiston kauppatieteiden ylioppilaiden, KY:n omistama rekrytointiyritys, ja lisää siitä voit lukea [täältä](https://www.prodeko.org/fi/yrityssuhteet/atalent/).
+Kaipaako yrityksenne kokonaisvaltaisempaa rekrytointipalvelua, kuten henkilöstövuokrausta, suorarekrytointia, headhuntingia tai onko yrityksenne Employer Brandingin parissa vielä tehtävää esimerkiksi trainee-ohjelman ja markkinoinnin suhteen? Prodeko suosittelee lämpimästi tutustumaan yritykseen nimeltä [aTalent](https://atalent.fi/). aTalent on Prodekon, Prodekon alumnien ja Aalto-yliopiston kauppatieteiden ylioppilaiden, KY:n omistama rekrytointiyritys, ja lisää siitä voit lukea [täältä](/fi/yrityssuhteet/atalent/).

@@ -2,13 +2,14 @@
 title: OPINNOT
 translationKey: opinnot-usein-kysyttya-opinnoista
 sourceURL: https://prodeko.org/fi/opinnot/usein-kysyttya-opinnoista/
+description: Vastauksia yleisimpiin opintokysymyksiin harjoittelusta, hyväksiluvusta, kannustusstipendistä ja teknisistä sivuaineista.
 ---
 
 ## Usein kysyttyä opinnoista
 
 **Voinko rakentaa, tahdittaa tai suunnitella opintoni näin? Mikä sivuaine minun kannattaa ottaa? Saanko hyväksiluettua tämän vaihdossa käymäni kurssin? Entä käykö tämä kandiaiheeksi?**
 
-Kaikissa näissä kysymyksissä pääaineen suunnittelijat Tiina ja Tarja auttavat mielellään. Heidän yhteystietonsa löytyvät [täältä](https://prodeko.org/fi/opinnot/keneen-otan-yhteytta/).
+Kaikissa näissä kysymyksissä pääaineen suunnittelijat Tiina ja Tarja auttavat mielellään. Heidän yhteystietonsa löytyvät [täältä](/fi/opinnot/keneen-otan-yhteytta/).
 
 **Miten saan työharjoittelusta opintopisteitä?**
 

@@ -7,7 +7,7 @@
       {{ with .Params.corpKicker }}<span class="kicker">{{ . }}</span>{{ end }}
       <h1>{{ .Params.corpTitle }}</h1>
       {{ .Content }}
-      {{ with .Params.corpCta }}<a class="btn btn-inverse" href="mailto:{{ $.Params.corpContactEmail }}" style="margin-top:var(--space-6)">{{ . }}</a>{{ end }}
+      {{ with .Params.corpCta }}<a class="btn btn-inverse" href="mailto:{{ $.Params.corpContactEmail }}" class="hero-stats-row">{{ . }}</a>{{ end }}
     </div>
     <div class="stats">
       {{ range .Params.corpNumbers }}
@@ -21,7 +21,7 @@
 </section>
 
 <div class="container">
-  <section style="padding:72px 0 24px">
+  <section class="two-col">
     <h2 class="section-title">{{ .Params.offerTitle }}</h2>
     <div class="card-grid">
       {{ range .Params.offers }}
@@ -52,11 +52,11 @@
       <div class="rainbow-rule"></div>
       <div class="body">
         <div class="sidebar-list-title">{{ .Params.contactTitle | default "Contact" }}</div>
-        <div style="display:flex;gap:var(--space-4);align-items:center;margin-bottom:var(--space-4)">
-          <div style="width:56px;height:56px;border-radius:50%;background:var(--pd-blue-tint-16);display:flex;align-items:center;justify-content:center;font-size:var(--size-sm);font-weight:700;color:var(--pd-blue)">N.N.</div>
+        <div class="contact-person">
+          <div class="avatar">N.N.</div>
           <div>
-            <div style="font-size:var(--size-lg);font-weight:600;color:var(--pd-blue)">{{ .Params.corpContactName }}</div>
-            <div style="font-size:var(--size-xs);color:var(--text-muted)">{{ .Params.corpContactRole }}</div>
+            <div class="contact-name">{{ .Params.corpContactName }}</div>
+            <div class="contact-role">{{ .Params.corpContactRole }}</div>
           </div>
         </div>
         <p>{{ .Params.corpContactBody }}</p>

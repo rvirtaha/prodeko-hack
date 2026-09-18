@@ -332,12 +332,15 @@ a.btn, a.btn:hover { border-bottom: none; }
   padding: var(--space-5) 0 var(--space-8);
   display: flex;
   justify-content: space-between;
-  gap: var(--space-4);
+  align-items: baseline;
+  gap: var(--space-2) var(--space-6);
   flex-wrap: wrap;
   font-size: var(--size-2xs);
   font-weight: var(--weight-light);
   opacity: 0.7;
 }
+.site-footer .bottom-links { display: flex; gap: var(--space-6); flex-wrap: wrap; }
+.site-footer .bottom-links a { color: var(--pd-white-1); border-bottom: 1px solid rgb(246 246 246 / 0.3); }
 
 /* ===== Hero: home (blue ground) ===== */
 
@@ -640,8 +643,39 @@ a.btn, a.btn:hover { border-bottom: none; }
 .person-name { display: block; font-weight: var(--weight-semibold); }
 .person-role { display: block; color: var(--text-muted); }
 .archive-group { margin: var(--space-10) 0; }
-.embed { margin: var(--space-8) 0; }
-.embed iframe { width: 100%; min-height: 32rem; border: 1px solid var(--border-subtle); }
+/* Embedded Prodeko services (layouts/partials/embed.html). The card carries
+   the page on its own where the service refuses to be framed. */
+.embed { margin: var(--space-8) 0; border: 1px solid var(--border-subtle); border-radius: var(--radius-ui); overflow: hidden; background: #fff; }
+.embed-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-6);
+  flex-wrap: wrap;
+  padding: var(--space-5) var(--space-6);
+  border-bottom: 1px solid var(--border-subtle);
+}
+.embed-head .kicker { color: var(--text-muted); display: block; margin-bottom: var(--space-1); }
+.embed-title { font-size: var(--size-lg); font-weight: var(--weight-semibold); color: var(--pd-blue); }
+.embed-note { margin: var(--space-2) 0 0; font-size: var(--size-sm); font-weight: var(--weight-light); color: var(--text-muted); }
+.embed-frame { position: relative; background: var(--surface-page); }
+.embed-fallback {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  padding: var(--space-8);
+  text-align: center;
+  font-size: var(--size-sm);
+  font-weight: var(--weight-light);
+  color: var(--text-muted);
+}
+.embed-fallback a { overflow-wrap: anywhere; }
+.embed-frame iframe { position: relative; width: 100%; height: 100%; min-height: inherit; border: 0; display: block; }
 
 /* ===== Plain content pages (layouts/partials/page-shell.html) =====
 
@@ -885,5 +919,46 @@ a.btn, a.btn:hover { border-bottom: none; }
      scroll on its own keeps the rest of the page at the viewport width. */
   .prose table { display: block; overflow-x: auto; }
   .prose code { overflow-wrap: anywhere; }
-  .embed iframe { min-height: 24rem; }
+  /* The inline min-height on .embed-frame carries the service's preferred
+     height, which is a desktop number; capping the frame here keeps a phone
+     from scrolling past several screens of a service that may not even paint. */
+  .embed-frame { min-height: 26rem !important; height: 26rem; }
+  .embed-head { flex-direction: column; align-items: stretch; }
+  .embed-head .btn { width: 100%; }
+}
+
+/* ===== Hub page sections (guild / prospective / corporate / alumni) =====
+
+   These were inline styles on the section elements, which no media query can
+   reach; the two-column split in particular gave a phone two 160px columns
+   side by side. */
+
+.two-col { padding: 72px 0 24px; display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap: 64px; align-items: start; }
+.hub-section { padding: 56px 0 24px; }
+.hub-body { padding-top: 56px; }
+.hero-stats-row { margin-top: var(--space-6); }
+.audience-card .bar { background: var(--pd-blue); }
+.section-title-row .sub-link { border-bottom: none; color: var(--pd-blue-light); }
+
+.contact-person { display: flex; gap: var(--space-4); align-items: center; margin-bottom: var(--space-4); }
+.contact-person .avatar {
+  width: 56px; height: 56px; flex-shrink: 0;
+  border-radius: 50%;
+  background: var(--pd-blue-tint-16);
+  display: flex; align-items: center; justify-content: center;
+  font-size: var(--size-sm); font-weight: 700; color: var(--pd-blue);
+}
+.contact-name { font-size: var(--size-lg); font-weight: 600; color: var(--pd-blue); }
+.contact-role { font-size: var(--size-xs); color: var(--text-muted); }
+
+@media (max-width: 900px) {
+  /* minmax(0, 1fr) rather than 1fr, for the same reason as .page-body: a 1fr
+     track still takes its minimum from its content. */
+  .hub-body { grid-template-columns: minmax(0, 1fr); }
+}
+
+@media (max-width: 720px) {
+  .two-col { grid-template-columns: minmax(0, 1fr); gap: 40px; padding: 40px 0 16px; }
+  .hub-section { padding: 40px 0 16px; }
+  .hub-body { padding-top: 40px; }
 }

@@ -2,6 +2,7 @@
 title: Prodeko Network
 translationKey: yrityssuhteet-prodeko-network
 sourceURL: https://prodeko.org/fi/yrityssuhteet/prodeko-network/
+description: Prodeko Network on vuodesta 1994 toiminut yritysverkosto, joka kokoaa yhteen killan kiinteimmät yhteistyöyritykset.
 ---
 
 Prodekon yritysyhteistyön kiinteimmän osan muodostaa yritysverkosto *Prodeko Network*. Se kokoaa yhteen toimialoillaan johtavia suomalaisia suuryrityksiä ja on toiminut vuodesta 1994 alkaen. Jäsenyritykset osallistuvat maamme johtavan teknis-taloudellisen koulutusohjelman opiskelijoiden arkeen ja juhlaan ollen esillä killan toiminnassa useilla tavoilla.
@@ -18,9 +19,9 @@ Prodeko Network -yritykset:
 
 [Metso](https://www.metso.com/fi/) (vuodesta 2006)
 
-[Vaisala](http://www.vaisala.fi/) (vuodesta 2010)
+[Vaisala](https://www.vaisala.fi/) (vuodesta 2010)
 
-[ABB](http://new.abb.com/fi) (vuodesta 2016)
+[ABB](https://new.abb.com/fi) (vuodesta 2016)
 
 [KONE](https://www.kone.fi/) (vuodesta 2016)
 
