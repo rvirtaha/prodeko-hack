@@ -13,19 +13,27 @@
      year itself (newest first) and a hand-grouped file like honours.yaml
      uses an explicit rank (its first group gets the highest number). */}}
 {{ define "main" }}
-  <article>
-    <h1>{{ .Title }}</h1>
-    {{ .Content }}
-    {{ $dataset := index hugo.Data .Params.dataset }}
-    {{ $groups := slice }}
-    {{ range $dataset }}
-      {{ $groups = $groups | append . }}
+  {{ $groups := slice }}
+  {{ range index hugo.Data .Params.dataset }}
+    {{ $groups = $groups | append . }}
+  {{ end }}
+  {{ $sorted := sort $groups "sortKey" "desc" }}
+
+  {{ $body := slice (string .Content) }}
+
+  {{/* A jump list, so an archive of sixty years is navigable without
+       scrolling through all of it. */}}
+  {{ if gt (len $sorted) 4 }}
+    {{ $jumps := slice }}
+    {{ range $sorted }}
+      {{ $jumps = $jumps | append (printf `<a href="#%s">%s</a>` (.heading | urlize) .heading) }}
     {{ end }}
-    {{ range sort $groups "sortKey" "desc" }}
-      <section class="archive-group">
-        <h2>{{ .heading }}</h2>
-        {{ partial "people-grid.html" .members }}
-      </section>
-    {{ end }}
-  </article>
+    {{ $body = $body | append (printf `<nav class="archive-jump" aria-label="%s">%s</nav>` .Title (delimit $jumps "")) }}
+  {{ end }}
+
+  {{ range $sorted }}
+    {{ $body = $body | append (printf `<section class="archive-group" id="%s"><h2>%s</h2>%s</section>` (.heading | urlize) .heading (partial "people-grid.html" .members)) }}
+  {{ end }}
+
+  {{ partial "page-shell.html" (dict "page" . "body" (delimit $body "" | safeHTML)) }}
 {{ end }}

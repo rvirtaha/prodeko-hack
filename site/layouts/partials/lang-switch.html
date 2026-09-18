@@ -1,0 +1,18 @@
+{{/* Both languages, always. Where the current page has a translation the
+     switch lands on it; where it does not — a good part of the site, since the
+     migrated content is uneven — it falls back to that language's front page
+     rather than disappearing, which would otherwise leave a reader with no way
+     across at all. */}}
+{{ $current := . }}
+<div class="lang-switch">
+  {{ range .Sites }}
+    {{ $lang := .Language.Lang }}
+    {{ $target := .Home }}
+    {{ range $current.AllTranslations }}
+      {{ if eq .Language.Lang $lang }}{{ $target = . }}{{ end }}
+    {{ end }}
+    <a class="{{ if eq $lang $current.Language.Lang }}current{{ end }}"
+       href="{{ $target.Permalink }}" hreflang="{{ $lang }}"
+       lang="{{ $lang }}">{{ $lang | upper }}</a>
+  {{ end }}
+</div>

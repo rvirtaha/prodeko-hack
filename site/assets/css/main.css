@@ -158,27 +158,6 @@ a.btn, a.btn:hover { border-bottom: none; }
 .nav-toggle-bars::before { position: absolute; top: -6px; left: 0; }
 .nav-toggle-bars::after { position: absolute; top: 6px; left: 0; }
 
-/* Below this width the logo + five nav items + language pill + login
-   button no longer fit on one line, so they collapse behind a toggle. */
-@media (max-width: 860px) {
-  .site-header .bar { height: auto; padding-block: var(--space-4); row-gap: var(--space-4); }
-  .nav-toggle { display: flex; }
-  .site-header nav,
-  .site-header .side { display: none; width: 100%; }
-  .site-header.nav-open nav,
-  .site-header.nav-open .side { display: flex; }
-  .site-header .nav-list { flex-direction: column; align-items: stretch; gap: 0; width: 100%; }
-  .site-header .nav-list a { width: 100%; padding: var(--space-3) 0; border-bottom: 1px solid var(--border-subtle); }
-  .site-header .nav-list a:hover,
-  .site-header .nav-list li.current a { border-bottom-color: var(--border-subtle); color: var(--pd-blue-light); }
-  .site-header .side { flex-direction: column; align-items: stretch; gap: var(--space-4); }
-  .site-header .side .btn { width: 100%; }
-  .lang-switch { align-self: flex-start; }
-  /* The mega-menu is a hover affordance; on touch it never opens, so the
-     flat nav-list above is the only way to reach these pages on mobile. */
-  .mega-panel { display: none !important; }
-}
-
 /* ===== Mega menu (layouts/partials/header.html + assets/js/mega-menu.js) ===== */
 
 @keyframes pdFade { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
@@ -244,6 +223,86 @@ a.btn, a.btn:hover { border-bottom: none; }
 }
 .lang-switch a.current { background: var(--pd-blue); color: var(--pd-white-1); }
 
+/* ===== Phone menu (layouts/partials/header.html, .mobile-nav) =====
+
+   The mega-panels are opened by hover, which touch never fires, so on a phone
+   the same links are repeated as a set of accordions. Hidden above the
+   breakpoint; the media query at the end of this section is what reveals it. */
+
+.mobile-nav { display: none; }
+.mobile-nav .container { padding-bottom: var(--space-6); }
+.m-group { border-bottom: 1px solid var(--border-subtle); }
+.m-group summary {
+  cursor: pointer;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 52px;
+  font-size: var(--size-xs);
+  font-weight: var(--weight-semibold);
+  letter-spacing: var(--track-caps);
+  text-transform: uppercase;
+  color: var(--pd-blue);
+}
+.m-group summary::-webkit-details-marker { display: none; }
+.m-group summary::after { content: "+"; font-size: var(--size-xl); font-weight: var(--weight-light); color: var(--pd-blue-light); }
+.m-group[open] summary::after { content: "\2013"; }
+.m-group-body { padding: 0 0 var(--space-4); }
+.m-col-title {
+  font-size: var(--size-3xs);
+  font-weight: var(--weight-semibold);
+  letter-spacing: var(--track-caps-wide);
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin: var(--space-4) 0 var(--space-1);
+}
+.mobile-nav a,
+.m-link-disabled {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  min-height: 44px;
+  font-size: var(--size-md);
+  font-weight: var(--weight-regular);
+  color: var(--pd-black);
+  border-bottom: none;
+}
+.mobile-nav a span:last-child { color: var(--pd-blue-light); font-size: var(--size-xs); }
+.m-link-disabled { color: var(--text-muted); }
+.m-overview { color: var(--pd-blue-light) !important; font-weight: var(--weight-semibold) !important; }
+.m-top {
+  border-bottom: 1px solid var(--border-subtle) !important;
+  min-height: 52px !important;
+  font-size: var(--size-xs) !important;
+  font-weight: var(--weight-semibold) !important;
+  letter-spacing: var(--track-caps);
+  text-transform: uppercase;
+  color: var(--pd-blue) !important;
+}
+.m-actions { display: flex; align-items: center; gap: var(--space-4); padding-top: var(--space-6); }
+.m-actions .lang-switch { flex-shrink: 0; }
+.m-actions .btn { flex: 1; }
+
+/* Below this width the logo, five nav items, language pill and login button no
+   longer fit on one line, so everything but the logo collapses behind the
+   toggle and the phone menu above takes over. */
+@media (max-width: 860px) {
+  .site-header .bar { height: 60px; gap: var(--space-4); flex-wrap: nowrap; }
+  .site-header .desktop-nav,
+  .site-header .side { display: none; }
+  .nav-toggle { display: flex; margin-left: auto; }
+  .mega-panel { display: none !important; }
+  .site-header.nav-open .mobile-nav {
+    display: block;
+    max-height: calc(100dvh - 60px);
+    overflow-y: auto;
+    border-top: 1px solid var(--border-subtle);
+    animation: pdFade 160ms var(--ease-standard);
+  }
+}
+
 /* ===== Footer ===== */
 
 .site-footer { background: var(--pd-blue-dark); color: var(--pd-white-1); }
@@ -285,7 +344,7 @@ a.btn, a.btn:hover { border-bottom: none; }
 .hero-home {
   position: relative;
   overflow: hidden;
-  background: var(--pd-blue) url("/images/brand/bg-texture-blue.png") center/cover;
+  background: var(--pd-blue) var(--bg-texture-blue) center/cover;
   color: var(--pd-white-1);
 }
 .hero-home::before {
@@ -349,6 +408,7 @@ a.btn, a.btn:hover { border-bottom: none; }
 
 /* ===== Announcement card ===== */
 
+.announcement-wrap { margin-top: -56px; position: relative; z-index: 1; max-width: 28rem; }
 .announcement {
   background: #fff;
   color: var(--text-body);
@@ -421,7 +481,7 @@ a.btn, a.btn:hover { border-bottom: none; }
 .hero-split {
   position: relative;
   overflow: hidden;
-  background: var(--pd-blue) url("/images/brand/bg-texture-blue.png") center/cover;
+  background: var(--pd-blue) var(--bg-texture-blue) center/cover;
   color: var(--pd-white-1);
   display: grid;
   grid-template-columns: minmax(0,1fr) minmax(0,1fr);
@@ -583,6 +643,247 @@ a.btn, a.btn:hover { border-bottom: none; }
 .embed { margin: var(--space-8) 0; }
 .embed iframe { width: 100%; min-height: 32rem; border: 1px solid var(--border-subtle); }
 
-/* ===== Plain content pages ===== */
+/* ===== Plain content pages (layouts/partials/page-shell.html) =====
 
-article { padding: var(--space-10) 0; }
+   Every text-shaped page — a migrated page, a section index, a people grid, a
+   year archive — is rendered inside this frame, so they share one measure, one
+   heading scale and one breadcrumb. */
+
+.page-head { background: #fff; border-bottom: 1px solid var(--border-subtle); position: relative; }
+.page-head .container { padding-top: var(--space-8); padding-bottom: var(--space-8); }
+.page-head h1 {
+  margin: var(--space-4) 0 0;
+  max-width: 24ch;
+  font-size: clamp(30px, 4vw, 46px);
+  font-weight: var(--weight-bold);
+  letter-spacing: var(--track-caps);
+  text-transform: uppercase;
+  line-height: 1.08;
+  color: var(--pd-blue);
+}
+.page-head .page-lead {
+  margin: var(--space-4) 0 0;
+  max-width: 60ch;
+  font-size: var(--size-lg);
+  font-weight: var(--weight-light);
+  line-height: var(--leading-normal);
+  color: var(--text-muted);
+}
+.page-head .rainbow-rule { position: absolute; left: 0; right: 0; bottom: 0; height: 4px; }
+
+.breadcrumbs ol {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-1) var(--space-2);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  font-size: var(--size-2xs);
+  font-weight: var(--weight-semibold);
+  letter-spacing: var(--track-caps);
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+.breadcrumbs li + li::before { content: "/"; margin-right: var(--space-2); color: var(--border-subtle); }
+.breadcrumbs a { color: var(--text-muted); border-bottom: none; }
+.breadcrumbs a:hover { color: var(--pd-blue-light); }
+.breadcrumbs [aria-current] { color: var(--pd-blue); }
+
+.page-body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 260px;
+  gap: var(--space-16);
+  align-items: start;
+  padding: var(--space-12) var(--space-8) var(--space-20);
+}
+.page-aside { position: sticky; top: 96px; display: flex; flex-direction: column; gap: var(--space-6); }
+.section-nav .sidebar-list a { font-size: var(--size-sm); padding: var(--space-1) 0; }
+.section-nav .sidebar-list a.current { color: var(--pd-blue); font-weight: var(--weight-semibold); }
+.source-note { margin: 0; font-size: var(--size-3xs); color: var(--text-muted); line-height: var(--leading-loose); }
+.source-note a { color: var(--text-muted); }
+
+/* ===== Prose =====
+
+   The migrated pages came out of the old site with their subheadings at h5 and
+   h6 regardless of depth, so the scale here deliberately does not fall away to
+   nothing at the bottom: a h6 still has to read as a heading. */
+
+.prose { max-width: var(--content-max); }
+.prose > :first-child { margin-top: 0; }
+.prose > :last-child { margin-bottom: 0; }
+.prose p, .prose li { font-size: var(--size-md); font-weight: var(--weight-light); line-height: var(--leading-loose); }
+.prose h2 {
+  margin: var(--space-12) 0 var(--space-4);
+  font-size: var(--size-2xl);
+  font-weight: var(--weight-semibold);
+  color: var(--pd-blue);
+  line-height: 1.15;
+}
+.prose h3 { margin: var(--space-10) 0 var(--space-3); font-size: var(--size-xl); font-weight: var(--weight-semibold); color: var(--pd-blue); }
+.prose h4,
+.prose h5,
+.prose h6 {
+  margin: var(--space-8) 0 var(--space-2);
+  font-size: var(--size-lg);
+  font-weight: var(--weight-semibold);
+  color: var(--pd-blue);
+  letter-spacing: var(--track-normal);
+  text-transform: none;
+}
+.prose ul, .prose ol { margin: 0 0 var(--space-4); padding-left: var(--space-6); }
+.prose li { margin-bottom: var(--space-2); }
+.prose li::marker { color: var(--pd-blue-light); }
+.prose a { color: var(--text-link); border-bottom: 1px solid rgb(0 46 125 / 0.25); }
+.prose a:hover { border-bottom-color: currentColor; }
+.prose blockquote {
+  margin: var(--space-8) 0;
+  padding: var(--space-2) 0 var(--space-2) var(--space-6);
+  border-left: 3px solid var(--pd-blue);
+  color: var(--text-muted);
+}
+.prose hr { border: 0; border-top: 1px solid var(--border-subtle); margin: var(--space-12) 0; }
+.prose img { margin: var(--space-6) 0; border-radius: var(--radius-ui); }
+.prose table { width: 100%; border-collapse: collapse; margin: var(--space-6) 0; font-size: var(--size-sm); }
+.prose th, .prose td { text-align: left; padding: var(--space-3); border-bottom: 1px solid var(--border-subtle); }
+.prose th { font-weight: var(--weight-semibold); color: var(--pd-blue); }
+.prose code {
+  font-size: 0.9em;
+  background: var(--pd-white-2, #f1f1f1);
+  padding: 0.1em 0.35em;
+  border-radius: 4px;
+}
+.prose pre { overflow-x: auto; padding: var(--space-4); background: var(--pd-white-2, #f1f1f1); border-radius: var(--radius-ui); }
+.prose pre code { background: none; padding: 0; }
+
+/* A scraped page can carry a bare URL as its own link text. Left alone that is
+   a single unbreakable word wider than a phone screen. */
+.prose a, .prose li, .prose p, .prose td { overflow-wrap: anywhere; }
+
+/* ===== Section index cards (layouts/section.html) ===== */
+
+.index-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: var(--space-4); margin-top: var(--space-8); }
+.index-card {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-rows: auto auto;
+  column-gap: var(--space-4);
+  padding: var(--space-5) var(--space-6);
+  background: #fff;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-ui);
+  border-bottom: 1px solid var(--border-subtle);
+  transition: var(--transition-ui);
+}
+.index-card:hover { border-color: var(--pd-blue); box-shadow: var(--shadow-sm); }
+.index-card .name { font-size: var(--size-lg); font-weight: var(--weight-semibold); color: var(--pd-blue); line-height: 1.2; }
+.index-card .desc { grid-column: 1; font-size: var(--size-sm); font-weight: var(--weight-light); color: var(--text-body); line-height: var(--leading-normal); margin-top: var(--space-2); }
+.index-card .go { grid-row: 1; grid-column: 2; color: var(--pd-blue-light); }
+
+/* ===== Archive jump list (layouts/archive.html) ===== */
+
+.archive-jump {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin: var(--space-8) 0 var(--space-4);
+  padding-bottom: var(--space-6);
+  border-bottom: 1px solid var(--border-subtle);
+}
+.archive-jump a {
+  padding: 6px 12px;
+  font-size: var(--size-2xs);
+  font-weight: var(--weight-semibold);
+  color: var(--pd-blue);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-ui);
+  font-variant-numeric: tabular-nums;
+}
+.archive-jump a:hover { border-color: var(--pd-blue); }
+.archive-group { margin: var(--space-12) 0; scroll-margin-top: 90px; }
+.archive-group h2 { font-size: var(--size-xl); color: var(--pd-blue); border-bottom: 2px solid var(--pd-blue); padding-bottom: var(--space-2); }
+
+.skip-link {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  z-index: 100;
+  padding: var(--space-3) var(--space-5);
+  background: var(--pd-blue);
+  color: var(--pd-white-1);
+  border-bottom: none;
+}
+.skip-link:focus {
+  width: auto;
+  height: auto;
+  clip-path: none;
+  left: 0;
+  top: 0;
+}
+
+@media (max-width: 900px) {
+    /* minmax(0, 1fr) rather than 1fr: a track sized 1fr still takes its minimum
+     from the content, so one long word or a wide table would push the whole
+     column past the viewport. */
+  .page-body { grid-template-columns: minmax(0, 1fr); gap: var(--space-10); }
+  .page-aside { position: static; border-top: 1px solid var(--border-subtle); padding-top: var(--space-6); }
+}
+
+/* ===== Phone and small-tablet layout =====
+
+   The grids above all collapse on their own through auto-fit; what does not
+   is vertical rhythm. Section padding and hero heights tuned for a 1440px
+   window cost a phone reader most of a screen before any content appears, so
+   they are scaled back here rather than carried down. */
+
+@media (max-width: 720px) {
+  .container { padding: 0 var(--space-6); }
+
+  .hero-home .inner { padding: 64px 0 56px; }
+  .hero-home h1 { font-size: clamp(30px, 9vw, 44px); letter-spacing: var(--track-normal); max-width: none; }
+  .hero-home .inner > p { font-size: var(--size-md); }
+  .hero-home .emblem { width: 340px; right: -90px; top: -80px; }
+  .hero-home .ctas .btn { flex: 1 1 auto; }
+
+  .hero-split .text { padding: 48px var(--space-6) 44px; }
+  .hero-split h1 { letter-spacing: var(--track-normal); }
+  .hero-split .image { min-height: 200px; }
+
+  .hero-photo .inner { padding: 56px 0 48px; }
+  .hero-photo h1 { letter-spacing: var(--track-normal); }
+  .hero-photo p { font-size: var(--size-md); }
+  .hero-prospective { min-height: 420px; }
+
+  .hero-alumni-band { height: 260px; }
+  .hero-alumni-card-wrap { margin-top: -72px; }
+  .hero-alumni-card { padding: var(--space-6); }
+  .hero-alumni-card h1 { letter-spacing: var(--track-normal); }
+  .hero-alumni-card p { font-size: var(--size-md); }
+  .hero-alumni-card .rainbow-rule { margin: var(--space-6) calc(-1 * var(--space-6)) calc(-1 * var(--space-6)); }
+
+  .announcement-wrap { max-width: none; }
+  .audiences { padding: 48px 0 24px; }
+  .values-section { padding: 40px 0 48px; }
+  .photo-band { height: 280px; }
+  .partners-section { padding: 40px 0 48px; }
+  .partner-tile { height: 72px; padding: var(--space-4); }
+  .stats-row { padding: 32px 0 16px; }
+  .hub-body { padding: 40px 0 56px; }
+  .hub-sections { gap: 40px; }
+
+  .page-head .container { padding-top: var(--space-6); padding-bottom: var(--space-6); }
+  .page-head h1 { letter-spacing: var(--track-normal); max-width: none; }
+  .page-head .page-lead { font-size: var(--size-md); }
+  .page-body { padding: var(--space-8) var(--space-6) var(--space-12); }
+  .prose h2 { margin-top: var(--space-10); font-size: var(--size-xl); }
+  .prose h3 { margin-top: var(--space-8); font-size: var(--size-lg); }
+
+  /* A migrated page can hold a table wider than any phone. Letting the table
+     scroll on its own keeps the rest of the page at the viewport width. */
+  .prose table { display: block; overflow-x: auto; }
+  .prose code { overflow-wrap: anywhere; }
+  .embed iframe { min-height: 24rem; }
+}

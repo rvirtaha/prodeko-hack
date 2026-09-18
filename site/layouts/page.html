@@ -1,6 +1,3 @@
 {{ define "main" }}
-  <article>
-    <h1>{{ .Title }}</h1>
-    {{ .Content }}
-  </article>
+  {{ partial "page-shell.html" (dict "page" . "body" .Content) }}
 {{ end }}

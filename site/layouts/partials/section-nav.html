@@ -1,0 +1,19 @@
+{{/* The other pages in the same section, as a sidebar list. Rendered only
+     where there is more than one, so a section holding a single page does not
+     get a list of itself. */}}
+{{ $section := .CurrentSection }}
+{{ $siblings := $section.RegularPages }}
+{{ if gt (len $siblings) 1 }}
+  <nav class="section-nav" aria-label="{{ $section.Title }}">
+    <div class="sidebar-list-title">{{ $section.Title }}</div>
+    <ul class="sidebar-list">
+      {{ range $siblings }}
+        <li>
+          <a href="{{ .RelPermalink }}"{{ if eq .RelPermalink $.RelPermalink }} class="current" aria-current="page"{{ end }}>
+            <span>{{ .Title }}</span><span aria-hidden="true">→</span>
+          </a>
+        </li>
+      {{ end }}
+    </ul>
+  </nav>
+{{ end }}
