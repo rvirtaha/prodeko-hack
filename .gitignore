@@ -8,3 +8,6 @@ site/.hugo_build.lock
 
 .env
 *.local
+
+/audit-tree/
+/node_modules
