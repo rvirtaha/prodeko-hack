@@ -24,6 +24,11 @@ jobs:
       # module is developed against. The Dockerfile pins golang:1.27-bookworm
       # for the image build, so the two have to move together.
       GO_VERSION: "1.27.1"
+      # Without this the go directive in proxy/go.mod silently outranks the
+      # version above, which makes GO_VERSION a floor rather than a pin. With
+      # it, a module that outgrows the pinned toolchain fails here instead of
+      # quietly testing against a different one.
+      GOTOOLCHAIN: local
     steps:
       - uses: actions/checkout@v5
 
