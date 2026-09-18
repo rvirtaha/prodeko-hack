@@ -1,0 +1,23 @@
+# Prodeko's 1976 board, imported from https://www.prodeko.org/fi/guild/board/edelliset-hallitukset/
+# by tools/import-boards.py. Edit here, not on the old site.
+heading: "1976"
+sortKey: 1976
+members:
+  - name: "Heikki Tulenheimo"
+    role: "Excursiomestari"
+  - name: "Asko Schrey"
+    role: "Isäntä"
+  - name: "Mikko Sajaniemi"
+    role: "Rahastonhoitaja"
+  - name: "Heidi Räisänen"
+    role: "Sihteeri"
+  - name: "Heikki Nelimarkka"
+    role: "Puheenjohtaja"
+  - name: "Risto Maunula"
+    role: "Urheilumestari"
+  - name: "Leena Lehtinen"
+    role: "Emäntä"
+  - name: "Veli-Matti Karjanlahti"
+    role: "Varapuheenjohtaja"
+  - name: "Jaana Holvikivi"
+    role: "Opintojohtokunnan pj."

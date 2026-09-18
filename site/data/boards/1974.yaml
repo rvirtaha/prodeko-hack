@@ -1,0 +1,19 @@
+# Prodeko's 1974 board, imported from https://www.prodeko.org/fi/guild/board/edelliset-hallitukset/
+# by tools/import-boards.py. Edit here, not on the old site.
+heading: "1974"
+sortKey: 1974
+members:
+  - name: "Risto Tanner"
+    role: "Ekskursiomestari"
+  - name: "Mikko Sajaniemi"
+    role: "Sihteeri"
+  - name: "Kari Pulkkinen"
+    role: "Varapuheenjohtaja"
+  - name: "Mirja Pirttimäki"
+    role: "Emäntä"
+  - name: "Seppo Luode"
+    role: "Rahastonhoitaja"
+  - name: "Pauli Kulvik"
+    role: "Puheenjohtaja"
+  - name: "Lauri Björklund"
+    role: "Isäntä"

@@ -1,0 +1,27 @@
+# Prodeko's 1975 board, imported from https://www.prodeko.org/fi/guild/board/edelliset-hallitukset/
+# by tools/import-boards.py. Edit here, not on the old site.
+heading: "1975"
+sortKey: 1975
+members:
+  - name: "Mikko Sajaniemi"
+    role: "Puheenjohtaja"
+  - name: "Asko Saarinen"
+    role: "Varexcursiomestari"
+  - name: "Arto Orelma"
+    role: "Opintojohtokunnan pj."
+  - name: "Heikki Nelimarkka"
+    role: "Varapuheenjohtaja"
+  - name: "Risto Maunula"
+    role: "Urheilumestari"
+  - name: "Timo Laitinen"
+    role: "Isäntä (syksy)"
+  - name: "Kari Kasanen"
+    role: "Isäntä (kevät)"
+  - name: "Veli-Matti Karjanlahti"
+    role: "Excursiomestari"
+  - name: "Jaana Holvikivi"
+    role: "Sihteeri"
+  - name: "Lauri Björklund"
+    role: "Rahastonhoitaja"
+  - name: "Tina Ahlers"
+    role: "Emäntä"

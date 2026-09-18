@@ -1,0 +1,19 @@
+# Prodeko's 1969 board, imported from https://www.prodeko.org/fi/guild/board/edelliset-hallitukset/
+# by tools/import-boards.py. Edit here, not on the old site.
+heading: "1969"
+sortKey: 1969
+members:
+  - name: "Marja-Terttu Tanttinen"
+    role: "Emäntä"
+  - name: "Pertti Löfgren"
+    role: "Taloudenhoitaja"
+  - name: "Heikki Lehmus"
+    role: "Isäntä"
+  - name: "Hannes Kulvik"
+    role: "Varapuheenjohtaja"
+  - name: "Jussi Karjalainen"
+    role: "Puheenjohtaja"
+  - name: "Markku Kangas"
+    role: "Ekskursiomestari"
+  - name: "Anneli Jalovaara"
+    role: "Sihteeri"

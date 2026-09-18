@@ -1,0 +1,25 @@
+# Prodeko's 1998 board, imported from https://www.prodeko.org/fi/guild/board/edelliset-hallitukset/
+# by tools/import-boards.py. Edit here, not on the old site.
+heading: "1998"
+sortKey: 1998
+members:
+  - name: "Sampo Yli-Olli"
+    role: "Mediakeisari & sihteeri"
+  - name: "Mika Uusitalo"
+    role: "Sisä- ja kultturiministeri"
+  - name: "Jussi Räisänen"
+    role: "Isäntä"
+  - name: "Jaakko Ollila"
+    role: "Opintovastaava"
+  - name: "Perttu Nihti"
+    role: "Puheenjohtaja"
+  - name: "Markku Maula"
+    role: "Yritysvastaava"
+  - name: "Timo Linnainmaa"
+    role: "Excursiomestari"
+  - name: "Jenni Eloranta"
+    role: "Rahastonhoitaja"
+  - name: "Timo Alarisku"
+    role: "Fuksikapteeni (1998-99)"
+  - name: "Kaisa Airila"
+    role: "Ulkoministeri"

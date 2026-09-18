@@ -1,0 +1,23 @@
+# Prodeko's 2005 board, imported from https://www.prodeko.org/fi/guild/board/edelliset-hallitukset/
+# by tools/import-boards.py. Edit here, not on the old site.
+heading: "2005"
+sortKey: 2005
+members:
+  - name: "Riku Seppälä"
+    role: "Ulkoministeri"
+  - name: "Tuomo Pesonen"
+    role: "Fuksikapteeni"
+  - name: "Aino Mäkisalo"
+    role: "Opintovastaava"
+  - name: "Tomi Lähdemäki"
+    role: "Yrityssuhdevastaava"
+  - name: "Kristiina Kyläkoski"
+    role: "Rahastonhoitaja"
+  - name: "Sebastian Knight"
+    role: "Excumestari"
+  - name: "Tommi Kemppainen"
+    role: "Puheenjohtaja"
+  - name: "Tuukka Eloranta"
+    role: "Isäntä"
+  - name: "Satu Alikoski"
+    role: "Sisä- ja Kulttuuriministeri"

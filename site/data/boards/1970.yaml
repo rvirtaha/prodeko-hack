@@ -1,0 +1,19 @@
+# Prodeko's 1970 board, imported from https://www.prodeko.org/fi/guild/board/edelliset-hallitukset/
+# by tools/import-boards.py. Edit here, not on the old site.
+heading: "1970"
+sortKey: 1970
+members:
+  - name: "Petteri Wallén"
+    role: "Rahastonhoitaja"
+  - name: "Erkki Rautiainen"
+    role: "Ekskursiomestari"
+  - name: "Virpi Pienkeroinen"
+    role: "Sihteeri"
+  - name: "Matti Packalén"
+    role: "Isäntä"
+  - name: "Hannes Kulvik"
+    role: "Puheenjohtaja"
+  - name: "Helena Komulainen"
+    role: "Emäntä"
+  - name: "Jorma Eloranta"
+    role: "Varapuheenjohtaja"

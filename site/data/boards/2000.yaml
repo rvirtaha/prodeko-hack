@@ -1,0 +1,27 @@
+# Prodeko's 2000 board, imported from https://www.prodeko.org/fi/guild/board/edelliset-hallitukset/
+# by tools/import-boards.py. Edit here, not on the old site.
+heading: "2000"
+sortKey: 2000
+members:
+  - name: "Jaakko Tuomainen"
+    role: "Sisä- ja kultturiministeri"
+  - name: "Katri Suominen"
+    role: "Rahastonhoitaja"
+  - name: "Teppo Rinta-Filppula"
+    role: "Excursiomestari"
+  - name: "Juhana Nurmio"
+    role: "Puheenjohtaja"
+  - name: "Tero Mäkinen"
+    role: "Mediakeisari & sihteeri"
+  - name: "Heikki Lummaa"
+    role: "Yritysvastaava"
+  - name: "Anne-Mari Laiho"
+    role: "Ulkoministeri"
+  - name: "Niklas Kari"
+    role: "Opintovastaava"
+  - name: "Juho Juopperi"
+    role: "Isäntä"
+  - name: "Anssi Hartiala"
+    role: "Fuksikapteeni (2000-2001)"
+  - name: "Jarno Alhonen"
+    role: "Fuksikapteeni (1999-2000)"

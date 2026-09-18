@@ -27,7 +27,7 @@ Prodeko Network companies:
 
 [Neste](https://www.neste.fi/) (since 2012)
 
-[ABB](https://new.abb.com/fi) (since 2016)
+[ABB](https://www.abb.com/fi) (since 2016)
 
 [KONE](https://www.google.fi/url?sa=t&rct=j&q=&esrc=s&source=web&cd=1&cad=rja&uact=8&ved=0ahUKEwiq4NnjrPTRAhVkP5oKHeY3DzwQFggZMAA&url=http%3A%2F%2Fwww.kone.fi%2F&usg=AFQjCNFB0yaE6eohJ_UnOkp6SvdhTJKWng&sig2=BdhPdPGu6rgFN1jAPs61Sg) (since 2016)
 

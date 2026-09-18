@@ -1,0 +1,23 @@
+# Prodeko's 1987 board, imported from https://www.prodeko.org/fi/guild/board/edelliset-hallitukset/
+# by tools/import-boards.py. Edit here, not on the old site.
+heading: "1987"
+sortKey: 1987
+members:
+  - name: "Anu Tuominen"
+    role: "Markkinointi-ihme"
+  - name: "Pekka Tammimen"
+    role: "Isäntä"
+  - name: "Ilkka Tainola"
+    role: "Opintoihme"
+  - name: "Hans Sohlström"
+    role: "Puheenjohtaja"
+  - name: "Leena Seppänen"
+    role: "Emäntä"
+  - name: "Simo-Pekka Rentto"
+    role: "Rahastonhoitaja"
+  - name: "Jussi Mononen"
+    role: "Varapuheenjohtaja"
+  - name: "Matti Kanninen"
+    role: "Excursiomestari"
+  - name: "Juha Huttunen"
+    role: "Sihteeri"

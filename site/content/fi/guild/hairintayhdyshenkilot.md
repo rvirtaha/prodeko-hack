@@ -17,7 +17,7 @@ Prodekolla on viisi häirintäyhdyshenkilöä: Aino Soinio, Aino Salmi, Kalle Sa
 
 Heipsuu! Mä oon Aino Soinio, kuudennen vuoden prodekolainen. Bailut on jees, mutta toisinaan oon henkisesti keski-ikäinen ja rakastan chillejä koti-iltoja Downton Abbeyn parissa :) Oon luotettava ja aika mukava tyyppi, joten jos on ikin mtn nii tuuthan jubailee! Vaikka säästä jos ei muusta ;)
 
-*[aino.soinio@aalto.fi](mailto:suvi.rinkineva@aalto.fi)*
+*[aino.soinio@aalto.fi](mailto:aino.soinio@aalto.fi)*
 
 *[+358 449745644]()*
 

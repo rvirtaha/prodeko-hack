@@ -1,0 +1,25 @@
+# Prodeko's 1980 board, imported from https://www.prodeko.org/fi/guild/board/edelliset-hallitukset/
+# by tools/import-boards.py. Edit here, not on the old site.
+heading: "1980"
+sortKey: 1980
+members:
+  - name: "Jari Tuomala"
+    role: "Isäntä"
+  - name: "Juha Putkiranta"
+    role: "Excursiomestari,pitkät"
+  - name: "Anne Nyysti"
+    role: "Emäntä"
+  - name: "Jussi Mankki"
+    role: "Varapuheenjohtaja"
+  - name: "Tapio Lehtinen"
+    role: "Excursiomestari,lyhyet"
+  - name: "Simo Lassila"
+    role: "Opintovastaava"
+  - name: "Helena Hyypä"
+    role: "Puheenjohtaja"
+  - name: "Jarmo Honkamaa"
+    role: "Rahastonhoitaja"
+  - name: "Riitta Holmström"
+    role: "Tiedotussihteeri"
+  - name: "Karlos Artto"
+    role: "Sihteeri"

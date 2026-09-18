@@ -1,0 +1,25 @@
+# Prodeko's 1997 board, imported from https://www.prodeko.org/fi/guild/board/edelliset-hallitukset/
+# by tools/import-boards.py. Edit here, not on the old site.
+heading: "1997"
+sortKey: 1997
+members:
+  - name: "Tiina Vilkamo"
+    role: "Rahastonhoitaja"
+  - name: "Tanja Vaheri"
+    role: "Opintovastaava"
+  - name: "Antti Tapionlinna"
+    role: "Ulkoministeri"
+  - name: "Perttu ”Perde” Rönkkö"
+    role: "Sisä- ja kultturiministeri, Varapuheenjohtaja"
+  - name: "Juha ”Nikkis” Nikola"
+    role: "Yritysvastaava"
+  - name: "Mikko Kärkkäinen"
+    role: "Fuksikapteeni (1997-98)"
+  - name: "Henriikka Juusela"
+    role: "Puheenjohtaja"
+  - name: "Jarno ”Jasse” Martikainen"
+    role: "Isäntä"
+  - name: "Pekka Härkönen"
+    role: "Excursiomestari"
+  - name: "Kaisa Airila"
+    role: "Tiedotusvastaava"

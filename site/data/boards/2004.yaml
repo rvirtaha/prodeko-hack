@@ -1,0 +1,25 @@
+# Prodeko's 2004 board, imported from https://www.prodeko.org/fi/guild/board/edelliset-hallitukset/
+# by tools/import-boards.py. Edit here, not on the old site.
+heading: "2004"
+sortKey: 2004
+members:
+  - name: "Tuomo Vierros"
+    role: "Fuksikapteeni"
+  - name: "Antti Suorsa"
+    role: "Excumestari"
+  - name: "Heidi Sivula"
+    role: "Sisä- ja Kulttuuriministeri"
+  - name: "Maria Routti"
+    role: "Opintovastaava"
+  - name: "Mikko Rönkkö"
+    role: "Puheenjohtaja"
+  - name: "Eero Palomäki"
+    role: "Uusmediakeisari"
+  - name: "Mikko Lauerma"
+    role: "Rahastonhoitaja"
+  - name: "Tommi Laivuori"
+    role: "Isäntä"
+  - name: "Heikki Henttu"
+    role: "Yrityssuhdevastaava"
+  - name: "Ville Heikkilä"
+    role: "Ulkoministeri"

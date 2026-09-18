@@ -21,7 +21,7 @@ Prodeko Network -yritykset:
 
 [Vaisala](https://www.vaisala.fi/) (vuodesta 2010)
 
-[ABB](https://new.abb.com/fi) (vuodesta 2016)
+[ABB](https://www.abb.com/fi) (vuodesta 2016)
 
 [KONE](https://www.kone.fi/) (vuodesta 2016)
 

@@ -1,0 +1,27 @@
+# Prodeko's 2014 board, imported from https://www.prodeko.org/fi/guild/board/edelliset-hallitukset/
+# by tools/import-boards.py. Edit here, not on the old site.
+heading: "2014"
+sortKey: 2014
+members:
+  - name: "Auri Väljä"
+    role: "Fuksikapteeni"
+  - name: "Katriina Suojala"
+    role: "Varapuheenjohtaja"
+  - name: "Matilda Säde"
+    role: "Opintovastaava"
+  - name: "Heta Ruikka"
+    role: "Isäntä"
+  - name: "Mikko Rajala"
+    role: "Rahastonhoitaja"
+  - name: "Lauri Mikkola"
+    role: "Yrityssuhdevastaava"
+  - name: "Lari Laukia"
+    role: "Ulkoministeri"
+  - name: "Markus Junkkari"
+    role: "Puheenjohtaja"
+  - name: "Ville Huovinen"
+    role: "Sisä- ja kulttuuriministeri"
+  - name: "Pyry Huhtanen"
+    role: "Excumestari"
+  - name: "Tony Hämmäinen"
+    role: "Mediakeisari, Sihteeri"

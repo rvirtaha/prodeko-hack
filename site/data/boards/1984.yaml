@@ -1,0 +1,25 @@
+# Prodeko's 1984 board, imported from https://www.prodeko.org/fi/guild/board/edelliset-hallitukset/
+# by tools/import-boards.py. Edit here, not on the old site.
+heading: "1984"
+sortKey: 1984
+members:
+  - name: "Petri Viertiö"
+    role: "Varapuheenjohtaja"
+  - name: "Jyri Uimonen"
+    role: "Markkinointi-ihme"
+  - name: "Kalervo Turtola"
+    role: "Rahastonhoitaja"
+  - name: "Hannu Tomi"
+    role: "Isäntä"
+  - name: "Tuulikki Salmenkylä"
+    role: "Puheenjohtaja"
+  - name: "Jyrki Perttunen"
+    role: "Excursiomestarit"
+  - name: "Pertti Nupponen"
+    role: "Opintoihminen"
+  - name: "Sari Kangas-Ikkala"
+    role: "Emäntä"
+  - name: "Kari Järvinen"
+    role: "Sihteeri"
+  - name: "Pertti Fallenius"
+    role: "Excursiomestarit"

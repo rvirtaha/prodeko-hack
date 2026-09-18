@@ -1,0 +1,27 @@
+# Prodeko's 1986 board, imported from https://www.prodeko.org/fi/guild/board/edelliset-hallitukset/
+# by tools/import-boards.py. Edit here, not on the old site.
+heading: "1986"
+sortKey: 1986
+members:
+  - name: "Janne Yli-Äyhö"
+    role: "Sihteeri"
+  - name: "Stefan Törnqvist"
+    role: "Excursiomestarit"
+  - name: "Ilkka Toivola"
+    role: "Opintoihme"
+  - name: "Hans Sohlström"
+    role: "Varapuheenjohtaja"
+  - name: "Olli Ranta"
+    role: "Excursiomestarit"
+  - name: "Pertti Nupponen"
+    role: "Markkinointi-ihme"
+  - name: "Juho Nikkola"
+    role: "Markkinointi-ihme"
+  - name: "Pirjo Linnainmaa"
+    role: "Emäntä"
+  - name: "Timo Lappalainen"
+    role: "Puheenjohtaja"
+  - name: "Juha-Pekka Kekäläinen"
+    role: "Rahastonhoitaja"
+  - name: "Matti Kanninen"
+    role: "Isäntä"

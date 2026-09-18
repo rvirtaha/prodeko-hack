@@ -1,0 +1,27 @@
+# Prodeko's 2007 board, imported from https://www.prodeko.org/fi/guild/board/edelliset-hallitukset/
+# by tools/import-boards.py. Edit here, not on the old site.
+heading: "2007"
+sortKey: 2007
+members:
+  - name: "Tuomo Vepsäläinen"
+    role: "Mediakeisari"
+  - name: "Timo Tervola"
+    role: "Isäntä"
+  - name: "Atso Takala"
+    role: "Sisä- ja Kulttuuriministeri"
+  - name: "Nora Rosendahl"
+    role: "Ulkoministeri"
+  - name: "Tuomo Pesonen"
+    role: "Puheenjohtaja"
+  - name: "Jenni Perätalo"
+    role: "Sihteeri"
+  - name: "Ilmari Ollila"
+    role: "Yrityssuhdevastaava"
+  - name: "Sanna Mutka"
+    role: "Rahastonhoitaja"
+  - name: "Nelli Lähteenmäki"
+    role: "Excumestari"
+  - name: "Iiris Kolu"
+    role: "Fuksikapteeni"
+  - name: "Linda Alanen"
+    role: "Opintovastaava"

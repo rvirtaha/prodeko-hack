@@ -1,0 +1,27 @@
+# Prodeko's 2017 board, imported from https://www.prodeko.org/fi/guild/board/edelliset-hallitukset/
+# by tools/import-boards.py. Edit here, not on the old site.
+heading: "2017"
+sortKey: 2017
+members:
+  - name: "Mikko Sippola"
+    role: "Puheenjohtaja"
+  - name: "Elena Pitkänen"
+    role: "Varapuheenjohtaja, Sihteeri"
+  - name: "Eemil Oikari"
+    role: "Rahastonhoitaja"
+  - name: "Henri Lencioni"
+    role: "Fuksikapteeni"
+  - name: "Olli Kiikkilä"
+    role: "Mediakeisari"
+  - name: "Olli Kesseli"
+    role: "Isäntä"
+  - name: "Juhani Järvensivu"
+    role: "Yrityssuhdevastaava"
+  - name: "Jaakko Hyppönen"
+    role: "Excumestari"
+  - name: "Santeri Hietanen"
+    role: "Ulkoministeri"
+  - name: "Aaro Hämeri"
+    role: "Opintovastaava"
+  - name: "Iida Haikonen"
+    role: "Sisä- ja kulttuuriministeri"

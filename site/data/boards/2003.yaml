@@ -1,0 +1,27 @@
+# Prodeko's 2003 board, imported from https://www.prodeko.org/fi/guild/board/edelliset-hallitukset/
+# by tools/import-boards.py. Edit here, not on the old site.
+heading: "2003"
+sortKey: 2003
+members:
+  - name: "Anu Vilén"
+    role: "Sihteeri"
+  - name: "Antti Vassinen"
+    role: "Uusmediakeisari"
+  - name: "Mailiina Turanlahti"
+    role: "Opintovastaava"
+  - name: "Eeva Lappalainen"
+    role: "Ulkoministeri"
+  - name: "Matias Kokko"
+    role: "Fuksikapteeni"
+  - name: "Tommi Kemppainen"
+    role: "Excumestari"
+  - name: "Juhani Kankaanpää"
+    role: "Puheenjohtaja"
+  - name: "Jussi Ikävalko"
+    role: "Yrityssuhdevastaava"
+  - name: "Tuija Heinonen"
+    role: "Sisä- ja Kulttuuriministeri"
+  - name: "Meri Halonen"
+    role: "Isäntä"
+  - name: "Lotta Haakana"
+    role: "Rahastonhoitaja"

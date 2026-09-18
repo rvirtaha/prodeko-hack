@@ -1,0 +1,27 @@
+# Prodeko's 2010 board, imported from https://www.prodeko.org/fi/guild/board/edelliset-hallitukset/
+# by tools/import-boards.py. Edit here, not on the old site.
+heading: "2010"
+sortKey: 2010
+members:
+  - name: "Mikko Savola"
+    role: "Rahastonhoitaja"
+  - name: "Juhana Nurmio"
+    role: "Puheenjohtaja"
+  - name: "Emma Nermes"
+    role: "Ulkoministeri"
+  - name: "Iida Myllymäki"
+    role: "Fuksikapteeni"
+  - name: "Erik Makkonen"
+    role: "Opintovastaava"
+  - name: "Iiro Kulvik"
+    role: "Yrityssuhdevastaava, Varapuheenjohtaja"
+  - name: "Liisa Karjalainen"
+    role: "Emäntä"
+  - name: "Lauri Ikonen"
+    role: "Isäntä"
+  - name: "Juho Hoikka"
+    role: "Excumestari"
+  - name: "Martti Heikkilä"
+    role: "Mediakeisari"
+  - name: "Mia Eriksson"
+    role: "Sihteeri"
