@@ -1,0 +1,68 @@
+:root{
+  /* ---- Base palette (brandidokumentti_final.pdf p.1) ---- */
+  --pd-white-1:#f6f6f6;            /* Valkoinen 1, lightest */
+  --pd-white-2:#ececec;            /* Valkoinen 2 */
+  --pd-black:#000a14;              /* Musta */
+
+  /* ---- The three official blues (p.2) ---- */
+  --pd-blue-light:#0053a0;         /* Vaalea, perinteinen — historical logo blue, overalls, official documents */
+  --pd-blue:#002e7d;               /* Keskisininen — the default Prodeko blue */
+  --pd-blue-dark:#002851;          /* Tummansininen — the formal, weightier blue */
+
+  /* ---- Overalls rainbow, Prodeko 60 cut (5 colours, used with the guild values) ---- */
+  --pd-rainbow-red:#e84028;
+  --pd-rainbow-orange:#f08028;
+  --pd-rainbow-yellow:#e8d068;
+  --pd-rainbow-green:#408850;
+  --pd-rainbow-blue:#386088;
+
+  /* ---- Overalls rainbow, faded fabric cut (from Prodeko60-sateenkaariraita.png) ---- */
+  --pd-fabric-red:#f56f43;
+  --pd-fabric-orange:#f9a644;
+  --pd-fabric-yellow:#f1db7c;
+  --pd-fabric-green:#549868;
+  --pd-fabric-blue:#4f76a0;
+
+  /* ---- Derived neutrals (tints of --pd-blue, for rules, fills and disabled ink) ---- */
+  --pd-blue-tint-04:oklch(from var(--pd-blue) 0.97 0.012 h);
+  --pd-blue-tint-08:oklch(from var(--pd-blue) 0.93 0.024 h);
+  --pd-blue-tint-16:oklch(from var(--pd-blue) 0.86 0.045 h);
+  --pd-blue-tint-40:oklch(from var(--pd-blue) 0.62 0.09 h);
+  --pd-blue-hover:oklch(from var(--pd-blue) calc(l - 0.05) c h);
+  --pd-blue-press:oklch(from var(--pd-blue) calc(l - 0.09) c h);
+
+  /* ---- Semantic aliases: surfaces ---- */
+  --surface-page:var(--pd-white-1);
+  --surface-page-alt:var(--pd-white-2);
+  --surface-card:#ffffff;
+  --surface-sunken:var(--pd-blue-tint-04);
+  --surface-brand:var(--pd-blue);
+  --surface-brand-dark:var(--pd-blue-dark);
+  --surface-inverse:var(--pd-black);
+
+  /* ---- Semantic aliases: ink ---- */
+  --text-heading:var(--pd-blue);
+  --text-body:var(--pd-black);
+  --text-muted:var(--pd-blue-tint-40);
+  --text-on-brand:var(--pd-white-1);
+  --text-link:var(--pd-blue-light);
+  --text-link-hover:var(--pd-blue-dark);
+
+  /* ---- Semantic aliases: lines & focus ---- */
+  --border-subtle:var(--pd-blue-tint-16);
+  --border-strong:var(--pd-blue);
+  --focus-ring:var(--pd-blue-light);
+
+  /* ---- Semantic status colours (borrowed from the rainbow — the guild has no
+         separate status palette, so these map onto overall colours) ---- */
+  --status-positive:var(--pd-rainbow-green);
+  --status-caution:var(--pd-rainbow-orange);
+  --status-critical:var(--pd-rainbow-red);
+  --status-info:var(--pd-blue-light);
+
+  /* ---- Signature gradients ---- */
+  --rainbow-gradient:linear-gradient(90deg,var(--pd-rainbow-red) 0 20%,var(--pd-rainbow-orange) 20% 40%,var(--pd-rainbow-yellow) 40% 60%,var(--pd-rainbow-green) 60% 80%,var(--pd-rainbow-blue) 80% 100%);
+  --rainbow-gradient-fabric:linear-gradient(90deg,var(--pd-fabric-red) 0 20%,var(--pd-fabric-orange) 20% 40%,var(--pd-fabric-yellow) 40% 60%,var(--pd-fabric-green) 60% 80%,var(--pd-fabric-blue) 80% 100%);
+  /* Inverse vignette used to calm a busy background graphic (p.6) */
+  --vignette-calm:radial-gradient(ellipse at center,rgb(0 46 125 / 0.72) 0%,rgb(0 46 125 / 0.25) 55%,rgb(0 46 125 / 0) 100%); /* @kind color */
+}

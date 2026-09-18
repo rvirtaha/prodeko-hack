@@ -1,0 +1,257 @@
+# The mega-menu columns from raw-website/Prodeko-site.dc.html, keyed by the
+# same menuKey used in data/navigation.yaml. Each link is {label, url}; url
+# is omitted where nothing in site/content/ or an external service actually
+# covers that item yet - the template renders those as plain text rather
+# than a dead link. Links to ilmo/viikkotiedote/gallery/store/kululaskut
+# reuse the base addresses in data/embeds.yaml.
+fi:
+  guild:
+    - title: Kilta
+      links:
+        - label: Arvot
+          url: /fi/guild/arvot/
+        - label: Hallitus 2026
+          url: /fi/guild/board/hallitus/
+        - label: Toimihenkilöt 2026
+          url: /fi/guild/toimarit/toimihenkilot/
+        - label: Häirintäyhdyshenkilöt
+          url: /fi/guild/hairintayhdyshenkilot/
+        - label: Säännöt ja asetukset
+          url: /fi/guild/guild-rules/rules/
+        - label: Kunnianosoitukset
+          url: /fi/guild/kunnianosoitukset/
+        - label: Urheilu
+        - label: Jäseneksi
+          url: /fi/guild/jaseneksi/
+    - title: Fukseille
+      links:
+        - label: Tervetuloa tutalle!
+          url: /fi/new-students/welcome-to-prodeko/
+        - label: Fuksiopas 2026
+          url: /fi/new-students/fuksiopas/
+        - label: Orientaatioviikko 2026
+          url: /fi/new-students/orientaatio/
+        - label: Opiskelijaelämän ABC
+          url: /fi/new-students/studentlife/
+        - label: Ensimmäisen vuoden opinnot
+          url: /fi/new-students/ensimmaisen-vuoden-opinnot/
+        - label: Asuminen ja eläminen
+          url: /fi/new-students/asuminen-ja-elaminen/
+        - label: Fuksipisteet
+          url: /fi/new-students/fuksipisteet/
+    - title: Opinnot
+      links:
+        - label: Keneen otan yhteyttä
+          url: /fi/opinnot/keneen-otan-yhteytta/
+        - label: Usein kysyttyä opinnoista
+          url: /fi/opinnot/usein-kysyttya-opinnoista/
+        - label: Kokouskuulumisia
+          url: /fi/opinnot/kokouskuulumisia/
+        - label: Tohtoriopinnoista
+          url: /fi/opinnot/tohtoriopinnoista/
+        - label: Tärkeitä linkkejä
+          url: /fi/opinnot/tarkeita-linkkeja/
+    - title: Palvelut
+      links:
+        - label: Viikkotiedote
+          url: https://viikkotiedote.prodeko.org
+        - label: Kokouspöytäkirjat
+        - label: Kulukorvaukset
+          url: https://prodeko.kululaskut.fi
+        - label: Galleria
+          url: https://gallery.prodeko.org
+        - label: Ilmokilke 3.0
+          url: https://ilmo.prodeko.org
+        - label: Prodeko rahasto
+          url: /fi/palvelut/prodeko-fund/
+        - label: Store
+          url: https://store.prodeko.org
+  prospective:
+    - title: Abeille
+      links:
+        - label: Moikka abi!
+          url: /fi/abit/
+        - label: Opinnot
+          url: /fi/opinnot/
+        - label: Hakeminen 2026
+          url: /fi/abit/
+        - label: Abimentorointi 2026
+          url: /fi/abit/
+        - label: Menestyneitä tutalaisia
+        - label: Abien polkuja tutalle
+        - label: Tärkeitä linkkejä
+          url: /fi/opinnot/tarkeita-linkkeja/
+    - title: Kielet
+      links:
+        - label: In English
+          url: /en/prospective-students/
+        - label: På svenska
+  corporate:
+    - title: Yrityksille
+      links:
+        - label: Yrityssuhteet
+          url: /fi/yrityssuhteet/
+        - label: Yritysvierailut
+          url: /fi/yrityssuhteet/yritysvierailut/
+        - label: Rekrytointi
+          url: /fi/yrityssuhteet/rekrytointi/
+        - label: Prodeko Network
+          url: /fi/yrityssuhteet/prodeko-network/
+        - label: aTalent
+          url: /fi/yrityssuhteet/atalent/
+        - label: Laskutustiedot
+          url: /fi/yrityssuhteet/laskutustiedot/
+    - title: Yhteystiedot
+      links:
+        - label: yrityssuhteet@prodeko.org
+          url: mailto:yrityssuhteet@prodeko.org
+        - label: excumestari@prodeko.org
+          url: mailto:excumestari@prodeko.org
+  alumni:
+    - title: Tietoa alumnista
+      links:
+        - label: Tietoa alumnista
+          url: /fi/alumni/tietoa-alumnista/
+        - label: Alumnitiedotteet
+          url: /fi/alumni/tietoa-alumnista/alumnitiedotteet/
+        - label: Alumnin hallitukset
+          url: /fi/alumni/tietoa-alumnista/alumnin-hallitukset/
+        - label: Alumnin säännöt
+          url: /fi/alumni/tietoa-alumnista/alumnin-saannot/
+        - label: Omat jäsentiedot
+          url: https://membership.prodeko.org
+        - label: Matrikkelin tietosuojaseloste
+          url: /fi/alumni/tietoa-alumnista/matrikkelin-tietosuojasleoste/
+    - title: Toiminta
+      links:
+        - label: Neuvottelukunta
+          url: /fi/alumni/neuvottelukunta/
+        - label: Lifelong Learning
+          url: /fi/alumni/lifelong-learning/
+        - label: Prodeko Ventures
+          url: /fi/alumni/prodeko-ventures/
+        - label: Prodeko-seminaari
+
+en:
+  guild:
+    - title: Guild
+      links:
+        - label: Values
+          url: /en/guild/values/
+        - label: Board 2026
+          url: /en/guild/board/board/
+        - label: Officials 2026
+          url: /en/guild/guild-officials/guild-officials/
+        - label: Harassment contact persons
+          url: /en/guild/harassment-contact-persons/
+        - label: Rules and regulations
+          url: /en/guild/rules/rules/
+        - label: Honours
+          url: /en/guild/honour/
+        - label: Sports
+        - label: Joining the guild
+          url: /en/guild/joining-guild/
+    - title: New students
+      links:
+        - label: Welcome to IEM
+          url: /en/new-students/welcome-to-prodeko/
+        - label: Fuksi guide 2026
+          url: /en/new-students/survival-guide-2024/
+        - label: Orientation week 2026
+        - label: Student life ABC
+          url: /en/new-students/studentlife/
+        - label: First-year studies
+          url: /en/new-students/first-year-studies/
+        - label: Housing and living
+          url: /en/new-students/living/
+        - label: Fuksi points
+          url: /en/new-students/freshmen-points/
+    - title: Studies
+      links:
+        - label: Who to contact
+          url: /en/studies/
+        - label: Studies FAQ
+          url: /en/studies/
+        - label: Meeting news
+        - label: Doctoral studies
+          url: /en/studies/
+        - label: Important links
+          url: /en/studies/
+    - title: Services
+      links:
+        - label: Weekly letter
+          url: https://viikkotiedote.prodeko.org
+        - label: Meeting minutes
+        - label: Expense claims
+          url: https://prodeko.kululaskut.fi
+        - label: Gallery
+          url: https://gallery.prodeko.org
+        - label: Ilmokilke 3.0
+          url: https://ilmo.prodeko.org
+        - label: Prodeko Fund
+          url: /en/services/prodeko-fund/
+        - label: Store
+          url: https://store.prodeko.org
+  prospective:
+    - title: Prospective students
+      links:
+        - label: Hello, applicant
+          url: /en/prospective-students/
+        - label: Studies
+          url: /en/studies/
+        - label: Applying 2026
+          url: /en/prospective-students/
+        - label: Mentoring 2026
+        - label: Successful alumni
+        - label: Students' paths to IEM
+        - label: Important links
+          url: /en/studies/studies/
+    - title: Languages
+      links:
+        - label: Suomeksi
+          url: /fi/abit/
+        - label: På svenska
+  corporate:
+    - title: For companies
+      links:
+        - label: Corporate relations
+          url: /en/yrityssuhteet/
+        - label: Company visits
+          url: /en/yrityssuhteet/excursions/
+        - label: Recruitment
+          url: /en/yrityssuhteet/recruiting/
+        - label: Prodeko Network
+          url: /en/yrityssuhteet/prodeko-network/
+        - label: aTalent
+          url: /en/yrityssuhteet/atalent/
+        - label: Billing information
+          url: /en/yrityssuhteet/billing/
+    - title: Contact
+      links:
+        - label: yrityssuhteet@prodeko.org
+          url: mailto:yrityssuhteet@prodeko.org
+        - label: excumestari@prodeko.org
+          url: mailto:excumestari@prodeko.org
+  alumni:
+    - title: About the alumni
+      links:
+        - label: About the alumni
+          url: /en/alumni/about-alumni/
+        - label: Alumni newsletters
+        - label: Alumni boards
+          url: /en/alumni/about-alumni/previous-alumni-boards/
+        - label: Alumni rules
+          url: /en/alumni/about-alumni/rules-prodeko-alumni/
+        - label: My member details
+          url: https://membership.prodeko.org
+        - label: Register privacy notice
+          url: /en/alumni/about-alumni/matrikkeli-privacy-notice/
+    - title: Activities
+      links:
+        - label: Advisory board
+          url: /en/alumni/honorary-advisory-council/
+        - label: Lifelong Learning
+          url: /en/alumni/lifelong-learning/
+        - label: Prodeko Ventures
+          url: /en/alumni/prodeko-ventures/
+        - label: Prodeko Seminar

@@ -1,4 +1,98 @@
 {{ define "main" }}
-  <h1>{{ .Title }}</h1>
-  {{ .Content }}
+
+<section class="hero-home">
+  {{ with resources.Get "images/brand/rainbow-stripe.png" }}
+    <img class="stripe" src="{{ .RelPermalink }}" alt="">
+  {{ end }}
+  {{ with resources.Get "images/brand/prodeko-emblem-white.png" }}
+    <img class="emblem" src="{{ .RelPermalink }}" alt="">
+  {{ end }}
+  <div class="container inner">
+    {{ with .Params.heroKicker }}<span class="kicker">{{ . }}</span>{{ end }}
+    <h1>{{ .Params.heroTitle }}</h1>
+    {{ .Content }}
+    <div class="ctas">
+      {{ with .Params.ctaJoin }}<a class="btn btn-inverse" href="{{ $.Params.ctaJoinUrl }}">{{ . }}</a>{{ end }}
+      {{ with .Params.ctaCompanies }}<a class="btn btn-outline-inverse" href="{{ $.Params.ctaCompaniesUrl }}">{{ . }}</a>{{ end }}
+    </div>
+  </div>
+</section>
+
+<div class="container">
+  {{ with .Params.announcement }}
+    <div style="margin-top:-56px;position:relative;z-index:1;max-width:28rem">
+      <div class="announcement">
+        <div class="rainbow-rule"></div>
+        <div class="body">
+          {{ with .kicker }}<span class="kicker">{{ . }}</span>{{ end }}
+          {{ with .title }}<div class="title">{{ . }}</div>{{ end }}
+          {{ with .body }}<p>{{ . }}</p>{{ end }}
+          {{ with .linkText }}<span class="link">{{ . }} →</span>{{ end }}
+        </div>
+      </div>
+    </div>
+  {{ end }}
+
+  {{ with .Params.audiences }}
+    <div class="audiences">
+      {{ range . }}
+        <a class="audience-card" href="{{ .url }}">
+          <div class="bar" style="background:var(--pd-blue)"></div>
+          <div class="body">
+            {{ with .kicker }}<span class="kicker">{{ . }}</span>{{ end }}
+            <div class="title">{{ .title }}</div>
+            <p>{{ .body }}</p>
+            {{ with .linkText }}<span class="link">{{ . }} →</span>{{ end }}
+          </div>
+        </a>
+      {{ end }}
+    </div>
+  {{ end }}
+
+  <section class="values-section">
+    <div class="section-title-row">
+      <h2 class="section-title">{{ .Params.valuesTitle }}</h2>
+      <span class="sub">{{ .Params.valuesSub }}</span>
+    </div>
+    {{ with .Params.values }}
+      <div class="values-grid">
+        {{ range . }}
+          {{ $value := . }}
+          {{ $slug := $value.name | urlize }}
+          {{ with resources.Get (printf "images/values/arvo-%s.jpg" $slug) }}
+            <img src="{{ .RelPermalink }}" alt="{{ $value.name }}">
+          {{ end }}
+        {{ end }}
+      </div>
+    {{ end }}
+  </section>
+</div>
+
+<section class="photo-band">
+  {{ with resources.Get "images/pages/page-guild.png" }}<img src="{{ .RelPermalink }}" alt="">{{ end }}
+  <div class="caption">
+    <div>
+      <div class="caption-title">{{ .Params.bandTitle }}</div>
+      <div class="caption-sub">{{ .Params.bandSub }}</div>
+    </div>
+  </div>
+</section>
+
+<section class="partners-section">
+  <div class="container">
+    <div class="section-title-row">
+      <h2 class="section-title">{{ .Params.partnersTitle }}</h2>
+      {{ with .Params.partnersLinkUrl }}<a class="sub" href="{{ . }}" style="border-bottom:none;color:var(--pd-blue-light)">{{ $.Params.partnersLinkText }} →</a>{{ end }}
+    </div>
+    <div class="partners-grid">
+      {{ range hugo.Data.partners }}
+        {{ $partner := . }}
+        <div class="partner-tile">
+          {{ with resources.Get $partner.logo }}<img src="{{ .RelPermalink }}" alt="{{ $partner.name }}">{{ end }}
+        </div>
+      {{ end }}
+    </div>
+  </div>
+</section>
+
 {{ end }}

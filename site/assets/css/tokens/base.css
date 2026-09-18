@@ -1,0 +1,15 @@
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--surface-page);color:var(--text-body);font-family:var(--font-body);font-weight:var(--weight-light);font-size:var(--size-md);line-height:var(--leading-normal);-webkit-font-smoothing:antialiased;text-wrap:pretty}
+h1,h2,h3,h4,h5,h6{font-family:var(--font-display);color:var(--text-heading);font-weight:var(--weight-semibold);line-height:var(--leading-tight);margin:0 0 var(--space-4)}
+h1{font-size:var(--size-3xl)}h2{font-size:var(--size-2xl)}h3{font-size:var(--size-xl)}h4{font-size:var(--size-lg)}
+p{margin:0 0 var(--space-4)}
+a{color:var(--text-link);text-decoration:none;border-bottom:1px solid currentColor;transition:var(--transition-ui)}
+a:hover{color:var(--text-link-hover)}
+a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--focus-ring);outline-offset:2px}
+strong{font-weight:var(--weight-semibold)}
+::selection{background:var(--pd-rainbow-yellow);color:var(--pd-black)}
+/* All-caps heading treatment with Kiikkilä Spacing */
+.pd-caps{text-transform:uppercase;letter-spacing:var(--track-caps);font-weight:var(--weight-semibold)}
+/* The signature rainbow rule */
+.pd-rainbow-rule{height:6px;background:var(--rainbow-gradient);border:0}
+@media (prefers-reduced-motion:reduce){*{animation-duration:0.01ms!important;transition-duration:0.01ms!important}}

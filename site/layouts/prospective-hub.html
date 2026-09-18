@@ -1,0 +1,72 @@
+{{ define "main" }}
+
+<section class="hero-photo hero-prospective">
+  {{ with resources.Get "images/pages/page-prospective.png" }}<img class="bg" src="{{ .RelPermalink }}" alt="">{{ end }}
+  <div class="container inner">
+    {{ with .Params.prospKicker }}<span class="kicker">{{ . }}</span>{{ end }}
+    <h1>{{ .Params.prospTitle }}</h1>
+    {{ .Content }}
+  </div>
+  {{ with resources.Get "images/brand/skraba-rainbow-bottom.png" }}<img class="skraba-bottom" src="{{ .RelPermalink }}" alt="">{{ end }}
+</section>
+
+<div class="container">
+  <section style="padding:72px 0 24px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:64px;align-items:start">
+    <div>
+      <h2 class="section-title">{{ .Params.whatTitle }}</h2>
+      <p>{{ .Params.whatBody1 }}</p>
+      <p>{{ .Params.whatBody2 }}</p>
+    </div>
+    <div>
+      <h2 class="section-title">{{ .Params.applyTitle }}</h2>
+      <div class="steps">
+        {{ range .Params.applySteps }}
+          <div class="step">
+            <div class="n">{{ .n }}</div>
+            <div>
+              <div class="title">{{ .title }}</div>
+              <div class="body">{{ .body }}</div>
+            </div>
+          </div>
+        {{ end }}
+      </div>
+    </div>
+  </section>
+
+  <section style="padding:56px 0 24px">
+    <h2 class="section-title">{{ .Params.lifeTitle }}</h2>
+    <div class="card-grid">
+      {{ range .Params.life }}
+        <div class="info-card">
+          <div class="bar"></div>
+          <div class="body">
+            <div class="title">{{ .title }}</div>
+            <p>{{ .body }}</p>
+          </div>
+        </div>
+      {{ end }}
+    </div>
+  </section>
+
+  <section class="hub-body" style="padding-top:56px">
+    <div>
+      <h2 class="section-title">{{ .Params.faqTitle }}</h2>
+      {{ range .Params.faq }}
+        <details class="faq-item">
+          <summary>{{ .q }}</summary>
+          <p class="answer">{{ .a }}</p>
+        </details>
+      {{ end }}
+    </div>
+    <aside class="sidebar">
+      <div class="sidebar-highlight">
+        {{ with .Params.captainsKicker }}<span class="kicker">{{ . }}</span>{{ end }}
+        <div class="title">{{ .Params.captainsTitle }}</div>
+        <p>{{ .Params.captainsBody }}</p>
+        {{ with .Params.captainsEmail }}<a href="mailto:{{ . }}">{{ . }}</a>{{ end }}
+      </div>
+    </aside>
+  </section>
+</div>
+
+{{ end }}

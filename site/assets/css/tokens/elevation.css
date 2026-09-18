@@ -1,0 +1,17 @@
+:root{
+  /* Shadows are for things that FLOAT — dialogs, menus, toasts, sticky bars.
+     Cards, panels and sections are separated by hairline rules and whitespace
+     instead. If a surface does not overlap what is beneath it, it gets no shadow.
+
+     The exception is the brand book's own rule (p.5): a drop shadow under the
+     logo and under headings whenever the background is not plain white. */
+  --shadow-logo:0 2px 8px rgb(0 10 20 / 0.35);
+  --shadow-heading:0 2px 6px rgb(0 10 20 / 0.30);
+  --shadow-none:none;
+  /* Overlay ramp — blue-tinted, never grey. */
+  --shadow-sm:0 1px 3px rgb(0 40 81 / 0.10);
+  --shadow-md:0 4px 14px rgb(0 40 81 / 0.10);
+  --shadow-lg:0 10px 34px rgb(0 40 81 / 0.16);
+  --shadow-inset-line:inset 0 -1px 0 var(--border-subtle);
+  --ring-focus:0 0 0 3px rgb(0 83 160 / 0.35);
+}

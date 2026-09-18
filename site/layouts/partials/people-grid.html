@@ -1,0 +1,12 @@
+{{/* Renders a list of {name, role} entries. Shared by the "people" and
+     "archive" layouts so both draw from the same markup and styling. */}}
+{{ with . }}
+  <ul class="people-grid">
+    {{ range . }}
+      <li class="person">
+        <span class="person-name">{{ .name }}</span>
+        {{ with .role }}<span class="person-role">{{ . }}</span>{{ end }}
+      </li>
+    {{ end }}
+  </ul>
+{{ end }}

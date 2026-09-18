@@ -1,3 +1,45 @@
-<footer>
-  <p>{{ .Site.Title }}</p>
+{{ $isFi := eq .Language.Lang "fi" }}
+<footer class="site-footer">
+  <div class="rainbow-rule"></div>
+  <div class="container">
+    <div class="cols">
+      <div class="brand">
+        {{ with resources.Get "images/brand/logo-text-white.svg" }}
+          <img src="{{ .RelPermalink }}" alt="{{ $.Site.Title }}">
+        {{ end }}
+        <p>
+          {{ if $isFi }}
+            Tuotantotalouden kilta Prodeko ry. Aalto-yliopiston ylioppilaskunnan yhteydessä toimiva tuotantotalouden opiskelijoiden ainejärjestö. Perustettu 1966.
+          {{ else }}
+            The guild for Industrial Engineering and Management at Aalto University. Founded 1966.
+          {{ end }}
+        </p>
+      </div>
+      {{ range index hugo.Data.navigation .Language.Lang }}
+        <div>
+          <div class="col-title">{{ .title }}</div>
+          {{ with .children }}
+            <ul class="links">
+              {{ range . }}<li><a href="{{ .url }}">{{ .title }}</a></li>{{ end }}
+            </ul>
+          {{ end }}
+        </div>
+      {{ end }}
+    </div>
+  </div>
+  <div class="container network">
+    <div class="col-title">Prodeko Network</div>
+    <div class="network-logos">
+      {{ range hugo.Data.partners }}
+        {{ $partner := . }}
+        {{ with resources.Get $partner.logo }}
+          <img src="{{ .RelPermalink }}" alt="{{ $partner.name }}">
+        {{ end }}
+      {{ end }}
+    </div>
+  </div>
+  <div class="container bottom">
+    <span>Tuotantotalouden kilta Prodeko ry · PL 15500, 00076 Aalto · TUAS-talo, Maarintie 8, 02150 Espoo</span>
+    <span>1966 – 2026</span>
+  </div>
 </footer>

@@ -1,0 +1,34 @@
+# Real Prodeko Network partner companies, from https://www.prodeko.org/fi/yrityssuhteet/.
+# No URLs are shown on that page; these are each company's own official site.
+# Logos came from the raw-website/ design export (assets/network/*-color.png),
+# copied into site/assets/images/partners/.
+- name: ABB
+  url: https://www.abb.com
+  logo: images/partners/abb-color.png
+- name: Kone
+  url: https://www.kone.com
+  logo: images/partners/kone-color.png
+- name: Metso
+  url: https://www.metso.com
+  logo: images/partners/metso-color.png
+- name: Vuono Group
+  url: https://www.vuonogroup.fi
+  logo: images/partners/vuono-color.png
+- name: Nokia
+  url: https://www.nokia.com
+  logo: images/partners/nokia-color.png
+- name: Nordea
+  url: https://www.nordea.com
+  logo: images/partners/nordea-color.png
+- name: RELEX Solutions
+  url: https://www.relexsolutions.com
+  logo: images/partners/relex-color.png
+- name: Visma
+  url: https://www.visma.com
+  logo: images/partners/visma-color.png
+- name: UPM
+  url: https://www.upm.com
+  logo: images/partners/upm-color.png
+- name: Vaisala
+  url: https://www.vaisala.com
+  logo: images/partners/vaisala-color.png

@@ -1,0 +1,13 @@
+:root{
+  /* One rounding value. Prodeko is square-edged — the skräbä bars, the rainbow
+     streak, the slide fills and every full-bleed band are hard-cornered — but
+     anything the user can click or type into gets a 2px softening so it reads as
+     a control. There is no radius ladder, on purpose: a ladder drifts upward,
+     and 8px corners make a Prodeko layout look like everyone else's.
+
+     --radius-ui is the only value components reference. */
+  --radius-none:0;      /* brand graphics, bands, full-bleed sections */
+  --radius-ui:2px;      /* every interactive control and overlay */
+  --radius-pill:999px;  /* Switch track only */
+  --radius-circle:50%;  /* the emblem, radio buttons */
+}

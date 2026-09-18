@@ -1,0 +1,37 @@
+# Read by layouts/partials/header.html and footer.html. One list per
+# language. URLs mirror the live prodeko.org exactly (both languages share
+# the "guild" segment), so migrated content needs no redirects.
+#
+# menuKey, where present, names a key in data/megamenu.yaml: the header
+# shows that item's columns in a mega-menu on hover/click.
+fi:
+  - title: Kilta
+    url: /fi/guild/
+    menuKey: guild
+  - title: Abeille
+    url: /fi/abit/
+    menuKey: prospective
+  - title: Yrityksille
+    url: /fi/yrityssuhteet/
+    menuKey: corporate
+  - title: Alumni
+    url: /fi/alumni/
+    menuKey: alumni
+  - title: Tapahtumat
+    url: /fi/tapahtumat/
+
+en:
+  - title: Guild
+    url: /en/guild/
+    menuKey: guild
+  - title: Prospective students
+    url: /en/prospective-students/
+    menuKey: prospective
+  - title: Companies
+    url: /en/yrityssuhteet/
+    menuKey: corporate
+  - title: Alumni
+    url: /en/alumni/
+    menuKey: alumni
+  - title: Events
+    url: /en/events/

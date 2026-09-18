@@ -1,0 +1,31 @@
+{{/* A year (or category) archive generated entirely from data files. Set
+     with front matter:
+
+       layout: archive
+       dataset: boards   # a top-level key under site/data
+
+     The dataset is a map from an arbitrary key (a year, a slug) to a group
+     of {heading, sortKey, members}. data/boards and data/officials get one
+     entry per year from one file per year; data/honours.yaml holds every
+     entry in a single file, grouped by category instead of year. Either
+     shape works here because both use the same {heading, sortKey, members}
+     structure. Groups render highest sortKey first, so a year file uses the
+     year itself (newest first) and a hand-grouped file like honours.yaml
+     uses an explicit rank (its first group gets the highest number). */}}
+{{ define "main" }}
+  <article>
+    <h1>{{ .Title }}</h1>
+    {{ .Content }}
+    {{ $dataset := index hugo.Data .Params.dataset }}
+    {{ $groups := slice }}
+    {{ range $dataset }}
+      {{ $groups = $groups | append . }}
+    {{ end }}
+    {{ range sort $groups "sortKey" "desc" }}
+      <section class="archive-group">
+        <h2>{{ .heading }}</h2>
+        {{ partial "people-grid.html" .members }}
+      </section>
+    {{ end }}
+  </article>
+{{ end }}

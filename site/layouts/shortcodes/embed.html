@@ -1,0 +1,23 @@
+{{/* Embeds one of the existing interactive Prodeko services, per
+     docs/superpowers/specs/2026-09-18-prodeko-git-cms-design.md, "Anything
+     interactive is an embed". Usage:
+
+       {{< embed service="ilmo" path="/events/kevatkokous" >}}
+
+     The service names and base addresses live in data/embeds.yaml so
+     editors pick from a fixed list rather than pasting arbitrary iframe
+     addresses. */}}
+{{ $service := .Get "service" }}
+{{ $config := index hugo.Data.embeds $service }}
+{{ if not $config }}
+  {{ errorf "embed shortcode: unknown service %q (%s)" $service .Position }}
+{{ end }}
+{{ $path := .Get "path" | default "" }}
+<div class="embed embed-{{ $service }}">
+  <iframe
+    src="{{ $config.baseURL }}{{ $path }}"
+    title="{{ $config.label }}"
+    loading="lazy"
+    sandbox="allow-scripts allow-forms allow-same-origin allow-popups"
+  ></iframe>
+</div>

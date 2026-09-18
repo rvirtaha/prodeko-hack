@@ -1,0 +1,69 @@
+{{ define "main" }}
+
+<section class="hero-photo hero-corporate">
+  {{ with resources.Get "images/pages/page-companies.jpg" }}<img class="bg" src="{{ .RelPermalink }}" alt="">{{ end }}
+  <div class="container inner">
+    <div>
+      {{ with .Params.corpKicker }}<span class="kicker">{{ . }}</span>{{ end }}
+      <h1>{{ .Params.corpTitle }}</h1>
+      {{ .Content }}
+      {{ with .Params.corpCta }}<a class="btn btn-inverse" href="mailto:{{ $.Params.corpContactEmail }}" style="margin-top:var(--space-6)">{{ . }}</a>{{ end }}
+    </div>
+    <div class="stats">
+      {{ range .Params.corpNumbers }}
+        <div class="stat on-dark">
+          <div class="value">{{ .value }}</div>
+          <div class="label">{{ .label }}</div>
+        </div>
+      {{ end }}
+    </div>
+  </div>
+</section>
+
+<div class="container">
+  <section style="padding:72px 0 24px">
+    <h2 class="section-title">{{ .Params.offerTitle }}</h2>
+    <div class="card-grid">
+      {{ range .Params.offers }}
+        <div class="info-card">
+          <div class="bar"></div>
+          <div class="body">
+            <div class="title">{{ .title }}</div>
+            <p>{{ .body }}</p>
+          </div>
+        </div>
+      {{ end }}
+    </div>
+  </section>
+
+  <section class="hub-body">
+    <div>
+      <h2 class="section-title">{{ .Params.partnersTitle | default "Prodeko Network" }}</h2>
+      <div class="partners-grid">
+        {{ range hugo.Data.partners }}
+          {{ $partner := . }}
+          <div class="partner-tile">
+            {{ with resources.Get $partner.logo }}<img src="{{ .RelPermalink }}" alt="{{ $partner.name }}">{{ end }}
+          </div>
+        {{ end }}
+      </div>
+    </div>
+    <aside class="sidebar-card">
+      <div class="rainbow-rule"></div>
+      <div class="body">
+        <div class="sidebar-list-title">{{ .Params.contactTitle | default "Contact" }}</div>
+        <div style="display:flex;gap:var(--space-4);align-items:center;margin-bottom:var(--space-4)">
+          <div style="width:56px;height:56px;border-radius:50%;background:var(--pd-blue-tint-16);display:flex;align-items:center;justify-content:center;font-size:var(--size-sm);font-weight:700;color:var(--pd-blue)">N.N.</div>
+          <div>
+            <div style="font-size:var(--size-lg);font-weight:600;color:var(--pd-blue)">{{ .Params.corpContactName }}</div>
+            <div style="font-size:var(--size-xs);color:var(--text-muted)">{{ .Params.corpContactRole }}</div>
+          </div>
+        </div>
+        <p>{{ .Params.corpContactBody }}</p>
+        <a href="mailto:{{ .Params.corpContactEmail }}">{{ .Params.corpContactEmail }}</a>
+      </div>
+    </aside>
+  </section>
+</div>
+
+{{ end }}

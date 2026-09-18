@@ -1,0 +1,27 @@
+# A curated subset (the "vastuutoimarit") of the real 2026 officials list at
+# https://www.prodeko.org/fi/guild/toimarit/toimihenkilot/. That page lists
+# well over a hundred people across dozens of committees; the full list is
+# migration work (docs/roadmap.md item H), not seed content.
+heading: "2026"
+sortKey: 2026
+members:
+  - name: Reetta Uusitalo
+    role: Päätoimittaja
+  - name: Enni Tiittanen
+    role: Abivastaava
+  - name: Eemeli Karjalainen
+    role: Abivastaava
+  - name: Iiris Leino
+    role: Diskonttaustirehtööri
+  - name: Elina Kärkkäinen
+    role: Diskonttaustirehtööri
+  - name: Eero Koskenvesa
+    role: ISOvastaava
+  - name: Charlie Cruz Kauppila
+    role: CTO
+  - name: Oona Jokela
+    role: ESTIEM-vastaava
+  - name: Alina Heikkinen
+    role: Seminaaritsaari
+  - name: Emmi Alahonko
+    role: Seminaaritsaari

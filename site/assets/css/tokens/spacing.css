@@ -1,0 +1,27 @@
+:root{
+  /* 4px base step */
+  --space-0:0;
+  --space-1:0.25rem;
+  --space-2:0.5rem;
+  --space-3:0.75rem;
+  --space-4:1rem;
+  --space-5:1.25rem;
+  --space-6:1.5rem;
+  --space-8:2rem;
+  --space-10:2.5rem;
+  --space-12:3rem;
+  --space-16:4rem;
+  --space-20:5rem;
+  --space-24:6rem;
+
+  /* Slide geometry, lifted from Prodeko 60 -kalvopohja (960x540pt master) */
+  --slide-w:1280px;
+  --slide-h:720px;
+  --slide-margin-x:4.4%;   /* 33 / 960 */
+  --slide-title-y:8.7%;    /* 47 / 540 */
+  --slide-footer-h:10%;    /* 54 / 540 */
+
+  --gutter:var(--space-6);
+  --page-max:1200px;
+  --content-max:68ch;
+}

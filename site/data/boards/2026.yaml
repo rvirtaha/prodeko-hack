@@ -1,0 +1,28 @@
+# Real 2026 board, from https://www.prodeko.org/fi/guild/board/hallitus/
+heading: "2026"
+sortKey: 2026
+members:
+  - name: Aaron Katainen
+    role: Puheenjohtaja
+  - name: Kalle Kinnala
+    role: Varapuheenjohtaja
+  - name: Arttu Kaitila
+    role: Rahastonhoitaja
+  - name: Emilia Schmidt
+    role: Excumestari
+  - name: Tuomas Ylimäki
+    role: Yrityssuhdevastaava
+  - name: Touko Heinilä
+    role: Maisteri- ja KV-kapteeni
+  - name: Elina Lauri
+    role: Fuksikapteeni
+  - name: Aida Sinkkonen
+    role: Sisä- ja kulttuuriministeri
+  - name: Helmi Halinen
+    role: Isäntä
+  - name: Joona Isosaari
+    role: Ulkoministeri
+  - name: Lauri Pörsti
+    role: Opintovastaava
+  - name: Daniel Nikkar
+    role: Mediakeisari

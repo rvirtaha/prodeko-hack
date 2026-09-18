@@ -1,0 +1,28 @@
+# Real 2025 board, from https://www.prodeko.org/fi/guild/board/edelliset-hallitukset/
+heading: "2025"
+sortKey: 2025
+members:
+  - name: Jaakko Rouste
+    role: Puheenjohtaja
+  - name: Alina Heikkinen
+    role: Varapuheenjohtaja
+  - name: Olli Särkilahti
+    role: Rahastonhoitaja
+  - name: Juuli Ylönen
+    role: Opintovastaava
+  - name: Aada Mattila
+    role: Sisä- ja kulttuuriministeri
+  - name: Kuutti Kivinen
+    role: Fuksikapteeni
+  - name: Aaron Katainen
+    role: Yrityssuhdevastaava
+  - name: Joel Jussila
+    role: Excumestari
+  - name: Elisa Jääskeläinen
+    role: Isäntä
+  - name: Meri Halme
+    role: Ulkoministeri
+  - name: Leo Ala-Laurila
+    role: Maisteri- ja KV-kapteeni
+  - name: Emmi Alahonko
+    role: Mediakeisari

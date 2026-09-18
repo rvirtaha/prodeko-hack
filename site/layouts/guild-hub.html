@@ -1,0 +1,74 @@
+{{ define "main" }}
+
+<section class="hero-split">
+  <div class="text">
+    {{ with .Params.guildKicker }}<span class="kicker">{{ . }}</span>{{ end }}
+    <h1>{{ .Params.guildTitle }}</h1>
+    {{ .Content }}
+  </div>
+  <div class="image">
+    {{ with resources.Get "images/pages/page-guild.png" }}<img src="{{ .RelPermalink }}" alt="">{{ end }}
+  </div>
+  <div class="rainbow-rule"></div>
+</section>
+
+<div class="container">
+  {{ with .Params.numbers }}
+    <div class="stats-row">
+      {{ range . }}
+        <div class="stat">
+          <div class="value">{{ .value }}</div>
+          <div class="label">{{ .label }}</div>
+        </div>
+      {{ end }}
+    </div>
+  {{ end }}
+
+  <div class="hub-body">
+    <div class="hub-sections">
+      {{ range .Params.sections }}
+        <div>
+          <h2 class="section-title">{{ .title }}</h2>
+          <p>{{ .body }}</p>
+          {{ with .items }}
+            <div class="item-grid">
+              {{ range . }}
+                <div class="item-card">
+                  <div class="name">{{ .name }}</div>
+                  <div class="desc">{{ .desc }}</div>
+                </div>
+              {{ end }}
+            </div>
+          {{ end }}
+        </div>
+      {{ end }}
+    </div>
+    <aside class="sidebar">
+      {{ with .Params.guildRoomTitle }}
+        <div class="sidebar-card">
+          <div class="rainbow-rule"></div>
+          <div class="body">
+            <span class="kicker">{{ . }}</span>
+            <p>{{ $.Params.guildRoomBody }}</p>
+          </div>
+        </div>
+      {{ end }}
+      {{ with .Params.docs }}
+        <div>
+          <div class="sidebar-list-title">{{ $.Params.docsTitle }}</div>
+          <ul class="sidebar-list">
+            {{ range . }}<li><a href="#"><span>{{ . }}</span><span>→</span></a></li>{{ end }}
+          </ul>
+        </div>
+      {{ end }}
+      {{ with .Params.contactAddress }}
+        <div class="sidebar-contact">
+          <div class="sidebar-list-title">{{ $.Params.contactTitle }}</div>
+          <p>{{ replace . "\n" "<br>" | safeHTML }}</p>
+        </div>
+      {{ end }}
+    </aside>
+  </div>
+</div>
+
+{{ end }}

@@ -1,0 +1,76 @@
+# Real honours from https://www.prodeko.org/fi/guild/kunnianosoitukset/. The
+# member "role" field carries the award year instead of a title, matching
+# the shape layouts/archive.html expects. The Kunniajäsenet list is complete
+# (17 people, 1969-2021); Pro Prodeko only covers the last few years as seed
+# — the full list runs 1991-2025 and belongs to the migration, item H in
+# docs/roadmap.md, along with the Kunnialastu and TIMES categories.
+kunniajasenet:
+  heading: Kunniajäsenet
+  sortKey: 2
+  members:
+    - name: Prof. Eino Niini
+      role: "1969"
+    - name: Prof. Carl E. Carlson
+      role: "1986"
+    - name: Prof. Sauli Häkkinen
+      role: "1986"
+    - name: TkT Hannes Kulvik
+      role: "1986"
+    - name: TkT Markku Nurmi
+      role: "1986"
+    - name: DI Mikko Sajaniemi
+      role: "1986"
+    - name: DI Asko Schrey
+      role: "1986"
+    - name: DI Petteri Walldén
+      role: "1986"
+    - name: Prof. Hans Andersin
+      role: "1991"
+    - name: Prof. Tauno Olkkonen
+      role: "1991"
+    - name: Prof. Martti M. Kaila
+      role: "1996"
+    - name: Vuorineuvos Jorma Eloranta
+      role: "2006"
+    - name: Prof. Eero Eloranta
+      role: "2011"
+    - name: DI Kaj Hagros
+      role: "2016"
+    - name: TkT Markus Mäkelä
+      role: "2016"
+    - name: DI Risto Siilasmaa
+      role: "2016"
+    - name: Prof Esa Saarinen
+      role: "2021"
+pro-prodeko:
+  heading: Pro Prodeko -ansiomerkki (2021–2025)
+  sortKey: 1
+  members:
+    - name: Rita Myllymäki
+      role: "2021"
+    - name: Riku Suonsivu
+      role: "2021"
+    - name: Niko Kinnunen
+      role: "2021"
+    - name: Teemu Mikola
+      role: "2021"
+    - name: Lotta Oksala
+      role: "2022"
+    - name: Veera Mäntylä
+      role: "2022"
+    - name: Eero Turkki
+      role: "2022"
+    - name: Anton Mikkonen
+      role: "2023"
+    - name: Severi Sinkko
+      role: "2023"
+    - name: Pihla Päivänsalo
+      role: "2024"
+    - name: Mikael Uusitalo
+      role: "2024"
+    - name: Niklas Linnanen
+      role: "2025"
+    - name: Reeta Lalla
+      role: "2025"
+    - name: Iiro Ukkonen
+      role: "2025"

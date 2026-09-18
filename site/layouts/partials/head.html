@@ -1,3 +1,13 @@
 {{ range .AllTranslations }}
   <link rel="alternate" hreflang="{{ .Language.Lang }}" href="{{ .Permalink }}" />
 {{ end }}
+
+{{ $tokenPaths := slice "css/tokens/fonts.css" "css/tokens/colors.css" "css/tokens/typography.css" "css/tokens/spacing.css" "css/tokens/radius.css" "css/tokens/elevation.css" "css/tokens/motion.css" "css/tokens/base.css" "css/main.css" }}
+{{ $stylesheets := slice }}
+{{ range $tokenPaths }}
+  {{ with resources.Get . }}{{ $stylesheets = $stylesheets | append . }}{{ end }}
+{{ end }}
+{{ with $stylesheets | resources.Concat "css/bundle.css" }}
+  {{ $css := . | minify | fingerprint }}
+  <link rel="stylesheet" href="{{ $css.RelPermalink }}" integrity="{{ $css.Data.Integrity }}" />
+{{ end }}

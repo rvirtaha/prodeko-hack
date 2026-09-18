@@ -1,8 +1,48 @@
-<header>
-  <a href="{{ "/" | relLangURL }}">{{ .Site.Title }}</a>
-  <nav>
-    {{ range .Site.Home.AllTranslations }}
-      <a href="{{ .Permalink }}">{{ .Language.Label }}</a>
-    {{ end }}
-  </nav>
+{{ $navItems := index hugo.Data.navigation .Language.Lang }}
+{{ $megamenu := index hugo.Data.megamenu .Language.Lang }}
+<header class="site-header" id="site-header">
+  <div class="container bar">
+    <a class="logo" href="{{ "/" | relLangURL }}">
+      {{ with resources.Get "images/brand/logo-text.svg" }}
+        <img src="{{ .RelPermalink }}" alt="{{ $.Site.Title }}">
+      {{ end }}
+    </a>
+    <nav>
+      <ul class="nav-list">
+        {{ range $navItems }}
+          <li{{ if strings.HasPrefix $.RelPermalink .url }} class="current"{{ end }}{{ with .menuKey }} data-mega="{{ . }}"{{ end }}>
+            <a href="{{ .url }}">{{ .title }}</a>
+          </li>
+        {{ end }}
+      </ul>
+    </nav>
+    <div class="side">
+      <div class="lang-switch">
+        {{ range .Site.Home.AllTranslations }}
+          <a class="{{ if eq .Language.Lang $.Language.Lang }}current{{ end }}" href="{{ .Permalink }}">{{ .Language.Lang | upper }}</a>
+        {{ end }}
+      </div>
+      <a class="btn btn-secondary" href="/admin/">{{ if eq .Language.Lang "fi" }}Kirjaudu{{ else }}Log in{{ end }}</a>
+    </div>
+  </div>
+
+  {{ range $key, $columns := $megamenu }}
+    <div class="mega-panel" data-mega-panel="{{ $key }}">
+      <div class="mega-panel-rainbow"></div>
+      <div class="container mega-panel-inner">
+        {{ range $columns }}
+          <div class="mega-col">
+            <div class="mega-col-title">{{ .title }}</div>
+            {{ range .links }}
+              {{ if .url }}
+                <a href="{{ .url }}"><span>{{ .label }}</span><span>→</span></a>
+              {{ else }}
+                <span class="mega-link-disabled">{{ .label }}</span>
+              {{ end }}
+            {{ end }}
+          </div>
+        {{ end }}
+      </div>
+    </div>
+  {{ end }}
 </header>

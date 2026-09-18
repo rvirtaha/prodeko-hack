@@ -1,0 +1,28 @@
+# Real 2024 board, from https://www.prodeko.org/fi/guild/board/edelliset-hallitukset/
+heading: "2024"
+sortKey: 2024
+members:
+  - name: Iiro Ukkonen
+    role: Puheenjohtaja
+  - name: Reeta Lalla
+    role: Varapuheenjohtaja
+  - name: Pauli Puhakainen
+    role: Rahastonhoitaja
+  - name: Frans Hietaranta
+    role: Opintovastaava
+  - name: Pinja Jokiniemi
+    role: Sisä- ja kulttuuriministeri
+  - name: Laura Lehikoinen
+    role: Fuksikapteeni
+  - name: Santtu Vaalamo
+    role: Excumestari
+  - name: Sara Kivi
+    role: Yrityssuhdevastaava
+  - name: Aino Kotiranta
+    role: Isäntä
+  - name: Santtu Pelkonen
+    role: Ulkoministeri
+  - name: Siiri Keränen
+    role: Maisteri- ja KV-kapteeni
+  - name: Jenni Palukka
+    role: Mediakeisari

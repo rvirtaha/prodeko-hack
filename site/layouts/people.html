@@ -1,0 +1,20 @@
+{{/* A grid of people for a single point in time: the current board or the
+     current officials. Set with front matter:
+
+       layout: people
+       dataset: boards    # a top-level key under site/data
+       year: 2026         # a key within that dataset
+
+     The year archive template (archive.html) covers every year at once. */}}
+{{ define "main" }}
+  <article>
+    <h1>{{ .Title }}</h1>
+    {{ .Content }}
+    {{ with .Params.dataset }}
+      {{ $group := index hugo.Data . (string $.Params.year) }}
+      {{ with $group }}
+        {{ partial "people-grid.html" .members }}
+      {{ end }}
+    {{ end }}
+  </article>
+{{ end }}
