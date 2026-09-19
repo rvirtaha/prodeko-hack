@@ -13,9 +13,11 @@ ctaCompaniesUrl: /fi/yrityssuhteet/
 announcement:
   kicker: Ajankohtaista
   title: Prodeko hack 2026
-  body: Webbitiimi babyyy!
-  linkText: Lue lisää abisivuilta
-  url: /fi/abit/
+  body: "Webbitiimi babyyy! Prodeko hack 2026 kokoaa killan koodarit ja koodaamisesta
+    kiinnostuneet saman pöydän ääreen rakentamaan killan digitaalisia palveluita.
+    Tule mukaan tekemään, oppimaan ja pitämään hauskaa hyvässä seurassa."
+  linkText: Ilmoittaudu
+  url: https://ilmo.prodeko.org
 audiences:
   - kicker: Kiltalaisille
     title: Kilta
