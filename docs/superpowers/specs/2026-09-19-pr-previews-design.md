@@ -23,6 +23,8 @@ pull request opened or pushed
   ├─ hugo, twice, baseURL https://pr-<N>.preview.prodeko.org/
   ├─ check-trees.sh
   ├─ rm -rf site/public/admin
+  ├─ pagefind, once for public and once per member section
+  ├─ check-trees.sh, again, now against the indexes
   │
   └─ tar public members | ssh deploy-prodeko-preview@prodeko.org "preview publish pr-<N>"
         │
@@ -366,7 +368,9 @@ Configuration:
 - `.github/workflows/preview.yml` is new. It triggers on `pull_request` with
   types `opened`, `synchronize`, `reopened` and `closed`. The publish job runs
   only for same-repository pull requests, builds both trees at the preview
-  baseURL, runs `./check-trees.sh`, removes `site/public/admin`, streams
+  baseURL, runs `./check-trees.sh`, removes `site/public/admin`, builds the
+  search indexes with the same pinned Pagefind and the same three runs as
+  `build.yml` and runs `./check-trees.sh` again against them, streams
   `public` and `members` into the forced command, and posts the commit status
   and a sticky comment. The cleanup job runs on `closed` and sends
   `preview delete`.
