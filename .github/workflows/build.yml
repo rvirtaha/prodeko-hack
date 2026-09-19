@@ -47,6 +47,13 @@ jobs:
       # deletes the cached image variants belonging to the other one.
       - name: Build the public tree
         working-directory: site
+        # The only build that carries the counting script. hugo.toml leaves
+        # site.Params.goatcounter empty, so the member build below and the
+        # crawl tree further down count nothing — the crawl matters, because
+        # it drives a real browser over every page and would otherwise post a
+        # whole site's worth of fictitious pageviews on every run.
+        env:
+          HUGO_PARAMS_GOATCOUNTER: https://analytics.prodeko.org
         run: hugo --minify --cleanDestinationDir
 
       - name: Build the member tree
@@ -59,11 +66,13 @@ jobs:
 
       # Pagefind reads the built HTML, so the pages generated from site/data are
       # indexed without the templates knowing search exists. After check-trees.sh
-      # on purpose: that step proves the public HTML names no member address, and
-      # every index here is built from exactly that HTML. The second run of the
-      # script proves the indexes are as clean as the HTML they came from, which
-      # needs its own assertions because an index is gzip and the original grep
-      # reads straight past it.
+      # on purpose: that step proves the public HTML names no page below a member
+      # section, and every index here is built from exactly that HTML. The second
+      # run of the script judges the indexes, which needs its own assertions
+      # because an index is gzip and the HTML grep reads straight past it, and
+      # which holds the index to the bare section path — stricter than the HTML
+      # check, because the sign-in link that legitimately names a landing page
+      # sits outside data-pagefind-body and never reaches the index.
       #
       # The digest pins the bytes; the tag alone pins only a name. Re-record it
       # when the version moves.

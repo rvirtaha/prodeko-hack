@@ -1,0 +1,284 @@
+name: Preview
+
+# One browsable copy of the site per open pull request, at
+# https://pr-<N>.preview.prodeko.org/, behind a Prodeko login. An editor saving
+# a draft in Decap sees the link next to their entry and can look at the change
+# before it is published, without a GitHub account and without a developer.
+#
+# The server side is the prodeko_preview and preview_gate roles in the
+# infra-prodeko repository. Four names are duplicated across the two and must
+# change together: the user deploy-prodeko-preview, the host prodeko.org, the
+# command strings below, and the tarball's two top-level directories.
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, closed]
+
+# No paths filter, unlike the build workflow. A filter is evaluated against the
+# pull request's current diff, so a branch that touched site/ early and no
+# longer does would publish a preview and then never fire the cleanup that
+# removes it. A preview of a docs-only pull request is a thirty-second build
+# and nobody has to remember the exception.
+
+# statuses: write is the one that matters. Decap resolves an entry's cms/
+# branch to its pull request and reads the commit status to find the preview
+# link; pull-requests: write is only for the comment a human reads.
+permissions:
+  contents: read
+  statuses: write
+  pull-requests: write
+
+jobs:
+  publish:
+    # Fork pull requests get no preview. GitHub does not expose secrets to
+    # them, so the publish cannot run, and guarding on the head repository
+    # makes that a skipped job rather than a failed SSH on every outside
+    # contribution. Editors are unaffected: the editorial workflow commits to
+    # cms/ branches in this repository and never forks.
+    #
+    # pull_request_target would lift the secret restriction and is deliberately
+    # not used: it runs trusted code with the deploy key in scope against
+    # content from an untrusted branch.
+    if: >-
+      github.event.action != 'closed'
+      && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    # Cancel rather than queue, the opposite of the production deploy. A
+    # preview is replaced in place and the only interesting version is the
+    # newest, so an in-flight build of a superseded commit is waste.
+    concurrency:
+      group: preview-${{ github.event.pull_request.number }}
+      cancel-in-progress: true
+    env:
+      HUGO_VERSION: 0.166.0
+      # Leaving this at the production value fails quietly rather than loudly:
+      # every link 404s and the root alias sends the editor to the live site,
+      # where everything looks right and none of their changes are present.
+      #
+      # The site is not portable to a subdirectory, which is why each preview
+      # gets a host of its own. Navigation and footer URLs come from
+      # data/navigation.yaml, data/megamenu.yaml and data/footer.yaml as
+      # root-absolute strings emitted raw by the templates, and Hugo's URL
+      # helpers do not rescue them: under a baseURL carrying a path,
+      # relURL "/fi/guild/" returns "/fi/guild/" and absURL drops the path too.
+      HUGO_BASEURL: https://pr-${{ github.event.pull_request.number }}.preview.prodeko.org/
+      PREVIEW_ID: pr-${{ github.event.pull_request.number }}
+      # Not github.sha, which on a pull_request event is the merge commit.
+      # Decap asks for GET /repos/{owner}/{repo}/commits/{head.sha}/status, and
+      # a status posted anywhere else is a status it never sees. The editor
+      # login proxy already permits that path; see proxy/internal/forward/allow.go.
+      HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+      PR_NUMBER: ${{ github.event.pull_request.number }}
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      # Before the build, so an editor who saves and looks straight away sees
+      # that something is happening rather than nothing.
+      - name: Mark the preview pending
+        run: |
+          gh api "repos/$GITHUB_REPOSITORY/statuses/$HEAD_SHA" \
+            --method POST \
+            --raw-field state=pending \
+            --raw-field context=prodeko/preview \
+            --raw-field description='Rakennetaan esikatselua' >/dev/null
+
+      # The default ref on a pull_request event is refs/pull/N/merge, which is
+      # what an editor means by asking what the site will look like. GitHub
+      # does not create that ref for a conflicting pull request, so this step
+      # fails and the report step at the end says so — rather than the job
+      # quietly building the head branch instead and showing a preview of a
+      # merge that cannot happen.
+      - uses: actions/checkout@v5
+
+      - name: Install Hugo
+        run: |
+          curl -sSLo hugo.tar.gz \
+            "https://github.com/gohugoio/hugo/releases/download/v${HUGO_VERSION}/hugo_extended_${HUGO_VERSION}_linux-amd64.tar.gz"
+          tar xzf hugo.tar.gz hugo
+          sudo mv hugo /usr/local/bin/
+
+      # Both trees, because the whole preview host is authenticated and an
+      # editor previewing a draft of a member page has to be able to see it.
+      # Neither build passes --gc: the checkout is fresh so there is nothing to
+      # collect, and the two builds share one resource cache, where a
+      # collecting pass deletes the cached image variants belonging to the
+      # other one.
+      - name: Build the public tree
+        working-directory: site
+        run: hugo --minify --cleanDestinationDir
+
+      - name: Build the member tree
+        working-directory: site
+        run: hugo --minify --cleanDestinationDir --environment members
+
+      - name: Check no member page reaches the public tree
+        working-directory: site
+        run: ./check-trees.sh
+
+      # The editing screen is static content under site/static/, which Hugo
+      # copies into the root of every public build. On an authenticated preview
+      # host a Decap that loads and offers a login is plausible enough for an
+      # editor to try, and it fails at the last step, because the login proxy's
+      # CORS allows the site's origin and not this one.
+      #
+      # Adding the preview host to cms_auth_proxy_site_origins is the
+      # natural-looking response to that failure and is the one change that
+      # must not be made: it would give preview pages, which may carry script a
+      # pull request wrote, credentialed access to this repository.
+      #
+      # Only the public tree needs this. config/members/ sets staticDir = [],
+      # so the member tree has no copy.
+      - name: Remove the editing screen from the preview
+        run: rm -rf site/public/admin
+
+      # The two top-level names are the contract with preview.sh on the server:
+      # it extracts exactly `public` and `members`, discards everything else in
+      # the archive, and exits non-zero if either is missing.
+      - name: Assemble the preview bundle
+        run: |
+          mkdir dist
+          mv site/public dist/public
+          mv site/public-members dist/members
+          tar -czf preview-bundle.tar.gz -C dist public members
+          echo "bundle: $(du -h preview-bundle.tar.gz | cut -f1)"
+
+      # Plain openssh-client from the runner image, no marketplace action, for
+      # the reasons spelled out in build.yml. The host key is committed to
+      # .github/known_hosts rather than kept as a secret: it is public data,
+      # and committing it makes the pin reviewable and rotatable by pull
+      # request.
+      #
+      # PRODEKO_PREVIEW_DEPLOY_KEY is a repository secret and not an
+      # environment one, deliberately. Same-repository pull requests have to be
+      # able to use it or there is no feature. The consequence is that anyone
+      # who can push a branch can publish to a host editors trust; pushing a
+      # branch already implies write access here, and the key is confined by a
+      # forced command to one directory tree it can only replace.
+      #
+      # The script prints the preview's URL, so the naming scheme lives on the
+      # server and this workflow does not construct an address.
+      - name: Publish to prodeko-vm2
+        id: publish
+        env:
+          DEPLOY_KEY: ${{ secrets.PRODEKO_PREVIEW_DEPLOY_KEY }}
+        run: |
+          key="$RUNNER_TEMP/preview_key"
+          install -m 600 /dev/null "$key"
+          printf '%s\n' "$DEPLOY_KEY" > "$key"
+          url="$(ssh -i "$key" \
+            -o IdentitiesOnly=yes \
+            -o StrictHostKeyChecking=yes \
+            -o UserKnownHostsFile=.github/known_hosts \
+            deploy-prodeko-preview@prodeko.org \
+            "preview publish $PREVIEW_ID" < preview-bundle.tar.gz)"
+          echo "url=$url" >> "$GITHUB_OUTPUT"
+          echo "published $url"
+
+      # always(), because a preview that failed to build has to say so on the
+      # pull request. Decap shows the link from the commit status; the comment
+      # is for whoever is reading the pull request itself.
+      - name: Report the result
+        if: always()
+        env:
+          JOB_STATUS: ${{ job.status }}
+          PREVIEW_URL: ${{ steps.publish.outputs.url }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          set -euo pipefail
+          if [ "$JOB_STATUS" = success ] && [ -n "$PREVIEW_URL" ]; then
+            state=success
+            description='Esikatselu on valmis'
+            target="$PREVIEW_URL"
+            body="Esikatselu tästä muutoksesta: $PREVIEW_URL
+
+          Vaatii Prodeko-tunnuksen ja ylläpitäjän oikeudet. Esikatselu päivittyy
+          jokaisella uudella commitilla ja poistuu kun tämä pull request
+          suljetaan."
+          else
+            state=failure
+            description='Esikatselun rakentaminen epäonnistui'
+            target="$RUN_URL"
+            body="Esikatselua ei voitu rakentaa. [Lokit]($RUN_URL).
+
+          Tavallisin syy on että pull requestissa on ristiriita, jolloin
+          yhdistettyä commitia ei ole olemassa eikä sitä voi rakentaa. Ratkaise
+          ristiriita, niin esikatselu rakennetaan uudelleen."
+          fi
+
+          # The context string is matched exactly by Decap, because
+          # site/static/admin/config.yml sets preview_context. Unset, Decap
+          # matches any context containing the substring "deploy", and
+          # "prodeko/preview" does not.
+          gh api "repos/$GITHUB_REPOSITORY/statuses/$HEAD_SHA" \
+            --method POST \
+            --raw-field state="$state" \
+            --raw-field context=prodeko/preview \
+            --raw-field description="$description" \
+            --raw-field target_url="$target" >/dev/null
+
+          # One comment per pull request, edited in place. A comment per push
+          # would bury the conversation under a hundred identical links.
+          marker='<!-- prodeko-preview -->'
+          # No pipe into head: --paginate would be killed by SIGPIPE on a
+          # pull request with more comments than one page, and pipefail would
+          # turn that into a failed step. Take the first line in the shell.
+          ids="$(gh api "repos/$GITHUB_REPOSITORY/issues/$PR_NUMBER/comments" \
+            --paginate --jq ".[] | select(.body | startswith(\"$marker\")) | .id")"
+          existing="${ids%%$'\n'*}"
+          if [ -n "$existing" ]; then
+            gh api "repos/$GITHUB_REPOSITORY/issues/comments/$existing" \
+              --method PATCH --raw-field body="$marker
+          $body" >/dev/null
+          else
+            gh api "repos/$GITHUB_REPOSITORY/issues/$PR_NUMBER/comments" \
+              --method POST --raw-field body="$marker
+          $body" >/dev/null
+          fi
+
+  # The closed event fires on both merge and discard and is the normal way a
+  # preview goes away. It is not the only way: every publish also prunes by age
+  # and by count on the server, because a cleanup that depends on one webhook
+  # arriving is a cleanup that leaks.
+  cleanup:
+    if: >-
+      github.event.action == 'closed'
+      && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    env:
+      PREVIEW_ID: pr-${{ github.event.pull_request.number }}
+      PR_NUMBER: ${{ github.event.pull_request.number }}
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      # Only for .github/known_hosts.
+      - uses: actions/checkout@v5
+
+      # Idempotent on the server, so a pull request that never published — a
+      # draft closed before CI finished, or one whose build failed — is not an
+      # error here.
+      - name: Delete the preview
+        env:
+          DEPLOY_KEY: ${{ secrets.PRODEKO_PREVIEW_DEPLOY_KEY }}
+        run: |
+          key="$RUNNER_TEMP/preview_key"
+          install -m 600 /dev/null "$key"
+          printf '%s\n' "$DEPLOY_KEY" > "$key"
+          ssh -i "$key" \
+            -o IdentitiesOnly=yes \
+            -o StrictHostKeyChecking=yes \
+            -o UserKnownHostsFile=.github/known_hosts \
+            deploy-prodeko-preview@prodeko.org \
+            "preview delete $PREVIEW_ID"
+
+      - name: Say the preview is gone
+        if: always()
+        run: |
+          set -euo pipefail
+          marker='<!-- prodeko-preview -->'
+          # No pipe into head: --paginate would be killed by SIGPIPE on a
+          # pull request with more comments than one page, and pipefail would
+          # turn that into a failed step. Take the first line in the shell.
+          ids="$(gh api "repos/$GITHUB_REPOSITORY/issues/$PR_NUMBER/comments" \
+            --paginate --jq ".[] | select(.body | startswith(\"$marker\")) | .id")"
+          existing="${ids%%$'\n'*}"
+          [ -n "$existing" ] || exit 0
+          gh api "repos/$GITHUB_REPOSITORY/issues/comments/$existing" \
+            --method PATCH --raw-field body="$marker
+          Esikatselu on poistettu, koska tämä pull request on suljettu." >/dev/null

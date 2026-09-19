@@ -18,6 +18,17 @@ disableKinds = ["taxonomy", "term", "rss"]
   startLevel = 2
   endLevel = 3
 
+[params]
+  # Origin of the self-hosted GoatCounter that counts pageviews:
+  # https://analytics.prodeko.org in the published site. Empty here on
+  # purpose. The value is supplied by one step of the publish workflow, so a
+  # fork, a pull request and the audit crawl all build a site that counts
+  # nothing — the crawl matters most, because it loads every page in a real
+  # browser and would otherwise post a hundred and ten pageviews per run.
+  #
+  # layouts/partials/analytics.html reads it and appends /count.js and /count.
+  goatcounter = ""
+
 [languages]
   [languages.fi]
     label = "Suomi"

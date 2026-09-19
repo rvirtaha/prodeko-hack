@@ -1,6 +1,16 @@
 {{ $navItems := index hugo.Data.navigation .Language.Lang }}
 {{ $megamenu := index hugo.Data.megamenu .Language.Lang }}
 {{ $isFi := eq .Language.Lang "fi" }}
+{{/* The sign-in button. It points at the member section's own landing page
+     rather than at an authentication endpoint: Caddy gates that address, so a
+     signed-out visitor is redirected to Keycloak and back by the gate, and a
+     member who already holds a session is simply shown the page. Naming the
+     gate's prefix here instead would put the address of the login flow in a
+     third place that has to agree with Keycloak. In a build that carries the
+     member tree the reader is already past the gate, so the button names where
+     it goes rather than offering a login. */}}
+{{ $memberHome := cond $isFi "/fi/jasenille/" "/en/members/" }}
+{{ $memberLabel := cond site.Params.members (cond $isFi "Jäsensivut" "Member pages") (cond $isFi "Kirjaudu" "Log in") }}
 <a class="skip-link" href="#main">{{ if $isFi }}Siirry sisältöön{{ else }}Skip to content{{ end }}</a>
 <header class="site-header" id="site-header">
   <div class="container bar">
@@ -30,7 +40,7 @@
     </nav>
     <div class="side">
       {{ partial "lang-switch.html" . }}
-      <a class="btn btn-secondary" href="/admin/">{{ if $isFi }}Kirjaudu{{ else }}Log in{{ end }}</a>
+      <a class="btn btn-secondary" href="{{ $memberHome }}">{{ $memberLabel }}</a>
     </div>
     <button type="button" class="nav-toggle" aria-expanded="false" aria-controls="mobile-nav" aria-label="{{ if $isFi }}Valikko{{ else }}Menu{{ end }}">
       <span class="nav-toggle-bars"></span>
@@ -150,7 +160,7 @@
       {{ end }}
       <div class="m-actions">
         {{ partial "lang-switch.html" . }}
-        <a class="btn btn-secondary" href="/admin/">{{ if $isFi }}Kirjaudu{{ else }}Log in{{ end }}</a>
+        <a class="btn btn-secondary" href="{{ $memberHome }}">{{ $memberLabel }}</a>
       </div>
     </div>
   </nav>

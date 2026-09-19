@@ -7,9 +7,20 @@
 #   ./check-trees.sh
 #
 # Every top-level section under content-members/ must be present in
-# public-members/, absent from public/, and named nowhere inside public/. The
-# section names are read from content-members/ rather than from a list here, so
-# a new member section is covered the day somebody adds it.
+# public-members/, absent from public/, and named nowhere inside public/ below
+# its own landing page. The section names are read from content-members/ rather
+# than from a list here, so a new member section is covered the day somebody
+# adds it. The member tree in turn must name no counting endpoint.
+#
+# Run it again after Pagefind has built the indexes:
+#
+#   pagefind --site public && pagefind --site public-members ...
+#   ./check-trees.sh
+#
+# The first run judges the HTML, the second the indexes derived from it. The
+# second needs assertions of its own because an index is gzip and the greps
+# below read straight past it, and it holds the index to a stricter rule than
+# the HTML — see the two greps inside the loop.
 #
 # The absence check is weaker than it looks against stale output: Hugo does not
 # reliably delete files it no longer produces, so run this against trees built
@@ -40,17 +51,36 @@ for secdir in "${sections[@]}"; do
     status=1
   fi
 
-  if grep -rlF -- "$path" public >/dev/null 2>&1; then
-    echo "LEAK: the public tree names $path in:" >&2
-    grep -rlF -- "$path" public >&2
+  # The section's own landing page is the address the sign-in button points at,
+  # so the public tree names it on every page. That is not a leak: Caddy gates
+  # the address and answers it with a redirect to Keycloak whether or not the
+  # tree it is serving holds the page, so what is published is the door rather
+  # than anything behind it. The pages below the landing page are the member
+  # material itself and must stay unnamed here, which is what this matches: the
+  # section path followed by a further segment. The search index below is held
+  # to the bare path instead, and the difference is deliberate.
+  if grep -rlE -- "$path[a-z0-9]" public >/dev/null 2>&1; then
+    echo "LEAK: the public tree names a page under $path in:" >&2
+    grep -rlE -- "$path[a-z0-9]" public >&2
     status=1
   fi
 
-  # The search index is gzip, so the grep above reads straight past it and
-  # reports nothing whatever it contains. Decompress everything Pagefind wrote
-  # into the public tree and run the same test against the contents. This is
-  # what proves a member address is absent from the public index rather than
-  # merely absent from the public HTML.
+  # The public search index, tested against the *bare* path and so stricter
+  # than the HTML check above. That one tolerates "$path" itself, because the
+  # sign-in button names the section landing page on every public page. This
+  # one tolerates nothing: the sign-in link sits in the header, outside
+  # data-pagefind-body, so it never enters the index, and no other correct
+  # output names a member address there either. An address that is merely a
+  # published door in HTML is a real leak in the public index, which is a
+  # description of the member pages themselves rather than a link to a gate.
+  #
+  # So the two patterns must not be harmonised. Relaxing this one to
+  # "$path[a-z0-9]" to match the grep above would wave through exactly the
+  # publication these assertions exist to prevent.
+  #
+  # Every .pf_index, .pf_fragment and .pf_meta file is gzip, so the greps above
+  # report nothing whatever the index contains. Decompressing first restores
+  # the test.
   if [ -d public/pagefind ] &&
      find public/pagefind \( -name '*.pf_index' -o -name '*.pf_fragment' -o -name '*.pf_meta' \) \
        -exec gzip -dc {} + 2>/dev/null | grep -qF -- "$path"; then
@@ -93,7 +123,28 @@ if [ -d public/pagefind ]; then
   fi
 fi
 
+# The mirror of the checks above: the public tree must not name a member path,
+# and the member tree must not name the counting endpoint. The member section is
+# not counted at all, because everyone past that gate is identified by name and
+# a pageview count on the same machine as the gate's session log is a
+# re-identification path the public side does not have.
+#
+# layouts/partials/analytics.html already refuses to render under three
+# separate conditions. This asserts the outcome rather than trusting any of
+# them, because the failure is silent: a counted member page looks exactly like
+# an uncounted one. The hostname is spelled out here rather than read from the
+# configuration, so the check keeps meaning the same thing if somebody empties
+# the parameter or renames it.
+analytics_host="analytics.prodeko.org"
+
+if grep -rlF -- "$analytics_host" public-members >/dev/null 2>&1; then
+  echo "LEAK: the member tree names $analytics_host in:" >&2
+  grep -rlF -- "$analytics_host" public-members >&2
+  status=1
+fi
+
 if [ "$status" -eq 0 ]; then
   echo "check-trees: ${#sections[@]} member sections, none reachable from the public tree"
+  echo "check-trees: the member tree names no counting endpoint"
 fi
 exit "$status"

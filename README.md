@@ -79,8 +79,27 @@ member page has no public address to guess. The public build reads only
 list, from `sitemap.xml` and from anything else generated out of loaded pages.
 
 `check-trees.sh` fails the build if a member section appears in the public tree,
-is named anywhere inside it, or is missing from the member tree. Run it after
-both builds; CI runs it too.
+is missing from the member tree, or has a page below it named anywhere inside
+the public tree. It also fails if the member tree names the counting endpoint,
+which nothing in that tree is allowed to do. Run it after both builds, and
+again once the search indexes exist; CI runs it both times.
+
+The section landing pages themselves, `/fi/jasenille/` and `/en/members/`, are
+the exception in HTML: the header's sign-in button points at them, so the public
+tree names them on every page. Caddy gates those addresses and answers them with
+a redirect to Keycloak whether or not the tree it is serving holds the page, so
+what is public is the door rather than anything behind it.
+
+The public search index gets no such exception, and the second run is where
+that is decided. It holds the index to the bare section path rather than to a
+path with a page below it: the sign-in link sits in the header, outside the
+part of the page that gets indexed, so no correct build puts a member address
+there, and an address that is only a door in HTML would be a description of the
+member material itself once it is in the index. The second run also proves that
+every member section got its own bundle, that no bundle sits at the member
+tree's root — where `/pagefind/` is an address the public tree owns — and that
+the public index holds exactly as many pages as the public build marked for
+indexing.
 
 Neither build passes `--gc`. The two share one resource cache under
 `site/resources/`, and a garbage collecting pass deletes the cached image
@@ -90,12 +109,51 @@ Both builds must start from a clean state. Hugo does not reliably delete output
 it no longer produces, and `--cleanDestinationDir` removes stale pages but not
 stale published resources, so deploys copy with `rsync --delete`.
 
+## Previews
+
+Every pull request gets a browsable copy of both trees at
+`https://pr-<number>.preview.prodeko.org/`, behind a Prodeko login that
+requires the administrator role. An editor saving a draft sees the link on
+their entry in the editing screen and can look at the change before it is
+published.
+
+The preview is rebuilt on every push to the branch and deleted when the pull
+request is merged or closed; the server also removes previews older than a
+fortnight and keeps at most fifteen. Pull requests from forks get no preview,
+because GitHub does not give them the deploy key.
+
+A preview carries the member tree as well as the public one, since the whole
+host is behind the login. It carries no editing screen: `/admin` is removed
+from the build, because a Decap that loads on a preview host would offer a
+sign-in that cannot complete.
+
+`.github/workflows/preview.yml` builds and publishes it; the
+`prodeko_preview` and `preview_gate` roles in infra-prodeko serve it.
+
 Templates can tell the two apart through `site.Params.members`, which is set in
 the member build and in local preview and unset in the public build. A
-navigation entry into the member section belongs behind that condition until
-Caddy enforces the login. `data/megamenu.yaml` marks such an entry with
-`members: true`, and the header renders it as plain text where there is no
-member tree.
+navigation entry naming a page *below* a member section belongs behind that
+condition: `data/megamenu.yaml` marks such an entry with `members: true`, and
+the header renders it as plain text where there is no member tree. The
+condition also carries the sign-in button's wording, which offers a login in
+the public build and names the destination in the other two, where the reader
+is already past the gate.
+
+## Counting visitors
+
+The public tree counts pageviews with [GoatCounter](https://www.goatcounter.com/)
+running on Prodeko's own server: pageviews per path, referrer, language,
+country, device class, and a click event on each "Avaa palvelu" button. It
+stores nothing on a visitor's device, which is why the site carries no cookie
+banner; the privacy notice describes what is recorded and carries the opt-out
+button. The member tree is not counted at all, and `check-trees.sh` asserts it.
+
+The dashboard is at [analytics.prodeko.org](https://analytics.prodeko.org),
+behind a Prodeko sign-in that requires the `prodeko-org-admin` role. The
+deployment lives in the infra-prodeko repository, in the `goatcounter` and
+`analytics_gate` roles;
+[the design document](docs/superpowers/specs/2026-09-19-analytics-design.md)
+explains what is measured and why there is no banner.
 
 ## Checking the site
 

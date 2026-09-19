@@ -167,8 +167,8 @@ migration plan.
 
 ## If time runs out
 
-Cut in this order: preview builds on pull requests, the staleness job, image
-processing, search, then polish on the templates.
+Cut in this order: the staleness job, image processing, search, then polish on
+the templates.
 
 Do not cut the role check in the proxy, the author injection, the repository
 pinning in the proxy, or the member gate actually gating. Those four are the

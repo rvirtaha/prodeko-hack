@@ -1,0 +1,32 @@
+{{- /*
+  The pageview counter: GoatCounter's count.js, served from Prodeko's own
+  machine at analytics.prodeko.org. It sends the path, the referrer, the
+  title, the screen width and a bot flag, and stores nothing on the visitor's
+  device — no cookie, no localStorage write, no cache identifier. That is what
+  lets this site carry no cookie banner. The privacy notice
+  (/fi/tietosuoja/, /en/privacy-policy/) says what is recorded and carries the
+  opt-out button that sets the one localStorage key count.js reads.
+
+  Three conditions, all three deliberate.
+
+  `site.Params.goatcounter` is empty in hugo.toml and supplied only by the
+  publish build, so a fork, a pull-request build and the audit crawl are
+  silent. The crawl is the one that matters: it drives a real browser over
+  every page, and a script here would put a full site's worth of fictitious
+  pageviews into the board's numbers on every run.
+
+  `hugo.IsProduction` and `site.Params.members` both exclude the member
+  section, which is not counted at all. Everyone past that gate is identified
+  by name, and a pageview count with a timestamp sitting on the same machine
+  as the gate's session log is a re-identification path the public side does
+  not have. The member build runs under `--environment members`, where
+  IsProduction is false, and both config/members and config/development set
+  `members = true`. Either condition excludes the member tree on its own.
+  Both are here because a guard of this kind should not rest on one fact
+  staying true, and check-trees.sh asserts the outcome rather than trusting
+  the reasoning.
+*/ -}}
+{{- $endpoint := strings.TrimSuffix "/" (site.Params.goatcounter | default "") -}}
+{{- if and $endpoint hugo.IsProduction (not site.Params.members) -}}
+<script data-goatcounter="{{ $endpoint }}/count" async src="{{ $endpoint }}/count.js"></script>
+{{- end -}}

@@ -44,10 +44,11 @@ one-sentence body and gets fifty-nine years of board members from
 `hugo.Data` through `layouts/archive.html`, and all of those names are in the
 index because the index is built from what the reader actually sees.
 
-`check-trees.sh` runs twice. The first run proves the public HTML names no
-member address. The second proves the indexes derived from that HTML are
-equally clean, which needs its own assertions because a Pagefind index is
-compressed and the original grep reads straight past it.
+`check-trees.sh` runs twice. The first run proves the public HTML names no page
+below a member section. The second proves the indexes derived from that HTML
+are cleaner still — they may not name a member section at all — which needs its
+own assertions because a Pagefind index is compressed and the HTML grep reads
+straight past it.
 
 ## What gets indexed
 
@@ -213,9 +214,9 @@ now — sign in again.", and public search keeps working.
 ## Proving the member pages stay out of the public index
 
 `site/check-trees.sh` holds the assertions. Every `.pf_index`, `.pf_fragment`
-and `.pf_meta` file begins `1f 8b` and is gzip, so the script's original
-`grep -rlF -- "$path" public` reads past the index entirely and reports nothing
-whatever it contains. Decompressing first restores the test:
+and `.pf_meta` file begins `1f 8b` and is gzip, so the script's HTML grep reads
+past the index entirely and reports nothing whatever it contains. Decompressing
+first restores the test:
 
 ```bash
   if [ -d public/pagefind ] &&
@@ -244,11 +245,22 @@ Each assertion is verified against a planted failure:
 The section loop still reads its sections from `content-members/*/*/`, so a new
 member section is covered the day somebody adds it.
 
-One subtlety governs how the test is written. The mega menu shows member
+Two subtleties govern how the test is written. The mega menu shows member
 entries as disabled labels in the public build, so the **word** "Pöytäkirjat"
 is legitimately present in public HTML and therefore in the public index. The
-assertions test for the **path**, `/fi/jasenille/`, exactly as the original
-check does. A test for the word would fail on correct output.
+assertions test for the **path**, `/fi/jasenille/`. A test for the word would
+fail on correct output.
+
+The second is that this index test is stricter than the HTML test beside it,
+and has to stay so. The HTML test allows a section landing page to be named,
+because the header's sign-in button points at `/fi/jasenille/` on every public
+page, and matches only `"$path[a-z0-9]"` — the path followed by a further
+segment. The index test matches the bare path. The sign-in link sits in the
+header, outside `data-pagefind-body`, so it never reaches the index; nothing
+correct puts a member address there, and an address that is a published door in
+HTML is a description of the member pages themselves once it is inside the
+index. Verified by planting a fragment naming only `/fi/jasenille/`: the
+relaxed pattern finds nothing in it, and the index test fails the build.
 
 ## The interface
 
@@ -500,8 +512,8 @@ it.
 ```yaml
       # Pagefind reads the built HTML, so the pages generated from site/data are
       # indexed without the templates knowing search exists. After check-trees.sh
-      # on purpose: that step proves the public HTML names no member address, and
-      # every index here is built from exactly that HTML.
+      # on purpose: that step proves the public HTML names no page below a member
+      # section, and every index here is built from exactly that HTML.
       - name: Build the search indexes
         working-directory: site
         env:

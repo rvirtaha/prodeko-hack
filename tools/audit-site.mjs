@@ -46,6 +46,13 @@ const UNREACHABLE_HOSTS = [
 ];
 const BOT_HOSTILE = /(^|\.)(aalto\.fi|hsl\.fi|nokia\.com|ayy\.fi|reittiopas\.fi|linkedin\.com|instagram\.com|facebook\.com)$/;
 
+/** The member sections live in a tree of their own, served behind the login
+ *  gate and absent from the tree crawled here, so the sign-in button in the
+ *  header points at an address this crawl cannot resolve. It is the door to
+ *  the gate rather than a broken link: skip it, which keeps it out of the
+ *  queue as well as out of the report. */
+const MEMBER_SECTIONS = /^\/(fi\/jasenille|en\/members)(\/|$)/;
+
 const origin = new URL(BASE).origin;
 const norm = (u) => { const x = new URL(u, BASE); x.hash = ''; return x.href; };
 const pathOf = (u) => new URL(u).pathname;
@@ -129,6 +136,7 @@ while (queue.length) {
 
   for (const link of info.links) {
     if (!link.abs) continue;
+    if (link.abs.startsWith(origin) && MEMBER_SECTIONS.test(new URL(link.abs).pathname)) continue;
     if (link.abs.startsWith(origin)) {
       const target = norm(link.abs);
       record.internalLinks.push({ ...link, target });
