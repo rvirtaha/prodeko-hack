@@ -10,16 +10,18 @@ fi:
       links:
         - label: Arvot
           url: /fi/guild/arvot/
+        - label: Hallitus ja toimihenkilöt
+          url: /fi/guild/hallitus-ja-toimihenkilot/
         - label: Hallitus 2026
-          url: /fi/guild/board/hallitus/
+          url: /fi/guild/hallitus-ja-toimihenkilot/hallitus/
         - label: Hallituksen toiminta
-          url: /fi/guild/board/
+          url: /fi/guild/hallitus-ja-toimihenkilot/hallituksen-toiminta/
         - label: Edelliset hallitukset
-          url: /fi/guild/board/edelliset-hallitukset/
+          url: /fi/guild/hallitus-ja-toimihenkilot/edelliset-hallitukset/
         - label: Toimihenkilöt 2026
-          url: /fi/guild/toimarit/toimihenkilot/
+          url: /fi/guild/hallitus-ja-toimihenkilot/toimihenkilot/
         - label: Toimarien toiminta
-          url: /fi/guild/toimarit/
+          url: /fi/guild/hallitus-ja-toimihenkilot/toimarien-toiminta/
         - label: Häirintäyhdyshenkilöt
           url: /fi/guild/hairintayhdyshenkilot/
         - label: Säännöt ja asetukset
@@ -156,16 +158,18 @@ en:
       links:
         - label: Values
           url: /en/guild/values/
+        - label: Board and officials
+          url: /en/guild/board-and-officials/
         - label: Board 2026
-          url: /en/guild/board/board/
+          url: /en/guild/board-and-officials/board/
         - label: What the board does
-          url: /en/guild/board/
+          url: /en/guild/board-and-officials/what-the-board-does/
         - label: Previous boards
-          url: /en/guild/board/previous-boards/
+          url: /en/guild/board-and-officials/previous-boards/
         - label: Officials 2026
-          url: /en/guild/guild-officials/guild-officials/
+          url: /en/guild/board-and-officials/officials/
         - label: What the officials do
-          url: /en/guild/guild-officials/
+          url: /en/guild/board-and-officials/what-the-officials-do/
         - label: Harassment contact persons
           url: /en/guild/harassment-contact-persons/
         - label: Rules and regulations

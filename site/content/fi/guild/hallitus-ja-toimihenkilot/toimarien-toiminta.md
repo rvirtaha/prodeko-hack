@@ -2,7 +2,10 @@
 title: Toimarien toiminta
 description: Toimarien rooli killassa, toimareiden valinta vaalikokouksessa sekä jaoksittain jaotellut toimarivirat ja niiden tehtävät.
 translationKey: guild-toimarit
+weight: 50
 sourceURL: https://prodeko.org/fi/guild/toimarit/
+aliases:
+  - /guild/toimarit/
 ---
 
 **Huom: tämä sivu on päivitetty viimeksi 22.10.2024 vastaamaan samana päivänä päätettyä organisaatiorakennetta.**

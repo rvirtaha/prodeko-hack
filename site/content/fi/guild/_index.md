@@ -31,6 +31,9 @@ sections:
         desc: Viikkotiedote, jäsenrekisteri ja viestintä.
       - name: Abivastaava
         desc: Abisivut, abimentorointi ja lukiovierailut.
+      - name: Hallitus ja toimihenkilöt
+        url: /fi/guild/hallitus-ja-toimihenkilot/
+        desc: Tämän vuoden hallitus ja toimarit, virkojen kuvaukset ja edelliset hallitukset.
   - title: Toimarivirat
     body: Toimihenkilöt tekevät tapahtumat, urheilun, kulttuurin ja kansainvälisen toiminnan vapaaehtoisina. Toimariksi voi hakea kuka tahansa jäsen, ja ensimmäinen vuosi on helpoin hetki aloittaa.
     items:
@@ -48,6 +51,7 @@ sections:
       - name: Jäsenyys 8 €
         desc: Lukuvuosittainen. Haku kesäkuun jälkeen tulevalle lukuvuodelle.
       - name: Jäsenhakemus
+        url: https://membership.prodeko.org/apply
         desc: membership.prodeko.org/apply · maksu pankkikortilla.
 guildRoomTitle: Kiltahuone
 guildRoomBody: TUAS-talo, Maarintie 8, 02150 Espoo. Kahvi-, tee- ja biljardisponssit tervetulleita.

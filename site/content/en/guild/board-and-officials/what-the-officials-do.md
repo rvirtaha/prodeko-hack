@@ -1,8 +1,11 @@
 ---
-title: Guild officials
+title: What the officials do
 description: What guild officials do and a description of every official position in the guild.
 translationKey: guild-toimarit
+weight: 50
 sourceURL: https://prodeko.org/en/guild/guild-officials/
+aliases:
+  - /guild/guild-officials/
 ---
 
 **Note: this is a unofficial translation of the official organisational strucutre updated 22.10.2024**

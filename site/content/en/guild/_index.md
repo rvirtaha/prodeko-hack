@@ -27,6 +27,9 @@ sections:
         desc: New students' first year.
       - name: Events
         desc: Sitsit, the annual ball and weekly events.
+      - name: Board and officials
+        url: /en/guild/board-and-officials/
+        desc: This year's board and officials, what each does, and previous boards.
   - title: Committees
     body: Any member can join a committee at any time. Your first year is the easiest time to start.
     items:
@@ -46,7 +49,7 @@ sections:
       - name: Autumn meeting
         desc: November · board and plan of action.
 guildRoomTitle: Guild room
-guildRoomBody: Maarintie 8, second floor. Open weekdays 10–20. Coffee 0.50 €. Ask the board for a key.
+guildRoomBody: Maarintie 8, second floor. Open weekdays 10–20. The coffee is free. Ask the board for a key.
 docsTitle: Official
 docs:
   - Rules

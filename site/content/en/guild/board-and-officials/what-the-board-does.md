@@ -1,8 +1,11 @@
 ---
-title: Prodeko Board
+title: What the board does
 description: What the guild's board does and what each board position is responsible for.
 translationKey: guild-board
+weight: 20
 sourceURL: https://prodeko.org/en/guild/board/
+aliases:
+  - /guild/board/
 ---
 
 **Note: updated 22.10.2024 according to the official organizational structure of the guild**

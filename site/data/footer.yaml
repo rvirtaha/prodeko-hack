@@ -8,9 +8,9 @@ fi:
       - label: Arvot
         url: /fi/guild/arvot/
       - label: Hallitus 2026
-        url: /fi/guild/board/hallitus/
+        url: /fi/guild/hallitus-ja-toimihenkilot/hallitus/
       - label: Toimihenkilöt 2026
-        url: /fi/guild/toimarit/toimihenkilot/
+        url: /fi/guild/hallitus-ja-toimihenkilot/toimihenkilot/
       - label: Säännöt ja asetukset
         url: /fi/guild/guild-rules/
       - label: Kunnianosoitukset
@@ -60,9 +60,9 @@ en:
       - label: Values
         url: /en/guild/values/
       - label: Board 2026
-        url: /en/guild/board/board/
+        url: /en/guild/board-and-officials/board/
       - label: Officials 2026
-        url: /en/guild/guild-officials/guild-officials/
+        url: /en/guild/board-and-officials/officials/
       - label: Rules and regulations
         url: /en/guild/rules/
       - label: Honours
