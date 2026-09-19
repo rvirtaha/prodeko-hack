@@ -16,6 +16,19 @@
 {{- $frame := .frame | default false -}}
 {{- $height := .height | default 700 -}}
 {{- $isFi := eq page.Language.Lang "fi" -}}
+{{- /* Whether anyone presses the button is the one question a pageview count
+     cannot answer, and it is the question these cards exist to raise.
+     count.js binds a click event to any element carrying
+     data-goatcounter-click; where the script is absent, in the member tree
+     and in every build but the published one, the attributes are inert.
+
+     The event name is derived from the destination host, so all seven
+     services in data/embeds.yaml are covered by this one anchor and no
+     shortcode names an event of its own: embed-ilmo.prodeko.org,
+     embed-store.prodeko.org, and so on. It records which service was opened,
+     not which page it was opened from — the latter is one more attribute and
+     one more line on the privacy notice. */ -}}
+{{- $clickHost := (urls.Parse $url).Host -}}
 <div class="embed">
   <div class="embed-head">
     <div>
@@ -31,7 +44,9 @@
         {{ end }}
       </p>
     </div>
-    <a class="btn btn-primary" href="{{ $url }}" target="_blank" rel="noopener">
+    <a class="btn btn-primary" href="{{ $url }}" target="_blank" rel="noopener"
+       data-goatcounter-click="embed-{{ $clickHost }}"
+       data-goatcounter-title="{{ $label }}">
       {{ if $isFi }}Avaa palvelu{{ else }}Open the service{{ end }} <span aria-hidden="true">→</span>
     </a>
   </div>
