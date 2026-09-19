@@ -3,6 +3,8 @@ title: "Matrikkelin tietosuojaseloste"
 translationKey: alumni-tietoa-alumnista-matrikkelin-tietosuojasleoste
 sourceURL: https://prodeko.org/fi/alumni/tietoa-alumnista/matrikkelin-tietosuojasleoste/
 description: Tietosuojaseloste siitä, miten Prodekon jäsen- ja alumnirekisterin sekä matrikkelin henkilötietoja kerätään ja käsitellään.
+aliases:
+  - /alumni/tietoa-alumnista/matrikkelin-tietosuojasleoste/
 ---
 
 Tämä on henkilötietolain (10 ja 24 §) ja EU:n yleisen tietosuoja-asetuksen (GDPR) mukainen rekisteri- ja tietosuojaseloste. Laadittu 16.05.2018. Viimeisin muutos 08.07.2026.
