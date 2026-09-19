@@ -21,7 +21,7 @@
 </section>
 
 <div class="container">
-  <section class="two-col">
+  <section class="hub-section">
     <h2 class="section-title">{{ .Params.offerTitle }}</h2>
     <div class="card-grid">
       {{ range .Params.offers }}
@@ -39,14 +39,7 @@
   <section class="hub-body">
     <div>
       <h2 class="section-title">{{ .Params.partnersTitle | default "Prodeko Network" }}</h2>
-      <div class="partners-grid">
-        {{ range hugo.Data.partners }}
-          {{ $partner := . }}
-          <div class="partner-tile">
-            {{ with resources.Get $partner.logo }}<img src="{{ .RelPermalink }}" alt="{{ $partner.name }}">{{ end }}
-          </div>
-        {{ end }}
-      </div>
+      {{ partial "partner-grid.html" . }}
     </div>
     <aside class="sidebar-card">
       <div class="rainbow-rule"></div>

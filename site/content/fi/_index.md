@@ -15,6 +15,7 @@ announcement:
   title: Prodeko hack 2026
   body: Webbitiimi babyyy!
   linkText: Lue lisää abisivuilta
+  url: /fi/abit/
 audiences:
   - kicker: Kiltalaisille
     title: Kilta

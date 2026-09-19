@@ -84,7 +84,6 @@ img { display: block; max-width: 100%; }
 .btn-inverse:hover { background: var(--pd-white-2); }
 .btn-outline-inverse { background: transparent; color: var(--pd-white-1); border-color: rgb(246 246 246 / 0.6); }
 .btn-outline-inverse:hover { border-color: var(--pd-white-1); }
-a.btn, a.btn:hover { border-bottom: none; }
 
 /* ===== Header ===== */
 
@@ -100,11 +99,15 @@ a.btn, a.btn:hover { border-bottom: none; }
   align-items: center;
   justify-content: space-between;
   flex-wrap: wrap;
-  gap: var(--space-10);
-  height: 76px;
+  /* The gap is a floor, not the spacing the reader sees: space-between spreads
+     the free width, so this only decides how tightly the row packs just before
+     it collapses to the toggle. min-height, not height, so a row that does wrap
+     grows the bar instead of spilling out of it. */
+  gap: var(--space-6);
+  min-height: 76px;
 }
-.site-header .logo { display: flex; align-items: center; flex-shrink: 0; }
-.site-header .logo img { height: 26px; width: auto; }
+.site-header .logo { display: flex; align-items: center; flex-shrink: 0; border-bottom: none; }
+.site-header .logo img { height: 32px; width: auto; }
 .site-header .nav-list {
   display: flex;
   gap: var(--space-8);
@@ -346,7 +349,9 @@ a.btn, a.btn:hover { border-bottom: none; }
 .mobile-nav { display: none; }
 .mobile-nav .container { padding-bottom: var(--space-6); }
 .m-group { border-bottom: 1px solid var(--border-subtle); }
-.m-group summary {
+/* Child combinators throughout: a section's own summary, not the summaries of
+   the columns nested inside it. */
+.m-group > summary {
   cursor: pointer;
   list-style: none;
   display: flex;
@@ -359,19 +364,33 @@ a.btn, a.btn:hover { border-bottom: none; }
   text-transform: uppercase;
   color: var(--pd-blue);
 }
-.m-group summary::-webkit-details-marker { display: none; }
-.m-group summary::after { content: "+"; font-size: var(--size-xl); font-weight: var(--weight-light); color: var(--pd-blue-light); }
-.m-group[open] summary::after { content: "\2013"; }
+.m-group > summary::-webkit-details-marker { display: none; }
+.m-group > summary::after { content: "+"; font-size: var(--size-xl); font-weight: var(--weight-light); color: var(--pd-blue-light); }
+.m-group[open] > summary::after { content: "\2013"; }
 .m-group-body { padding: 0 0 var(--space-4); }
-.m-col-title {
+.m-sub { border-top: 1px solid var(--border-subtle); }
+.m-sub > summary {
+  cursor: pointer;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 44px;
   font-size: var(--size-3xs);
   font-weight: var(--weight-semibold);
   letter-spacing: var(--track-caps-wide);
   text-transform: uppercase;
   color: var(--text-muted);
-  margin: var(--space-4) 0 var(--space-1);
 }
-.mobile-nav a,
+.m-sub > summary::-webkit-details-marker { display: none; }
+.m-sub > summary::after { content: "+"; font-size: var(--size-lg); font-weight: var(--weight-light); color: var(--pd-blue-light); }
+.m-sub[open] > summary::after { content: "\2013"; }
+/* The rule the column's links hang off, so an open column reads as a branch of
+   the section above it rather than as more of the same list. */
+.m-sub-body { padding: 0 0 var(--space-3) var(--space-4); border-left: 2px solid var(--border-subtle); margin-left: var(--space-1); }
+/* Every anchor in the menu is a two-column row — except a button, which keeps
+   the button shape and all four of its borders. */
+.mobile-nav a:not(.btn),
 .m-link-disabled {
   display: flex;
   align-items: center;
@@ -414,11 +433,19 @@ a.btn, a.btn:hover { border-bottom: none; }
 .m-actions .lang-switch { flex-shrink: 0; }
 .m-actions .btn { flex: 1; }
 
+/* Once the bar is no longer wider than the page it has to hold, the nav items
+   move closer together rather than the row breaking. The English labels are the
+   long ones, so this range is what they set. */
+@media (max-width: 1200px) {
+  .site-header .desktop-nav { gap: var(--space-5); }
+  .site-header .nav-list { gap: var(--space-5); }
+}
+
 /* Below this width the logo, five nav items, language pill and login button no
-   longer fit on one line, so everything but the logo collapses behind the
-   toggle and the phone menu above takes over. */
-@media (max-width: 860px) {
-  .site-header .bar { height: 60px; gap: var(--space-4); flex-wrap: nowrap; }
+   longer fit on one line even packed, so everything but the logo collapses
+   behind the toggle and the phone menu above takes over. */
+@media (max-width: 1100px) {
+  .site-header .bar { min-height: 60px; gap: var(--space-4); flex-wrap: nowrap; }
   .site-header .desktop-nav,
   .site-header .side { display: none; }
   .nav-toggle { display: flex; margin-left: auto; }
@@ -486,13 +513,17 @@ a.btn, a.btn:hover { border-bottom: none; }
   inset: 0;
   background: var(--vignette-calm);
 }
+/* The stripe is a corner wedge: it enters the left edge and leaves the top
+   edge, and only that diagonal is ever seen. Its offsets are absolute rather
+   than proportional so the wedge keeps the same size — and stays clear of the
+   kicker — whatever the hero grows to. */
 .hero-home .stripe {
   position: absolute;
-  left: -10%;
-  top: 18%;
-  width: 90%;
-  height: 18px;
-  transform: rotate(-26deg);
+  left: -110px;
+  top: 310px;
+  width: 820px;
+  height: 36px;
+  transform: rotate(-45deg);
   transform-origin: left center;
 }
 .hero-home .emblem {
@@ -502,11 +533,11 @@ a.btn, a.btn:hover { border-bottom: none; }
   width: 560px;
   opacity: 0.08;
 }
-.hero-home .inner { position: relative; padding-block: 130px 120px; }
+.hero-home .inner { position: relative; padding-block: 88px 104px; }
 .hero-home h1 {
   margin: 0 0 var(--space-6);
   max-width: 16ch;
-  font-size: clamp(40px,5.6vw,72px);
+  font-size: clamp(38px,4.8vw,64px);
   font-weight: var(--weight-bold);
   line-height: 1.05;
   letter-spacing: var(--track-caps);
@@ -543,11 +574,13 @@ a.btn, a.btn:hover { border-bottom: none; }
 
 .announcement-wrap { margin-top: -56px; position: relative; z-index: 1; max-width: 28rem; }
 .announcement {
+  position: relative;
   background: #fff;
   color: var(--text-body);
   border-radius: var(--radius-ui);
   box-shadow: var(--shadow-lg);
   overflow: hidden;
+  transition: var(--transition-ui);
 }
 .announcement .rainbow-rule { height: 6px; }
 .announcement .body { padding: var(--space-6) var(--space-8) var(--space-8); }
@@ -555,14 +588,38 @@ a.btn, a.btn:hover { border-bottom: none; }
 .announcement .title { font-size: var(--size-xl); font-weight: var(--weight-semibold); color: var(--pd-blue); line-height: 1.2; margin-bottom: var(--space-3); }
 .announcement p { margin: 0 0 var(--space-4); font-size: var(--size-sm); font-weight: var(--weight-light); line-height: var(--leading-loose); }
 .announcement .link { font-size: var(--size-2xs); font-weight: var(--weight-semibold); letter-spacing: var(--track-caps); text-transform: uppercase; color: var(--pd-blue-light); border-bottom: none; }
+/* The card is one announcement, so the whole of it is the target rather than
+   the caps line at the foot of it. The overlay is on the anchor, so a card
+   whose announcement carries no url stays inert. */
+.announcement a.link::after { content: ""; position: absolute; inset: 0; }
+.announcement:has(a.link):hover { transform: translateY(-2px); }
+.announcement a.link:hover { color: var(--pd-blue); }
 
 /* ===== Values strip (home) ===== */
 
 .values-section { padding: 64px 0 88px; }
 .values-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(200px,1fr)); gap: var(--space-6); }
 .values-grid .value { margin: 0; display: flex; flex-direction: column; gap: var(--space-3); }
-.values-grid img { width: 100%; aspect-ratio: 16/9; object-fit: cover; }
-.values-grid figcaption {
+/* One overalls colour per value — five values, five stripes, in rainbow order.
+   The rule carries the colour at full strength; the name is darkened along its
+   own hue where it has to, because raw orange and yellow land at 2.5:1 and
+   1.4:1 on the page background, under the 3:1 floor for large text. */
+.values-grid .value:nth-child(5n+1) { --value-stripe: var(--pd-rainbow-red);    --value-ink: var(--pd-rainbow-red); }
+.values-grid .value:nth-child(5n+2) { --value-stripe: var(--pd-rainbow-orange); --value-ink: oklch(from var(--pd-rainbow-orange) calc(l - 0.1) c h); }
+.values-grid .value:nth-child(5n+3) { --value-stripe: var(--pd-rainbow-yellow); --value-ink: oklch(from var(--pd-rainbow-yellow) calc(l - 0.25) c h); }
+.values-grid .value:nth-child(5n+4) { --value-stripe: var(--pd-rainbow-green);  --value-ink: var(--pd-rainbow-green); }
+.values-grid .value:nth-child(5n+5) { --value-stripe: var(--pd-rainbow-blue);   --value-ink: var(--pd-rainbow-blue); }
+.values-grid .value-rule { height: 6px; background: var(--value-stripe); }
+.values-grid .value-name {
+  font-size: clamp(22px,2.1vw,30px);
+  font-weight: var(--weight-bold);
+  letter-spacing: var(--track-tight);
+  line-height: var(--leading-tight);
+  color: var(--value-ink);
+  text-wrap: balance;
+}
+.values-grid .value p {
+  margin: 0;
   font-size: var(--size-sm);
   font-weight: var(--weight-light);
   line-height: var(--leading-loose);
@@ -579,11 +636,23 @@ a.btn, a.btn:hover { border-bottom: none; }
 }
 .photo-band img { width: 100%; height: 100%; object-fit: cover; }
 /* The caption is white type over an uncontrolled photograph, so the scrim
-   has to hold on its brightest part, not its average one. */
-.photo-band::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgb(0 40 81 / 0.45) 0%, rgb(0 40 81 / 0.62) 55%, rgb(0 40 81 / 0.75) 100%); }
+   has to hold on its brightest part, not its average one. The radial layer
+   sits behind the centred caption and carries most of the contrast, leaving
+   the edges of the photograph readable. */
+.photo-band::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 62% 88% at 50% 50%, rgb(0 27 54 / 0.62) 0%, rgb(0 27 54 / 0.26) 62%, rgb(0 27 54 / 0) 100%),
+    linear-gradient(180deg, rgb(0 27 54 / 0.34) 0%, rgb(0 27 54 / 0.46) 55%, rgb(0 27 54 / 0.6) 100%);
+}
 .photo-band .caption {
   position: absolute;
   inset: 0;
+  /* The scrim is a ::after, so it is the last thing painted in this box and
+     would otherwise lie over the type it exists to set off. */
+  z-index: 1;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -608,15 +677,19 @@ a.btn, a.btn:hover { border-bottom: none; }
 .partners-section { background: #fff; border-top: 1px solid var(--border-subtle); padding: 64px 0 72px; }
 .partners-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(150px,1fr)); gap: var(--space-4); }
 .partner-tile {
-  height: 96px;
+  min-height: 96px;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: var(--space-5);
-  border: 1px solid var(--border-subtle);
+  padding: var(--space-4);
   border-radius: var(--radius-ui);
+  border-bottom: none;
+  transition: var(--transition-ui);
 }
-.partner-tile img { max-width: 100%; max-height: 100%; object-fit: contain; }
+.partner-tile:hover { background: var(--surface-sunken); }
+/* The width and height attributes come from the file's own pixel size, halved;
+   these only stop a narrow column from overflowing. */
+.partner-tile img { max-width: 100%; height: auto; }
 
 /* ===== Hub page hero: split (guild) ===== */
 
@@ -628,20 +701,25 @@ a.btn, a.btn:hover { border-bottom: none; }
   display: grid;
   grid-template-columns: minmax(0,1fr) minmax(0,1fr);
 }
-.hero-split .text { position: relative; padding: 88px var(--space-10) 80px var(--space-8); display: flex; flex-direction: column; justify-content: center; }
+/* The text column is half the section and the section is full-bleed, so 100%
+   here is half the viewport: the start padding resolves to the .container
+   content edge, which is where the page below begins. */
+.hero-split .text { position: relative; padding: 88px var(--space-10) 80px max(var(--space-8), calc(100% - var(--page-max) / 2 + var(--space-8))); display: flex; flex-direction: column; justify-content: center; }
 .hero-split .image { position: relative; min-height: 420px; }
 .hero-split .image img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 .hero-split .image::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, var(--pd-blue) 0%, rgb(0 46 125 / 0) 28%); }
 /* The longest word here is TUOTANTOTALOUDEN, and the text column is half the
-   viewport: at 3.8vw it was wider than its column at every width from 900px
-   up, so the final N was sheared off on every desktop too. */
-.hero-split h1 { margin: 0 0 var(--space-5); font-size: clamp(24px,3vw,46px); hyphens: auto; font-weight: var(--weight-bold); letter-spacing: var(--track-caps); text-transform: uppercase; line-height: 1.05; color: var(--pd-white-1); text-shadow: var(--shadow-heading); }
+   viewport inset to the page measure, so its content stops at 528px however
+   wide the window is: past 37px that one word is sheared off. */
+.hero-split h1 { margin: 0 0 var(--space-5); font-size: clamp(24px,3vw,37px); hyphens: auto; font-weight: var(--weight-bold); letter-spacing: var(--track-caps); text-transform: uppercase; line-height: 1.05; color: var(--pd-white-1); text-shadow: var(--shadow-heading); }
 .hero-split .kicker { opacity: 0.85; margin-bottom: var(--space-4); display: block; }
 .hero-split p { margin: 0; max-width: 52ch; font-size: var(--size-md); font-weight: var(--weight-light); line-height: var(--leading-normal); }
 .hero-split .rainbow-rule { position: absolute; left: 0; right: 0; bottom: 0; }
 /* 900 rather than 780: below this the text column is under 450px, which is
    too narrow to set a display heading beside a photograph. */
-@media (max-width: 900px) { .hero-split { grid-template-columns: minmax(0, 1fr); } .hero-split .image { min-height: 240px; } }
+/* Once the text column spans the section, 100% is the whole viewport and the
+   calc above would run away, so the single-column form takes the plain inset. */
+@media (max-width: 900px) { .hero-split { grid-template-columns: minmax(0, 1fr); } .hero-split .text { padding-inline: var(--space-8); } .hero-split .image { min-height: 240px; } }
 
 /* ===== Hub page hero: full-bleed photo (prospective / corporate) ===== */
 
@@ -654,10 +732,22 @@ a.btn, a.btn:hover { border-bottom: none; }
 
 .hero-prospective { min-height: 560px; display: flex; align-items: flex-end; background: var(--pd-blue-dark); }
 .hero-prospective::before { content: ""; position: absolute; inset: 0; z-index: 1; background: linear-gradient(180deg, rgb(0 40 81 / 0.05) 0%, rgb(0 40 81 / 0.2) 35%, rgb(0 40 81 / 0.88) 62%, rgb(0 40 81 / 0.96) 100%); }
+/* The subject stands left of centre and high in the frame, and the source
+   carries its own torn blue band across the bottom third. Centred, the crop
+   took the band and cut the face off above it; anchored high and left it
+   holds the face over the lit part of the photograph and leaves the band out
+   of frame at every width wide enough to crop vertically at all. */
+.hero-prospective img.bg { object-position: 30% 12%; }
+/* A flex item takes its width from its content, so .container here stopped at
+   the heading's width and centred that, leaving the hero text inset further
+   than the page content below it. */
+.hero-prospective .inner { width: 100%; }
 .hero-prospective h1 { font-size: clamp(40px,6vw,84px); line-height: 1; }
 
 /* The torn "skräbä" edge from the brand book: a full-bleed band never ends
-   in a straight line where it meets the page. */
+   in a straight line where it meets the page. The strip is transparent above
+   the tear, so it has to be squashed rather than cropped — `cover` at this
+   height keeps only the solid blue under the tear and draws a flat bar. */
 .skraba-bottom {
   position: absolute;
   z-index: 2;
@@ -665,9 +755,8 @@ a.btn, a.btn:hover { border-bottom: none; }
   right: 0;
   bottom: -1px;
   width: 100%;
-  height: 40px;
-  object-fit: cover;
-  object-position: bottom;
+  height: 56px;
+  object-fit: fill;
 }
 
 .hero-corporate { background: var(--pd-blue-dark); }
@@ -714,6 +803,8 @@ a.btn, a.btn:hover { border-bottom: none; }
 .item-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(220px,1fr)); gap: var(--space-3); }
 .item-card { background: #fff; border: 1px solid var(--border-subtle); border-radius: var(--radius-ui); padding: var(--space-4) var(--space-5); display: flex; flex-direction: column; gap: var(--space-1); }
 .item-card .name { font-size: var(--size-md); font-weight: var(--weight-semibold); color: var(--pd-blue); }
+.item-card .name a { color: inherit; border-bottom: 1px solid rgb(0 46 125 / 0.25); }
+.item-card .name a:hover { border-bottom-color: currentColor; }
 .item-card .desc { font-size: var(--size-xs); font-weight: var(--weight-light); color: var(--text-body); line-height: var(--leading-normal); }
 
 .sidebar { display: flex; flex-direction: column; gap: var(--space-8); }
@@ -1021,9 +1112,11 @@ a.btn, a.btn:hover { border-bottom: none; }
 
 /* ===== Archive jump list (layouts/archive.html) ===== */
 
+/* Sixty years of chips wrapped as a flex row left every line its own ragged
+   set of widths; equal tracks put them in columns. */
 .archive-jump {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(3.75rem, 1fr));
   gap: var(--space-2);
   margin: var(--space-8) 0 var(--space-4);
   padding-bottom: var(--space-6);
@@ -1032,6 +1125,7 @@ a.btn, a.btn:hover { border-bottom: none; }
 .archive-jump a {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   min-height: 44px;
   padding: 6px 14px;
   font-size: var(--size-2xs);
@@ -1084,10 +1178,11 @@ a.btn, a.btn:hover { border-bottom: none; }
 @media (max-width: 720px) {
   .container { padding: 0 var(--space-6); }
 
-  .hero-home .inner { padding-block: 64px 56px; }
+  .hero-home .inner { padding-block: 76px 52px; }
   .hero-home h1 { font-size: clamp(30px, 9vw, 44px); letter-spacing: var(--track-normal); max-width: none; }
   .hero-home .inner > p { font-size: var(--size-md); }
   .hero-home .emblem { width: 340px; right: -90px; top: -80px; }
+  .hero-home .stripe { left: -48px; top: 120px; width: 400px; height: 28px; }
   .hero-home .ctas .btn { flex: 1 1 auto; }
 
   .hero-split .text { padding: 48px var(--space-6) 44px; }
@@ -1106,12 +1201,15 @@ a.btn, a.btn:hover { border-bottom: none; }
   .hero-alumni-card p { font-size: var(--size-md); }
   .hero-alumni-card .rainbow-rule { margin: var(--space-6) calc(-1 * var(--space-6)) calc(-1 * var(--space-6)); }
 
-  .announcement-wrap { max-width: none; }
+  /* The card is full width here, so lifting it over the hero edge reads as the
+     hero stopping short rather than as an overlap — and any lift at all puts
+     the card on top of the buttons above it. It sits below the hero instead. */
+  .announcement-wrap { max-width: none; margin-top: var(--space-8); }
   .audiences { padding: 48px 0 24px; }
   .values-section { padding: 40px 0 48px; }
   .photo-band { height: 280px; }
   .partners-section { padding: 40px 0 48px; }
-  .partner-tile { height: 72px; padding: var(--space-4); }
+  .partner-tile { min-height: 72px; }
   .stats-row { padding: 32px 0 16px; }
   .hub-body { padding: 40px 0 56px; }
   .hub-sections { gap: 40px; }

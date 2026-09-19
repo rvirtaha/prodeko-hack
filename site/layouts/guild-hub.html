@@ -35,7 +35,12 @@
             <div class="item-grid">
               {{ range . }}
                 <div class="item-card">
-                  <div class="name">{{ .name }}</div>
+                  {{/* An item names a url where the thing it describes is
+                       somewhere a reader can go — a form, a service — rather
+                       than a role or a meeting. */}}
+                  <div class="name">
+                    {{ if .url }}<a href="{{ .url }}">{{ .name }}</a>{{ else }}{{ .name }}{{ end }}
+                  </div>
                   <div class="desc">{{ .desc }}</div>
                 </div>
               {{ end }}

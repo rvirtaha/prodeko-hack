@@ -22,5 +22,7 @@
      stylesheet alone would leave a 404 behind every hero. Handing the resolved
      address to the stylesheet as a custom property fixes both halves at once. */}}
 {{ with resources.Get "images/brand/bg-texture-blue.png" }}
-  <style>:root{--bg-texture-blue:url("{{ .RelPermalink }}")}</style>
+  {{ with .Process "resize 1800x webp q68" }}
+    <style>:root{--bg-texture-blue:url("{{ .RelPermalink }}")}</style>
+  {{ end }}
 {{ end }}

@@ -14,6 +14,7 @@ announcement:
   title: Welcome, class of 2026
   body: "Orientation week starts Mon 31 Aug at 9:00 at Otakaari 1. The fuksi guide and the captains' contact details are on the Prospective students page."
   linkText: Read the fuksi guide
+  url: /en/prospective-students/
 audiences:
   - kicker: For students
     title: Everything about guild life
@@ -57,4 +58,4 @@ partnersLinkUrl: /en/yrityssuhteet/
 
 Prodeko is the guild of around 900 Industrial Engineering and Management
 students in Otaniemi. Three hundred events a year, company relations,
-sports, sitsit and one guild room where coffee costs 50 cents.
+sports, sitsit and one guild room where the coffee is free.
