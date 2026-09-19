@@ -66,7 +66,14 @@ list, from `sitemap.xml` and from anything else generated out of loaded pages.
 `check-trees.sh` fails the build if a member section appears in the public tree,
 is named anywhere inside it, or is missing from the member tree. It also fails
 if the member tree names the counting endpoint. Run it after both builds; CI
-runs it too.
+runs it too. If any page below a member section is named inside it, or if a section is
+missing from the member tree. Run it after both builds; CI runs it too.
+
+The section landing pages themselves, `/fi/jasenille/` and `/en/members/`, are
+the exception: the header's sign-in button points at them, so the public tree
+names them on every page. Caddy gates those addresses and answers them with a
+redirect to Keycloak whether or not the tree it is serving holds the page, so
+what is public is the door rather than anything behind it.
 
 Neither build passes `--gc`. The two share one resource cache under
 `site/resources/`, and a garbage collecting pass deletes the cached image
@@ -78,10 +85,12 @@ stale published resources, so deploys copy with `rsync --delete`.
 
 Templates can tell the two apart through `site.Params.members`, which is set in
 the member build and in local preview and unset in the public build. A
-navigation entry into the member section belongs behind that condition until
-Caddy enforces the login. `data/megamenu.yaml` marks such an entry with
-`members: true`, and the header renders it as plain text where there is no
-member tree.
+navigation entry naming a page *below* a member section belongs behind that
+condition: `data/megamenu.yaml` marks such an entry with `members: true`, and
+the header renders it as plain text where there is no member tree. The
+condition also carries the sign-in button's wording, which offers a login in
+the public build and names the destination in the other two, where the reader
+is already past the gate.
 
 ## Counting visitors
 
