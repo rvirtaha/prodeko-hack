@@ -13,17 +13,16 @@ Founded in 2015, Prodeko Ventures is backed by funding from nearly 200 Prodeko a
 
 ## Prodeko Ventures’ Investment Strategy and Criteria:
 
-- • Stage: Usually participates in first round of external funding, e.g. pre-seed.
-- • Focus: High-growth-oriented start-ups
-- • Requirements: The venture must have a close affiliation with Prodeko
-
-- • Committed and capable team with full time employee(s)
-- • Prodeko members/alumni in key role
-- • Scaleable business model with international potential
-- • Professional lead in the round
-- • Potential for follow-on funding
-- • PV investment creates impact
-- • Deal Flow: 3-7 new investments per year
-- • Investments: Typically €25,000–50,000 in convertible notes, or, in cases involving a professional VC or Angel-led syndicate, as an equity investment
+- Stage: Usually participates in first round of external funding, e.g. pre-seed.
+- Focus: High-growth-oriented start-ups
+- Requirements: The venture must have a close affiliation with Prodeko
+- Committed and capable team with full time employee(s)
+- Prodeko members/alumni in key role
+- Scaleable business model with international potential
+- Professional lead in the round
+- Potential for follow-on funding
+- PV investment creates impact
+- Deal Flow: 3-7 new investments per year
+- Investments: Typically €25,000–50,000 in convertible notes, or, in cases involving a professional VC or Angel-led syndicate, as an equity investment
 
 **More information on the portfolio, current board members and their contacts can be found on the Prodeko Ventures webpage [prodekoventures.com](http://prodekoventures.com). PV can also be contacted through their email info@prodekoventures.com**

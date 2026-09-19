@@ -992,6 +992,9 @@ a.btn, a.btn:hover { border-bottom: none; }
   .page-body { padding: var(--space-8) var(--space-6) var(--space-12); }
   .prose h2 { margin-top: var(--space-10); font-size: var(--size-xl); }
   .prose h3 { margin-top: var(--space-8); font-size: var(--size-lg); }
+  /* h3 steps down to the size h4 already is, so without this a role and its
+     sub-role render identically on a phone. */
+  .prose h4, .prose h5, .prose h6 { margin-top: var(--space-6); font-size: var(--size-md); }
 
   /* A migrated page can hold a table wider than any phone. Letting the table
      scroll on its own keeps the rest of the page at the viewport width. */

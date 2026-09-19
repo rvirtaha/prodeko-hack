@@ -9,7 +9,7 @@ sourceURL: https://prodeko.org/en/guild/board/
 
 The guild chooses their board annually in the election meeting in November. Every position is elected separetely and there isn't a spesific person who would choose the rest of the board. Over the last couple years, there have been 12 board members in Prodeko board and the common practise is to have board meeting once a week, although every board can decide the meeting freqvency on their own. The board represents all members of the guild and board members won't get paid by their volunteer work.
 
-Board positions
+## Board positions
 
 Every board member needs to do the common board tasks, which are
 
@@ -19,16 +19,15 @@ Every board member needs to do the common board tasks, which are
 - To help organize the annual ball
 - To help organize Prodeko seminar
 - To plan and execute specific events, for example:
-
-- Pre-Christmas party
-- Wappu sitsis
-- Wappu sillis breakfast
-- Autumn sitsis
-- Changes for the board and guild officials
+  - Pre-Christmas party
+  - Wappu sitsis
+  - Wappu sillis breakfast
+  - Autumn sitsis
+  - Changes for the board and guild officials
 - To represent the guild
 - To carry responsibility for their own guild officials wellbeing
 
-## President
+### President
 
 - Overlooks legitimacy of the guild operations
 - Coordinates the work of the board
@@ -40,7 +39,7 @@ Every board member needs to do the common board tasks, which are
 - Keeps contact to alumni coordinator
 - Is a contact person between Prodeko and Prodeko Ventures
 
-## Vice President
+### Vice President
 
 - Oversees and develops guild operations with President
 - Takes care of President's responsibilities when President is not available
@@ -53,7 +52,7 @@ Every board member needs to do the common board tasks, which are
 - Leads Prodeko's community division
 - Represents Prodeko in AYY's Teekkari Culture Committee (TKTMK)
 
-## Minister of Excursions
+### Minister of Excursions
 
 - Takes care that guild members get to know as many different companies as possible
 - Is responsible of excursion operations and longer excursion trips
@@ -61,7 +60,7 @@ Every board member needs to do the common board tasks, which are
 - Leads Prodeko's corporate relations team with Minister of Corporate Relations
 - Represents Prodeko in AYY's Corporate Relations Committee (YTMK)
 
-## Captain of Freshmen Education
+### Captain of Freshmen Education
 
 - Is responsible for introduction guild activity for new freshmen
 - Is responsible for tech student culture education
@@ -72,7 +71,7 @@ Every board member needs to do the common board tasks, which are
 - Leads Freshmen Division with the Captain of Master and International Students
 - Represents Prodeko in AYY's Freshmen Committee (FTMK)
 
-## Captain of Master and International Students
+### Captain of Master and International Students
 
 - Is responsible of master freshmen introduction and integration to guild
 - Is responisble for welcoming and introduction exchange students to guild
@@ -81,7 +80,7 @@ Every board member needs to do the common board tasks, which are
 - Leads Freshmen Division with the Captain Freshmen Education
 - Represents Prodeko in AYY's International Committee (KvTMK)
 
-## Minister of Media and Information Technology
+### Minister of Media and Information Technology
 
 - Is responsible for internal and external communications of the guild and the brand of Prodeko and developing these as a whole
 - Overlooks developing the guild's information technology
@@ -92,7 +91,7 @@ Every board member needs to do the common board tasks, which are
 - Has board responsibility for Proleko
 - Represents Prodeko in AYY's Communications Committee (VTMK)
 
-## Minister of Studies
+### Minister of Studies
 
 - Coordinates and executes advocacy work of guild with the help of hallopeds
 - Is a contact person between guild and university governance
@@ -104,7 +103,7 @@ Every board member needs to do the common board tasks, which are
 - Is responsible for promoting exchange studies and information of them
 - Represents Prodeko in AYY's Studies Committee (OPN)
 
-## Treasurer
+### Treasurer
 
 - Is a treasurer and is responsible for transactions of the guild
 - Conducts a budget with the help of the rest of the board
@@ -117,7 +116,7 @@ Every board member needs to do the common board tasks, which are
 - Is member of Corporate relations team of Prodeko
 - Represents Prodeko in AYY's Committee of Treasurers
 
-## Minister of Corporate Relations
+### Minister of Corporate Relations
 
 - Is responsible for Prodeko Network and guild corporate relations as a whole
 - Is responsible for contracts about guild corporate relations
@@ -127,7 +126,7 @@ Every board member needs to do the common board tasks, which are
 - Leads Corporate relations team of Prodeko with Minister of Excursions
 - Represents Prodeko in AYY's Corporate Relations Committee (YTMK)
 
-## Minister of Internal and Cultural Affairs
+### Minister of Internal and Cultural Affairs
 
 - Brings ideas and organises events with the rest of the host team
 - Is responsible for the events as a whole with the rest of the host team
@@ -138,7 +137,7 @@ Every board member needs to do the common board tasks, which are
 - Contacts song leaders with Host
 - Represents Prodeko in AYY's Host and Hostess Committee (IE) with Host
 
-## Host
+### Host
 
 - Brings ideas and organises events with the rest of the host team
 - Is responsible for the events as a whole with the rest of the host team
@@ -151,7 +150,7 @@ Every board member needs to do the common board tasks, which are
 - Is responsible for Prodeko's reservations of rooms and vans
 - Represents Prodeko in AYY's Host and Hostess Committee (IE) with Minister of Internal Affairs
 
-## Minister of Foreign Affairs
+### Minister of Foreign Affairs
 
 - Is responsible for guild international side and developing it
 - Takes care for relations to other guild and subject assosiations

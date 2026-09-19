@@ -11,29 +11,29 @@ Aalto University and AYY offer their members a broad variety of different servic
 
 [AYY's services](https://www.ayy.fi/en/services-for-members)
 
-Housing and facilities:
+## Housing and facilities
 
 - [AYY housing](https://www.ayy.fi/en/housing)
 - [AYY's rentable facilities and van](https://www.ayy.fi/en/rent-a-facility-or-van)
 - [Acces control with HSL card](https://www.aalto.fi/en/services/access-control-with-hsl-card)
 
-Study related links:
+## Study related links
 
 - [Softwares for Aalto University students home computers](https://download.aalto.fi/student/index.html#)
-- [I](https://www.aalto.fi/fi/palvelut/it-kayttajatuki)[T Service Desk](https://www.aalto.fi/en/services/it-end-user-support)
+- [IT Service Desk](https://www.aalto.fi/en/services/it-end-user-support)
 - [Library services](https://www.aalto.fi/en/learning-centre)
-- [P](https://www.aalto.fi/fi/palvelut/tulostaminen-aalto-yliopistossa)[rinting at Aalto University](https://www.aalto.fi/en/services/printing-at-aalto-university)
+- [Printing at Aalto University](https://www.aalto.fi/en/services/printing-at-aalto-university)
 
-Well-being:
+## Well-being
 
-- [A](https://www.ayy.fi/fi/palvelut-jasenille/hairintayhdyshenkilot)[YY's harrasment contact persons](https://www.ayy.fi/en/services-for-members/ayys-harassment-contact-persons)
+- [AYY's harrasment contact persons](https://www.ayy.fi/en/services-for-members/ayys-harassment-contact-persons)
 - [Individual study arrangements](https://www.aalto.fi/en/services/individual-study-arrangements)
 - [FSHS](https://www.yths.fi/en/frontpage/) (Finnish Students Health Services)
-- [S](https://into.aalto.fi/display/fiopisk/Opinto-+ja+uraohjauspsykologit)[tudy - and career plannin psychologists](https://into.aalto.fi/display/enopisk/Study-+and+career+planning+psychologists)
+- [Study - and career plannin psychologists](https://into.aalto.fi/display/enopisk/Study-+and+career+planning+psychologists)
 - [Aalto chaplains](https://www.aalto.fi/en/services/aalto-chaplains-provide-services-for-everyone-at-aalto)
 - Students’ support centre [Nyyti](https://www.nyyti.fi/en/) offers confidential conversational help, support and an outsider’s perspective on various life situations, for when you are feeling helpless or when you cannot cope on your own.
 
-Free time activities:
+## Free time activities
 
-- [U](https://unisport.fi)[nisport](https://unisport.fi/en)
+- [Unisport](https://unisport.fi/en)
 - [Here](https://www.ayy.fi/en/list-of-associations) you can find all of AYY's associations. Continue an old hobby or start a completely new one, find like-minded friends, learn and experience.

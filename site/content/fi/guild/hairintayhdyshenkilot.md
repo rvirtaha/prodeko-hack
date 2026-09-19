@@ -19,7 +19,7 @@ Heipsuu! Mä oon Aino Soinio, kuudennen vuoden prodekolainen. Bailut on jees, mu
 
 *[aino.soinio@aalto.fi](mailto:aino.soinio@aalto.fi)*
 
-*[+358 449745644]()*
+*[+358 44 974 5644](tel:+358449745644)*
 
 *TG: @qlonqqu*
 
@@ -31,11 +31,9 @@ Moikku! Mä oon Aino Salmi, Prodekon fuksi vuosimallia ’23. Vapaa-ajalla rakas
 
 *[aino.e.salmi@aalto.fi](mailto:aino.e.salmi@aalto.fi)*
 
-[+358 44 9297924]()
+[+358 44 929 7924](tel:+358449297924)
 
 TG: @salmiaino
-
-![]()
 
 ![](https://static.prodeko.org/media/filer_public_thumbnails/public/2026/01/16/hary-kuva_kalle.jpg__480x505_q85_subsampling-2.jpg)
 
@@ -79,4 +77,4 @@ Mikäli haluat, voit ottaa myös suoraan yhteyttä AYY:n häirintäyhdyshenkilö
 
 **SCI:n opintoasiain päälikkö:**
 
-Mari Knuuttila, [mari.knuuttila@aalto.fi](mailto:mari.knuuttila@aalto.fi), [+358 50 537 3358]()
+Mari Knuuttila, [mari.knuuttila@aalto.fi](mailto:mari.knuuttila@aalto.fi), [+358 50 537 3358](tel:+358505373358)
