@@ -540,7 +540,7 @@ img { display: block; max-width: 100%; }
   font-size: clamp(38px,4.8vw,64px);
   font-weight: var(--weight-bold);
   line-height: 1.05;
-  letter-spacing: var(--track-caps);
+  letter-spacing: var(--track-display);
   text-transform: uppercase;
   color: var(--pd-white-1);
   text-shadow: var(--shadow-heading);
@@ -662,13 +662,17 @@ img { display: block; max-width: 100%; }
 .photo-band .caption-title {
   font-size: clamp(26px,3.4vw,44px);
   font-weight: var(--weight-bold);
-  letter-spacing: var(--track-caps);
+  letter-spacing: var(--track-display);
   text-transform: uppercase;
   color: var(--pd-white-1);
   text-shadow: var(--shadow-heading);
   max-width: 22ch;
   line-height: 1.15;
   margin: 0 auto;
+  /* Centred over a photograph, so the shape of the block is the shape of the
+     caption: the measure alone leaves the last line holding the year on its
+     own, where balance spreads the three lines evenly. */
+  text-wrap: balance;
 }
 .photo-band .caption-sub { margin-top: var(--space-4); font-size: var(--size-md); font-weight: var(--weight-regular); color: var(--pd-white-1); text-shadow: var(--shadow-heading); }
 
@@ -711,7 +715,7 @@ img { display: block; max-width: 100%; }
 /* The longest word here is TUOTANTOTALOUDEN, and the text column is half the
    viewport inset to the page measure, so its content stops at 528px however
    wide the window is: past 37px that one word is sheared off. */
-.hero-split h1 { margin: 0 0 var(--space-5); font-size: clamp(24px,3vw,37px); hyphens: auto; font-weight: var(--weight-bold); letter-spacing: var(--track-caps); text-transform: uppercase; line-height: 1.05; color: var(--pd-white-1); text-shadow: var(--shadow-heading); }
+.hero-split h1 { margin: 0 0 var(--space-5); font-size: clamp(24px,3vw,37px); hyphens: auto; font-weight: var(--weight-bold); letter-spacing: var(--track-display); text-transform: uppercase; line-height: 1.05; color: var(--pd-white-1); text-shadow: var(--shadow-heading); }
 .hero-split .kicker { opacity: 0.85; margin-bottom: var(--space-4); display: block; }
 .hero-split p { margin: 0; max-width: 52ch; font-size: var(--size-md); font-weight: var(--weight-light); line-height: var(--leading-normal); }
 .hero-split .rainbow-rule { position: absolute; left: 0; right: 0; bottom: 0; }
@@ -726,7 +730,7 @@ img { display: block; max-width: 100%; }
 .hero-photo { position: relative; overflow: hidden; color: var(--pd-white-1); }
 .hero-photo img.bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 .hero-photo .inner { position: relative; z-index: 2; padding-block: 96px 88px; }
-.hero-photo h1 { margin: 0 0 var(--space-5); font-weight: var(--weight-bold); letter-spacing: var(--track-caps); text-transform: uppercase; line-height: 1.05; color: var(--pd-white-1); text-shadow: var(--shadow-heading); }
+.hero-photo h1 { margin: 0 0 var(--space-5); font-weight: var(--weight-bold); letter-spacing: var(--track-display); text-transform: uppercase; line-height: 1.05; color: var(--pd-white-1); text-shadow: var(--shadow-heading); }
 .hero-photo .kicker { opacity: 0.9; margin-bottom: var(--space-4); display: block; }
 .hero-photo p { margin: 0; max-width: 60ch; font-size: var(--size-lg); font-weight: var(--weight-light); line-height: var(--leading-normal); text-shadow: var(--shadow-heading); }
 
@@ -781,7 +785,7 @@ img { display: block; max-width: 100%; }
   box-shadow: var(--shadow-lg);
 }
 .hero-alumni-card .kicker { opacity: 0.85; margin-bottom: var(--space-4); display: block; }
-.hero-alumni-card h1 { margin: 0 0 var(--space-4); font-size: clamp(32px,4vw,52px); font-weight: var(--weight-bold); letter-spacing: var(--track-caps); text-transform: uppercase; line-height: 1.05; color: var(--pd-white-1); }
+.hero-alumni-card h1 { margin: 0 0 var(--space-4); font-size: clamp(32px,4vw,52px); font-weight: var(--weight-bold); letter-spacing: var(--track-display); text-transform: uppercase; line-height: 1.05; color: var(--pd-white-1); }
 .hero-alumni-card p { margin: 0; font-size: var(--size-lg); font-weight: var(--weight-light); line-height: var(--leading-normal); }
 .hero-alumni-card .rainbow-rule { margin: var(--space-8) calc(-1 * var(--space-10)) calc(-1 * var(--space-10)); }
 
@@ -928,7 +932,7 @@ img { display: block; max-width: 100%; }
   max-width: 24ch;
   font-size: clamp(30px, 4vw, 46px);
   font-weight: var(--weight-bold);
-  letter-spacing: var(--track-caps);
+  letter-spacing: var(--track-display);
   text-transform: uppercase;
   line-height: 1.08;
   color: var(--pd-blue);
@@ -1181,25 +1185,23 @@ img { display: block; max-width: 100%; }
   .container { padding: 0 var(--space-6); }
 
   .hero-home .inner { padding-block: 76px 52px; }
-  .hero-home h1 { font-size: clamp(30px, 9vw, 44px); letter-spacing: var(--track-normal); max-width: none; }
+  .hero-home h1 { font-size: clamp(30px, 9vw, 44px); max-width: none; }
   .hero-home .inner > p { font-size: var(--size-md); }
   .hero-home .emblem { width: 340px; right: -90px; top: -80px; }
   .hero-home .stripe { left: -48px; top: 120px; width: 400px; height: 28px; }
   .hero-home .ctas .btn { flex: 1 1 auto; }
 
   .hero-split .text { padding: 48px var(--space-6) 44px; }
-  .hero-split h1 { letter-spacing: var(--track-normal); font-size: clamp(24px, 7.4vw, 34px); }
+  .hero-split h1 { font-size: clamp(24px, 7.4vw, 34px); }
   .hero-split .image { min-height: 200px; }
 
   .hero-photo .inner { padding-block: 56px 48px; }
-  .hero-photo h1 { letter-spacing: var(--track-normal); }
   .hero-photo p { font-size: var(--size-md); }
   .hero-prospective { min-height: 420px; }
 
   .hero-alumni-band { height: 260px; }
   .hero-alumni-card-wrap { margin-top: -72px; }
   .hero-alumni-card { padding: var(--space-6); }
-  .hero-alumni-card h1 { letter-spacing: var(--track-normal); }
   .hero-alumni-card p { font-size: var(--size-md); }
   .hero-alumni-card .rainbow-rule { margin: var(--space-6) calc(-1 * var(--space-6)) calc(-1 * var(--space-6)); }
 
@@ -1217,7 +1219,7 @@ img { display: block; max-width: 100%; }
   .hub-sections { gap: 40px; }
 
   .page-head .container { padding-top: var(--space-6); padding-bottom: var(--space-6); }
-  .page-head h1 { letter-spacing: var(--track-normal); max-width: none; }
+  .page-head h1 { max-width: none; }
   .page-head .page-lead { font-size: var(--size-md); }
   .page-body { padding: var(--space-8) var(--space-6) var(--space-12); }
   .prose h2 { margin-top: var(--space-10); font-size: var(--size-xl); }
