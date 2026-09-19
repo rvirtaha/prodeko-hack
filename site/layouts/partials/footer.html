@@ -46,6 +46,10 @@
     <span>Tuotantotalouden kilta Prodeko ry · PL 15500, 00076 Aalto · TUAS-talo, Maarintie 8, 02150 Espoo</span>
     <span class="bottom-links">
       <a href="{{ $privacy }}">{{ if $isFi }}Tietosuojaseloste{{ else }}Privacy notice{{ end }}</a>
+      {{/* The editing interface. It belongs to the handful of people who write
+           the site rather than to anyone reading it, so it sits here among the
+           small print instead of in the header. */}}
+      <a href="/admin/">{{ if $isFi }}Ylläpito{{ else }}Admin{{ end }}</a>
       <span>1966 – 2026</span>
     </span>
   </div>

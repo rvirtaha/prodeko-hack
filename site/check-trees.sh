@@ -40,9 +40,16 @@ for secdir in "${sections[@]}"; do
     status=1
   fi
 
-  if grep -rlF -- "$path" public >/dev/null 2>&1; then
-    echo "LEAK: the public tree names $path in:" >&2
-    grep -rlF -- "$path" public >&2
+  # The section's own landing page is the address the sign-in button points at,
+  # so the public tree names it on every page. That is not a leak: Caddy gates
+  # the address and answers it with a redirect to Keycloak whether or not the
+  # tree it is serving holds the page, so what is published is the door rather
+  # than anything behind it. The pages below the landing page are the member
+  # material itself and must stay unnamed here, which is what this matches: the
+  # section path followed by a further segment.
+  if grep -rlE -- "$path[a-z0-9]" public >/dev/null 2>&1; then
+    echo "LEAK: the public tree names a page under $path in:" >&2
+    grep -rlE -- "$path[a-z0-9]" public >&2
     status=1
   fi
 done
