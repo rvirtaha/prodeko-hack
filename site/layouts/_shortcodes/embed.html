@@ -13,7 +13,12 @@
   {{ errorf "embed shortcode: unknown service %q (%s)" $service .Position }}
 {{ end }}
 {{ $path := .Get "path" | default "" }}
+{{/* labelEn where the service has one: the events page is in English and the
+     card was titled "Ilmoittautumiset ja tapahtumakalenteri". */}}
+{{ $label := $config.label }}
+{{ if and (ne page.Language.Lang "fi") $config.labelEn }}{{ $label = $config.labelEn }}{{ end }}
 {{ partial "embed.html" (dict
      "url" (printf "%s%s" $config.baseURL $path)
-     "label" $config.label
+     "label" $label
+     "frame" $config.frame
      "height" (.Get "height" | default 700)) }}

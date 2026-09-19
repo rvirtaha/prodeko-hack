@@ -1,11 +1,18 @@
-{{/* Renders a list of {name, role} entries. Shared by the "people" and
-     "archive" layouts so both draw from the same markup and styling. */}}
+{{/* Renders a list of {name, role, roleEn} entries. Shared by the "people" and
+     "archive" layouts so both draw from the same markup and styling.
+
+     roleEn is used on an English page where the entry has one. The historical
+     archive has only Finnish titles: those were the offices' names at the
+     time, and most have no English form the guild has ever used. */}}
+{{ $isFi := eq page.Language.Lang "fi" }}
 {{ with . }}
   <ul class="people-grid">
     {{ range . }}
+      {{ $role := .role }}
+      {{ if and (not $isFi) .roleEn }}{{ $role = .roleEn }}{{ end }}
       <li class="person">
         <span class="person-name">{{ .name }}</span>
-        {{ with .role }}<span class="person-role">{{ . }}</span>{{ end }}
+        {{ with $role }}<span class="person-role">{{ . }}</span>{{ end }}
       </li>
     {{ end }}
   </ul>

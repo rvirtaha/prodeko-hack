@@ -7,21 +7,31 @@ sortKey: 2026
 members:
   - name: Reetta Uusitalo
     role: Päätoimittaja
+    roleEn: Editor-in-Chief
   - name: Enni Tiittanen
     role: Abivastaava
+    roleEn: Upper Secondary Outreach Officer
   - name: Eemeli Karjalainen
     role: Abivastaava
+    roleEn: Upper Secondary Outreach Officer
   - name: Iiris Leino
     role: Diskonttaustirehtööri
+    roleEn: Director of Discounting
   - name: Elina Kärkkäinen
     role: Diskonttaustirehtööri
+    roleEn: Director of Discounting
   - name: Eero Koskenvesa
     role: ISOvastaava
+    roleEn: Tutor Coordinator
   - name: Charlie Cruz Kauppila
     role: CTO
+    roleEn: CTO
   - name: Oona Jokela
     role: ESTIEM-vastaava
+    roleEn: ESTIEM Officer
   - name: Alina Heikkinen
     role: Seminaaritsaari
+    roleEn: Tsar of the Seminar
   - name: Emmi Alahonko
     role: Seminaaritsaari
+    roleEn: Tsar of the Seminar

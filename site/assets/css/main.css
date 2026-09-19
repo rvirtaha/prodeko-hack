@@ -794,7 +794,21 @@ a.btn, a.btn:hover { border-bottom: none; }
   color: var(--text-muted);
 }
 .prose hr { border: 0; border-top: 1px solid var(--border-subtle); margin: var(--space-12) 0; }
-.prose img { margin: var(--space-6) 0; border-radius: var(--radius-ui); }
+.prose img { margin: 0; border-radius: var(--radius-ui); }
+.content-image { margin: var(--space-8) 0; max-width: var(--content-max); }
+.content-image a { border-bottom: none; display: block; }
+.content-image figcaption {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+  margin-top: var(--space-2);
+  font-size: var(--size-xs);
+  font-weight: var(--weight-light);
+  color: var(--text-muted);
+}
+.content-image figcaption a { display: inline; color: var(--text-link); white-space: nowrap; }
 .prose table { width: 100%; border-collapse: collapse; margin: var(--space-6) 0; font-size: var(--size-sm); }
 .prose th, .prose td { text-align: left; padding: var(--space-3); border-bottom: 1px solid var(--border-subtle); }
 .prose th { font-weight: var(--weight-semibold); color: var(--pd-blue); }
