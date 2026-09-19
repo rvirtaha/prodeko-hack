@@ -179,9 +179,13 @@ img { display: block; max-width: 100%; }
 .mega-panel.is-open { display: block; animation: pdFade 180ms var(--ease-standard); }
 .mega-panel-rainbow { height: 4px; background: var(--rainbow-gradient); }
 .mega-panel-inner {
-  padding: var(--space-10) 0 44px;
+  /* Keep .container's inline padding: the shorthand would zero it and pin
+     the outer columns to the screen edge on windows below --page-max. */
+  padding: var(--space-10) var(--space-8) 44px;
   display: grid;
-  grid-template-columns: repeat(auto-fit,minmax(200px,1fr));
+  /* 170px lets five columns hold all the way down to the 1100px collapse,
+     where a 200px minimum wrapped the last column onto a row of its own. */
+  grid-template-columns: repeat(auto-fit,minmax(170px,1fr));
   gap: var(--space-10);
 }
 .mega-col-title {
