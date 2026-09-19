@@ -26,6 +26,6 @@ You can find information about the credit transfer of higher education studies c
 
 The suitable minors are listed under the following links.
 
-[Technical minors at the bachelor's level](https://www.aalto.fi/fi/ohjelmat/teknistieteellinen-kandidaattiohjelma/opetussuunnitelma-2022-2024#15-tuotantotalouden-opiskelijat)
+[Technical minors at the bachelor's level](https://www.aalto.fi/fi/ohjelmat/teknistieteellinen-kandidaattiohjelma/opetussuunnitelma-2026-2028#44-sivuaine-25-op) (the Finnish-taught bachelor's curriculum is published in Finnish only)
 
-[Technical minors at the master's level](https://www.aalto.fi/en/programmes/masters-programme-in-industrial-engineering-and-management/curriculum-2022-2024#17-minor)
+[Technical minors at the master's level](https://www.aalto.fi/en/programmes/masters-programme-in-industrial-engineering-and-management/curriculum-2026-2028#10-minor-20-ects)

@@ -19,7 +19,7 @@ Tässä tilanteessa tärkein olet sinä – fuksi – eli ensimmäisen vuoden ko
 
 Mikä parasta – et satu olemaan vain fuksi vaan nimenomaan Prodeko-fuksi! Tämä tarkoittaa, Prodekolla on vain sinua ja muita fukseja varten fuksikapteeni, jonka suuri kunnia on päästä rakentamaan ensimmäisestä vuodestasi ikimuistoinen kollaasi unohtamattomia hetkiä ja vauhdikkaita tilanteita! Prodeko ei taiteellisesta nimestään huolimatta ole kuitenkaan Art Decon alalaji, vaan Aalto-yliopiston tuotantotalouden opiskelijoiden kilta. Killan tärkeimpänä tehtävänä on tarjota palveluja jäsenilleen aina juhlista yritysvierailuihin ja sitseistä bilispöytään kiltahuoneella. Myös sinä olet kiltamme jäsen heti ensimmäisestä opiskelupäivästäsi alkaen.
 
-**Lukukauden 2026-2027 fuksikapteeni on Elina Lauri**. Sähköposti on [fuksikapteeni@prodeko.org](mailto:fuksikapteeni@prodeko.org) ja puhelinnumero puolestaan [040 659 2055](tel:+358406592055). Telegramista Elinan löytää käyttäjänimellä @fuksikapteeni. Kannattaa ladata telegram puhelimeesi heti ja liittyä samalla fuksien Telegram-kanavalle [tästä](https://t.me/+Ws0a49oviEg3ODE0) (*Vai oletko sittenkin tulossa opiskelemaan jo tutan maisteriohjelmaan? Maisterifuksien Telegram-kanavalle pääset liittymään (linkki tulossa pian!). Lisää maisterifukseille suunnattua infoa löydät vaihtamalla tämän sivun englanninkieliseksi ylävalikosta!*)
+**Lukukauden 2026-2027 fuksikapteeni on Elina Lauri**. Sähköposti on [fuksikapteeni@prodeko.org](mailto:fuksikapteeni@prodeko.org) ja puhelinnumero puolestaan [040 659 2055](tel:+358406592055). Telegramista Elinan löytää käyttäjänimellä @fuksikapteeni. Kannattaa ladata telegram puhelimeesi heti ja liittyä samalla fuksien Telegram-kanavalle [tästä](https://t.me/+Ws0a49oviEg3ODE0) (*Vai oletko sittenkin tulossa opiskelemaan jo tutan maisteriohjelmaan? Maisterifuksien Telegram-kanavan liittymislinkin saat fuksikapteenilta sähköpostitse tai Telegramissa. Lisää maisterifukseille suunnattua infoa löydät vaihtamalla tämän sivun englanninkieliseksi ylävalikosta!*)
 
 Fuksikapteenin tärkein tehtävä on tutustuttaa sinut opiskelijaelämän saloihin, luoda sinulle mahdollisuuksia päästä seuraamaan omia kiinnostuksenkohteitasi ja vastailla kysymyksiin, jotka joko liittyvät opiskelijaelämään tai eivät. Fuksikapteeni on sinua varten, ja häntä kannattaa tulla nykäisemään hihasta joko livenä tai virtuaalisesti valitsemaasi somekanavaa pitkin. Hänet tunnistaa sateenkaarilla koristetusta viitasta!
 
@@ -29,12 +29,12 @@ Ensimmäisen kosketuksen sateenkaarihaalarien väriseen opiskelijaelämään saa
 
 - Ota opiskelupaikkasi vastaan ja ilmoittaudu läsnäolevaksi
 - Maksa ilmoittautuessasi AYY:n ja Prodekon jäsenmaksu
-- Laita opiskelija-asuntohakemus tulille [AYY:lle](https://domo.ayy.fi/) ja/tai [HOAS:ille](https://www.hoas.fi/). (Myös osakunnat tarjoavat asuntoja)
-- Hae opintotukea (sekä asumislisää) ja opintolainaa [Kelalta](http://www.kela.fi/opiskelijat)
+- Laita opiskelija-asuntohakemus tulille [AYY:lle](https://ayyasunnot.fi/asuntohaku/) ja/tai [HOAS:ille](https://hoas.fi/asuntohakemus/). (Myös osakunnat tarjoavat asuntoja)
+- Hae opintotukea ja opintolainaa [Kelalta](https://www.kela.fi/korkeakoulussa)
 - Tilaa opiskelijakortti [Frankilta](https://www.frank.fi/opiskelijakortti/)
 - Tarkista, millä julkisilla Otaniemeen pääsee (metro on kova!) ja hae opiskelijan [matkakorttia](https://www.hsl.fi/liput-ja-hinnat/alennusliput/opiskelijat)
 - Liity Prodeko-fuksit '26 -ryhmään Telegramissa [tästä linkistä](https://t.me/+Ws0a49oviEg3ODE0)
-- Osallistu Varaslähtöön 8.-9.8.2025. Ota mukaan ETYK-kamat (En Tule Yöksi Kotiin).
+- Osallistu Varaslähtöön 8.-9.8. Ota mukaan ETYK-kamat (En Tule Yöksi Kotiin).
 - Osallistu Fuksiryhmätapaamiseen 21.8. (VastuuISOsi kertoo tarkemmin syksymmällä.)
 - **Muista varata kalenterisi tyhjäksi orientaatioviikoksi 24.-28.8. ja ennen kaikkea, nauti kesästä!**
 
@@ -48,7 +48,7 @@ Jos et löydä jotain tietoa netistä tai puskaradiosta, tai sinulla on kysymyks
 
 ## Fuksivuoden oleellisimmat tiedotuskanavat
 
-Tähän on koottu keskeisimmät asiat killan tiedotuksesta. Koulun tiedotuskäytännöt käydään läpi pääosin Johdatus opiskeluun –kurssilla, joka on kaikille pakollinen ja alkaa heti Orientaatioviikolla lukukauden alussa. Yliopiston järjestelmistä löydät lisää tietoa Ensimmäiset opinnot -sivulta. Kaikki killan tiedotuskanavat löytyvät [täältä](https://prodeko.org/fi/palvelut/tiedotuskanavat/). Lisätietoa kanavista saat Mediakeisariltamme esimerkiksi kysymällä sähköpostitse mediakeisari[at]prodeko.org. Kaikki prodekolaiselle merkityksellisisitä tunnuksista ja linkeistä kerrotaan jo heti orientaatioviikolla.
+Tähän on koottu keskeisimmät asiat killan tiedotuksesta. Koulun tiedotuskäytännöt käydään läpi pääosin Johdatus opiskeluun –kurssilla, joka on kaikille pakollinen ja alkaa heti Orientaatioviikolla lukukauden alussa. Yliopiston järjestelmistä löydät lisää tietoa [Ensimmäisen vuoden opinnot](/fi/new-students/ensimmaisen-vuoden-opinnot/) -sivulta. Killan keskeisimmät tiedotuskanavat, sähköposti ja Telegram, on esitelty alla. Lisätietoa kanavista saat Mediakeisariltamme esimerkiksi kysymällä sähköpostitse mediakeisari[at]prodeko.org. Kaikki prodekolaiselle merkityksellisisitä tunnuksista ja linkeistä kerrotaan jo heti orientaatioviikolla.
 
 ### Sähköposti
 
