@@ -63,7 +63,7 @@
         <div>
           <div class="sidebar-list-title">{{ $.Params.docsTitle }}</div>
           <ul class="sidebar-list">
-            {{ range . }}<li><a href="#"><span>{{ . }}</span><span>→</span></a></li>{{ end }}
+            {{ range . }}<li><a href="{{ .url }}"><span>{{ .label }}</span><span>→</span></a></li>{{ end }}
           </ul>
         </div>
       {{ end }}
