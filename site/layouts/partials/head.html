@@ -2,6 +2,10 @@
   <link rel="alternate" hreflang="{{ .Language.Lang }}" href="{{ .Permalink }}" />
 {{ end }}
 
+<link rel="icon" href="/favicon.ico" sizes="48x48" />
+<link rel="icon" type="image/png" href="/favicon.png" sizes="192x192" />
+<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
 {{ $tokenPaths := slice "css/tokens/fonts.css" "css/tokens/colors.css" "css/tokens/typography.css" "css/tokens/spacing.css" "css/tokens/radius.css" "css/tokens/elevation.css" "css/tokens/motion.css" "css/tokens/base.css" "css/main.css" }}
 {{ $stylesheets := slice }}
 {{ range $tokenPaths }}
