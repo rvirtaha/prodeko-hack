@@ -236,9 +236,20 @@ tls {
 }
 ```
 
-The `caddy` role runs `caddy validate` and `caddy reload` from `PATH`, so it
-gains a `caddy_bin` variable. The default stays `caddy` because the role is
-shared with `kiltis_server_services.yml`, which must be unaffected.
+The `caddy` role runs `caddy validate` from `PATH`, so it gains a `caddy_bin`
+variable. The default stays `caddy` because the role is shared with
+`kiltis_server_services.yml`, which must be unaffected.
+
+The five `{$NAME}` forms above are adapt-time substitutions, resolved by
+whichever process performs the reload out of that process's own environment.
+The role's reload therefore goes through `systemctl reload caddy` and not
+`caddy reload --config`: a command Ansible runs over SSH has no environment, so
+it would replace the live config with one whose DNS provider carries no
+credentials. Measured against the pinned binary, `caddy adapt` without the
+environment emits `"provider": {"name": "azure"}`, `caddy validate` accepts it,
+the reload exits 0, and the symptom is a wildcard certificate that never
+issues. Only the unit has the `EnvironmentFile`, so only systemd can reload
+this host.
 
 ### Host routing
 
@@ -307,7 +318,9 @@ backward compatible:
   its checksum, renders `/etc/caddy/azure-dns.env` at 0640 `root:caddy` with
   `no_log`, installs the systemd drop-in, and asserts
   `dns.providers.azure` appears in `caddy list-modules`.
-- `tasks/config.yml` and `handlers/main.yml` use `{{ caddy_bin }}`.
+- `tasks/config.yml` validates with `{{ caddy_bin }}` and asserts that a host
+  without the drop-in leaves `caddy_config_dest` where the stock unit reloads
+  from; `handlers/main.yml` reloads through systemd.
 - `README.md` describes the custom binary and how to re-pin it.
 
 New roles, each modelled on an existing one:
