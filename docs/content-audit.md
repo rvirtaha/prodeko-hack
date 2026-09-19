@@ -74,10 +74,11 @@ rendered smaller than the body text around them. Heading levels were renumbered
 across every section into an actual outline.
 
 The service embeds send `frame-ancestors 'self'`, so a browser refuses to
-paint ilmo.prodeko.org inside this origin. The events page in both languages
-was a blank rectangle. The embed now carries a card naming the service with a
-link to it and a placeholder behind the frame, so the page reads the same
-whether the frame paints or is refused.
+paint ilmo.prodeko.org inside this origin: the events page in both languages
+reserved 700px and rendered nothing. The frame is opt-in per service now,
+through `frame: true` in `data/embeds.yaml`, and what the reader gets is a
+card naming the service and linking to it. Turn the frame on for a service
+once that service allows this origin to frame it.
 
 The alumni newsletter archive is 86 consecutive paragraphs each holding one
 link. As paragraphs they rendered 20px tall with nothing between them, which
