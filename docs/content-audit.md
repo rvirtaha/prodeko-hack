@@ -27,6 +27,8 @@ than a phone, or a broken image.
 | board years in the archive | 3 | 59 |
 | h6 headings left over from the scrape | 264 | 0 |
 | pages paired across both languages | 52 | 57 |
+| pages with a description | 0 | all 117 |
+| console errors | 4 distinct | 0 |
 
 The deployable public tree, which omits the four member pages, comes out at
 113 of 113 reachable with the same zero counts. The audit now runs in CI.
@@ -81,6 +83,45 @@ The alumni newsletter archive is 86 consecutive paragraphs each holding one
 link. As paragraphs they rendered 20px tall with nothing between them, which
 is neither readable nor tappable on a phone. A paragraph whose whole content
 is a link is now a row in a list of documents.
+
+## What a crawl cannot see
+
+Every page was also rendered at 390px and read as a person holding a phone
+would. That pass found things the crawler has no opinion about, and each
+finding was then handed to a second agent told to refute it by loading the
+page and measuring: 72 findings, 49 taken seriously, 39 confirmed.
+
+The heaviest were in the stylesheet. A padding shorthand on an element that is
+also a `.container` replaces the container's horizontal gutter with zero, and
+both hero inners and both footer strips did it — so the hero kicker read
+"RITYKSILLE", the h1 lost the left half of its Y, and the partner logos sat
+hard against the screen edge on every page. The hero scrims are pseudo-elements
+of the hero while the photo is a positioned child of it, so the photo painted
+over them and white lead text was laid straight onto sunlit grass. `--text-muted`
+measured 3.4:1 against the page, under AA, and it carries every page lead, card
+blurb, breadcrumb and person's role.
+
+The rest was markup the scrape had flattened:
+
+- Section titles left as ordinary paragraphs, so pages thousands of pixels long
+  had no visible structure — the eleven jaos names on the officials page, the
+  seven chapter titles in the guild rules, the statute's section markers.
+- Rosters written as space-indented continuation lines, which markdown folds
+  into a single paragraph. Eighteen years of alumni boards read as one unbroken
+  run of names and addresses.
+- Literal markdown showing through: a lone `**` as its own paragraph, bold
+  labels glued to the following word, `4.**Co-create**` breaking a numbered
+  list, and list items written `- • Thing` that rendered with two bullets.
+- Both English privacy notices were entirely in Finnish.
+- Empty link targets — `[040 659 2055]()` is a link back to the current page,
+  and `![]()` emits `<img src="">`, which a browser resolves to the page URL
+  and fetches a second time.
+
+The five guild values are artwork with the copy baked in. In the grid that copy
+renders at about six pixels, and on the Finnish page it is in English anyway,
+so the section said nothing to anyone; the guild's own words are front matter
+now. The footer came to about 1500px on a phone — three screens of it under
+every page — and collapses to 727px.
 
 ## Content that was wrong rather than missing
 
@@ -150,3 +191,9 @@ reader with no way across.
   a laptop. The audit skips it for that reason.
 - `www.abb.com` is not reachable from this build machine at all, so the
   replacement for the retired `new.abb.com` is unverified.
+- Two pages exist only in Finnish: the alumni newsletters and orientation week.
+- `site/content/fi/guild/board/_index.md` has a bullet the scrape truncated —
+  "Teekkarikulttuuritoimikunnassa (TKTMK)" with no verb. It wants a human with
+  the live page open, not a guess.
+- The values artwork still carries its baked-in copy under the readable text.
+  Cropping it out is image work, not CSS.

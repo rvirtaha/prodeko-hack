@@ -1,5 +1,6 @@
 ---
 title: Meeting minutes
+description: Minutes of the guild meetings and board meetings, for members only.
 translationKey: minutes
 reviewed: 2026-09-18
 owner: hallitus
