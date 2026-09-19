@@ -44,7 +44,7 @@ const UNREACHABLE_HOSTS = [
   'vaalikoppi.prodeko.org',
   'prodeko.kululaskut.fi',
 ];
-const BOT_HOSTILE = /(^|\.)(aalto\.fi|hsl\.fi|nokia\.com|ayy\.fi|reittiopas\.fi|linkedin\.com|instagram\.com|facebook\.com)$/;
+const BOT_HOSTILE = /(^|\.)(aalto\.fi|hsl\.fi|nokia\.com|abb\.com|ayy\.fi|reittiopas\.fi|linkedin\.com|instagram\.com|facebook\.com)$/;
 
 /** The member sections live in a tree of their own, served behind the login
  *  gate and absent from the tree crawled here, so the sign-in button in the
