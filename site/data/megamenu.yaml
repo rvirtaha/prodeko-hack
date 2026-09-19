@@ -12,6 +12,22 @@ fi:
       links:
         - label: Arvot
           url: /fi/guild/arvot/
+        - label: Häirintäyhdyshenkilöt
+          url: /fi/guild/hairintayhdyshenkilot/
+        - label: Säännöt ja asetukset
+          url: /fi/guild/guild-rules/
+        - label: Kunnianosoitukset
+          url: /fi/guild/kunnianosoitukset/
+        # The guild's sports are PoRa's, and PoRa keeps its own site.
+        - label: Urheilu
+          url: https://raittiusseura.org
+        - label: Jäseneksi
+          url: /fi/guild/jaseneksi/
+    # A column of its own: as part of the Kilta column these six drowned the
+    # other guild pages, and the site's own tree keeps them under one
+    # subsection anyway.
+    - title: Hallitus ja toimarit
+      links:
         - label: Hallitus ja toimihenkilöt
           url: /fi/guild/hallitus-ja-toimihenkilot/
         - label: Hallitus 2026
@@ -24,17 +40,6 @@ fi:
           url: /fi/guild/hallitus-ja-toimihenkilot/toimihenkilot/
         - label: Toimarien toiminta
           url: /fi/guild/hallitus-ja-toimihenkilot/toimarien-toiminta/
-        - label: Häirintäyhdyshenkilöt
-          url: /fi/guild/hairintayhdyshenkilot/
-        - label: Säännöt ja asetukset
-          url: /fi/guild/guild-rules/
-        - label: Kunnianosoitukset
-          url: /fi/guild/kunnianosoitukset/
-        # The guild's sports are PoRa's, and PoRa keeps its own site.
-        - label: Urheilu
-          url: https://raittiusseura.org
-        - label: Jäseneksi
-          url: /fi/guild/jaseneksi/
     - title: Fukseille
       links:
         - label: Tervetuloa tutalle!
@@ -157,6 +162,21 @@ en:
       links:
         - label: Values
           url: /en/guild/values/
+        - label: Harassment contact persons
+          url: /en/guild/harassment-contact-persons/
+        - label: Rules and regulations
+          url: /en/guild/rules/
+        - label: Honours
+          url: /en/guild/honour/
+        - label: Sports
+          url: https://raittiusseura.org/en/etusivu
+        - label: Joining the guild
+          url: /en/guild/joining-guild/
+    # A column of its own: as part of the Guild column these six drowned the
+    # other guild pages, and the site's own tree keeps them under one
+    # subsection anyway.
+    - title: Board and officials
+      links:
         - label: Board and officials
           url: /en/guild/board-and-officials/
         - label: Board 2026
@@ -169,16 +189,6 @@ en:
           url: /en/guild/board-and-officials/officials/
         - label: What the officials do
           url: /en/guild/board-and-officials/what-the-officials-do/
-        - label: Harassment contact persons
-          url: /en/guild/harassment-contact-persons/
-        - label: Rules and regulations
-          url: /en/guild/rules/
-        - label: Honours
-          url: /en/guild/honour/
-        - label: Sports
-          url: https://raittiusseura.org/en/etusivu
-        - label: Joining the guild
-          url: /en/guild/joining-guild/
     - title: New students
       links:
         - label: Welcome to IEM
