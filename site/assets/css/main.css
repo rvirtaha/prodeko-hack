@@ -763,7 +763,7 @@ a.btn, a.btn:hover { border-bottom: none; }
    or an embed inside a page should use the width the page has; only running
    prose needs to stop at a readable line length. */
 .prose > p,
-.prose > ul,
+.prose > ul:not(.people-grid),
 .prose > ol,
 .prose > blockquote,
 .prose > h2,
@@ -1049,6 +1049,7 @@ a.btn, a.btn:hover { border-bottom: none; }
   .site-footer .footer-group { border-top: 1px solid rgb(246 246 246 / 0.15); }
   .site-footer .footer-group summary {
     display: flex;
+    /* the marker is suppressed for every width below, not only here */
     align-items: center;
     justify-content: space-between;
     min-height: 52px;
@@ -1060,6 +1061,12 @@ a.btn, a.btn:hover { border-bottom: none; }
   .site-footer .footer-group[open] summary::after { content: "\2013"; }
   .site-footer .footer-group .col-title { margin: 0; }
   .site-footer .links { padding-bottom: var(--space-4); }
+}
+
+.site-footer .footer-group summary { list-style: none; }
+.site-footer .footer-group summary::-webkit-details-marker { display: none; }
+
+@media (max-width: 720px) {
   .site-footer .links a { display: flex; align-items: center; min-height: 40px; }
   .site-footer .brand { margin-bottom: var(--space-6); }
   .site-footer .network-logos { gap: var(--space-5) var(--space-8); }

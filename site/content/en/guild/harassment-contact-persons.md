@@ -77,4 +77,4 @@ If you wish, you can also contact AYY’s harassment contact persons or SCI’s 
 
 **SCI’s Manager of Academic Affairs:**
 
-Mari Knuuttila, [mari.knuuttila@aalto.fi](mailto:mari.knuuttila@aalto.fi), [+358 50 537 3358]()
+Mari Knuuttila, [mari.knuuttila@aalto.fi](mailto:mari.knuuttila@aalto.fi), +358 50 537 3358

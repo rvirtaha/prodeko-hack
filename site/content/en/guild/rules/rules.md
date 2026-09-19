@@ -7,9 +7,7 @@ sourceURL: https://prodeko.org/en/guild/rules/rules/
 
 **DISCLAIMER**: This translation of the Guild's rules is unofficial. The translation is based on the Guild's official rules in Finnish approved in Fall 2023.
 
-## Chapter I
-
-Name, domicile and purpose
+## Chapter I — Name, domicile and purpose
 
 ### 1§ The Name and Domicile of the Association
 
@@ -38,9 +36,7 @@ To support its activities, the Guild can arrange entertaining activities, lotter
 
 The Official language of the Guild is Finnish. The minutes and notification languages of the Guild is Finnish.
 
-## Chapter II
-
-Members and Fees
+## Chapter II — Members and Fees
 
 ### 6§ On the Members
 
@@ -82,9 +78,7 @@ The board may discharge a member who has severely hampered the functioning of th
 
 A discharged/disciplined member has the right to file a written appeal against the decision to the Guild's general assembly, which means that the final decision must be agreed by the Guild's general assembly. The appeal must be submitted to the Board within one (1) month of the release of the dischargement or disciplinary decision and ought to be dealt with mainly at the next meeting, but not later than six (6) months after the filing of the appeal.
 
-## Chapter III
-
-The Guild's Meetings
+## Chapter III — The Guild's Meetings
 
 ### 16§ On the Meetings
 
@@ -138,9 +132,7 @@ The members of the Guild with voting rights are the full members of the Guild. A
 
 Unless otherwise provided for in these rules, decisions at meetings shall be taken by a simple majority of votes. In the event of a tied vote, the chairman of the meeting shall have the casting vote, but in the case of elections, the decision shall be taken by lot.
 
-## Chapter IV
-
-The Guild Board
+## Chapter IV — The Guild Board
 
 ### 26§ On the Guild board
 
@@ -149,17 +141,16 @@ The Guild's activities are the responsibility of the board elected at an electio
 ### 27§ On the tasks of the board
 
 The tasks of the Board include at least:
- 1) manage the activities of the Guild
- 2) to prepare the matters to be discussed at the guild meetings and to implement the decisions taken at these meetings
- 3) manage the finances and property of the Guild
- 4) to prepare the Guild's annual report and accounts and a proposal for an action plan; and
- budget
- 5) supervise the activities of the committees and officers
- 6) be responsible for the appropriate and necessary activities of the Guild, such as
- cooperation with stakeholders, lobbying, programming, information and fuks activities
- 7) to convene a Guild meeting when necessary
- 8) and such other duties as may be assigned by the Guild Assembly
- 9) approval of members
+
+1) manage the activities of the Guild
+2) to prepare the matters to be discussed at the guild meetings and to implement the decisions taken at these meetings
+3) manage the finances and property of the Guild
+4) to prepare the Guild's annual report and accounts and a proposal for an action plan; and budget
+5) supervise the activities of the committees and officers
+6) be responsible for the appropriate and necessary activities of the Guild, such as cooperation with stakeholders, lobbying, programming, information and fuks activities
+7) to convene a Guild meeting when necessary
+8) and such other duties as may be assigned by the Guild Assembly
+9) approval of members
 
 ### 28§ On the composition of the board
 
@@ -189,9 +180,7 @@ The name of the Guild shall be written jointly by two (2) members of the Guild b
 
 The board may make guidelines specifying the framework of the Guild's services and related procedures. The regulations are decisions of the board by a majority of at least three-quarters (3/4) of the votes cast, and are valid indefinitely. They may not relate to decisions requiring a decision of the Guild Assembly or similar decisions as specified in the rules. They may, however, specify, for example, the rules of procedure for the use of the guild's services.
 
-## Chapter V
-
-Committees and guild officials
+## Chapter V — Committees and guild officials
 
 ### 35§ On committees and guild officials
 
@@ -205,9 +194,7 @@ In addition to the provisions of Article 23 of the rules, the Guild board may, f
 
 The body appointing the committee shall determine how members of the Guild may participate in the activities of the committees.
 
-## Chapter VI
-
-Administration and finance
+## Chapter VI — Administration and finance
 
 ### 38§ On the Guild's term of office and financial year
 
@@ -221,9 +208,7 @@ The financial management of the Guild shall be supervised by auditors/operations
 
 Auditors/operations inspectors shall submit to the board a written report on the audit of the Guild's administration and accounts, addressed to the Guild's Annual General Meeting, no later than fourteen (14) days before the Guild's Annual General Meeting.
 
-## Chapter VII
-
-Specific provisions
+## Chapter VII — Specific provisions
 
 ### 41§ On the symbols and emblems of the Guild
 
