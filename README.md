@@ -75,6 +75,27 @@ Both builds must start from a clean state. Hugo does not reliably delete output
 it no longer produces, and `--cleanDestinationDir` removes stale pages but not
 stale published resources, so deploys copy with `rsync --delete`.
 
+## Previews
+
+Every pull request gets a browsable copy of both trees at
+`https://pr-<number>.preview.prodeko.org/`, behind a Prodeko login that
+requires the administrator role. An editor saving a draft sees the link on
+their entry in the editing screen and can look at the change before it is
+published.
+
+The preview is rebuilt on every push to the branch and deleted when the pull
+request is merged or closed; the server also removes previews older than a
+fortnight and keeps at most fifteen. Pull requests from forks get no preview,
+because GitHub does not give them the deploy key.
+
+A preview carries the member tree as well as the public one, since the whole
+host is behind the login. It carries no editing screen: `/admin` is removed
+from the build, because a Decap that loads on a preview host would offer a
+sign-in that cannot complete.
+
+`.github/workflows/preview.yml` builds and publishes it; the
+`prodeko_preview` and `preview_gate` roles in infra-prodeko serve it.
+
 Templates can tell the two apart through `site.Params.members`, which is set in
 the member build and in local preview and unset in the public build. A
 navigation entry into the member section belongs behind that condition until
