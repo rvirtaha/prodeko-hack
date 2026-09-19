@@ -47,7 +47,28 @@ for secdir in "${sections[@]}"; do
   fi
 done
 
+# The mirror of the checks above: the public tree must not name a member path,
+# and the member tree must not name the counting endpoint. The member section is
+# not counted at all, because everyone past that gate is identified by name and
+# a pageview count on the same machine as the gate's session log is a
+# re-identification path the public side does not have.
+#
+# layouts/partials/analytics.html already refuses to render under three
+# separate conditions. This asserts the outcome rather than trusting any of
+# them, because the failure is silent: a counted member page looks exactly like
+# an uncounted one. The hostname is spelled out here rather than read from the
+# configuration, so the check keeps meaning the same thing if somebody empties
+# the parameter or renames it.
+analytics_host="analytics.prodeko.org"
+
+if grep -rlF -- "$analytics_host" public-members >/dev/null 2>&1; then
+  echo "LEAK: the member tree names $analytics_host in:" >&2
+  grep -rlF -- "$analytics_host" public-members >&2
+  status=1
+fi
+
 if [ "$status" -eq 0 ]; then
   echo "check-trees: ${#sections[@]} member sections, none reachable from the public tree"
+  echo "check-trees: the member tree names no counting endpoint"
 fi
 exit "$status"
