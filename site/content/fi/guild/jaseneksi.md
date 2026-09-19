@@ -13,7 +13,7 @@ Killan varsinaisiksi jäseniksi voidaan hyväksyä jäsenmaksunsa maksaneet Aalt
 
 ## Alumni
 
-Prodekon Alumni ry on yhdistys, joka on suunnattu Aallon tuotantotalouden linjan alumneille. Yhdistys ylläpitää alumniverkostoa ja järjestää jäsenistölleen tapahtumia. Yhdistyksellä ei ole jäsenmaksua ja kaikki valmistuneet tuotantotalouden opiskelijat liitetään yhdistyksen jäseniksi automaattisesti. Lisätietoa saa alumniyhdistyksen hallitukselta [alumni@prodeko.org](mailto:alumni@prodeko.org). Lue lisää näiltä sivuilta ja [tämän linkin](https://alumni.prodeko.org/) takaa. **Alumnin jäseneksi voi hakea laittamalla alumnikoordinaattori Akseli Köngäkselle sähköpostia (akseli.kongas@aalto.fi).**
+Prodekon Alumni ry on yhdistys, joka on suunnattu Aallon tuotantotalouden linjan alumneille. Yhdistys ylläpitää alumniverkostoa ja järjestää jäsenistölleen tapahtumia. Yhdistyksellä ei ole jäsenmaksua ja kaikki valmistuneet tuotantotalouden opiskelijat liitetään yhdistyksen jäseniksi automaattisesti. Lisätietoa saa alumniyhdistyksen hallitukselta [alumni@prodeko.org](mailto:alumni@prodeko.org). Lue lisää [näiltä sivuilta](/fi/alumni/) ja [tämän linkin](https://alumni.prodeko.org/) takaa. **Alumnin jäseneksi voi hakea laittamalla alumnikoordinaattori Akseli Köngäkselle sähköpostia (akseli.kongas@aalto.fi).**
 
 ## Muut jäsenet
 

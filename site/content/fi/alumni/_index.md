@@ -28,10 +28,14 @@ alumniJoinBody: Kaikki valmistuneet liitetään automaattisesti. Killan vanhaksi
 alumniJoinEmail: alumni@prodeko.org
 alumniLinksTitle: Alumnin sivut
 alumniLinks:
-  - alumni.prodeko.org
-  - Alumnitiedotteet
-  - Omat jäsentiedot
-  - Matrikkelin tietosuojaseloste
+  - label: alumni.prodeko.org
+    url: https://alumni.prodeko.org
+  - label: Alumnitiedotteet
+    url: /fi/alumni/tietoa-alumnista/alumnitiedotteet/
+  - label: Omat jäsentiedot
+    url: https://membership.prodeko.org
+  - label: Matrikkelin tietosuojaseloste
+    url: /fi/alumni/tietoa-alumnista/matrikkelin-tietosuojaseloste/
 contactTitle: Ota yhteyttä
 contactAddress: "Prodekon Alumni ry\nPL 15500, 00076 Aalto\nalumni@prodeko.org"
 ---
