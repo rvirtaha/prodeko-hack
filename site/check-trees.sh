@@ -61,8 +61,14 @@ for secdir in "${sections[@]}"; do
   # Each member section carries its own index, inside the gate. Without this a
   # silently missing bundle degrades to "member search finds nothing" rather
   # than to a failed build.
-  if [ ! -d "public-members$path/pagefind" ]; then
-    echo "MISSING: public-members$path/pagefind was not built" >&2
+  #
+  # Conditional on the public index, because the script runs twice: once on the
+  # HTML before anything is derived from it, and once on the indexes. The
+  # public run always precedes the member runs, so public/pagefind is what
+  # distinguishes "indexing has not happened yet" from "indexing happened and
+  # skipped this section".
+  if [ -d public/pagefind ] && [ ! -d "public-members${path}pagefind" ]; then
+    echo "MISSING: public-members${path}pagefind was not built" >&2
     status=1
   fi
 done
