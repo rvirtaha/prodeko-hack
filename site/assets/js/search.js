@@ -76,6 +76,46 @@
     });
   }
 
+  // Where a result should land: on the matched text, not the page top. Two
+  // layers, because only one of them works everywhere. Pagefind's sub-results
+  // carry the nearest heading's id, which Hugo generates for every heading, so
+  // the anchor is an ordinary address any browser honours. The text fragment
+  // appended after it is honoured by the browsers that have it and ignored by
+  // the rest, which then fall back to the anchor.
+  function resultHref(d) {
+    var best = null;
+    var top = -1;
+    (d.sub_results || []).forEach(function (s) {
+      var score = (s.weighted_locations || []).reduce(function (a, w) { return a + w.balanced_score; }, 0);
+      if (score > top) { top = score; best = s; }
+    });
+    if (!best) best = { url: d.url, excerpt: d.excerpt };
+    // The excerpt is cut from the page's own text, so a phrase taken out of it
+    // is there to be found. innerHTML and a range rather than a regex: it
+    // decodes the entities and drops the <mark> tags in one step.
+    var host = document.createElement("span");
+    host.innerHTML = best.excerpt;
+    var mark = host.querySelector("mark");
+    if (!mark) return best.url;
+    var range = document.createRange();
+    range.setStartBefore(mark);
+    range.setEnd(host, host.childNodes.length);
+    var words = [];
+    range.toString().trim().split(/\s+/).slice(0, 3).some(function (w) {
+      // Pagefind ends every block with a full stop the page itself may not
+      // contain, so the phrase stops at one rather than quoting text that is
+      // not there.
+      var ends = /[.!?]$/.test(w);
+      words.push(ends ? w.slice(0, -1) : w);
+      return ends;
+    });
+    // One word on its own is matched wherever it first appears, which can be
+    // above the section the anchor names. The anchor alone is better than that.
+    if (words.length < 2) return best.url;
+    return best.url + (best.url.indexOf("#") === -1 ? "#" : "") +
+      ":~:text=" + encodeURIComponent(words.join(" "));
+  }
+
   // The panel. Only the desktop box has one; the phone form sits inside the
   // menu that is already open around it.
   var toggle = document.querySelector("[data-search-toggle]");
@@ -168,7 +208,7 @@
           a.setAttribute("role", "option");
           a.tabIndex = -1;
           a.id = list.id + "-option-" + i;
-          a.href = d.url;
+          a.href = resultHref(d);
           var title = document.createElement("span");
           title.className = "search-result-title";
           title.textContent = (d.meta && d.meta.title) || d.url;
