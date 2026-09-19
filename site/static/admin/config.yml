@@ -21,6 +21,17 @@ backend:
   auth_endpoint: auth
   api_root: https://cms.prodeko.org/github
 
+  # The commit status .github/workflows/preview.yml posts with the address of
+  # this entry's pull request preview. Decap resolves the entry's cms/ branch
+  # to its pull request, reads GET /commits/{head.sha}/status, and shows the
+  # link on the entry.
+  #
+  # This must be set. Unset, Decap matches any status context containing the
+  # substring "deploy", and "prodeko/preview" does not, so the link never
+  # appears and nothing says why. With it set the match is exact, so this
+  # string and the workflow's context field are one value in two files.
+  preview_context: prodeko/preview
+
 # There is no local_backend key here on purpose, and there must never be one.
 # Decap's local backend bypasses the proxy entirely, so testing with it
 # exercises none of the login path while appearing to work.
@@ -66,6 +77,21 @@ collections:
     nested:
       depth: 4
       subfolders: false
+    # Where this entry lands in the built site, appended to the preview address
+    # from the commit status. {{dirname}} is the path under folder: above and
+    # keeps its slashes; {{slug}} would be run through the slug sanitiser and
+    # come back with them replaced, which is why it is not used here.
+    #
+    # A page at the top of the folder has an empty {{dirname}} and so a doubled
+    # slash, which Caddy resolves to the same page. A section's own _index.md
+    # previews one level too deep, at the section address plus "_index/"; those
+    # pages are edited rarely and the cure is a files collection, not a second
+    # template.
+    #
+    # Nothing in this file may spell a member section path. Hugo copies
+    # site/static/ into the public tree, and check-trees.sh fails the build if
+    # the public tree so much as names one.
+    preview_path: "fi/{{dirname}}/{{filename}}/"
     sortable_fields: [title, reviewed]
     fields:
       - &title
@@ -124,6 +150,8 @@ collections:
     nested:
       depth: 4
       subfolders: false
+    # See pages_fi. The language prefix is the only difference.
+    preview_path: "en/{{dirname}}/{{filename}}/"
     sortable_fields: [title, reviewed]
     fields:
       - *title
@@ -158,6 +186,8 @@ collections:
     nested:
       depth: 4
       subfolders: false
+    # See pages_fi.
+    preview_path: "fi/{{dirname}}/{{filename}}/"
     sortable_fields: [title, reviewed]
     fields:
       - *title
@@ -178,6 +208,11 @@ collections:
   # matching one of site/layouts/{home,guild-hub,prospective-hub,
   # corporate-hub,alumni-hub}.html. A `files` collection is Decap's way to
   # edit a fixed set of files rather than an open folder of them.
+  #
+  # Each file carries its own preview_path, which Decap prefers over a
+  # collection-level one. They are literal addresses rather than templates,
+  # because a section index is at the directory's own URL and no arrangement of
+  # {{dirname}} and {{filename}} produces that from an _index.md.
   - name: special_pages
     label: "Erikoissivut"
     label_singular: "Erikoissivu"
@@ -188,6 +223,7 @@ collections:
       - name: home_fi
         label: "Etusivu (suomeksi)"
         file: site/content/fi/_index.md
+        preview_path: "fi/"
         fields: &homeFields
           - *title
           - name: layout
@@ -273,11 +309,13 @@ collections:
       - name: home_en
         label: "Etusivu (englanniksi)"
         file: site/content/en/_index.md
+        preview_path: "en/"
         fields: *homeFields
 
       - name: guild_hub_fi
         label: "Kilta-sivu (suomeksi)"
         file: site/content/fi/guild/_index.md
+        preview_path: "fi/guild/"
         fields: &guildHubFields
           - *title
           - {name: layout, widget: hidden, required: false}
@@ -325,11 +363,13 @@ collections:
       - name: guild_hub_en
         label: "Guild page (English)"
         file: site/content/en/guild/_index.md
+        preview_path: "en/guild/"
         fields: *guildHubFields
 
       - name: prospective_hub_fi
         label: "Abeille-sivu (suomeksi)"
         file: site/content/fi/abit/_index.md
+        preview_path: "fi/abit/"
         fields: &prospectiveHubFields
           - *title
           - {name: layout, widget: hidden, required: false}
@@ -377,11 +417,13 @@ collections:
       - name: prospective_hub_en
         label: "Prospective students page (English)"
         file: site/content/en/prospective-students.md
+        preview_path: "en/prospective-students/"
         fields: *prospectiveHubFields
 
       - name: corporate_hub_fi
         label: "Yrityksille-sivu (suomeksi)"
         file: site/content/fi/yrityssuhteet/_index.md
+        preview_path: "fi/yrityssuhteet/"
         fields: &corporateHubFields
           - *title
           - {name: layout, widget: hidden, required: false}
@@ -419,11 +461,13 @@ collections:
       - name: corporate_hub_en
         label: "Companies page (English)"
         file: site/content/en/yrityssuhteet/_index.md
+        preview_path: "en/yrityssuhteet/"
         fields: *corporateHubFields
 
       - name: alumni_hub_fi
         label: "Alumni-sivu (suomeksi)"
         file: site/content/fi/alumni/_index.md
+        preview_path: "fi/alumni/"
         fields: &alumniHubFields
           - *title
           - {name: layout, widget: hidden, required: false}
@@ -466,6 +510,7 @@ collections:
       - name: alumni_hub_en
         label: "Alumni page (English)"
         file: site/content/en/alumni/_index.md
+        preview_path: "en/alumni/"
         fields: *alumniHubFields
 
   - name: member_pages_en
@@ -481,6 +526,8 @@ collections:
     nested:
       depth: 4
       subfolders: false
+    # See pages_fi. The language prefix is the only difference.
+    preview_path: "en/{{dirname}}/{{filename}}/"
     sortable_fields: [title, reviewed]
     fields:
       - *title
