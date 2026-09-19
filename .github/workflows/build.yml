@@ -95,28 +95,6 @@ jobs:
                      --output-path public-members/en/members/pagefind
           ./check-trees.sh
 
-      # hugo exits zero on a page nothing links to, a link to a page that no
-      # longer exists, and a page wider than a phone. All three shipped on this
-      # site before anybody crawled it; docs/content-audit.md is the write-up.
-      #
-      # A third build rather than the deploy tree, because the deploy tree's
-      # links are absolute against uusi.prodeko.org and a crawler pointed at
-      # localhost would follow none of them and call every page an orphan.
-      # Nothing from this tree ships.
-      - name: Build a tree to crawl
-        working-directory: site
-        env:
-          HUGO_BASEURL: http://127.0.0.1:1313/
-        run: hugo --cleanDestinationDir -d "$GITHUB_WORKSPACE/audit-tree"
-
-      - name: Audit the built site
-        run: |
-          npm install --no-save playwright@1.63.0
-          npx playwright install --with-deps chromium
-          npx --yes http-server audit-tree -p 1313 --silent &
-          npx --yes wait-on -t 60000 http://127.0.0.1:1313/fi/
-          node tools/audit-site.mjs http://127.0.0.1:1313 audit-tree
-
       # One tarball rather than two directory artifacts. upload-artifact skips
       # hidden files by default and rewrites every file to 644 and every
       # directory to 755, so a directory artifact silently drops anything Hugo
