@@ -11,7 +11,7 @@ Hugo has already produced, so nothing in the templates has to know that search
 exists. The index is a set of static files served from disk like everything
 else. There is no search server, no API key and no runtime query backend.
 
-The interface is ours: about ninety lines of vanilla JavaScript driving
+The interface is ours: under two hundred lines of vanilla JavaScript driving
 Pagefind's JavaScript API, painting a dropdown panel that matches the rest of
 the header. Pagefind's own user interface bundle is not used.
 
@@ -134,7 +134,7 @@ effectively free on the wire.
 The header template emits the bundle address only in the member build:
 
 ```go-html-template
-{{ if site.Params.memberTree }} data-search-members="{{ .FirstSection.RelPermalink }}pagefind"{{ end }}
+{{ if and site.Params.memberTree (not .IsHome) }} data-search-members="{{ .FirstSection.RelPermalink }}pagefind"{{ end }}
 ```
 
 `config/members/hugo.toml` sets `memberTree = true` alongside the existing
@@ -149,14 +149,16 @@ public and member pages together. A preview page must not try to merge a second
 index, because there is not one. Guarding on `members` would make it try.
 
 `.FirstSection.RelPermalink` resolves to the top-level section the page sits
-in, which is the directory the bundle was written to. Verified across all three
-builds:
+in, which is the directory the bundle was written to. The home page is the
+exception: its first section is itself, so it would name `/fi/pagefind`, an
+address in the public tree where no bundle is written. `not .IsHome` drops the
+attribute there. Verified across all three builds:
 
-| Build | `/fi/guild/` | `/fi/jasenille/poytakirjat/` | `/en/members/minutes/` |
-|---|---|---|---|
-| public | attribute absent | page not built | page not built |
-| members | page not built | `/fi/jasenille/pagefind` | `/en/members/pagefind` |
-| development | attribute absent | attribute absent | attribute absent |
+| Build | `/fi/` | `/fi/guild/` | `/fi/jasenille/poytakirjat/` | `/en/members/minutes/` |
+|---|---|---|---|---|
+| public | attribute absent | attribute absent | page not built | page not built |
+| members | attribute absent | page not built | `/fi/jasenille/pagefind` | `/en/members/pagefind` |
+| development | attribute absent | attribute absent | attribute absent | attribute absent |
 
 The public build never emits the attribute, so the member bundle's address
 appears in no public HTML.
@@ -292,11 +294,12 @@ The panel is a sibling of the mega panels, after the
       <input type="search" data-search role="combobox" autocomplete="off"
              aria-expanded="false" aria-controls="search-results"
              aria-autocomplete="list"
-             {{ if site.Params.memberTree }}data-search-members="{{ .FirstSection.RelPermalink }}pagefind"{{ end }}
+             {{ if and site.Params.memberTree (not .IsHome) }}data-search-members="{{ .FirstSection.RelPermalink }}pagefind"{{ end }}
              placeholder="{{ if $isFi }}Hae sivustolta{{ else }}Search the site{{ end }}"
              aria-label="{{ if $isFi }}Hae sivustolta{{ else }}Search the site{{ end }}">
     </form>
     <div class="search-results" id="search-results" role="listbox"></div>
+    <div class="search-footer"></div>
     <p class="search-status" aria-live="polite"></p>
   </div>
 </div>
@@ -351,6 +354,11 @@ middle-clicked or opened in a new tab is a broken search result, and `href`
 buys that for nothing. `tabindex="-1"` keeps it out of the tab order, where an
 option does not belong.
 
+The "show all" button is rendered into `.search-footer`, the sibling beneath
+the listbox, because a listbox contains options and nothing else. It is an
+ordinary button and an ordinary tab stop: Tab from the input reaches it and
+then leaves the panel, while the options are reached with the arrow keys.
+
 `.search-status` is `aria-live="polite"` and is the single place any status
 text appears: the result count, the loading line, the no-results line and the
 member-index line all write here. The count announcement is debounced to 300 ms
@@ -383,11 +391,11 @@ the interval a reader reads as immediate.
 
 Six results are rendered, and `data()` is called **only for those six**. Each
 `data()` call is one fragment fetch, so this is what bounds the traffic. When
-more matched, a footer row reads "Näytä kaikki 17 tulosta" and expands the
-panel to `max-height: 70vh; overflow-y: auto` rather than navigating anywhere.
-There is no separate results page: it would need a layout, a content file per
-language, an address in both languages and its own empty and loading states,
-and the dropdown is where the reader is looking.
+more matched, a button beneath them reads "Näytä kaikki 17 tulosta" and
+expands the panel to `max-height: 70vh; overflow-y: auto` rather than
+navigating anywhere. There is no separate results page: it would need a
+layout, a content file per language, an address in both languages and its own
+empty and loading states, and the dropdown is where the reader is looking.
 
 ### What a result looks like
 
@@ -574,7 +582,7 @@ an equivalent index. The banner is not worth chasing.
 | `site/check-trees.sh` | the three index assertions |
 | `site/config/members/hugo.toml` | `memberTree = true` under `[params]` |
 | `site/layouts/partials/header.html` | the toggle, the panel, the phone form, `data-search-members` |
-| `site/assets/js/search.js` | new, about ninety lines |
+| `site/assets/js/search.js` | new, under two hundred lines of code |
 | `site/assets/css/main.css` | a `/* ===== Search ===== */` section after the mega menu section |
 | `.github/workflows/build.yml` | the indexing step and the second `check-trees.sh` |
 | `README.md` | the two-terminal local loop |
@@ -642,9 +650,9 @@ Replace with:
 > Search. Neither prodeko.org nor tietokilta.fi has any. A build-time search
 > index needs no server: it is a set of static files built from the pages
 > themselves and served from disk like the rest of the site. The index costs one
-> build step and one HTML attribute; the search box that reads it is ninety
-> lines of our own. Members search member pages and public pages in one list,
-> and the build fails if a member page reaches the public index.
+> build step and one HTML attribute; the search box that reads it is under two
+> hundred lines of our own. Members search member pages and public pages in one
+> list, and the build fails if a member page reaches the public index.
 
 The claim about needing no server is the competitive point and is exactly
 right. The rest states what the feature costs, including the part that is the
