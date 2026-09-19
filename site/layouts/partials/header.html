@@ -27,6 +27,16 @@
           </li>
         {{ end }}
       </ul>
+      {{/* Not an entry in data/navigation.yaml: that file maps titles to
+           addresses and is editor-facing through Decap, where an entry with no
+           address invites an editor to correct or delete it. It also opens on
+           click rather than on hover, which is the one way it behaves unlike
+           the items beside it — a search panel that appears as the mouse
+           sweeps across the bar is intolerable. */}}
+      <button type="button" class="nav-search-toggle" data-search-toggle
+              aria-expanded="false" aria-controls="search-panel">
+        {{ if $isFi }}Haku{{ else }}Search{{ end }}
+      </button>
     </nav>
     <div class="side">
       {{ partial "lang-switch.html" . }}
@@ -61,12 +71,61 @@
     </div>
   {{ end }}
 
+  {{/* The search panel, built out of the same parts as a mega panel because the
+       header already has one vocabulary for "something drops down from the
+       bar". data-search-members names the gated bundle, and only the member
+       build emits it: the public build must not name a member address, and a
+       preview build renders both trees into one index with nothing to merge.
+       .FirstSection.RelPermalink is the section directory the bundle was
+       written to, which holds for every page of the member tree except its
+       home page, whose first section is itself and whose address is the public
+       tree's. */}}
+  <div class="search-panel" id="search-panel" hidden>
+    <div class="mega-panel-rainbow"></div>
+    <div class="container search-panel-inner search-box">
+      <form role="search" onsubmit="return false">
+        <input type="search" data-search role="combobox" autocomplete="off"
+               aria-expanded="false" aria-controls="search-results"
+               aria-autocomplete="list"
+               {{ if and site.Params.memberTree (not .IsHome) }}data-search-members="{{ .FirstSection.RelPermalink }}pagefind"{{ end }}
+               placeholder="{{ if $isFi }}Hae sivustolta{{ else }}Search the site{{ end }}"
+               aria-label="{{ if $isFi }}Hae sivustolta{{ else }}Search the site{{ end }}">
+      </form>
+      <div class="search-results" id="search-results" role="listbox"
+           aria-label="{{ if $isFi }}Hakutulokset{{ else }}Search results{{ end }}"></div>
+      {{/* Where the "show all" button goes. It sits beside the listbox rather
+           than inside it: a listbox holds options and nothing else, and this is
+           an ordinary button the reader reaches with Tab, while the options
+           themselves are reached with the arrow keys. */}}
+      <div class="search-footer"></div>
+      <p class="search-status" aria-live="polite"></p>
+    </div>
+  </div>
+
   {{/* The phone menu. The mega-panels above are a hover affordance that touch
        never triggers, so every link in them is repeated here as an accordion.
        Without this the roughly thirty pages that only the mega-menu reaches
        would have no address a phone can get to. */}}
   <nav class="mobile-nav" id="mobile-nav" aria-label="{{ if $isFi }}Valikko{{ else }}Menu{{ end }}">
     <div class="container">
+      {{/* First child of the menu, so opening it puts search under the reader's
+           thumb. The results render inline beneath the input rather than in an
+           overlay, because this container is already scrolling inside a
+           max-height and an overlay inside it has nowhere to go. */}}
+      <div class="m-search search-box">
+        <form role="search" onsubmit="return false">
+          <input type="search" data-search role="combobox" autocomplete="off"
+                 aria-expanded="false" aria-controls="m-search-results"
+                 aria-autocomplete="list"
+                 {{ if and site.Params.memberTree (not .IsHome) }}data-search-members="{{ .FirstSection.RelPermalink }}pagefind"{{ end }}
+                 placeholder="{{ if $isFi }}Hae sivustolta{{ else }}Search the site{{ end }}"
+                 aria-label="{{ if $isFi }}Hae sivustolta{{ else }}Search the site{{ end }}">
+        </form>
+        <div class="search-results" id="m-search-results" role="listbox"
+             aria-label="{{ if $isFi }}Hakutulokset{{ else }}Search results{{ end }}"></div>
+        <div class="search-footer"></div>
+        <p class="search-status" aria-live="polite"></p>
+      </div>
       {{ range $navItems }}
         {{ $columns := "" }}
         {{ with .menuKey }}{{ $columns = index $megamenu . }}{{ end }}

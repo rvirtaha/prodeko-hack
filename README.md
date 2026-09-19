@@ -40,6 +40,21 @@ The site is bilingual, with Finnish under `content/fi/` and English under
 `translationKey` in their front matter, which is what lets the Finnish and
 English addresses differ.
 
+Search needs an index, which is built from the rendered HTML rather than from
+the content, so it is a second terminal:
+
+```
+cd site
+npx pagefind@1.5.0 --site public-preview
+```
+
+Hugo serves `site/public-preview/` from disk, index included, and the index
+survives a live-reload rebuild. Editing a page serves the new text immediately
+while the index stays as it was, so re-run that command — it takes about a
+second — to see the change in search results. The preview mounts both content
+roots into one site, so the preview index holds public and member pages
+together.
+
 ## Public pages and member pages
 
 Some pages are for Prodeko members only: meeting minutes, back issues of the
@@ -64,16 +79,27 @@ member page has no public address to guess. The public build reads only
 list, from `sitemap.xml` and from anything else generated out of loaded pages.
 
 `check-trees.sh` fails the build if a member section appears in the public tree,
-is named anywhere inside it, or is missing from the member tree. It also fails
-if the member tree names the counting endpoint. Run it after both builds; CI
-runs it too. If any page below a member section is named inside it, or if a section is
-missing from the member tree. Run it after both builds; CI runs it too.
+is missing from the member tree, or has a page below it named anywhere inside
+the public tree. It also fails if the member tree names the counting endpoint,
+which nothing in that tree is allowed to do. Run it after both builds, and
+again once the search indexes exist; CI runs it both times.
 
 The section landing pages themselves, `/fi/jasenille/` and `/en/members/`, are
-the exception: the header's sign-in button points at them, so the public tree
-names them on every page. Caddy gates those addresses and answers them with a
-redirect to Keycloak whether or not the tree it is serving holds the page, so
+the exception in HTML: the header's sign-in button points at them, so the public
+tree names them on every page. Caddy gates those addresses and answers them with
+a redirect to Keycloak whether or not the tree it is serving holds the page, so
 what is public is the door rather than anything behind it.
+
+The public search index gets no such exception, and the second run is where
+that is decided. It holds the index to the bare section path rather than to a
+path with a page below it: the sign-in link sits in the header, outside the
+part of the page that gets indexed, so no correct build puts a member address
+there, and an address that is only a door in HTML would be a description of the
+member material itself once it is in the index. The second run also proves that
+every member section got its own bundle, that no bundle sits at the member
+tree's root — where `/pagefind/` is an address the public tree owns — and that
+the public index holds exactly as many pages as the public build marked for
+indexing.
 
 Neither build passes `--gc`. The two share one resource cache under
 `site/resources/`, and a garbage collecting pass deletes the cached image

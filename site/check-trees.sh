@@ -7,9 +7,20 @@
 #   ./check-trees.sh
 #
 # Every top-level section under content-members/ must be present in
-# public-members/, absent from public/, and named nowhere inside public/. The
-# section names are read from content-members/ rather than from a list here, so
-# a new member section is covered the day somebody adds it.
+# public-members/, absent from public/, and named nowhere inside public/ below
+# its own landing page. The section names are read from content-members/ rather
+# than from a list here, so a new member section is covered the day somebody
+# adds it. The member tree in turn must name no counting endpoint.
+#
+# Run it again after Pagefind has built the indexes:
+#
+#   pagefind --site public && pagefind --site public-members ...
+#   ./check-trees.sh
+#
+# The first run judges the HTML, the second the indexes derived from it. The
+# second needs assertions of its own because an index is gzip and the greps
+# below read straight past it, and it holds the index to a stricter rule than
+# the HTML — see the two greps inside the loop.
 #
 # The absence check is weaker than it looks against stale output: Hugo does not
 # reliably delete files it no longer produces, so run this against trees built
@@ -46,13 +57,71 @@ for secdir in "${sections[@]}"; do
   # tree it is serving holds the page, so what is published is the door rather
   # than anything behind it. The pages below the landing page are the member
   # material itself and must stay unnamed here, which is what this matches: the
-  # section path followed by a further segment.
+  # section path followed by a further segment. The search index below is held
+  # to the bare path instead, and the difference is deliberate.
   if grep -rlE -- "$path[a-z0-9]" public >/dev/null 2>&1; then
     echo "LEAK: the public tree names a page under $path in:" >&2
     grep -rlE -- "$path[a-z0-9]" public >&2
     status=1
   fi
+
+  # The public search index, tested against the *bare* path and so stricter
+  # than the HTML check above. That one tolerates "$path" itself, because the
+  # sign-in button names the section landing page on every public page. This
+  # one tolerates nothing: the sign-in link sits in the header, outside
+  # data-pagefind-body, so it never enters the index, and no other correct
+  # output names a member address there either. An address that is merely a
+  # published door in HTML is a real leak in the public index, which is a
+  # description of the member pages themselves rather than a link to a gate.
+  #
+  # So the two patterns must not be harmonised. Relaxing this one to
+  # "$path[a-z0-9]" to match the grep above would wave through exactly the
+  # publication these assertions exist to prevent.
+  #
+  # Every .pf_index, .pf_fragment and .pf_meta file is gzip, so the greps above
+  # report nothing whatever the index contains. Decompressing first restores
+  # the test.
+  if [ -d public/pagefind ] &&
+     find public/pagefind \( -name '*.pf_index' -o -name '*.pf_fragment' -o -name '*.pf_meta' \) \
+       -exec gzip -dc {} + 2>/dev/null | grep -qF -- "$path"; then
+    echo "LEAK: the public search index contains $path" >&2
+    status=1
+  fi
+
+  # Each member section carries its own index, inside the gate. Without this a
+  # silently missing bundle degrades to "member search finds nothing" rather
+  # than to a failed build.
+  #
+  # Conditional on the public index, because the script runs twice: once on the
+  # HTML before anything is derived from it, and once on the indexes. The
+  # public run always precedes the member runs, so public/pagefind is what
+  # distinguishes "indexing has not happened yet" from "indexing happened and
+  # skipped this section".
+  if [ -d public/pagefind ] && [ ! -d "public-members${path}pagefind" ]; then
+    echo "MISSING: public-members${path}pagefind was not built" >&2
+    status=1
+  fi
 done
+
+# A bundle at the root of the member tree would answer on /pagefind/, which is
+# the address the public tree already serves. Pagefind's default output path
+# puts it there, so this is one forgotten --output-path away.
+if [ -d public-members/pagefind ]; then
+  echo "LEAK: public-members/pagefind sits at the tree root, where /pagefind/ is public" >&2
+  status=1
+fi
+
+# Pagefind aimed at the wrong tree is one mistyped path, and it would publish
+# the member index to the world. The public index must describe exactly the
+# pages the public build marked as indexable, no more.
+if [ -d public/pagefind ]; then
+  fragments=$(find public/pagefind/fragment -name '*.pf_fragment' | wc -l)
+  indexable=$(grep -rlF 'data-pagefind-body' public --include='*.html' | wc -l)
+  if [ "$fragments" -ne "$indexable" ]; then
+    echo "MISMATCH: public index holds $fragments pages, the public tree marks $indexable" >&2
+    status=1
+  fi
+fi
 
 # The mirror of the checks above: the public tree must not name a member path,
 # and the member tree must not name the counting endpoint. The member section is

@@ -129,6 +129,36 @@ jobs:
       - name: Remove the editing screen from the preview
         run: rm -rf site/public/admin
 
+      # The same indexing build.yml does, with the same pinned binary and the
+      # same three runs. A preview is browsed the way the site is, and a search
+      # box with no index to read reports that search is unavailable — a fault
+      # in the preview that looks like a fault in the change being previewed.
+      # The version and its digest are spelled out here rather than shared with
+      # build.yml, so the two have to be moved together.
+      #
+      # After the editing screen is removed, so the index describes exactly the
+      # tree that ships. check-trees.sh runs again afterwards for the reason it
+      # does in build.yml: it holds the indexes to a stricter rule than the HTML,
+      # and an index is gzip, which the run above it reads straight past.
+      - name: Build the search indexes
+        working-directory: site
+        env:
+          PAGEFIND_VERSION: v1.5.0
+          PAGEFIND_SHA256: 0a10c6d780bc2a61378cfafe01be620a4de8400de4a1eafd180a0015d002000b
+        run: |
+          curl -sSLo pagefind.tar.gz \
+            "https://github.com/pagefind/pagefind/releases/download/${PAGEFIND_VERSION}/pagefind-${PAGEFIND_VERSION}-x86_64-unknown-linux-musl.tar.gz"
+          echo "${PAGEFIND_SHA256}  pagefind.tar.gz" | sha256sum -c -
+          tar xzf pagefind.tar.gz pagefind
+          ./pagefind --site public
+          # One bundle per member section, inside the gate. A bundle at the root
+          # of the member tree answers on /pagefind/, which the public tree owns.
+          ./pagefind --site public-members --glob "fi/**/*.html" --force-language fi \
+                     --output-path public-members/fi/jasenille/pagefind
+          ./pagefind --site public-members --glob "en/**/*.html" --force-language en \
+                     --output-path public-members/en/members/pagefind
+          ./check-trees.sh
+
       # The two top-level names are the contract with preview.sh on the server:
       # it extracts exactly `public` and `members`, discards everything else in
       # the archive, and exits non-zero if either is missing.

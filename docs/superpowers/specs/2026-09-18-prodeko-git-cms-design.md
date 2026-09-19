@@ -224,7 +224,11 @@ The dead Instagram feed is dropped rather than ported.
 ### Two small additions
 
 Search. Neither prodeko.org nor tietokilta.fi has any. A build-time search
-index costs one line in the build and needs no server.
+index needs no server: it is a set of static files built from the pages
+themselves and served from disk like the rest of the site. The index costs one
+build step and one HTML attribute; the search box that reads it is under two
+hundred lines of our own. Members search member pages and public pages in one
+list, and the build fails if a member page reaches the public index.
 
 A review date. Every page carries a reviewed date and an owning role. A
 scheduled job opens an issue for anything untouched for a year. The brief says
