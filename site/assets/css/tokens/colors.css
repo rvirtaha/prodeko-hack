@@ -27,7 +27,7 @@
   --pd-blue-tint-04:oklch(from var(--pd-blue) 0.97 0.012 h);
   --pd-blue-tint-08:oklch(from var(--pd-blue) 0.93 0.024 h);
   --pd-blue-tint-16:oklch(from var(--pd-blue) 0.86 0.045 h);
-  --pd-blue-tint-40:oklch(from var(--pd-blue) 0.62 0.09 h);
+  --pd-blue-tint-40:oklch(from var(--pd-blue) 0.54 0.09 h);
   --pd-blue-hover:oklch(from var(--pd-blue) calc(l - 0.05) c h);
   --pd-blue-press:oklch(from var(--pd-blue) calc(l - 0.09) c h);
 
