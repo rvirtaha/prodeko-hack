@@ -11,7 +11,7 @@ Hugo has already produced, so nothing in the templates has to know that search
 exists. The index is a set of static files served from disk like everything
 else. There is no search server, no API key and no runtime query backend.
 
-The interface is ours: under two hundred lines of vanilla JavaScript driving
+The interface is ours: a little over two hundred lines of vanilla JavaScript driving
 Pagefind's JavaScript API, painting a dropdown panel that matches the rest of
 the header. Pagefind's own user interface bundle is not used.
 
@@ -436,6 +436,54 @@ and the address are ours and are assigned with `textContent` and `href`.
 No new design token is needed. Adding one for a single component is how a token
 file starts to drift.
 
+### Where a result goes
+
+A result lands on the matched text rather than the top of the page, which on
+the rules pages is the difference between an answer and forty paragraphs to
+scroll through. The `href` is built in two layers, because only one of them
+works in every browser:
+
+```
+/fi/guild/guild-rules/rules/#25-%C3%A4%C3%A4ntenenemmist%C3%B6st%C3%A4
+/fi/alumni/tietoa-alumnista/#prodekon-alumnin-hallitus-2026:~:text=hallitus%202026
+/fi/new-students/#:~:text=s%C3%A4%C3%A4nn%C3%B6t%2C%20joilla%20fuksi
+```
+
+The anchor is Pagefind's. `data()` returns `sub_results`, one per heading the
+match falls under, each with the heading's id already in its `url` and already
+percent-encoded — Hugo generates the ids, so `Ääntenenemmistöstä` is addressable
+without anything being written into the content. The row takes the sub-result
+with the highest summed `balanced_score`, which is usually the page itself when
+the title matched and the section otherwise.
+
+The text fragment is ours. The sub-result's excerpt is cut from the page's own
+text, so a phrase taken out of it is a phrase that is there to be found: the
+first `<mark>`ed word plus up to two words after it, the `<mark>` tags dropped
+by reading the excerpt back out of a detached element, and the whole thing
+through `encodeURIComponent`. That encoding is load-bearing — a comma and a
+hyphen are the text directive's own separators, and `ä` and `ö` are in half the
+phrases on this site. The directive appends as `#anchor:~:text=…` after an
+anchor and as `#:~:text=…` after a bare path.
+
+Three rules keep the phrase honest. It stops at a full stop, because Pagefind
+ends a block with one the page may not contain. It is dropped entirely below
+two words, because a single common word is matched wherever it first appears,
+which can be above the section the anchor names. And a title-only match, where
+the excerpt carries no usable mark, keeps the plain page address.
+
+Measured over fourteen Finnish queries and the 72 rows they render: 17 plain
+page addresses, 18 an anchor alone, 14 an anchor and a directive, 23 a
+directive on a bare path. Of the 37 directives, 31 name text a browser finds
+inside a single block.
+
+The other six span a block boundary that Pagefind joined with a space — a card
+title glued to the paragraph beneath it, a table cell beside the next one — and
+no browser will match across it. That costs nothing: an unmatched directive
+falls back to the anchor, and a row with no anchor falls back to the top of the
+page, which is where the address would have gone anyway. The same fallback
+carries browsers that do not implement text fragments at all. No result is ever
+worse off for the directive being there.
+
 ### While it loads, and when it finds nothing
 
 The Pagefind module is imported when the panel first opens, not on page load,
@@ -594,7 +642,7 @@ an equivalent index. The banner is not worth chasing.
 | `site/check-trees.sh` | the three index assertions |
 | `site/config/members/hugo.toml` | `memberTree = true` under `[params]` |
 | `site/layouts/partials/header.html` | the toggle, the panel, the phone form, `data-search-members` |
-| `site/assets/js/search.js` | new, under two hundred lines of code |
+| `site/assets/js/search.js` | new, a little over two hundred lines of code |
 | `site/assets/css/main.css` | a `/* ===== Search ===== */` section after the mega menu section |
 | `.github/workflows/build.yml` | the indexing step and the second `check-trees.sh` |
 | `README.md` | the two-terminal local loop |
@@ -662,7 +710,7 @@ Replace with:
 > Search. Neither prodeko.org nor tietokilta.fi has any. A build-time search
 > index needs no server: it is a set of static files built from the pages
 > themselves and served from disk like the rest of the site. The index costs one
-> build step and one HTML attribute; the search box that reads it is under two
+> build step and one HTML attribute; the search box that reads it is a couple of
 > hundred lines of our own. Members search member pages and public pages in one
 > list, and the build fails if a member page reaches the public index.
 
