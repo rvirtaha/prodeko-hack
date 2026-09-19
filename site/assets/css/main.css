@@ -297,6 +297,10 @@ img { display: block; max-width: 100%; }
   color: inherit;
 }
 .search-result:first-child { border-top: 1px solid var(--border-subtle); }
+/* The pointer and the arrow keys pick a row the same way, so they light it the
+   same way. The tint stays at 04 because the excerpt's <mark> is 08: a row
+   tinted that far up would swallow the matched words inside it. */
+.search-result:hover,
 .search-result.is-active { background: var(--pd-blue-tint-04); }
 .search-result-title {
   display: block;
