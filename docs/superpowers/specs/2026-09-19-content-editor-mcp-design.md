@@ -115,10 +115,9 @@ not suffice here.
   the touched files. Draft-on-open is what fires the preview build.
 - No merge tool exists in the API — but that is only our code being polite.
   The real boundary is branch protection on `main` requiring one approving
-  review. **Decision to make consciously:** the Decap proxy's allowlist
-  permits the merge call, which is how a Decap editor publishes today, so
-  required reviews add a review step to Decap publishing too. That is a
-  product change, not a side effect to discover in production.
+  review. The Decap proxy's allowlist permits the merge call, which is how a
+  Decap editor publishes, so the requirement puts a review step in front of
+  Decap publishing as well; that trade is accepted.
 
 ## Previews
 
@@ -216,6 +215,62 @@ backup; everything on that disk is reconstructible from git.
 
 DNS: `edit` A record beside `cms`, TTL 3600 — the name is permanent, and it
 still reads right if it later grows the image-upload page.
+
+### What changes where
+
+In infra-prodeko: the `edit` A record in Terraform; the `prodeko_mcp`
+Ansible role (compose file, rendered `.env` with the Keycloak client
+secret, session secret and GitHub token from the vault, image pinned by
+digest, the worktree volume with a disk quota); a Caddy site block
+`edit.prodeko.org → 127.0.0.1:8093` with no forward_auth, because the MCP
+server is the authentication there; the preview gate's required role
+widened to a list accepting `prodeko-org-admin` or `prodeko-org-media`
+(oauth2-proxy treats the list as any-of); a gatus check on `/healthz`; the
+role wired into the VM playbook under an `mcp` tag.
+
+By hand, host-side: the Keycloak confidential client and the
+`prodeko-org-media` role in the admin console; the second bot account's
+fine-grained token into the vault; branch protection on `main` requiring
+one approving review — accepted, together with the review step it adds to
+Decap publishing.
+
+In prodeko-hack: `cmd/mcp/` beside `cmd/proxy/` with `config`, `session`
+and the Keycloak half of `auth` factored into shared packages; the
+`[security]` block in `hugo.toml`; the `media` PR label.
+
+### The connect flow
+
+```mermaid
+sequenceDiagram
+    participant C as claude.ai connector
+    participant M as edit.prodeko.org
+    participant K as id.prodeko.org
+    C->>M: GET /.well-known/oauth-authorization-server
+    C->>M: POST /register (DCR, permissive)
+    C->>M: GET /authorize (PKCE)
+    M->>K: Keycloak login
+    K-->>M: code, tokens, realm roles
+    M->>M: require prodeko-org-media AND membership
+    M-->>C: code, then POST /token → access + refresh
+```
+
+### The edit flow
+
+```mermaid
+sequenceDiagram
+    participant A as Claude (client side)
+    participant M as MCP server
+    participant G as GitHub
+    A->>M: search / read_file / edit_file
+    A->>M: build()
+    M->>M: hugo + check-trees.sh in the worktree
+    M-->>A: clean, or errors inline
+    A->>M: submit(title)
+    M->>M: commit, author = Keycloak identity
+    M->>G: push media/user/slug, open draft PR
+    M-->>A: PR number + pr-N.preview.prodeko.org
+    G->>G: preview workflow publishes to the VM
+```
 
 ## A session, end to end
 
