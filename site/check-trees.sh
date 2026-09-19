@@ -45,7 +45,47 @@ for secdir in "${sections[@]}"; do
     grep -rlF -- "$path" public >&2
     status=1
   fi
+
+  # The search index is gzip, so the grep above reads straight past it and
+  # reports nothing whatever it contains. Decompress everything Pagefind wrote
+  # into the public tree and run the same test against the contents. This is
+  # what proves a member address is absent from the public index rather than
+  # merely absent from the public HTML.
+  if [ -d public/pagefind ] &&
+     find public/pagefind \( -name '*.pf_index' -o -name '*.pf_fragment' -o -name '*.pf_meta' \) \
+       -exec gzip -dc {} + 2>/dev/null | grep -qF -- "$path"; then
+    echo "LEAK: the public search index contains $path" >&2
+    status=1
+  fi
+
+  # Each member section carries its own index, inside the gate. Without this a
+  # silently missing bundle degrades to "member search finds nothing" rather
+  # than to a failed build.
+  if [ ! -d "public-members$path/pagefind" ]; then
+    echo "MISSING: public-members$path/pagefind was not built" >&2
+    status=1
+  fi
 done
+
+# A bundle at the root of the member tree would answer on /pagefind/, which is
+# the address the public tree already serves. Pagefind's default output path
+# puts it there, so this is one forgotten --output-path away.
+if [ -d public-members/pagefind ]; then
+  echo "LEAK: public-members/pagefind sits at the tree root, where /pagefind/ is public" >&2
+  status=1
+fi
+
+# Pagefind aimed at the wrong tree is one mistyped path, and it would publish
+# the member index to the world. The public index must describe exactly the
+# pages the public build marked as indexable, no more.
+if [ -d public/pagefind ]; then
+  fragments=$(find public/pagefind/fragment -name '*.pf_fragment' | wc -l)
+  indexable=$(grep -rlF 'data-pagefind-body' public --include='*.html' | wc -l)
+  if [ "$fragments" -ne "$indexable" ]; then
+    echo "MISMATCH: public index holds $fragments pages, the public tree marks $indexable" >&2
+    status=1
+  fi
+fi
 
 if [ "$status" -eq 0 ]; then
   echo "check-trees: ${#sections[@]} member sections, none reachable from the public tree"
