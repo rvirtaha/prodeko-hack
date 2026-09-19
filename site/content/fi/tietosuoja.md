@@ -5,7 +5,7 @@ description: Prodeko ry:n tietosuojaseloste siitä, miten kilta kerää, käytt�
 sourceURL: https://prodeko.org/fi/tietosuoja/
 ---
 
-Tämä on Prodeko Ry:n henkilötietolain (10 ja 24 §) ja EU:n yleisen tietosuoja-asetuksen (GDPR) mukainen rekisteri- ja tietosuojaseloste. Laadittu 23.05.2018. Viimeisin muutos 25.05.2026.
+Tämä on Prodeko Ry:n henkilötietolain (10 ja 24 §) ja EU:n yleisen tietosuoja-asetuksen (GDPR) mukainen rekisteri- ja tietosuojaseloste. Laadittu 23.05.2018. Viimeisin muutos 19.09.2026.
 
 Tämä tietosuojaseloste kuvaa, kuinka Tuotantotalouden Kilta Prodeko ry kerää, käyttää ja käsittelee käyttäjien henkilötietoja. Sitä sovelletaan kaikkiin Prodekon sähköisiin palveluihin, jotka on eritelty tarkemmin dokumentin lopussa.
 
@@ -28,13 +28,15 @@ Käyttäessäsi Prodekon verkkosivuja palvelimellemme tallentuu teknisiä lokiti
 
 ## 3. Tietojen luovuttaminen ja kolmannet osapuolet
 
-Emme lähtökohtaisesti luovuta tietoja muille osapuolille tai EU- ja ETA-maiden ulkopuolelle. Käytämme kuitenkin toiminnassamme seuraavia ulkopuolisia palveluntarjoajia, jotka käsittelevät tietoja omien tietosuojaselosteidensa mukaisesti: Mailman, Mailchimp, SendGrid, Google Analytics, Google AdWords, Kide.app, Stripe, kululaskut.fi
+Emme lähtökohtaisesti luovuta tietoja muille osapuolille tai EU- ja ETA-maiden ulkopuolelle. Käytämme kuitenkin toiminnassamme seuraavia ulkopuolisia palveluntarjoajia, jotka käsittelevät tietoja omien tietosuojaselosteidensa mukaisesti: Mailman, Mailchimp, SendGrid, Kide.app, Stripe, kululaskut.fi
 
 Kaikki käyttämämme palveluntarjoajat noudattavat EU:n tietosuoja-asetusta.
 
 ### Evästeiden käyttö
 
-Sähköisiä palveluitamme käyttäessäsi hyväksyt, että laitteellesi saatetaan tallentaa evästeitä. Evästeet ovat pienikokoisia tekstitiedostoja, joita selain tallentaa käyttäjän päätelaitteelle. Hyödynnämme evästeitä esimerkiksi istuntojen ylläpitämiseen (käyttäjän ei tarvitse kirjautua sisään joka kerta uudestaan) sekä palveluiden toimivuuden varmistamiseen ja kävijämäärien seuraamiseen. Jotkin kolmannen osapuolen liitännäiset (esim. Googlen tilastopalvelut) voivat asettaa omia evästeitään. Voit halutessasi estää evästeiden käytön selaimesi asetuksista.
+Evästeet ovat pienikokoisia tekstitiedostoja, joita selain tallentaa käyttäjän päätelaitteelle. Prodekon pääsivusto ei tallenna laitteellesi evästeitä eikä muuta tunnistetta: myöskään kävijämäärien laskenta ei käytä evästettä, eikä sivustolla ole kolmannen osapuolen liitännäisiä, jotka asettaisivat omia evästeitään.
+
+Kirjautumista vaativissa palveluissa, kuten jäsensivuilla ja ilmoittautumisessa, käytetään istuntoevästettä. Se on välttämätön pyytämäsi palvelun toteuttamiseksi — ilman sitä et pysyisi kirjautuneena — eikä sitä käytetä mihinkään muuhun. Voit halutessasi estää evästeiden käytön selaimesi asetuksista, jolloin kirjautumista vaativat palvelut eivät toimi.
 
 ## 4. Rekisteröidyn oikeudet
 
@@ -46,7 +48,17 @@ Tiettyjen palveluiden tai niiden osien käyttöä on rajoitettu käyttäjän sij
 
 **www.prodeko.org**
 
-Palvelu toimii Prodekon pääsivuina ja se sisältää monipuolisesti materiaalia, josta osa näkyy vain kirjautuneille. Killan jäsenelle luodaan tunnukset palveluun jäseneksi liittymisen yhteydessä. Sivustolla saattaa esiintyä henkilötietoja saattaa esiintyä hallituksen pöytäkirjoissa, killan toimijoiden yhteystiedoissa ja opiskelukertomuksissa. Pääsivujen liikennettä seurataan Google Analyticsin avulla ja sivustolla käytetään Google AdWords -työkalua markkinoinnin kohdentamiseen (voit estää kohdennuksen osoitteessa google.com/settings/ads)
+Palvelu toimii Prodekon pääsivuina ja se sisältää monipuolisesti materiaalia, josta osa näkyy vain kirjautuneille. Killan jäsenelle luodaan tunnukset palveluun jäseneksi liittymisen yhteydessä. Sivustolla saattaa esiintyä henkilötietoja saattaa esiintyä hallituksen pöytäkirjoissa, killan toimijoiden yhteystiedoissa ja opiskelukertomuksissa.
+
+Sivuston kävijämääriä seurataan Prodekon omalla palvelimella toimivalla GoatCounter-ohjelmistolla. Se ei tallenna laitteellesi evästeitä eikä muuta tunnistetta, eikä tietoja luovuteta millekään kolmannelle osapuolelle. Jokaisesta sivunäytöstä tallennetaan sivun osoite, edellinen sivu jolta saavuit, selaimen ilmoittama kieli ja tyyppi, näytön leveys sekä karkea sijainti maan tarkkuudella. Lisäksi laskemme, kuinka monta kertaa sivuilla olevia linkkejä Prodekon muihin palveluihin, kuten ilmoittautumiseen tai verkkokauppaan, on avattu; näistä tallentuu vain linkin kohde ja ajankohta.
+
+IP-osoitettasi ei tallenneta: sitä säilytetään enintään kahdeksan tunnin ajan palvelimen muistissa yhden käynnin tunnistamiseksi, minkä jälkeen se häviää. Emme siis voi tunnistaa sinua emmekä seurata käyntejäsi päivästä toiseen. Kirjautumista vaativia jäsensivuja ei seurata lainkaan. Tiedot poistetaan 24 kuukauden kuluttua.
+
+Käsittelyn oikeusperuste on rekisterinpitäjän oikeutettu etu (tietosuoja-asetuksen 6 artiklan 1 kohdan f alakohta): kilta haluaa tietää, mitkä sen omista sivuista ovat käytössä ja mitkä eivät.
+
+Voit kieltää laskennan alla olevalla painikkeella. Painike tallentaa selaimeesi yhden merkinnän, jonka ainoa tehtävä on estää laskenta tällä laitteella.
+
+{{< analytics-optout >}}
 
 Pääsivuihin on integroitu Prodekon sähköinen matrikkeli, jossa sekä killan että killan alumniyhdistyksen jäsenet voivat katsella toistensa jakamia tietojaan. Liittyessäsi Prodekon jäseneksi kirjaamme liittymiseen vaadittavat henkilötietosi (täydellinen nimi, kotipaikka, opiskeluala ja pääaine, sähköpostiosoite sekä AYY:n jäsenyys). Tämän lisäksi kirjaamme liittymisajankohdasta ja -perusteista johdannaiset hallinnolliset jäsentiedot rekisteriin (excursiovuosikurssi, jäsenyyden päättymispäivämäärä ja jäsentyyppi). Keräämme lisäksi tietoja, jotka syötät vapaaehtoisesti palvelua käyttäessäsi, kuten esimerkiksi työhistoriasi. Jos ostat Prodekon jäsenyyden ulkoisen tarjoajan, kuten kide.app:in kautta, saattaa palveluntarjoaja tallentaa ja jakaa meille sinusta tietoja edellä mainittujen lisäksi. Tästä lisää tietoa löydät aina kyseisen palveluntarjoajan käyttöehdoista. Rekisteröidyt käyttäjät voivat muokata jäsentietojaan sekä tarvittaessa poistaa tietonsa. Sähköisen matrikkelin ylläpito, hallinto ja käytäntö on kuvattu tarkemmin matrikkelin rekisteriselosteessa.
 
@@ -74,7 +86,7 @@ Palveluun tallennetaan kuvia killan tapahtumista. Palveluntarjoajana toimii Kuva
 
 **ilmo.prodeko.org**
 
-Palvelua käytetään killan tapahtumien viestintään ja niihin ilmoittautumiseen. Ilmoittautumisen yhteydessä kerätyt tiedot riippuvat tapahtumasta, mutta jokaisen tapahtuman yhteydessä kerätään ainakin etu- ja sukunimi, ilmoittautumisaika ja sähköpostiosoite. Sähköpostiosoitetta käytetään peruutuslinkin lähettämiseen sekä tapahtumaan liittyviin tiedotuksiin. Muita tyypillisesti kerättäviä tietoja ovat ilmoittautumiskiintiö, ruoka-aineallergiat ja vuosikurssi. Ilmoittautumistiedoista etu- ja sukunimi, ilmoittautumisaika sekä mahdollinen kiintiö ovat palvelussa julkisesti nähtävillä. Kiintiö on tapahtumakohtainen ja voi periaatteessa olla mitä tahansa, mutta useimmiten kiintiöksi asetetaan vuosikurssi, kilta tai joukkue. Tapahtumasta riippuen ilmoittautumistietoja voidaan luovuttaa eteenpäin killan ulkopuoliselle taholle, esimerkiksi excursion järjestäjälle. Ilmoittautumistiedot anonymisoidaan automaattisesti kuusi kuukautta sen jälkeen, kun ilmoittautuminen on mennyt kiinni siten, ettei niistä jää mitään ilmoittautuneiden lukumäärää, mahdollisia kiintiöitä ja niiden täyttöasteita lukuun ottamatta jäljelle. Anonymisoituja tietoja käytetään osallistumismäärien analysoimiseen ja tapahtumatarjonnan parantamiseen. Ilmokilkkeen liikennettä seurataan Googlen analytiikkatyökalujen (Google Analytics) avulla.
+Palvelua käytetään killan tapahtumien viestintään ja niihin ilmoittautumiseen. Ilmoittautumisen yhteydessä kerätyt tiedot riippuvat tapahtumasta, mutta jokaisen tapahtuman yhteydessä kerätään ainakin etu- ja sukunimi, ilmoittautumisaika ja sähköpostiosoite. Sähköpostiosoitetta käytetään peruutuslinkin lähettämiseen sekä tapahtumaan liittyviin tiedotuksiin. Muita tyypillisesti kerättäviä tietoja ovat ilmoittautumiskiintiö, ruoka-aineallergiat ja vuosikurssi. Ilmoittautumistiedoista etu- ja sukunimi, ilmoittautumisaika sekä mahdollinen kiintiö ovat palvelussa julkisesti nähtävillä. Kiintiö on tapahtumakohtainen ja voi periaatteessa olla mitä tahansa, mutta useimmiten kiintiöksi asetetaan vuosikurssi, kilta tai joukkue. Tapahtumasta riippuen ilmoittautumistietoja voidaan luovuttaa eteenpäin killan ulkopuoliselle taholle, esimerkiksi excursion järjestäjälle. Ilmoittautumistiedot anonymisoidaan automaattisesti kuusi kuukautta sen jälkeen, kun ilmoittautuminen on mennyt kiinni siten, ettei niistä jää mitään ilmoittautuneiden lukumäärää, mahdollisia kiintiöitä ja niiden täyttöasteita lukuun ottamatta jäljelle. Anonymisoituja tietoja käytetään osallistumismäärien analysoimiseen ja tapahtumatarjonnan parantamiseen.
 
 **infoscreen.prodeko.org**
 
