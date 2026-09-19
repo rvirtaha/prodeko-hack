@@ -13,17 +13,16 @@ Vuonna 2015 perustetun Prodeko Venturesin rahoitus pohjautuu lähes 200 Prodekon
 
 ## Prodeko Venturesin sijoitusstrategia ja kriteerit:
 
-- • Vaihe / stage: yleensä ensimmäisellä ulkoista rahoitusta sisältävällä kierroksella, esim. pre-seed
-- • Fokus: Start-upit voimakkaalla kasvupotentiaalilla
-- • Vaatimukset: Yrityksellä tulee olla läheinen linkki Prodekoon
+- Vaihe / stage: yleensä ensimmäisellä ulkoista rahoitusta sisältävällä kierroksella, esim. pre-seed
+- Fokus: Start-upit voimakkaalla kasvupotentiaalilla
+- Vaatimukset: Yrityksellä tulee olla läheinen linkki Prodekoon
+- Sitoutunut ja kyvykäs tiimi, jossa kokoaikainen työntekijä(t)
+- Prodekon opiskelija/alumnijäseniä avainrooleissa
+- Skaalautuva liiketoimintamalli, jolla kansainvälistä potentiaalia
+- Ammattimainen lead-sijoittaja rahoituskierroksella
+- Potentiaalia jatkorahoitukseen
+- PV:n sijoituksella on impaktia
+- Deal Flow: 3-7 uutta sijoitusta vuosittain
+- Sijoitukset: Tyypillisesti 25 000 - 50 000 € vaihtovelkalainakirjoina tai pääomasijoituksena, mikäli kierroksella mukana ammattimainen pääomasijoittaja tai enkelisijoittajien syndikaatti
 
-- • Sitoutunut ja kyvykäs tiimi, jossa kokoaikainen työntekijä(t)
-- • Prodekon opiskelija/alumnijäseniä avainrooleissa
-- • Skaalautuva liiketoimintamalli, jolla kansainvälistä potentiaalia
-- • Ammattimainen lead-sijoittaja rahoituskierroksella
-- • Potentiaalia jatkorahoitukseen
-- • PV:n sijoituksella on impaktia
-- • Deal Flow: 3-7 uutta sijoitusta vuosittain
-- • Sijoitukset: Tyypillisesti 25 000 - 50 000 € vaihtovelkalainakirjoina tai pääomasijoituksena, mikäli kierroksella mukana ammattimainen pääomasijoittaja tai enkelisijoittajien syndikaatti
-
-**Lisätietoja portfoliosta, nykyisistä hallituksen jäsenistä ja heidän kontakteistaan löytyy Prodeko Venturesin nettisivuilta****[prodekoventures.com](http://prodekoventures.com). PV:n voi tavoittaa myös sähköpostitse info@prodekoventures.com**
+**Lisätietoja portfoliosta, nykyisistä hallituksen jäsenistä ja heidän kontakteistaan löytyy Prodeko Venturesin nettisivuilta [prodekoventures.com](http://prodekoventures.com). PV:n voi tavoittaa myös sähköpostitse info@prodekoventures.com**

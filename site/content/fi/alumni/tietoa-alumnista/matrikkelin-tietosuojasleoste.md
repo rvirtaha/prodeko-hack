@@ -11,18 +11,19 @@ Tämä tietosuojaseloste kuvaa sitä, kuinka Matrikkelin käyttäjien tietoja ke
 
 ## 1. Rekisterinpitäjä
 
-Tuotantotalouden Kilta Prodeko ry
- PL 15500
- 00076 Aalto
+Tuotantotalouden Kilta Prodeko ry  
+PL 15500  
+00076 Aalto
 
 ## 2. Yhteyshenkilö rekisteriä koskevissa asioissa
 
-Tuotantotalouden Kilta Prodeko ry
- PL 15500
- 00076 Aalto
- mediakeisari@prodeko.org
- Rekisteröidyt voivat esittää tietosuoja-asetuksen mukaiset pyynnöt yllä olevaan
- sähköpostiosoitteeseen.
+Tuotantotalouden Kilta Prodeko ry  
+PL 15500  
+00076 Aalto  
+mediakeisari@prodeko.org
+
+Rekisteröidyt voivat esittää tietosuoja-asetuksen mukaiset pyynnöt yllä olevaan
+sähköpostiosoitteeseen.
 
 ## 3. Rekisterin nimi
 

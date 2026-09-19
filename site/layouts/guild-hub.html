@@ -7,7 +7,8 @@
     {{ .Content }}
   </div>
   <div class="image">
-    {{ with resources.Get "images/pages/page-guild.png" }}<img src="{{ .RelPermalink }}" alt="">{{ end }}
+    {{ $photo := resources.Get "images/pages/page-guild.png" }}
+    {{ with $photo }}{{ with .Crop "850x690 TopLeft" }}<img src="{{ .RelPermalink }}" alt="" loading="lazy">{{ end }}{{ end }}
   </div>
   <div class="rainbow-rule"></div>
 </section>

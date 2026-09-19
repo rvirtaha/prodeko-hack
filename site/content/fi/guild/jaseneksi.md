@@ -19,7 +19,7 @@ Prodekon Alumni ry on yhdistys, joka on suunnattu Aallon tuotantotalouden linjan
 
 Killan vanhaksi jäseneksi voidaan hyväksyä tutkintonsa suorittanut ihminen, joka on ollut entisen Tuotantotalouden kerho PRODEKOn tai Tuotantotalouden killan Prodekon varsinaisena jäsenenä. Prodeko-alumnit voivat siis halutessaan hakea killan **vanhoiksi jäseniksi**. Killan **ulkojäseneksi** voidaan anomuksesta hyväksyä killan toiminnasta kiinnostunut ihminen, jota ei voida hyväksyä varsinaiseksi jäseneksi. Killan **kannatusjäseneksi** puolestaan voidaan hyväksyä killan toimintaa tukeva yksityinen henkilö, oikeustoimikelpoinen yhteisö tai säätiö. Varsinaiset, ulko- ja kannatusjäsenet sekä vanhat jäsenet hyväksyy killan hallitus.
 
-Jäseneksi liittyminen
+## Jäseneksi liittyminen
 
 **HUOM: Uusien opiskelijoiden ei tarvitse hankkia jäsenyyttä ennen opiskeluiden alkua! Jäsenmaksun maksamiselle annetaan mahdollisuus orientaatioviikolla.**
 

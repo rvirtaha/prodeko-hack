@@ -5,8 +5,6 @@ sourceURL: https://prodeko.org/fi/opinnot/usein-kysyttya-opinnoista/
 description: Vastauksia yleisimpiin opintokysymyksiin harjoittelusta, hyväksiluvusta, kannustusstipendistä ja teknisistä sivuaineista.
 ---
 
-## Usein kysyttyä opinnoista
-
 **Voinko rakentaa, tahdittaa tai suunnitella opintoni näin? Mikä sivuaine minun kannattaa ottaa? Saanko hyväksiluettua tämän vaihdossa käymäni kurssin? Entä käykö tämä kandiaiheeksi?**
 
 Kaikissa näissä kysymyksissä pääaineen suunnittelijat Tiina ja Tarja auttavat mielellään. Heidän yhteystietonsa löytyvät [täältä](/fi/opinnot/keneen-otan-yhteytta/).
@@ -23,8 +21,10 @@ Löydät ohjeet kannustusstipendin saamiseen [täältä](https://www.aalto.fi/fi
 
 Muualla suoritettujen korkeakouluopintojen hyväksilukemisesta osaksi tutkintoasi löydät tietoa [Opiskelijan oppaasta](https://www.aalto.fi/fi/hakemukset-ohjeet-ja-saannot/opintojen-hyvaksiluku). Hyväksilukeminen voi olla tutkintoosi kuuluvien opintojaksojen korvaamista tai soveltuvien opintojen sisällyttämistä osaksi tutkintoa.
 
- **Käykö vaihtoehto x tekniseksi sivuaineeksi?**
+**Käykö vaihtoehto x tekniseksi sivuaineeksi?**
 
 Seuraavien linkkien alle on listattu sopivat sivuaineet.
- [Kandivaiheen tekniset sivuaineet](https://www.aalto.fi/fi/ohjelmat/teknistieteellinen-kandidaattiohjelma/opetussuunnitelma-2022-2024#15-tuotantotalouden-opiskelijat)
- [Maisterivaiheen tekniset sivuaineet](https://www.aalto.fi/en/programmes/masters-programme-in-industrial-engineering-and-management/curriculum-2022-2024#17-minor)
+
+[Kandivaiheen tekniset sivuaineet](https://www.aalto.fi/fi/ohjelmat/teknistieteellinen-kandidaattiohjelma/opetussuunnitelma-2022-2024#15-tuotantotalouden-opiskelijat)
+
+[Maisterivaiheen tekniset sivuaineet](https://www.aalto.fi/en/programmes/masters-programme-in-industrial-engineering-and-management/curriculum-2022-2024#17-minor)

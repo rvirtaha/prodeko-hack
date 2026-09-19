@@ -429,8 +429,15 @@ a.btn, a.btn:hover { border-bottom: none; }
 /* ===== Values strip (home) ===== */
 
 .values-section { padding: 64px 0 88px; }
-.values-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(180px,1fr)); gap: var(--space-4); }
+.values-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(200px,1fr)); gap: var(--space-6); }
+.values-grid .value { margin: 0; display: flex; flex-direction: column; gap: var(--space-3); }
 .values-grid img { width: 100%; aspect-ratio: 16/9; object-fit: cover; }
+.values-grid figcaption {
+  font-size: var(--size-sm);
+  font-weight: var(--weight-light);
+  line-height: var(--leading-loose);
+  color: var(--text-body);
+}
 
 /* ===== Photo band (home) ===== */
 
@@ -441,7 +448,9 @@ a.btn, a.btn:hover { border-bottom: none; }
   background: var(--pd-blue-dark);
 }
 .photo-band img { width: 100%; height: 100%; object-fit: cover; }
-.photo-band::after { content: ""; position: absolute; inset: 0; background: var(--vignette-calm); }
+/* The caption is white type over an uncontrolled photograph, so the scrim
+   has to hold on its brightest part, not its average one. */
+.photo-band::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgb(0 40 81 / 0.45) 0%, rgb(0 40 81 / 0.62) 55%, rgb(0 40 81 / 0.75) 100%); }
 .photo-band .caption {
   position: absolute;
   inset: 0;
@@ -462,7 +471,7 @@ a.btn, a.btn:hover { border-bottom: none; }
   line-height: 1.15;
   margin: 0 auto;
 }
-.photo-band .caption-sub { margin-top: var(--space-4); font-size: var(--size-md); font-weight: var(--weight-light); color: var(--pd-white-1); opacity: 0.92; }
+.photo-band .caption-sub { margin-top: var(--space-4); font-size: var(--size-md); font-weight: var(--weight-regular); color: var(--pd-white-1); text-shadow: var(--shadow-heading); }
 
 /* ===== Partners ===== */
 
@@ -493,11 +502,16 @@ a.btn, a.btn:hover { border-bottom: none; }
 .hero-split .image { position: relative; min-height: 420px; }
 .hero-split .image img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 .hero-split .image::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, var(--pd-blue) 0%, rgb(0 46 125 / 0) 28%); }
-.hero-split h1 { margin: 0 0 var(--space-5); font-size: clamp(34px,3.8vw,54px); font-weight: var(--weight-bold); letter-spacing: var(--track-caps); text-transform: uppercase; line-height: 1.05; color: var(--pd-white-1); text-shadow: var(--shadow-heading); }
+/* The longest word here is TUOTANTOTALOUDEN, and the text column is half the
+   viewport: at 3.8vw it was wider than its column at every width from 900px
+   up, so the final N was sheared off on every desktop too. */
+.hero-split h1 { margin: 0 0 var(--space-5); font-size: clamp(24px,3vw,46px); hyphens: auto; font-weight: var(--weight-bold); letter-spacing: var(--track-caps); text-transform: uppercase; line-height: 1.05; color: var(--pd-white-1); text-shadow: var(--shadow-heading); }
 .hero-split .kicker { opacity: 0.85; margin-bottom: var(--space-4); display: block; }
 .hero-split p { margin: 0; max-width: 52ch; font-size: var(--size-md); font-weight: var(--weight-light); line-height: var(--leading-normal); }
 .hero-split .rainbow-rule { position: absolute; left: 0; right: 0; bottom: 0; }
-@media (max-width: 780px) { .hero-split { grid-template-columns: minmax(0, 1fr); } .hero-split .image { min-height: 240px; } }
+/* 900 rather than 780: below this the text column is under 450px, which is
+   too narrow to set a display heading beside a photograph. */
+@media (max-width: 900px) { .hero-split { grid-template-columns: minmax(0, 1fr); } .hero-split .image { min-height: 240px; } }
 
 /* ===== Hub page hero: full-bleed photo (prospective / corporate) ===== */
 

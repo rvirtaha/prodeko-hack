@@ -13,105 +13,47 @@ Kortista tulee suorittaa 11 pakollista pistettä ja vähintään 8 valinnaista p
 
 ![](https://static.prodeko.org/media/filer_public_thumbnails/public/2020/07/07/tomoftuta.jpg__2048x1365_q85_subsampling-2.jpg)
 
-Pakolliset (11)
+## Pakolliset (11)
 
-**Laulu (2n+1)**
- Laula 2n teekkarilaulua fuksikapteenillesi ja sanele teekkarihymni oikeaoppisesti. N vastaa laulavan porukan lukumäärää.
+- **Laulu (2n+1)** Laula 2n teekkarilaulua fuksikapteenillesi ja sanele teekkarihymni oikeaoppisesti. N vastaa laulavan porukan lukumäärää.
+- **Opinto** Suorita kahdeksan (8) opintopistettä.
+- **Historia** Osallistu Teekkarimuseon museokierrokselle.
+- **Hyvinvointi** Osallistu Prodekon hyvinvointivalmennukseen.
+- **Isäntä** IE:n avustaminen esimerkiksi jonkin tapahtuman järkkäilyssä.
+- **Sikajuhla** Osallistu Sikajuhlien järjestämiseen
+- **Fuksijäynä** Osallistu Fuksijäynään.
+- **Sitsi** Osallistu sitseille.
+- **Diskonttaus** Osallistu Prodekon vuosijuhlan, Diskonttauksen, järjestämiseen.
+- **Alayhdistys** Osallistu jonkin AYY:n alaisuudessa toimivan yhdistyksen tai järjestön toimintaan. Polyteknikkojen raittiusseuraa PoRaa ei lasketa.
+- **Fuksitappo** Osallistu fuksitappoon.
 
-**Opinto**
- Suorita kahdeksan (8) opintopistettä.
+## Valinnaiset (8)
 
-**Historia**
- Osallistu Teekkarimuseon museokierrokselle.
+- **Abi-info** Pidä abi-infotilaisuus lukiollasi tai Prodekon abitapahtumassa.
+- **Aktiivisuus** Osallistu aktiivisesti killan toimintaan esim. fuksiprojektitiimin tai toimariviran kautta.
+- **Bilis** Tee käyttäjä biliskilkkeeseen ja pelaa vähintään yksi peli (sekä kirjaa se kilkkeeseen).
+- **Fabu** Fabulounas tai muuta aktiviteettia vanhemman kiltalaisen kanssa.
+- **Haalarimerkki** Ompele kymmenen haalarimerkkiä haalareihisi kiinni.
+- **Haalariseikkailu** Osallistu haalariseikkailuun.
+- **Hallituksen kokous** Osallistu Prodekon hallituksen kokoukseen.
+- **Kansainvälisyys** Osallistu kansainväliseen tapahtumaan (Esim. Prodekon International-tapahtumaan) tai ESTIEM-tapahtumaan (ESTIEM-infoa ei lasketa).
+- **Kilta** Tutustu johonkin toiseen Otaniemen kiltaan esimerkiksi fuksibileiden, kiltiskiertelyn, tapahtuman tai jäsenyyden kautta.
+- **Kiltis** Vietä kiltiksellä vähintään tunti fuksikapteenin ollessa paikalla.
+- **Kulttuuri** Osallistu Otaniemeläiseen kulttuuritapahtumaan, esim. konserttiin!
+- **Mekaanikko** Osallistu Otatarhan ajojen tai Laskiaisriehan ajoneuvon rakentamiseen tai itse tapahtumiin.
+- **Otaniemi** Osallistu Otaniemen kiltojen yhteiseen fuksitapahtumaan. Syksyllä näitä tapahtumia ovat esimerkiksi SCI-kiltojen yhteinen tapahtuma, Fuksien juhlasitsit ja Aalto Amazing Race. Keväällä puolestaan Talvipäivä, Pomppupäivä ja Fuksien SCItsit.
+- **Poikkitieteellisyys** Osallistu AYY:n ulkopuolisen opiskelijajärjestön tapahtumaan.
+- **Raittius** Osallistu PoRan urheilutapahtumaan.
+- **Teekkariperinne** Osallistu johonkin teekkariperinneviikon tapahtumaan, esim. alkupamaukseen, Fuksien juhlasitseille, Punaisen kirjan läpilaulantaan, laulukilpailusitseille tai Polin approille.
+- **Vaikuttaminen** Osallistu Prodekon kilta- tai vaalikokoukseen.
+- **Yhteishyvä** Tee jotain hyvää yhteisöllesi: Siivoa kiltis, luovuta verta tai auta mummoja kaupassa.
+- **XQ** Osallistu yritysvierailulle.
 
-**Hyvinvointi**
- Osallistu Prodekon hyvinvointivalmennukseen.
-
-**Isäntä**
- IE:n avustaminen esimerkiksi jonkin tapahtuman järkkäilyssä.
-
-**Sikajuhla**
- Osallistu Sikajuhlien järjestämiseen
-
-**Fuksijäynä**
- Osallistu Fuksijäynään.
-
-**Sitsi**
- Osallistu sitseille.
-
-**Diskonttaus**
- Osallistu Prodekon vuosijuhlan, Diskonttauksen, järjestämiseen.
-
-**Alayhdistys**
- Osallistu jonkin AYY:n alaisuudessa toimivan yhdistyksen tai järjestön toimintaan. Polyteknikkojen raittiusseuraa PoRaa ei lasketa.
-
-**Fuksitappo**
- Osallistu fuksitappoon.
-
-Valinnaiset (8)
-
-**Abi-info**
- Pidä abi-infotilaisuus lukiollasi tai Prodekon abitapahtumassa.
-
-**Aktiivisuus**
- Osallistu aktiivisesti killan toimintaan esim. fuksiprojektitiimin tai toimariviran kautta.
-
-**Bilis**
- Tee käyttäjä biliskilkkeeseen ja pelaa vähintään yksi peli (sekä kirjaa se kilkkeeseen).
-
-**Fabu**
- Fabulounas tai muuta aktiviteettia vanhemman kiltalaisen kanssa.
-
-**Haalarimerkki**
- Ompele kymmenen haalarimerkkiä haalareihisi kiinni.
-
-**Haalariseikkailu**
- Osallistu haalariseikkailuun.
-
-**Hallituksen kokous**
- Osallistu Prodekon hallituksen kokoukseen.
-
-**Kansainvälisyys**
- Osallistu kansainväliseen tapahtumaan (Esim. Prodekon International-tapahtumaan) tai ESTIEM-tapahtumaan (ESTIEM-infoa ei lasketa).
-
-**Kilta**
- Tutustu johonkin toiseen Otaniemen kiltaan esimerkiksi fuksibileiden, kiltiskiertelyn, tapahtuman tai jäsenyyden kautta.
-
-**Kiltis**
- Vietä kiltiksellä vähintään tunti fuksikapteenin ollessa paikalla.
-
-**Kulttuuri**
- Osallistu Otaniemeläiseen kulttuuritapahtumaan, esim. konserttiin!
-
-**Mekaanikko**
- Osallistu Otatarhan ajojen tai Laskiaisriehan ajoneuvon rakentamiseen tai itse tapahtumiin.
-
-**Otaniemi**
- Osallistu Otaniemen kiltojen yhteiseen fuksitapahtumaan. Syksyllä näitä tapahtumia ovat esimerkiksi SCI-kiltojen yhteinen tapahtuma, Fuksien juhlasitsit ja Aalto Amazing Race. Keväällä puolestaan Talvipäivä, Pomppupäivä ja Fuksien SCItsit.
-
-**Poikkitieteellisyys**
- Osallistu AYY:n ulkopuolisen opiskelijajärjestön tapahtumaan.
-
-**Raittius**
- Osallistu PoRan urheilutapahtumaan.
-
-**Teekkariperinne**
- Osallistu johonkin teekkariperinneviikon tapahtumaan, esim. alkupamaukseen, Fuksien juhlasitseille, Punaisen kirjan läpilaulantaan, laulukilpailusitseille tai Polin approille.
-
-**Vaikuttaminen**
- Osallistu Prodekon kilta- tai vaalikokoukseen.
-
-**Yhteishyvä**
- Tee jotain hyvää yhteisöllesi: Siivoa kiltis, luovuta verta tai auta mummoja kaupassa.
-
-**XQ**
- Osallistu yritysvierailulle.
-
-Lisäpiste
+## Lisäpiste
 
 Fuksikapteeni myöntää jotain erittäin teekkarihenkistä tekoa vastaan. Esimerkiksi tee jäynä sisarkillallemme Athenelle tai toimi wappulehtimyyjänä mahdollisena wappuna 2027!
 
-Prodekon fuksipisteistä
+## Prodekon fuksipisteistä
 
 1§ Fuksipistevihko on henkilökohtainen ja se on voimassa 30. huhtikuuta asti.
 

@@ -7,9 +7,7 @@ sourceURL: https://prodeko.org/fi/guild/guild-rules/rules/
 
 Säännöt on päivitetty syksyllä 2023.
 
-## I LUKU
-
-Nimi, kotipaikka ja tarkoitus
+## I LUKU — Nimi, kotipaikka ja tarkoitus
 
 ### 1§ YHDISTYKSEN NIMI JA KOTIPAIKKA
 
@@ -52,9 +50,7 @@ Toimintansa tukemiseksi kilta voi järjestää huvitilaisuuksia, arpajaisia, har
 
 Killan virallinen kieli on suomi. Pöytäkirja- ja ilmoituskielenä on suomi.
 
-## II LUKU
-
-Jäsenet ja maksut
+## II LUKU — Jäsenet ja maksut
 
 ### 6§ JÄSENISTÄ
 
@@ -123,9 +119,7 @@ Erotetulla tai rangaistulla jäsenellä on oikeus kirjallisesti valittaa päät�
  lähinnä seuraavassa kiltakokouksessa, kuitenkin viimeistään kuuden (6) kuukauden sisällä
  valituksen jättämisestä.
 
-## III LUKU
-
-Killan kokoukset
+## III LUKU — Killan kokoukset
 
 ### 16§ KOKOUKSISTA
 
@@ -198,9 +192,7 @@ Ellei näissä säännöissä toisin mainita, päätökset kokouksissa tehdään
  enemmistöllä. Annettujen äänten jakaantuessa tasan ratkaisee kokouksen puheenjohtajan kanta,
  vaaleissa kuitenkin arpa.
 
-## IV LUKU
-
-Killan hallitus
+## IV LUKU — Killan hallitus
 
 ### 26§ HALLITUKSESTA
 
@@ -259,9 +251,7 @@ Hallitus voi tehdä killan palveluiden puitteita ja niihin liittyviä toimintata
  kiltakokouksen päätöstä edellyttäviin tai näihin verrattavissa oleviin päätöksiin. Asetuksissa
  voidaan kuitenkin tarkentaa esimerkiksi killan palveluiden käyttöä edellyttävät toimintaohjeet.
 
-## V LUKU
-
-Toimikunnat ja toimihenkilöt
+## V LUKU — Toimikunnat ja toimihenkilöt
 
 ### 35§ TOIMIKUNNISTA JA TOIMIHENKILÖISTÄ
 
@@ -280,9 +270,7 @@ Sen lisäksi mitä sääntöjen 23§ on määrätty, voi killan hallitus painavi
 Toimikunnan nimittänyt taho määrittelee kuinka killan jäsenet voivat osallistua toimikuntien
  toimintaan.
 
-## VI LUKU
-
-Hallinto ja talous
+## VI LUKU — Hallinto ja talous
 
 ### 38§ KILLAN TOIMI- JA TILIKAUDESTA
 
@@ -300,9 +288,7 @@ Tilintarkastajien/toiminnantarkastajien on annettava hallitukselle kirjallinen, 
  vuosikokoukselle osoitettu kertomus toimittamastaan killan hallinnon ja tilien tarkastuksesta
  viimeistään neljätoista (14) päivää ennen killan vuosikokousta.
 
-## VII LUKU
-
-Erityisiä määräyksiä
+## VII LUKU — Erityisiä määräyksiä
 
 ### 41§ KILLAN TUNNUKSISTA JA MERKEISTÄ
 

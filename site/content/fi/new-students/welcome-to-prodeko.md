@@ -11,7 +11,7 @@ description: Fuksikapteenin tervehdys uusille tutalaisille sekä ohjeet ennen op
 
 **Olet löytänyt aivan oikeaan paikkaan - oikeasta sivupalkista löydät lisätietoa niin ensimmäisten päivien ohjelmasta, fuksivuodesta kokonaisuutena, ensimmäisen vuoden opinnoista kuin teekkarikulttuurista laajemmin. Opit, mitä ovat fuksipisteet ja miten ne liittyvät teekkarilakin saamiseen sekä löydät kerran vuodessa ilmestyvän Fuksioppaan. Suosittelemme, että luet ensin Tervetuloa tutalle -sivun tervehdyksen, ja jatkat sitten tutkimaan muita välilehtiä (mm. fuksiopas on suositeltavaa luettavaa).**
 
-        Fuksivuodesta
+## Fuksivuodesta
 
 Onneksi olkoon mahtavan opiskelupaikan valitsemisesta - tai siitä, että olet onnekkaasti löytänyt nettisivuillemme! Joka tapauksessa näiltä sivuilta löytyy räjähtävä katsaus opiskelijaelämään, teekkariuteen ja elämään Prodeko-fuksina. Löydät myös tärkeitä aikatauluja ensimmäisistä viikoistasi Otaniemessä.
 
@@ -25,7 +25,7 @@ Fuksikapteenin tärkein tehtävä on tutustuttaa sinut opiskelijaelämän saloih
 
 Ensimmäisen kosketuksen sateenkaarihaalarien väriseen opiskelijaelämään saat jo kaksi viikkoa ennen itse Orientaatioviikon alkua, kun Prodeko järjestää perinteisen Varaslähdön elokuun alussa uusille kandiopiskelijoille. **Varaslähtö on elokuun alkupuolella, 8.-9.8. (Varaa ajankohta jo kalenteristasi!). Paikalle kannattaa ehdottomasti tulla,** sillä Orientaatioviikko on mukava aloittaa, kun tuntee jo muutamia kavereita entuudestaan! Tapahtumassa pääset tutustumaan kanssafukseihin, fuksikapteeniin sekä fuksiryhmien vastuuISOihin. Itse opinnot, tai ainakin opiskelijaelämä, pyörähtää kunnolla käyntiin Orientaatioviikolla viikko ennen lukukauden virallista alkamista. **Syksyn 2026 Orientaatioviikko on 24.-28.8.** Orientaatioviikolla luvassa on nimensä mukaisesti orientoitumista opiskelijana olemiseen ja perehtymistä Otaniemen saloihin. *Pro tip:* Kannattaa varata koko orientaatioviikko vapaaksi, sillä ohjelmaa on aamusta iltaan!
 
-Ennen opintojen alkua
+### Ennen opintojen alkua
 
 - Ota opiskelupaikkasi vastaan ja ilmoittaudu läsnäolevaksi
 - Maksa ilmoittautuessasi AYY:n ja Prodekon jäsenmaksu
@@ -38,7 +38,7 @@ Ennen opintojen alkua
 - Osallistu Fuksiryhmätapaamiseen 21.8. (VastuuISOsi kertoo tarkemmin syksymmällä.)
 - **Muista varata kalenterisi tyhjäksi orientaatioviikoksi 24.-28.8. ja ennen kaikkea, nauti kesästä!**
 
-Ensimmäinen päivä, nyt mennään!
+### Ensimmäinen päivä, nyt mennään!
 
 Saavu klo 8.00 kandidaattikeskuksen U2-saliin osoitteeseen Otakaari 1 (tarkemmasta sijainnista lisätietoa seuraa telegram-ryhmään lähempänä) ilmoittautumaan. ETYK-kamat mukaan! (ETYK = En Tule Yöksi Kotiin)
 
@@ -46,15 +46,15 @@ Jos et löydä jotain tietoa netistä tai puskaradiosta, tai sinulla on kysymyks
 
 **Onnittelut vielä hyvästä valinnasta, nähdään pian!**
 
-     Fuksivuoden oleellisimmat tiedotuskanavat
+## Fuksivuoden oleellisimmat tiedotuskanavat
 
 Tähän on koottu keskeisimmät asiat killan tiedotuksesta. Koulun tiedotuskäytännöt käydään läpi pääosin Johdatus opiskeluun –kurssilla, joka on kaikille pakollinen ja alkaa heti Orientaatioviikolla lukukauden alussa. Yliopiston järjestelmistä löydät lisää tietoa Ensimmäiset opinnot -sivulta. Kaikki killan tiedotuskanavat löytyvät [täältä](https://prodeko.org/fi/palvelut/tiedotuskanavat/). Lisätietoa kanavista saat Mediakeisariltamme esimerkiksi kysymällä sähköpostitse mediakeisari[at]prodeko.org. Kaikki prodekolaiselle merkityksellisisitä tunnuksista ja linkeistä kerrotaan jo heti orientaatioviikolla.
 
- Sähköposti
+### Sähköposti
 
 Sähköposti on Prodekon ensisijainen tiedotuskanava. Jokainen jäsen on vastuussa siitä, että he ilmoittavat päivitetyt tietonsa killan jäsenrekisteriin. Näin sähköposti voidaan toimittaa kaikille jäsenille. Tärkeimmät tiedotettavat asiat käyvät ilmi kerran viikossa lähetettävässä Prodekon viikkotiedotteessa, jota kannattaa seurata. Killan tärkein tiedotuskanava on jäsenet-sähköpostilista, jolle kaikki killan jäsenet automaattisesti kuuluvat. Listaa saa käyttää ainoastaan Prodekon hallituksen luvalla. Sähköpostilistojen osoitteita ei julkaista netissä roskapostin välttämiseksi.
 
-  Telegram
+### Telegram
 
 Telegram on Whatsapin kaltainen pikaviestintäsovellus, jota lähes kaikki Otaniemessä käyttävät. Yksi syy Telegramin käyttöön on sen monet toiminnallisuudet, joita Whatsappiin ei kuulu. On myös mukava pitää yliopistoon liittyvät viestit omassa sovelluksessaan! Telegram kannattaa ladata jo ennen koulun alkua, sillä myös fuksikapteenin tiedotus on pääasiassa "teegeessä".
 

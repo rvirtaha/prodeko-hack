@@ -19,7 +19,7 @@ Jokainen on varmasti nähnyt tämän valkoisen tupsulakin! Teekkarilakki on teek
 
 ## Sitsit
 
-Sitsit ovat elämän parasta aikaa - vai miltä kuulostaa maistuva ruoka ja juoma höystettynä mahtavalla pöytäseuralla? Kun aika ei kulu syödessä tai seurasta nauttiessa, lauletaan sitseillä toinen toistaan keksiliäämpiä teekkarilauluja lukkarien eli laulunjohtajien johdolla. Otaniemessä tuttu lause*"Teekkari laulaa mieluummin kuin hyvin!"* onkin vahva osa sitsikulttuuria.
+Sitsit ovat elämän parasta aikaa - vai miltä kuulostaa maistuva ruoka ja juoma höystettynä mahtavalla pöytäseuralla? Kun aika ei kulu syödessä tai seurasta nauttiessa, lauletaan sitseillä toinen toistaan keksiliäämpiä teekkarilauluja lukkarien eli laulunjohtajien johdolla. Otaniemessä tuttu lause *"Teekkari laulaa mieluummin kuin hyvin!"* onkin vahva osa sitsikulttuuria.
 
 ## Sikajuhlat
 

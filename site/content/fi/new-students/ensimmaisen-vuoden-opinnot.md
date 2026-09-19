@@ -15,7 +15,7 @@ Käy läpi myös [Tuotantotalouden opinto-opasta](https://www.aalto.fi/fi/ohjelm
 
 Kursseille ja tentteihin ilmoittaudutaan [Sisussa](https://sisu.aalto.fi/student/login). Sieltä löytyvät kaikkien kurssien tiedot (mm. luento- ja harjoitusajat sekä tenttien ajankohdat). Järjestelmän käyttö opetetaan Johdatus opiskeluun -kurssilla.
 
-Ensimmäisen vuoden kurssit
+## Ensimmäisen vuoden kurssit
 
 Fuksivuoden mallilukujärjestys on aika täysi ja ohjelmaa opintojen ulkopuolella riittää. Seuraavaksi luetellut kurssit ovat ehdotuksia, ja moni jättää jotakin pois, jos tuntuu ettei aika riitä kaikkeen. Vanha viisaus siitä, että *kaikki kurssit ehtii suorittaa ennen valmistumista*, pitää paikkansa ja toisena ja vielä kolmentena ja neljäntenäkin vuotena löytää paljon kavereita, joilta fuksikursseja on suorittamatta. Koulunkäyntiin on hyvä laittaa aikaa ja keskittyä, mutta stressiä on turha ottaa. Opiskeluvuodet ovat hienoa aikaa, ja jos tuntuu, että kiltatoiminta tai vaikka töissä käyminen vetävät puoleensa kursseja enemmän, uskalla rohkeasti jättää jotain pois. Opinnoista jää paljon enemmän käteen, kun niitä suorittaa hyvillä fiiliksillä hyvinvoinnistaan huolehtien eikä jaksamisensa äärirajoille itseään pakottaen. Jokainen opiskelee itseään varten - yliopisto ei ole enää lakisääteiseen oppivelvollisuuteen kuuluva pakollinen opinahjo.
 
@@ -43,7 +43,7 @@ Fuksivuoden mallilukujärjestys on aika täysi ja ohjelmaa opintojen ulkopuolell
 
 Vinkkejä tarjonnan keventämiseen, lisäämiseen tai vaihtoehtoiseen suoritusjärjestykseen voit rohkeasti kysellä vanhemmilta opiskelijoilta esimerkiksi ISOilta (eli tutoreilta) - he neuvovat mielellään, millaisia peliliikkeitä opintojen kanssa voi tehdä. Tällä mallilukkarilla ensimmäisestä vuodesta suoriutuu kuitenkin paremmin kuin hyvin!
 
-Opiskelumateriaali
+## Opiskelumateriaali
 
 Mahdollisuuksia opiskelumateriaalin hankkimiseen on monia. Kirjoja voi ostaa tai lainata ja kurssien sivuilta löytyy paljon materiaalia, jota on hyvä seurata kurssin edetessä. Vanhat kiltalaiset ovat joutuneet itsekin joskus hankkimaan nämä materiaalit, joten heiltä on hyvä kysellä erilaisista mahdollisuuksista.
 
@@ -53,7 +53,7 @@ Välillä kurssikirjoja joutuu ostamaan. Valtaosaa kurssikirjoista myydään Aka
 
 Kurssimateriaalia julkaistaan usein MyCourses-palvelussa. Esimerkiksi luentokalvot, opetusmonisteet, malliratkaisut ynnä muut löytyvät usein helposti MyCoursesissa kurssin omilta sivuilta. Usein kurssikirjat myös tarjotaan elektronisina näillä sivuilla kurssin puitteiden mukaan. Materiaalia löytyy myös [Aalto Libproxyn](https://login.libproxy.aalto.fi/menu) kautta, jonne pääset Aalto-tunnuksilla, jotka saat Orientaatioviikolla. Ylipäätään kurssikirjojen merkitys kurssin oppimisessa ei ole täydet 100%, sillä oppimista tapahtuu myös ryhmätöitä tehden ja harjoituksiin apua kysyen ja googlaten.
 
-Kielten opinnot
+## Kielten opinnot
 
 Prodeko ja tutayhteisö on kansainvälinen ryhmä ihmisiä ja tulet toivottavasti olemaan opintojesi aikana tekemisissä vaihto-opiskelijoidemme kanssa tekemisissä. Kansainväliseen toimintaan kannustetaan lähtemään mukaan tukemalla vaihtoja ja matkustamista niin yliopiston kuin killankin puolesta. Näistä kerrotaan enemmän vuoden mittaan, joten kannattaa olla tarkkana seuraamassa erilaisia tapahtumia Prodekon sähköpostilistalla.
 
