@@ -40,6 +40,21 @@ The site is bilingual, with Finnish under `content/fi/` and English under
 `translationKey` in their front matter, which is what lets the Finnish and
 English addresses differ.
 
+Search needs an index, which is built from the rendered HTML rather than from
+the content, so it is a second terminal:
+
+```
+cd site
+npx pagefind@1.5.0 --site public-preview
+```
+
+Hugo serves `site/public-preview/` from disk, index included, and the index
+survives a live-reload rebuild. Editing a page serves the new text immediately
+while the index stays as it was, so re-run that command — it takes about a
+second — to see the change in search results. The preview mounts both content
+roots into one site, so the preview index holds public and member pages
+together.
+
 ## Public pages and member pages
 
 Some pages are for Prodeko members only: meeting minutes, back issues of the
