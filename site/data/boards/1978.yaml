@@ -1,0 +1,27 @@
+# Prodeko's 1978 board, imported from https://www.prodeko.org/fi/guild/board/edelliset-hallitukset/
+# by tools/import-boards.py. Edit here, not on the old site.
+heading: "1978"
+sortKey: 1978
+members:
+  - name: "Heikki Tulenheimo"
+    role: "Puheenjohtaja"
+  - name: "Lars-Olof Staffans"
+    role: "Opintoasiat"
+  - name: "Asko Schrey"
+    role: "Varapuheenjohtaja"
+  - name: "Matti Ruotsala"
+    role: "Rahastonhoitaja"
+  - name: "Marketta Riipola"
+    role: "Emäntä"
+  - name: "Matti Raininko"
+    role: "Isäntä"
+  - name: "Jussi Mankki"
+    role: "Prodektivastaava"
+  - name: "Olavi Luotonen"
+    role: "Varexcursiomestari"
+  - name: "Simo Lassila"
+    role: "Excursiomestari"
+  - name: "Helena Hyypä"
+    role: "Emäntä"
+  - name: "Tina Ahlers"
+    role: "Tiedotus/sihteeri"

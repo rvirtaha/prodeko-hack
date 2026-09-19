@@ -1,5 +1,6 @@
 ---
 title: Hallitus
+description: Prodekon nykyisen hallituksen jäsenet ja heidän virkansa.
 translationKey: guild-board-hallitus
 layout: people
 dataset: boards

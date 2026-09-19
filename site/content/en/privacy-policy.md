@@ -1,93 +1,95 @@
 ---
-title: Tuotantotalouden Kilta Prodeko ry:n tietosuojaseloste
+title: "Privacy notice of Tuotantotalouden Kilta Prodeko ry"
 translationKey: tietosuoja
+description: "Prodeko ry's privacy notice on how the guild collects, uses and stores personal data in its digital services."
 sourceURL: https://prodeko.org/en/privacy-policy/
 ---
 
-Tämä on Prodeko Ry:n henkilötietolain (10 ja 24 §) ja EU:n yleisen tietosuoja-asetuksen (GDPR) mukainen rekisteri- ja tietosuojaseloste. Laadittu 23.05.2018. Viimeisin muutos 25.05.2026.
+This is the register and privacy notice of Prodeko Ry in accordance with the henkilötietolaki (the Personal Data Act, sections 10 and 24) and the EU General Data Protection Regulation (GDPR). Drawn up 23.05.2018. Last modified 25.05.2026.
 
-Tämä tietosuojaseloste kuvaa, kuinka Tuotantotalouden Kilta Prodeko ry kerää, käyttää ja käsittelee käyttäjien henkilötietoja. Sitä sovelletaan kaikkiin Prodekon sähköisiin palveluihin, jotka on eritelty tarkemmin dokumentin lopussa.
+This privacy notice describes how Tuotantotalouden Kilta Prodeko ry collects, uses and processes users' personal data. It applies to all of Prodeko's digital services, which are specified in more detail at the end of this document.
 
-### 1. Rekisterinpitäjä ja yhteystiedot
+## 1. Controller and contact details
 
 Tuotantotalouden Kilta Prodeko ry
- Postiosoite: PL 15500, 00076 Aalto
- Sähköposti: mediakeisari@prodeko.org
 
-Tietosuojaan ja omien tietojen käsittelyyn liittyvissä kysymyksissä voit olla yhteydessä yllä mainittuun sähköpostiosoitteeseen.
+- Postal address: PL 15500, 00076 Aalto
+- Email: mediakeisari@prodeko.org
 
-### 2. Tietojen säilytys ja turvallisuus
+In questions concerning data protection and the processing of your own data, you can contact the email address mentioned above.
 
-Tietojen käsittelyssä noudatetaan huolellisuutta ja tiedot on suojattu asianmukaisesti. Sähköisten palveluiden sisältämät tiedot on suojattu palomuurein, salasanoin ja muin tietoturvatoimialan yleisesti hyväksyttävin teknisin keinoin. Fyysisesti ylläpidettävät aineistot, kuten hallituksen, kiltakokouksen ja vuosikokouksen pöytäkirjat, sijaitsevat lukituissa tiloissa, joihin asiattomilta on pääsy estetty.
+## 2. Storage and security of data
 
-Ellei palvelukohtaisesti toisin mainita, sähköiset palvelut sekä niihin liittyvät tiedot sijaitsevat Amsterdamissa Microsoft Azuren datakeskuksessa olevalla virtuaalipalvelimella.
+Data is processed with due care and is appropriately protected. The data contained in the digital services is protected with firewalls, passwords and other technical means generally accepted in the information security industry. Physically maintained materials, such as the minutes of the board, of the guild meeting and of the annual meeting, are located in locked premises to which unauthorised persons have no access.
 
-Käyttäessäsi Prodekon verkkosivuja palvelimellemme tallentuu teknisiä lokitietoja, kuten IP-osoite, käyttöjärjestelmän asetukset sekä selaimen tyyppi ja versio. Emme käytä näitä tietoja analytiikkaan, mainontaan tai käyttäjien yksilöimiseen, ellei palvelukohtaisessa erittelyssä ole toisin mainittu.
+Unless otherwise stated for an individual service, the digital services and the data relating to them are located on a virtual server in Microsoft Azure's data centre in Amsterdam.
 
-### 3. Tietojen luovuttaminen ja kolmannet osapuolet
+When you use Prodeko's website, technical log data such as the IP address, operating system settings and browser type and version is stored on our server. We do not use this data for analytics, advertising or identifying individual users, unless otherwise stated in the service-specific breakdown.
 
-Emme lähtökohtaisesti luovuta tietoja muille osapuolille tai EU- ja ETA-maiden ulkopuolelle. Käytämme kuitenkin toiminnassamme seuraavia ulkopuolisia palveluntarjoajia, jotka käsittelevät tietoja omien tietosuojaselosteidensa mukaisesti: Mailman, Mailchimp, SendGrid, Google Analytics, Google AdWords, Kide.app, Stripe, kululaskut.fi
+## 3. Disclosure of data and third parties
 
-Kaikki käyttämämme palveluntarjoajat noudattavat EU:n tietosuoja-asetusta.
+As a rule, we do not disclose data to other parties or outside the EU and EEA countries. In our operations, however, we use the following external service providers, which process data in accordance with their own privacy notices: Mailman, Mailchimp, SendGrid, Google Analytics, Google AdWords, Kide.app, Stripe, kululaskut.fi
 
-#### Evästeiden käyttö
+All the service providers we use comply with the EU data protection regulation.
 
-Sähköisiä palveluitamme käyttäessäsi hyväksyt, että laitteellesi saatetaan tallentaa evästeitä. Evästeet ovat pienikokoisia tekstitiedostoja, joita selain tallentaa käyttäjän päätelaitteelle. Hyödynnämme evästeitä esimerkiksi istuntojen ylläpitämiseen (käyttäjän ei tarvitse kirjautua sisään joka kerta uudestaan) sekä palveluiden toimivuuden varmistamiseen ja kävijämäärien seuraamiseen. Jotkin kolmannen osapuolen liitännäiset (esim. Googlen tilastopalvelut) voivat asettaa omia evästeitään. Voit halutessasi estää evästeiden käytön selaimesi asetuksista.
+### Use of cookies
 
-### 4. Rekisteröidyn oikeudet
+When using our digital services you accept that cookies may be stored on your device. Cookies are small text files that the browser stores on the user's terminal device. We use cookies, for example, to maintain sessions (so that the user does not have to log in again every time) as well as to ensure that the services work and to monitor visitor numbers. Some third-party plugins (e.g. Google's statistics services) may set their own cookies. If you wish, you can block the use of cookies in your browser settings.
 
-Jokaisella rekisterissä olevalla henkilöllä on oikeus tarkistaa rekisteriin tallennetut tietonsa ja vaatia mahdollisen virheellisen tiedon korjaamista tai puutteellisen tiedon täydentämistä. Rekisterissä olevalla henkilöllä on myös oikeus pyytää häntä koskevien henkilötietojen poistamiseen rekisteristä. Henkilöillä on myös oikeus henkilötietojen käsittelyn rajoittamiseksi tietyissä tilanteissa. Mikäli henkilö haluaa tarkistaa hänestä tallennetut tiedot tai vaatia niihin oikaisua, pyyntö tulee lähettää kirjallisesti rekisterinpitäjän sähköpostiosoitteeseen (mediakeisari@prodeko.org).
+## 4. Rights of the data subject
 
-### 5. Rekisterin tietosisältö ja tietolähteet palveluittain
+Every person in the register has the right to check the data stored about them in the register and to demand the correction of any erroneous data or the completion of incomplete data. A person in the register also has the right to request the erasure of personal data concerning them from the register. Persons also have the right to restrict the processing of personal data in certain situations. If a person wishes to check the data stored about them or to demand its rectification, the request must be sent in writing to the controller's email address (mediakeisari@prodeko.org).
 
-Tiettyjen palveluiden tai niiden osien käyttöä on rajoitettu käyttäjän sijainnin tai tunnistautumisen perusteella.
+## 5. Data content of the register and data sources by service
+
+The use of certain services or parts of them has been restricted on the basis of the user's location or authentication.
 
 **www.prodeko.org**
 
-Palvelu toimii Prodekon pääsivuina ja se sisältää monipuolisesti materiaalia, josta osa näkyy vain kirjautuneille. Killan jäsenelle luodaan tunnukset palveluun jäseneksi liittymisen yhteydessä. Sivustolla saattaa esiintyä henkilötietoja saattaa esiintyä hallituksen pöytäkirjoissa, killan toimijoiden yhteystiedoissa ja opiskelukertomuksissa. Pääsivujen liikennettä seurataan Google Analyticsin avulla ja sivustolla käytetään Google AdWords -työkalua markkinoinnin kohdentamiseen (voit estää kohdennuksen osoitteessa google.com/settings/ads)
+The service functions as Prodeko's main website and it contains a wide range of material, some of which is visible only to logged-in users. Credentials for the service are created for a guild member when they join as a member. Personal data may appear on the site in the minutes of the board, in the contact details of the guild's officials and in study accounts. Traffic on the main site is monitored with Google Analytics and the site uses the Google AdWords tool for targeting marketing (you can block targeting at google.com/settings/ads)
 
-Pääsivuihin on integroitu Prodekon sähköinen matrikkeli, jossa sekä killan että killan alumniyhdistyksen jäsenet voivat katsella toistensa jakamia tietojaan. Liittyessäsi Prodekon jäseneksi kirjaamme liittymiseen vaadittavat henkilötietosi (täydellinen nimi, kotipaikka, opiskeluala ja pääaine, sähköpostiosoite sekä AYY:n jäsenyys). Tämän lisäksi kirjaamme liittymisajankohdasta ja -perusteista johdannaiset hallinnolliset jäsentiedot rekisteriin (excursiovuosikurssi, jäsenyyden päättymispäivämäärä ja jäsentyyppi). Keräämme lisäksi tietoja, jotka syötät vapaaehtoisesti palvelua käyttäessäsi, kuten esimerkiksi työhistoriasi. Jos ostat Prodekon jäsenyyden ulkoisen tarjoajan, kuten kide.app:in kautta, saattaa palveluntarjoaja tallentaa ja jakaa meille sinusta tietoja edellä mainittujen lisäksi. Tästä lisää tietoa löydät aina kyseisen palveluntarjoajan käyttöehdoista. Rekisteröidyt käyttäjät voivat muokata jäsentietojaan sekä tarvittaessa poistaa tietonsa. Sähköisen matrikkelin ylläpito, hallinto ja käytäntö on kuvattu tarkemmin matrikkelin rekisteriselosteessa.
+Prodeko's electronic matrikkeli is integrated into the main site; there, members of both the guild and the guild's alumni association can view the information the others have shared. When you join Prodeko as a member, we record the personal data required for joining (full name, place of residence, field of study and major, email address and membership of AYY). In addition to this, we record in the register the administrative membership data derived from the time of and grounds for joining (excursion year class, membership end date and membership type). We also collect data that you enter voluntarily while using the service, such as your work history. If you purchase Prodeko membership through an external provider, such as kide.app, the service provider may store and share data about you with us in addition to the above. You can always find more information about this in the terms of use of the service provider in question. Registered users can edit their membership data and, if necessary, delete their data. The maintenance, administration and practices of the electronic matrikkeli are described in more detail in the matrikkeli's register notice.
 
-Lisäksi pääsivuihin on integroitu tiedote-palvelu – tiedotteet.prodeko.org. Sitä käytetään Prodekon viestintään ja sähköpostilla lähetettävän viikkotiedotteen luomiseen. Tiedotteissa saattaa esiintyä henkilötietoja, mikäli se liittyy olennaisesti tiedotettavaan asiaan. Esimerkiksi tiedotteesta lisätietoja toimittava taho on usein kirjattuna tiedotteen loppuun.
+In addition, a bulletin service – tiedotteet.prodeko.org – is integrated into the main site. It is used for Prodeko's communications and for creating the weekly bulletin sent by email. Personal data may appear in the bulletins if it is essentially related to the matter being announced. For example, the party providing further information about a bulletin is often recorded at the end of the bulletin.
 
 **kiltiskamera.prodeko.org**
 
-Palvelun ensisijaisena tarkoituksena on mahdollistaa kiltahuoneen reaaliaikaisen tilanteen seuraaminen. Toiminto toteutetaan välittämällä kiltahuoneelta suoraa videokuvaa (livestriimiä). Palvelun käyttö on rajattu yksinomaan tuotantotalouden kilta Prodeko ry:n jäsenille. Palvelun hyödyntäminen edellyttää onnistunutta sisäänkirjautumista Prodekon sähköisiin palveluihin. Jotta palvelua voi käyttää, käyttäjän on annettava palvelussa suostumus vielä erillisille oikeuksille, jotta palvelu toimii.
+The primary purpose of the service is to make it possible to follow the real-time situation in the guild room. The function is implemented by transmitting live video (a livestream) from the guild room. Use of the service is restricted exclusively to members of Tuotantotalouden Kilta Prodeko ry. Making use of the service requires a successful login to Prodeko's digital services. In order to use the service, the user must also give consent in the service to separate permissions so that the service works.
 
 **membership.prodeko.org**
 
-Palvelun tarkoitus on toimia Prodekon jäsenrekisterinä. Matrikkelin rinnalla jäsentietoja siis säilytetään myös kyseisessä palvelussa. Säilytämme jäsenrekisterissä jäseneksi liittymiseen vaadittavat henkilötiedot (täydellinen nimi, kotipaikka, opiskeluala ja pääine, sähköpostiosoite sekä AYY:n jäsenyys). Kirjaamme myös liittymisajankohdasta ja -perusteista johdannaiset hallinnolliset jäsentiedot rekisteriin (excursiovuosikurssi, jäsenyyden päättymispäivämäärä ja jäsentyyppi). Kaikkiin jäsenrekisterien tietoihin pääsevät kiinni vain killan hallituksen osoittamat henkilöt, joiden killan eteen tekemä työ edellyttää tietoihin pääsemistä.
+The purpose of the service is to act as Prodeko's member register. Alongside the matrikkeli, membership data is therefore also stored in that service. In the member register we store the personal data required for joining as a member (full name, place of residence, field of study and major, email address and membership of AYY). We also record in the register the administrative membership data derived from the time of and grounds for joining (excursion year class, membership end date and membership type). Access to all of the data in the member registers is available only to persons designated by the guild's board whose work for the guild requires access to the data.
 
 **alumni.prodeko.org**
 
-Palvelun tarkoitus on toimia Prodekon alumniyhdistyksen (Prodekon Alumni ry) tiedotuskanavana. Sivulla julkaistaan alumnitiedotteita, jotka saattavat sisältää nimiä esimerkiksi allekirjoituksina.
+The purpose of the service is to act as the communication channel of Prodeko's alumni association (Prodekon Alumni ry). Alumni bulletins are published on the site and they may contain names, for example as signatures.
 
 **bilis2.prodeko.org**
 
-Palvelun tarkoitus on pitää kirjaa Prodekon kiltahuoneella pelatuista biljardipeleistä ja laskea niiden perusteella taitotasoindeksit pelaajille. Pelaajasta tallentuvat etu- ja sukunimi, emoji, lempinimi, motto ja indeksi. Pelistä tallentuvat voittaja, häviäjä, päivämäärä ja kellonaika sekä tieto siitä, tekikö häviäjä ainuttakaan pussitusta. Kaikkien käyttäjien ja pelien tiedot ovat vapaasti haettavissa. Palvelun luonteen vuoksi sekä väärinkäytösten estämiseksi palvelu on käytettävissä ainoastaan kiltahuoneella.
+The purpose of the service is to keep a record of the billiards games played in Prodeko's guild room and, on the basis of these, to calculate skill level indices for the players. The first and last name, emoji, nickname, motto and index are stored about a player. The winner, loser, date and time of day, as well as information about whether the loser potted a single ball, are stored about a game. The data of all users and games is freely retrievable. Because of the nature of the service and in order to prevent misuse, the service can be used only in the guild room.
 
 **gallery.prodeko.org**
 
-Palveluun tallennetaan kuvia killan tapahtumista. Palveluntarjoajana toimii Kuvat.fi ( https://kuvat.fi). Kuvan tiedostonimen yhteyteen saatetaan liittää tietoja kuvattavasta, esimerkiksi kuvattavan etunimi. Kuvat ovat julkisesti nähtävillä.
+Photographs from the guild's events are stored in the service. The service provider is Kuvat.fi ( https://kuvat.fi). Information about the person photographed, for example their first name, may be attached to the file name of the photograph. The photographs are publicly visible.
 
 **ilmo.prodeko.org**
 
-Palvelua käytetään killan tapahtumien viestintään ja niihin ilmoittautumiseen. Ilmoittautumisen yhteydessä kerätyt tiedot riippuvat tapahtumasta, mutta jokaisen tapahtuman yhteydessä kerätään ainakin etu- ja sukunimi, ilmoittautumisaika ja sähköpostiosoite. Sähköpostiosoitetta käytetään peruutuslinkin lähettämiseen sekä tapahtumaan liittyviin tiedotuksiin. Muita tyypillisesti kerättäviä tietoja ovat ilmoittautumiskiintiö, ruoka-aineallergiat ja vuosikurssi. Ilmoittautumistiedoista etu- ja sukunimi, ilmoittautumisaika sekä mahdollinen kiintiö ovat palvelussa julkisesti nähtävillä. Kiintiö on tapahtumakohtainen ja voi periaatteessa olla mitä tahansa, mutta useimmiten kiintiöksi asetetaan vuosikurssi, kilta tai joukkue. Tapahtumasta riippuen ilmoittautumistietoja voidaan luovuttaa eteenpäin killan ulkopuoliselle taholle, esimerkiksi excursion järjestäjälle. Ilmoittautumistiedot anonymisoidaan automaattisesti kuusi kuukautta sen jälkeen, kun ilmoittautuminen on mennyt kiinni siten, ettei niistä jää mitään ilmoittautuneiden lukumäärää, mahdollisia kiintiöitä ja niiden täyttöasteita lukuun ottamatta jäljelle. Anonymisoituja tietoja käytetään osallistumismäärien analysoimiseen ja tapahtumatarjonnan parantamiseen. Ilmokilkkeen liikennettä seurataan Googlen analytiikkatyökalujen (Google Analytics) avulla.
+The service is used for communications about the guild's events and for registering for them. The data collected in connection with registration depends on the event, but in connection with every event at least the first and last name, the time of registration and the email address are collected. The email address is used for sending the cancellation link and for communications relating to the event. Other data typically collected are the registration quota, food allergies and year class. Of the registration data, the first and last name, the time of registration and any quota are publicly visible in the service. The quota is event-specific and can in principle be anything, but most often the quota is set as the year class, the guild or the team. Depending on the event, registration data may be passed on to a party outside the guild, for example to the organiser of an excursion. Registration data is automatically anonymised six months after registration has closed, in such a way that nothing remains of it apart from the number of registrants, any quotas and their fill rates. The anonymised data is used for analysing participation numbers and for improving the range of events. Traffic on ilmokilke is monitored with Google's analytics tools (Google Analytics).
 
 **infoscreen.prodeko.org**
 
-Palvelu on tarkoitettu jatkuvasti päivittyväksi tiedotusnäytöksi ja sen käyttö on rajattu kiltahuoneelle. Tiedotteet voivat satunnaisesti sisältää henkilötietoja.
+The service is intended as a continuously updating information display and its use is restricted to the guild room. The bulletins may occasionally contain personal data.
 
 **namu.prodeko.org**
 
-Palvelu toimii maksupäätteenä kiltahuoneella myytäville ruokatuotteille. Palvelun käyttäminen edellyttää luomaan käyttäjän, josta tallennetaan etu- ja sukunimi sekä käyttäjän määrittämä käyttäjänimi. Käyttäjä voi ostaa tuotteita tallettamalla käyttäjätililleen rahaa jä käyttämällä sitä ostoksiin. Talletus tapahtuu tilisiirtona MobilePay-mobiilisovelluksella ([https://mobilepay.fi](https://mobilepay.fi)) tai Stripe-palveluntarjoajan välittämänä mobiilimaksuna ([https://stripe.com/en-fi](https://stripe.com/en-fi)). Ulkoiset palveluntarjoajat käsittelevät maksuihin liittyviä tietoja omien tietosuojaselosteidensa mukaisesti.
+The service acts as a payment terminal for the food products sold in the guild room. Using the service requires creating a user account, about which the first and last name as well as a username determined by the user are stored. The user can buy products by depositing money into their user account and using it for purchases. The deposit is made as a bank transfer with the MobilePay mobile application ([https://mobilepay.fi](https://mobilepay.fi)) or as a mobile payment intermediated by the service provider Stripe ([https://stripe.com/en-fi](https://stripe.com/en-fi)). The external service providers process data relating to payments in accordance with their own privacy notices.
 
-Palvelu pitää kirjaa tehdyistä talletuksista, ostoksista, palveluun kirjautumisesta, kirjautuneen käyttäjän laitetyypistä (mobiili, työpöytä tai kiltahuoneen tabletti) sekä talletuksiin käytetystä ulkoisesta palvelusta (Mobilepay tai Stripe). Palvelun ylläpitäjät voivat nähdä edellä mainituista tiedoista aggregoituja tilastoja, joita ei voi yhdistää yksittäisiin käyttäjiin. Käyttäjän osto- ja talletushistoria on näkyvissä vain käyttäjälle itselleen.
+The service keeps a record of the deposits and purchases made, of logins to the service, of the device type of the logged-in user (mobile, desktop or the guild room tablet) and of the external service used for deposits (Mobilepay or Stripe). The maintainers of the service can see aggregated statistics of the above-mentioned data, which cannot be connected to individual users. A user's purchase and deposit history is visible only to the user themselves.
 
 **sikajuhlat.com**
 
-Palvelu tarjoaa vuosittain muutaman sikajuhlia edeltävän kuukauden ajan selainpelin, jossa parhaimmat pisteet saaneet palkitaan sikajuhlissa. Pelaamisen yhteydessä kerätään nimimerkki ja mahdollisesti telegram tunnus sekä sähköpostiosoite parhaiden pelaajien tavoittamiseen. Pelaajatiedot poistetaan sikajuhlien jälkeen.
+Each year, for a few months preceding the Sikajuhlat, the service offers a browser game in which those who achieve the best scores are rewarded at the Sikajuhlat. In connection with playing, a nickname and possibly a Telegram handle as well as an email address are collected in order to reach the best players. Player data is deleted after the Sikajuhlat.
 
 **vaalikoppi.prodeko.org**
 
-Palvelu toimii alustana kiltakokouksissa äänestämiselle, eikä sitä ole tarkoitettu jatkuvaan käyttöön. Ehdokkaiden nimet tallennetaan palveluun äänestyksen ajaksi. Äänestäjät tunnistautuvat satunnaisesti luodulla äänestäjäkohtaisella pseudonyymillä. Pseudonyymin tarkoitus on estää ulkopuolisia osallistumasta äänestykseen ja varmistaa vaalisalaisuus. Äänenannon yhteydessä tallennetaan ainoastaan tieto siitä, että pseudonyymin omaaja käyttänyt äänensä. Kaikki palvelun tiedot poistetaan jokaisen käyttökerran jälkeen.
+The service acts as a platform for voting at guild meetings, and it is not intended for continuous use. The names of the candidates are stored in the service for the duration of the vote. Voters are authenticated with a randomly generated voter-specific pseudonym. The purpose of the pseudonym is to prevent outsiders from taking part in the vote and to ensure the secrecy of the ballot. In connection with casting a vote, only the information that the holder of the pseudonym has used their vote is stored. All data in the service is deleted after each occasion of use.

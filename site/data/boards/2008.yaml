@@ -1,0 +1,27 @@
+# Prodeko's 2008 board, imported from https://www.prodeko.org/fi/guild/board/edelliset-hallitukset/
+# by tools/import-boards.py. Edit here, not on the old site.
+heading: "2008"
+sortKey: 2008
+members:
+  - name: "Jussi Valtonen"
+    role: "Puheenjohtaja"
+  - name: "Juha Tolva"
+    role: "Rahastonhoitaja"
+  - name: "Ville Poikolainen"
+    role: "Isäntä"
+  - name: "Arjo Laukia"
+    role: "Fuksikapteeni"
+  - name: "Jarno Lappalainen"
+    role: "Ulkoministeri"
+  - name: "Reeta Kukkola"
+    role: "Sisä- ja Kulttuuriministeri"
+  - name: "Antti Koulumies"
+    role: "Opintovastaava"
+  - name: "Taneli Hirvola"
+    role: "Excumestari"
+  - name: "Outi Herkepeus"
+    role: "Yrityssuhdevastaava (varapuheenjohtaja)"
+  - name: "Terhen Heikkilä"
+    role: "Sihteeri"
+  - name: "Johan Haataja"
+    role: "Mediakeisari"

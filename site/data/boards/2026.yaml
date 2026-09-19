@@ -4,25 +4,37 @@ sortKey: 2026
 members:
   - name: Aaron Katainen
     role: Puheenjohtaja
+    roleEn: President
   - name: Kalle Kinnala
     role: Varapuheenjohtaja
+    roleEn: Vice President
   - name: Arttu Kaitila
     role: Rahastonhoitaja
+    roleEn: Treasurer
   - name: Emilia Schmidt
     role: Excumestari
+    roleEn: Excursion Manager
   - name: Tuomas Ylimäki
     role: Yrityssuhdevastaava
+    roleEn: Corporate Relations Manager
   - name: Touko Heinilä
     role: Maisteri- ja KV-kapteeni
+    roleEn: Master’s and International Captain
   - name: Elina Lauri
     role: Fuksikapteeni
+    roleEn: Fuksi Captain
   - name: Aida Sinkkonen
     role: Sisä- ja kulttuuriministeri
+    roleEn: Minister of Internal and Cultural Affairs
   - name: Helmi Halinen
     role: Isäntä
+    roleEn: Host
   - name: Joona Isosaari
     role: Ulkoministeri
+    roleEn: Minister of Foreign Affairs
   - name: Lauri Pörsti
     role: Opintovastaava
+    roleEn: Minister of Studies
   - name: Daniel Nikkar
     role: Mediakeisari
+    roleEn: Emperor of Media

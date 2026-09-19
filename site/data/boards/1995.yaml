@@ -1,0 +1,27 @@
+# Prodeko's 1995 board, imported from https://www.prodeko.org/fi/guild/board/edelliset-hallitukset/
+# by tools/import-boards.py. Edit here, not on the old site.
+heading: "1995"
+sortKey: 1995
+members:
+  - name: "Hannu Suonio"
+    role: "Yritysvastaava"
+  - name: "Sami Sarkamies"
+    role: "Ulkoministeri"
+  - name: "Timo Räikkönen"
+    role: "Pr-vastaava"
+  - name: "Tuomas Pippola"
+    role: "Isäntä"
+  - name: "Paul ’Pale’ Melin"
+    role: "Puheenjohtaja"
+  - name: "Sari Naukkarinen"
+    role: "Fuksikapteeni"
+  - name: "Mikael Kuhn"
+    role: "Sisäministeri"
+  - name: "Tero Heikkilä"
+    role: "Mediakeisari, sihteeri"
+  - name: "Ville Haapalinna"
+    role: "Excursiomestari"
+  - name: "Anna Granskog"
+    role: "Opintovastaava, varapuheenjohtaja"
+  - name: "Laura Ahlqvist"
+    role: "Rahastonhoitaja"

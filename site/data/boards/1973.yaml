@@ -1,0 +1,19 @@
+# Prodeko's 1973 board, imported from https://www.prodeko.org/fi/guild/board/edelliset-hallitukset/
+# by tools/import-boards.py. Edit here, not on the old site.
+heading: "1973"
+sortKey: 1973
+members:
+  - name: "Risto Tanner"
+    role: "Isäntä"
+  - name: "Matti Sinnemaa"
+    role: "Varapuheenjohtaja"
+  - name: "Hannu Kuuskoski"
+    role: "Puheenjohtaja"
+  - name: "Airi Kupiainen"
+    role: "Sihteeri"
+  - name: "Pauli Kulvik"
+    role: "Ekskursiomestari"
+  - name: "Risto Kääpä"
+    role: "Rahastonhoitaja"
+  - name: "Heidi Forsman"
+    role: "Emäntä"

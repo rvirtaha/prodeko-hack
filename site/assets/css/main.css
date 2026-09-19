@@ -158,27 +158,6 @@ a.btn, a.btn:hover { border-bottom: none; }
 .nav-toggle-bars::before { position: absolute; top: -6px; left: 0; }
 .nav-toggle-bars::after { position: absolute; top: 6px; left: 0; }
 
-/* Below this width the logo + five nav items + language pill + login
-   button no longer fit on one line, so they collapse behind a toggle. */
-@media (max-width: 860px) {
-  .site-header .bar { height: auto; padding-block: var(--space-4); row-gap: var(--space-4); }
-  .nav-toggle { display: flex; }
-  .site-header nav,
-  .site-header .side { display: none; width: 100%; }
-  .site-header.nav-open nav,
-  .site-header.nav-open .side { display: flex; }
-  .site-header .nav-list { flex-direction: column; align-items: stretch; gap: 0; width: 100%; }
-  .site-header .nav-list a { width: 100%; padding: var(--space-3) 0; border-bottom: 1px solid var(--border-subtle); }
-  .site-header .nav-list a:hover,
-  .site-header .nav-list li.current a { border-bottom-color: var(--border-subtle); color: var(--pd-blue-light); }
-  .site-header .side { flex-direction: column; align-items: stretch; gap: var(--space-4); }
-  .site-header .side .btn { width: 100%; }
-  .lang-switch { align-self: flex-start; }
-  /* The mega-menu is a hover affordance; on touch it never opens, so the
-     flat nav-list above is the only way to reach these pages on mobile. */
-  .mega-panel { display: none !important; }
-}
-
 /* ===== Mega menu (layouts/partials/header.html + assets/js/mega-menu.js) ===== */
 
 @keyframes pdFade { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
@@ -244,6 +223,86 @@ a.btn, a.btn:hover { border-bottom: none; }
 }
 .lang-switch a.current { background: var(--pd-blue); color: var(--pd-white-1); }
 
+/* ===== Phone menu (layouts/partials/header.html, .mobile-nav) =====
+
+   The mega-panels are opened by hover, which touch never fires, so on a phone
+   the same links are repeated as a set of accordions. Hidden above the
+   breakpoint; the media query at the end of this section is what reveals it. */
+
+.mobile-nav { display: none; }
+.mobile-nav .container { padding-bottom: var(--space-6); }
+.m-group { border-bottom: 1px solid var(--border-subtle); }
+.m-group summary {
+  cursor: pointer;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 52px;
+  font-size: var(--size-xs);
+  font-weight: var(--weight-semibold);
+  letter-spacing: var(--track-caps);
+  text-transform: uppercase;
+  color: var(--pd-blue);
+}
+.m-group summary::-webkit-details-marker { display: none; }
+.m-group summary::after { content: "+"; font-size: var(--size-xl); font-weight: var(--weight-light); color: var(--pd-blue-light); }
+.m-group[open] summary::after { content: "\2013"; }
+.m-group-body { padding: 0 0 var(--space-4); }
+.m-col-title {
+  font-size: var(--size-3xs);
+  font-weight: var(--weight-semibold);
+  letter-spacing: var(--track-caps-wide);
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin: var(--space-4) 0 var(--space-1);
+}
+.mobile-nav a,
+.m-link-disabled {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  min-height: 44px;
+  font-size: var(--size-md);
+  font-weight: var(--weight-regular);
+  color: var(--pd-black);
+  border-bottom: none;
+}
+.mobile-nav a span:last-child { color: var(--pd-blue-light); font-size: var(--size-xs); }
+.m-link-disabled { color: var(--text-muted); }
+.m-overview { color: var(--pd-blue-light) !important; font-weight: var(--weight-semibold) !important; }
+.m-top {
+  border-bottom: 1px solid var(--border-subtle) !important;
+  min-height: 52px !important;
+  font-size: var(--size-xs) !important;
+  font-weight: var(--weight-semibold) !important;
+  letter-spacing: var(--track-caps);
+  text-transform: uppercase;
+  color: var(--pd-blue) !important;
+}
+.m-actions { display: flex; align-items: center; gap: var(--space-4); padding-top: var(--space-6); }
+.m-actions .lang-switch { flex-shrink: 0; }
+.m-actions .btn { flex: 1; }
+
+/* Below this width the logo, five nav items, language pill and login button no
+   longer fit on one line, so everything but the logo collapses behind the
+   toggle and the phone menu above takes over. */
+@media (max-width: 860px) {
+  .site-header .bar { height: 60px; gap: var(--space-4); flex-wrap: nowrap; }
+  .site-header .desktop-nav,
+  .site-header .side { display: none; }
+  .nav-toggle { display: flex; margin-left: auto; }
+  .mega-panel { display: none !important; }
+  .site-header.nav-open .mobile-nav {
+    display: block;
+    max-height: calc(100dvh - 60px);
+    overflow-y: auto;
+    border-top: 1px solid var(--border-subtle);
+    animation: pdFade 160ms var(--ease-standard);
+  }
+}
+
 /* ===== Footer ===== */
 
 .site-footer { background: var(--pd-blue-dark); color: var(--pd-white-1); }
@@ -265,27 +324,30 @@ a.btn, a.btn:hover { border-bottom: none; }
 }
 .site-footer .links { display: flex; flex-direction: column; gap: var(--space-2); list-style: none; margin: 0; padding: 0; }
 .site-footer .links a { color: var(--pd-white-1); font-size: var(--size-sm); font-weight: var(--weight-light); opacity: 0.9; border-bottom: none; }
-.site-footer .network { padding: var(--space-2) 0 var(--space-10); }
+.site-footer .network { padding-block: var(--space-2) var(--space-10); }
 .site-footer .network-logos { display: flex; flex-wrap: wrap; gap: var(--space-8) 44px; align-items: center; margin-top: var(--space-6); }
 .site-footer .network-logos img { height: 22px; width: auto; filter: brightness(0) invert(1); opacity: 0.9; }
 .site-footer .bottom {
   border-top: 1px solid rgb(246 246 246 / 0.15);
-  padding: var(--space-5) 0 var(--space-8);
+  padding-block: var(--space-5) var(--space-8);
   display: flex;
   justify-content: space-between;
-  gap: var(--space-4);
+  align-items: baseline;
+  gap: var(--space-2) var(--space-6);
   flex-wrap: wrap;
   font-size: var(--size-2xs);
   font-weight: var(--weight-light);
   opacity: 0.7;
 }
+.site-footer .bottom-links { display: flex; gap: var(--space-6); flex-wrap: wrap; }
+.site-footer .bottom-links a { color: var(--pd-white-1); border-bottom: 1px solid rgb(246 246 246 / 0.3); }
 
 /* ===== Hero: home (blue ground) ===== */
 
 .hero-home {
   position: relative;
   overflow: hidden;
-  background: var(--pd-blue) url("/images/brand/bg-texture-blue.png") center/cover;
+  background: var(--pd-blue) var(--bg-texture-blue) center/cover;
   color: var(--pd-white-1);
 }
 .hero-home::before {
@@ -310,7 +372,7 @@ a.btn, a.btn:hover { border-bottom: none; }
   width: 560px;
   opacity: 0.08;
 }
-.hero-home .inner { position: relative; padding: 130px 0 120px; }
+.hero-home .inner { position: relative; padding-block: 130px 120px; }
 .hero-home h1 {
   margin: 0 0 var(--space-6);
   max-width: 16ch;
@@ -349,6 +411,7 @@ a.btn, a.btn:hover { border-bottom: none; }
 
 /* ===== Announcement card ===== */
 
+.announcement-wrap { margin-top: -56px; position: relative; z-index: 1; max-width: 28rem; }
 .announcement {
   background: #fff;
   color: var(--text-body);
@@ -366,8 +429,15 @@ a.btn, a.btn:hover { border-bottom: none; }
 /* ===== Values strip (home) ===== */
 
 .values-section { padding: 64px 0 88px; }
-.values-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(180px,1fr)); gap: var(--space-4); }
+.values-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(200px,1fr)); gap: var(--space-6); }
+.values-grid .value { margin: 0; display: flex; flex-direction: column; gap: var(--space-3); }
 .values-grid img { width: 100%; aspect-ratio: 16/9; object-fit: cover; }
+.values-grid figcaption {
+  font-size: var(--size-sm);
+  font-weight: var(--weight-light);
+  line-height: var(--leading-loose);
+  color: var(--text-body);
+}
 
 /* ===== Photo band (home) ===== */
 
@@ -378,7 +448,9 @@ a.btn, a.btn:hover { border-bottom: none; }
   background: var(--pd-blue-dark);
 }
 .photo-band img { width: 100%; height: 100%; object-fit: cover; }
-.photo-band::after { content: ""; position: absolute; inset: 0; background: var(--vignette-calm); }
+/* The caption is white type over an uncontrolled photograph, so the scrim
+   has to hold on its brightest part, not its average one. */
+.photo-band::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgb(0 40 81 / 0.45) 0%, rgb(0 40 81 / 0.62) 55%, rgb(0 40 81 / 0.75) 100%); }
 .photo-band .caption {
   position: absolute;
   inset: 0;
@@ -399,7 +471,7 @@ a.btn, a.btn:hover { border-bottom: none; }
   line-height: 1.15;
   margin: 0 auto;
 }
-.photo-band .caption-sub { margin-top: var(--space-4); font-size: var(--size-md); font-weight: var(--weight-light); color: var(--pd-white-1); opacity: 0.92; }
+.photo-band .caption-sub { margin-top: var(--space-4); font-size: var(--size-md); font-weight: var(--weight-regular); color: var(--pd-white-1); text-shadow: var(--shadow-heading); }
 
 /* ===== Partners ===== */
 
@@ -421,7 +493,7 @@ a.btn, a.btn:hover { border-bottom: none; }
 .hero-split {
   position: relative;
   overflow: hidden;
-  background: var(--pd-blue) url("/images/brand/bg-texture-blue.png") center/cover;
+  background: var(--pd-blue) var(--bg-texture-blue) center/cover;
   color: var(--pd-white-1);
   display: grid;
   grid-template-columns: minmax(0,1fr) minmax(0,1fr);
@@ -430,29 +502,35 @@ a.btn, a.btn:hover { border-bottom: none; }
 .hero-split .image { position: relative; min-height: 420px; }
 .hero-split .image img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 .hero-split .image::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, var(--pd-blue) 0%, rgb(0 46 125 / 0) 28%); }
-.hero-split h1 { margin: 0 0 var(--space-5); font-size: clamp(34px,3.8vw,54px); font-weight: var(--weight-bold); letter-spacing: var(--track-caps); text-transform: uppercase; line-height: 1.05; color: var(--pd-white-1); text-shadow: var(--shadow-heading); }
+/* The longest word here is TUOTANTOTALOUDEN, and the text column is half the
+   viewport: at 3.8vw it was wider than its column at every width from 900px
+   up, so the final N was sheared off on every desktop too. */
+.hero-split h1 { margin: 0 0 var(--space-5); font-size: clamp(24px,3vw,46px); hyphens: auto; font-weight: var(--weight-bold); letter-spacing: var(--track-caps); text-transform: uppercase; line-height: 1.05; color: var(--pd-white-1); text-shadow: var(--shadow-heading); }
 .hero-split .kicker { opacity: 0.85; margin-bottom: var(--space-4); display: block; }
 .hero-split p { margin: 0; max-width: 52ch; font-size: var(--size-md); font-weight: var(--weight-light); line-height: var(--leading-normal); }
 .hero-split .rainbow-rule { position: absolute; left: 0; right: 0; bottom: 0; }
-@media (max-width: 780px) { .hero-split { grid-template-columns: 1fr; } .hero-split .image { min-height: 240px; } }
+/* 900 rather than 780: below this the text column is under 450px, which is
+   too narrow to set a display heading beside a photograph. */
+@media (max-width: 900px) { .hero-split { grid-template-columns: minmax(0, 1fr); } .hero-split .image { min-height: 240px; } }
 
 /* ===== Hub page hero: full-bleed photo (prospective / corporate) ===== */
 
 .hero-photo { position: relative; overflow: hidden; color: var(--pd-white-1); }
 .hero-photo img.bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-.hero-photo .inner { position: relative; padding: 96px 0 88px; }
+.hero-photo .inner { position: relative; z-index: 2; padding-block: 96px 88px; }
 .hero-photo h1 { margin: 0 0 var(--space-5); font-weight: var(--weight-bold); letter-spacing: var(--track-caps); text-transform: uppercase; line-height: 1.05; color: var(--pd-white-1); text-shadow: var(--shadow-heading); }
 .hero-photo .kicker { opacity: 0.9; margin-bottom: var(--space-4); display: block; }
 .hero-photo p { margin: 0; max-width: 60ch; font-size: var(--size-lg); font-weight: var(--weight-light); line-height: var(--leading-normal); text-shadow: var(--shadow-heading); }
 
 .hero-prospective { min-height: 560px; display: flex; align-items: flex-end; background: var(--pd-blue-dark); }
-.hero-prospective::before { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgb(0 40 81 / 0.05) 0%, rgb(0 40 81 / 0.2) 35%, rgb(0 40 81 / 0.88) 62%, rgb(0 40 81 / 0.96) 100%); }
+.hero-prospective::before { content: ""; position: absolute; inset: 0; z-index: 1; background: linear-gradient(180deg, rgb(0 40 81 / 0.05) 0%, rgb(0 40 81 / 0.2) 35%, rgb(0 40 81 / 0.88) 62%, rgb(0 40 81 / 0.96) 100%); }
 .hero-prospective h1 { font-size: clamp(40px,6vw,84px); line-height: 1; }
 
 /* The torn "skräbä" edge from the brand book: a full-bleed band never ends
    in a straight line where it meets the page. */
 .skraba-bottom {
   position: absolute;
+  z-index: 2;
   left: 0;
   right: 0;
   bottom: -1px;
@@ -463,8 +541,8 @@ a.btn, a.btn:hover { border-bottom: none; }
 }
 
 .hero-corporate { background: var(--pd-blue-dark); }
-.hero-corporate::before { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, rgb(0 40 81 / 0.9) 0%, rgb(0 40 81 / 0.72) 55%, rgb(0 40 81 / 0.55) 100%); }
-.hero-corporate::after { content: ""; position: absolute; inset: 0; background: var(--vignette-calm); }
+.hero-corporate::before { content: ""; position: absolute; inset: 0; z-index: 1; background: linear-gradient(90deg, rgb(0 40 81 / 0.9) 0%, rgb(0 40 81 / 0.72) 55%, rgb(0 40 81 / 0.55) 100%); }
+.hero-corporate::after { content: ""; position: absolute; inset: 0; z-index: 1; background: var(--vignette-calm); }
 .hero-corporate h1 { font-size: clamp(36px,4.6vw,60px); }
 .hero-corporate .inner { display: grid; grid-template-columns: minmax(0,1.3fr) minmax(240px,0.7fr); gap: var(--space-10); align-items: end; }
 .hero-corporate .stats { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-5); position: relative; }
@@ -514,8 +592,8 @@ a.btn, a.btn:hover { border-bottom: none; }
 .sidebar-card .kicker { color: var(--text-muted); margin-bottom: var(--space-3); display: block; }
 .sidebar-card p { margin: 0; font-size: var(--size-sm); font-weight: var(--weight-light); line-height: var(--leading-loose); }
 .sidebar-list-title { font-size: var(--size-2xs); font-weight: var(--weight-semibold); letter-spacing: var(--track-caps); text-transform: uppercase; color: var(--text-muted); margin-bottom: var(--space-3); }
-.sidebar-list { display: flex; flex-direction: column; gap: var(--space-2); list-style: none; margin: 0; padding: 0; }
-.sidebar-list a { font-size: var(--size-md); font-weight: var(--weight-regular); color: var(--pd-blue-light); display: flex; justify-content: space-between; border-bottom: none; }
+.sidebar-list { display: flex; flex-direction: column; list-style: none; margin: 0; padding: 0; }
+.sidebar-list a { font-size: var(--size-md); font-weight: var(--weight-regular); color: var(--pd-blue-light); display: flex; align-items: center; justify-content: space-between; gap: var(--space-4); min-height: 44px; border-bottom: none; }
 .sidebar-contact { border-top: 1px solid var(--border-subtle); padding-top: var(--space-6); }
 .sidebar-contact p { margin: 0; font-size: var(--size-sm); font-weight: var(--weight-light); line-height: var(--leading-loose); }
 .sidebar-highlight {
@@ -580,9 +658,420 @@ a.btn, a.btn:hover { border-bottom: none; }
 .person-name { display: block; font-weight: var(--weight-semibold); }
 .person-role { display: block; color: var(--text-muted); }
 .archive-group { margin: var(--space-10) 0; }
-.embed { margin: var(--space-8) 0; }
-.embed iframe { width: 100%; min-height: 32rem; border: 1px solid var(--border-subtle); }
+/* Embedded Prodeko services (layouts/partials/embed.html). The card carries
+   the page on its own where the service refuses to be framed. */
+.embed { margin: var(--space-8) 0; border: 1px solid var(--border-subtle); border-radius: var(--radius-ui); overflow: hidden; background: #fff; }
+.embed-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-6);
+  flex-wrap: wrap;
+  padding: var(--space-5) var(--space-6);
+  border-bottom: 1px solid var(--border-subtle);
+}
+.embed-head .kicker { color: var(--text-muted); display: block; margin-bottom: var(--space-1); }
+.embed-title { font-size: var(--size-lg); font-weight: var(--weight-semibold); color: var(--pd-blue); }
+.embed-note { margin: var(--space-2) 0 0; font-size: var(--size-sm); font-weight: var(--weight-light); color: var(--text-muted); }
+.embed-frame { position: relative; background: var(--surface-page); }
+.embed-fallback {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  padding: var(--space-8);
+  text-align: center;
+  font-size: var(--size-sm);
+  font-weight: var(--weight-light);
+  color: var(--text-muted);
+}
+.embed-fallback a { overflow-wrap: anywhere; }
+.embed-frame iframe { position: relative; width: 100%; height: 100%; min-height: inherit; border: 0; display: block; }
 
-/* ===== Plain content pages ===== */
+/* ===== Plain content pages (layouts/partials/page-shell.html) =====
 
-article { padding: var(--space-10) 0; }
+   Every text-shaped page — a migrated page, a section index, a people grid, a
+   year archive — is rendered inside this frame, so they share one measure, one
+   heading scale and one breadcrumb. */
+
+.page-head { background: #fff; border-bottom: 1px solid var(--border-subtle); position: relative; }
+.page-head .container { padding-top: var(--space-8); padding-bottom: var(--space-8); }
+.page-head h1 {
+  margin: var(--space-4) 0 0;
+  max-width: 24ch;
+  font-size: clamp(30px, 4vw, 46px);
+  font-weight: var(--weight-bold);
+  letter-spacing: var(--track-caps);
+  text-transform: uppercase;
+  line-height: 1.08;
+  color: var(--pd-blue);
+}
+.page-head .page-lead {
+  margin: var(--space-4) 0 0;
+  max-width: 60ch;
+  font-size: var(--size-lg);
+  font-weight: var(--weight-light);
+  line-height: var(--leading-normal);
+  color: var(--text-muted);
+}
+.page-head .rainbow-rule { position: absolute; left: 0; right: 0; bottom: 0; height: 4px; }
+
+.breadcrumbs ol {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-1) var(--space-2);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  font-size: var(--size-2xs);
+  font-weight: var(--weight-semibold);
+  letter-spacing: var(--track-caps);
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+.breadcrumbs li + li::before { content: "/"; margin-right: var(--space-2); color: var(--border-subtle); }
+.breadcrumbs a { color: var(--text-muted); border-bottom: none; }
+.breadcrumbs a:hover { color: var(--pd-blue-light); }
+.breadcrumbs [aria-current] { color: var(--pd-blue); }
+
+.page-body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 260px;
+  gap: var(--space-16);
+  align-items: start;
+  padding: var(--space-12) var(--space-8) var(--space-20);
+}
+.page-body-wide { grid-template-columns: minmax(0, 1fr); }
+.page-aside { position: sticky; top: 96px; display: flex; flex-direction: column; gap: var(--space-6); }
+.section-nav .sidebar-list a { font-size: var(--size-sm); min-height: 44px; align-items: center; padding: var(--space-2) 0; }
+.section-nav .sidebar-list a.current { color: var(--pd-blue); font-weight: var(--weight-semibold); }
+.source-note { margin: 0; font-size: var(--size-3xs); color: var(--text-muted); line-height: var(--leading-loose); }
+.source-note a { color: var(--text-muted); }
+
+/* ===== Prose =====
+
+   The migrated pages came out of the old site with their subheadings at h5 and
+   h6 regardless of depth, so the scale here deliberately does not fall away to
+   nothing at the bottom: a h6 still has to read as a heading. */
+
+/* The measure is applied to the text, not to the column. A card grid, a table
+   or an embed inside a page should use the width the page has; only running
+   prose needs to stop at a readable line length. */
+.prose > p,
+.prose > ul:not(.people-grid),
+.prose > ol,
+.prose > blockquote,
+.prose > h2,
+.prose > h3,
+.prose > h4,
+.prose > h5,
+.prose > h6 { max-width: var(--content-max); }
+.prose > :first-child { margin-top: 0; }
+.prose > :last-child { margin-bottom: 0; }
+.prose p, .prose li { font-size: var(--size-md); font-weight: var(--weight-light); line-height: var(--leading-loose); }
+.prose h2 {
+  margin: var(--space-12) 0 var(--space-4);
+  font-size: var(--size-2xl);
+  font-weight: var(--weight-semibold);
+  color: var(--pd-blue);
+  line-height: 1.15;
+}
+.prose h3 { margin: var(--space-10) 0 var(--space-3); font-size: var(--size-xl); font-weight: var(--weight-semibold); color: var(--pd-blue); }
+.prose h4,
+.prose h5,
+.prose h6 {
+  margin: var(--space-8) 0 var(--space-2);
+  font-size: var(--size-lg);
+  font-weight: var(--weight-semibold);
+  color: var(--pd-blue);
+  letter-spacing: var(--track-normal);
+  text-transform: none;
+}
+.prose ul:not(.people-grid), .prose ol { margin: 0 0 var(--space-4); padding-left: var(--space-6); }
+.prose .people-grid { margin: var(--space-4) 0; padding-left: 0; }
+.prose li { margin-bottom: var(--space-2); }
+.prose li::marker { color: var(--pd-blue-light); }
+/* :not(.btn) because `.prose a` outweighs `.btn-primary`, and without it a
+   button inside page content took the link colour on its own blue ground —
+   0 53 160 on 0 46 125, which is a contrast ratio of 1.6. */
+.prose a:not(.btn) { color: var(--text-link); border-bottom: 1px solid rgb(0 46 125 / 0.25); }
+.prose a:not(.btn):hover { border-bottom-color: currentColor; }
+.prose blockquote {
+  margin: var(--space-8) 0;
+  padding: var(--space-2) 0 var(--space-2) var(--space-6);
+  border-left: 3px solid var(--pd-blue);
+  color: var(--text-muted);
+}
+.prose hr { border: 0; border-top: 1px solid var(--border-subtle); margin: var(--space-12) 0; }
+.prose img { margin: 0; border-radius: var(--radius-ui); }
+.content-image { margin: var(--space-8) 0; max-width: var(--content-max); }
+.content-image a { border-bottom: none; display: block; }
+.content-image figcaption {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+  margin-top: var(--space-2);
+  font-size: var(--size-xs);
+  font-weight: var(--weight-light);
+  color: var(--text-muted);
+}
+.content-image figcaption a { display: inline; color: var(--text-link); white-space: nowrap; }
+.prose table { width: 100%; border-collapse: collapse; margin: var(--space-6) 0; font-size: var(--size-sm); }
+.prose th, .prose td { text-align: left; padding: var(--space-3); border-bottom: 1px solid var(--border-subtle); }
+.prose th { font-weight: var(--weight-semibold); color: var(--pd-blue); }
+.prose code {
+  font-size: 0.9em;
+  background: var(--pd-white-2, #f1f1f1);
+  padding: 0.1em 0.35em;
+  border-radius: 4px;
+}
+.prose pre { overflow-x: auto; padding: var(--space-4); background: var(--pd-white-2, #f1f1f1); border-radius: var(--radius-ui); }
+.prose pre code { background: none; padding: 0; }
+
+/* A scraped page can carry a bare URL as its own link text, and Finnish
+   builds compounds like PURKAUTUMISPÄÄTÖKSEN that are wider than a phone on
+   their own. `anywhere` rather than `break-word` because it also lowers the
+   element's min-content width, which is what a grid track measures. */
+.prose a, .prose li, .prose p, .prose td { overflow-wrap: anywhere; }
+.page-head h1,
+.prose h1, .prose h2, .prose h3, .prose h4, .prose h5, .prose h6 {
+  overflow-wrap: anywhere;
+  hyphens: auto;
+}
+
+/* A list of documents, marked up in page-shell.html: a paragraph holding
+   nothing but a link. The alumni newsletter archive is 86 of them, and as
+   plain paragraphs they were 20px tall with nothing between them, which is
+   neither readable nor tappable. */
+.prose .doc-link { margin: 0; max-width: var(--content-max); }
+.prose .doc-link > a {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  min-height: 44px;
+  padding: var(--space-2) 0;
+  border-bottom: 1px solid var(--border-subtle);
+  overflow-wrap: anywhere;
+}
+.prose .doc-link > a::after {
+  content: "\2193";
+  flex-shrink: 0;
+  color: var(--pd-blue-light);
+  font-size: var(--size-sm);
+}
+.prose .doc-link + p:not(.doc-link) { margin-top: var(--space-8); }
+
+/* ===== Section index cards (layouts/section.html) ===== */
+
+.index-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: var(--space-4); margin-top: var(--space-8); }
+.index-card {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-rows: auto auto;
+  column-gap: var(--space-4);
+  padding: var(--space-5) var(--space-6);
+  background: #fff;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-ui);
+  border-bottom: 1px solid var(--border-subtle);
+  transition: var(--transition-ui);
+}
+.index-card:hover { border-color: var(--pd-blue); box-shadow: var(--shadow-sm); }
+.index-card .name { font-size: var(--size-lg); font-weight: var(--weight-semibold); color: var(--pd-blue); line-height: 1.2; }
+.index-card .desc { grid-column: 1; font-size: var(--size-sm); font-weight: var(--weight-light); color: var(--text-body); line-height: var(--leading-normal); margin-top: var(--space-2); }
+.index-card .go { grid-row: 1; grid-column: 2; color: var(--pd-blue-light); }
+
+/* ===== Archive jump list (layouts/archive.html) ===== */
+
+.archive-jump {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin: var(--space-8) 0 var(--space-4);
+  padding-bottom: var(--space-6);
+  border-bottom: 1px solid var(--border-subtle);
+}
+.archive-jump a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 6px 14px;
+  font-size: var(--size-2xs);
+  font-weight: var(--weight-semibold);
+  color: var(--pd-blue);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-ui);
+  font-variant-numeric: tabular-nums;
+}
+.archive-jump a:hover { border-color: var(--pd-blue); }
+.archive-group { margin: var(--space-12) 0; scroll-margin-top: 90px; }
+.archive-group h2 { font-size: var(--size-xl); color: var(--pd-blue); border-bottom: 2px solid var(--pd-blue); padding-bottom: var(--space-2); }
+
+.skip-link {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  z-index: 100;
+  padding: var(--space-3) var(--space-5);
+  background: var(--pd-blue);
+  color: var(--pd-white-1);
+  border-bottom: none;
+}
+.skip-link:focus {
+  width: auto;
+  height: auto;
+  clip-path: none;
+  left: 0;
+  top: 0;
+}
+
+@media (max-width: 900px) {
+    /* minmax(0, 1fr) rather than 1fr: a track sized 1fr still takes its minimum
+     from the content, so one long word or a wide table would push the whole
+     column past the viewport. */
+  .page-body { grid-template-columns: minmax(0, 1fr); gap: var(--space-10); }
+  .page-aside { position: static; border-top: 1px solid var(--border-subtle); padding-top: var(--space-6); }
+}
+
+/* ===== Phone and small-tablet layout =====
+
+   The grids above all collapse on their own through auto-fit; what does not
+   is vertical rhythm. Section padding and hero heights tuned for a 1440px
+   window cost a phone reader most of a screen before any content appears, so
+   they are scaled back here rather than carried down. */
+
+@media (max-width: 720px) {
+  .container { padding: 0 var(--space-6); }
+
+  .hero-home .inner { padding-block: 64px 56px; }
+  .hero-home h1 { font-size: clamp(30px, 9vw, 44px); letter-spacing: var(--track-normal); max-width: none; }
+  .hero-home .inner > p { font-size: var(--size-md); }
+  .hero-home .emblem { width: 340px; right: -90px; top: -80px; }
+  .hero-home .ctas .btn { flex: 1 1 auto; }
+
+  .hero-split .text { padding: 48px var(--space-6) 44px; }
+  .hero-split h1 { letter-spacing: var(--track-normal); font-size: clamp(24px, 7.4vw, 34px); }
+  .hero-split .image { min-height: 200px; }
+
+  .hero-photo .inner { padding-block: 56px 48px; }
+  .hero-photo h1 { letter-spacing: var(--track-normal); }
+  .hero-photo p { font-size: var(--size-md); }
+  .hero-prospective { min-height: 420px; }
+
+  .hero-alumni-band { height: 260px; }
+  .hero-alumni-card-wrap { margin-top: -72px; }
+  .hero-alumni-card { padding: var(--space-6); }
+  .hero-alumni-card h1 { letter-spacing: var(--track-normal); }
+  .hero-alumni-card p { font-size: var(--size-md); }
+  .hero-alumni-card .rainbow-rule { margin: var(--space-6) calc(-1 * var(--space-6)) calc(-1 * var(--space-6)); }
+
+  .announcement-wrap { max-width: none; }
+  .audiences { padding: 48px 0 24px; }
+  .values-section { padding: 40px 0 48px; }
+  .photo-band { height: 280px; }
+  .partners-section { padding: 40px 0 48px; }
+  .partner-tile { height: 72px; padding: var(--space-4); }
+  .stats-row { padding: 32px 0 16px; }
+  .hub-body { padding: 40px 0 56px; }
+  .hub-sections { gap: 40px; }
+
+  .page-head .container { padding-top: var(--space-6); padding-bottom: var(--space-6); }
+  .page-head h1 { letter-spacing: var(--track-normal); max-width: none; }
+  .page-head .page-lead { font-size: var(--size-md); }
+  .page-body { padding: var(--space-8) var(--space-6) var(--space-12); }
+  .prose h2 { margin-top: var(--space-10); font-size: var(--size-xl); }
+  .prose h3 { margin-top: var(--space-8); font-size: var(--size-lg); }
+  /* h3 steps down to the size h4 already is, so without this a role and its
+     sub-role render identically on a phone. */
+  .prose h4, .prose h5, .prose h6 { margin-top: var(--space-6); font-size: var(--size-md); }
+
+  /* A migrated page can hold a table wider than any phone. Letting the table
+     scroll on its own keeps the rest of the page at the viewport width. */
+  .prose table { display: block; overflow-x: auto; }
+  .prose code { overflow-wrap: anywhere; }
+  /* The inline min-height on .embed-frame carries the service's preferred
+     height, which is a desktop number; capping the frame here keeps a phone
+     from scrolling past several screens of a service that may not even paint. */
+  .embed-frame { min-height: 26rem !important; height: 26rem; }
+  .embed-head { flex-direction: column; align-items: stretch; }
+  .embed-head .btn { width: 100%; }
+}
+
+/* ===== Hub page sections (guild / prospective / corporate / alumni) =====
+
+   These were inline styles on the section elements, which no media query can
+   reach; the two-column split in particular gave a phone two 160px columns
+   side by side. */
+
+.two-col { padding: 72px 0 24px; display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap: 64px; align-items: start; }
+.hub-section { padding: 56px 0 24px; }
+.hub-body { padding-top: 56px; }
+.hero-stats-row { margin-top: var(--space-6); }
+.audience-card .bar { background: var(--pd-blue); }
+.section-title-row .sub-link { border-bottom: none; color: var(--pd-blue-light); }
+
+.contact-person { display: flex; gap: var(--space-4); align-items: center; margin-bottom: var(--space-4); }
+.contact-person .avatar {
+  width: 56px; height: 56px; flex-shrink: 0;
+  border-radius: 50%;
+  background: var(--pd-blue-tint-16);
+  display: flex; align-items: center; justify-content: center;
+  font-size: var(--size-sm); font-weight: 700; color: var(--pd-blue);
+}
+.contact-name { font-size: var(--size-lg); font-weight: 600; color: var(--pd-blue); }
+.contact-role { font-size: var(--size-xs); color: var(--text-muted); }
+
+@media (max-width: 900px) {
+  /* minmax(0, 1fr) rather than 1fr, for the same reason as .page-body: a 1fr
+     track still takes its minimum from its content. */
+  .hub-body { grid-template-columns: minmax(0, 1fr); }
+}
+
+@media (max-width: 720px) {
+  .two-col { grid-template-columns: minmax(0, 1fr); gap: 40px; padding: 40px 0 16px; }
+  .hub-section { padding: 40px 0 16px; }
+  .hub-body { padding-top: 40px; }
+}
+
+/* The footer carries four link groups plus the partner strip, which on a phone
+   is about 1500px — three screens of it under every page. Collapsing the
+   groups leaves the brand line, four closed rows and the legal line. */
+@media (max-width: 720px) {
+  .site-footer .cols { display: block; padding: var(--space-8) 0 var(--space-4); }
+  .site-footer .footer-group { border-top: 1px solid rgb(246 246 246 / 0.15); }
+  .site-footer .footer-group summary {
+    display: flex;
+    /* the marker is suppressed for every width below, not only here */
+    align-items: center;
+    justify-content: space-between;
+    min-height: 52px;
+    cursor: pointer;
+    list-style: none;
+  }
+  .site-footer .footer-group summary::-webkit-details-marker { display: none; }
+  .site-footer .footer-group summary::after { content: "+"; font-size: var(--size-lg); opacity: 0.7; }
+  .site-footer .footer-group[open] summary::after { content: "\2013"; }
+  .site-footer .footer-group .col-title { margin: 0; }
+  .site-footer .links { padding-bottom: var(--space-4); }
+}
+
+.site-footer .footer-group summary { list-style: none; }
+.site-footer .footer-group summary::-webkit-details-marker { display: none; }
+
+@media (max-width: 720px) {
+  .site-footer .links a { display: flex; align-items: center; min-height: 40px; }
+  .site-footer .brand { margin-bottom: var(--space-6); }
+  .site-footer .network-logos { gap: var(--space-5) var(--space-8); }
+  .site-footer .network-logos img { height: 18px; }
+}

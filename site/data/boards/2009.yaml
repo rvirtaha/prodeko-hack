@@ -1,0 +1,27 @@
+# Prodeko's 2009 board, imported from https://www.prodeko.org/fi/guild/board/edelliset-hallitukset/
+# by tools/import-boards.py. Edit here, not on the old site.
+heading: "2009"
+sortKey: 2009
+members:
+  - name: "Jenni Räihä"
+    role: "Sisä- ja Kulttuuriministeri"
+  - name: "Ville Poikolainen"
+    role: "Puheenjohtaja"
+  - name: "Ilona Pitkänen"
+    role: "Excumestari"
+  - name: "Juhana Nurmio"
+    role: "Isäntä"
+  - name: "Albert Nazander"
+    role: "Mediakeisari"
+  - name: "Marko Mälkiä"
+    role: "Yrityssuhdevastaava"
+  - name: "Henri Koponen"
+    role: "Ulkoministeri"
+  - name: "Salli Hukkinen"
+    role: "Fuksikapteeni"
+  - name: "Johan Haataja"
+    role: "Rahastonhoitaja, Varapuheenjohtaja"
+  - name: "Anna Cajanus"
+    role: "Sihteeri"
+  - name: "Tomi Alén"
+    role: "Opintovastaava"

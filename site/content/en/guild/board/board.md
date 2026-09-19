@@ -1,5 +1,6 @@
 ---
 title: Board
+description: The members of Prodeko's board for the current year and their positions.
 translationKey: guild-board-hallitus
 layout: people
 dataset: boards

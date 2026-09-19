@@ -1,6 +1,7 @@
 ---
 title: Kokouspöytäkirjat
 translationKey: minutes
+description: Killan kokousten ja hallituksen kokousten pöytäkirjat jäsenille.
 reviewed: 2026-09-18
 owner: hallitus
 ---

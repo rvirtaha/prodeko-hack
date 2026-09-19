@@ -1,0 +1,36 @@
+{{/* The frame every text-shaped page sits in: breadcrumb, title band, a prose
+     column held to a readable measure, and the rest of the section beside it.
+
+     Takes {page, body}. Body is already-rendered HTML rather than the page's
+     own .Content, so the people and archive layouts can pass their generated
+     markup through the same frame. */}}
+{{ $page := .page }}
+
+{{/* A paragraph that is nothing but a link is a row in a list of documents,
+     not prose — the alumni newsletter archive is 86 of them in a row. Marking
+     them here rather than with `p > a:only-child` in CSS is the difference
+     between "the paragraph holds only this link" and "the paragraph holds
+     exactly one link"; the second also matches a sentence with a link in it,
+     which would tear the sentence apart. */}}
+{{ $body := replaceRE `<p>(<a href="[^"]*"[^>]*>[^<]*</a>)</p>` `<p class="doc-link">$1</p>` (string .body) | safeHTML }}
+{{ $nav := partial "section-nav.html" $page }}
+{{ $hasNav := ne (trim (string $nav) " \n\t") "" }}
+<article class="page">
+  <div class="page-head">
+    <div class="container">
+      {{ partial "breadcrumbs.html" $page }}
+      <h1>{{ $page.Title }}</h1>
+      {{ with $page.Description }}<p class="page-lead">{{ . }}</p>{{ end }}
+    </div>
+    <div class="rainbow-rule"></div>
+  </div>
+
+  <div class="container page-body{{ if not $hasNav }} page-body-wide{{ end }}">
+    <div class="prose">
+      {{ $body }}
+    </div>
+    {{/* Omitted rather than left empty: on a phone the aside sits below the
+         text, and an empty one draws its separating rule under nothing. */}}
+    {{ if $hasNav }}<aside class="page-aside">{{ $nav }}</aside>{{ end }}
+  </div>
+</article>

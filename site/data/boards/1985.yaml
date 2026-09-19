@@ -1,0 +1,25 @@
+# Prodeko's 1985 board, imported from https://www.prodeko.org/fi/guild/board/edelliset-hallitukset/
+# by tools/import-boards.py. Edit here, not on the old site.
+heading: "1985"
+sortKey: 1985
+members:
+  - name: "Hannu Turunen"
+    role: "Puheenjohtaja"
+  - name: "Kalervo Turtola"
+    role: "Varapuheenjohtaja"
+  - name: "Hans Sohlström"
+    role: "Isäntä"
+  - name: "Tuulikki Salmenkylä"
+    role: "Markkinointi-ihme"
+  - name: "Taina Riihimäki"
+    role: "Rahastonhoitaja"
+  - name: "Pertti Nupponen"
+    role: "Opintoihminen"
+  - name: "Timo Lappalainen"
+    role: "Excursiomestarit"
+  - name: "Susanna Kukkonen"
+    role: "Emäntä"
+  - name: "Sari Kangas-Ikkala"
+    role: "Sihteeri"
+  - name: "Mikko Hyttinen"
+    role: "Excursiomestarit"

@@ -1,5 +1,6 @@
 ---
 title: Connection to business world
+description: Why hosting an excursion for Prodeko students is worthwhile for a company, and who to contact about arranging one.
 translationKey: yrityssuhteet-yritysvierailut
 sourceURL: https://prodeko.org/en/yrityssuhteet/excursions/
 ---

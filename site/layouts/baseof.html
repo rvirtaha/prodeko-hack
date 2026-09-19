@@ -3,13 +3,13 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>{{ if .IsHome }}{{ .Site.Title }}{{ else }}{{ .Title }} | {{ .Site.Title }}{{ end }}</title>
+    <title>{{ if .IsHome }}{{ .Site.Title }} — {{ if eq .Language.Lang "fi" }}Tuotantotalouden kilta{{ else }}The IEM guild at Aalto University{{ end }}{{ else }}{{ .Title }} | {{ .Site.Title }}{{ end }}</title>
     {{ with .Description }}<meta name="description" content="{{ . }}" />{{ end }}
     {{ partial "head.html" . }}
   </head>
   <body>
     {{ partial "header.html" . }}
-    <main>
+    <main id="main">
       {{ block "main" . }}{{ end }}
     </main>
     {{ partial "footer.html" . }}

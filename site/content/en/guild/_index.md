@@ -1,5 +1,6 @@
 ---
 title: Guild
+description: How the student-run guild works — its board, committees, guild meetings, guild room and official documents.
 translationKey: guild
 layout: guild-hub
 source: raw-website design export, Prodeko-site.dc.html

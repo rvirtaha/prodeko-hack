@@ -1,0 +1,25 @@
+# Prodeko's 2006 board, imported from https://www.prodeko.org/fi/guild/board/edelliset-hallitukset/
+# by tools/import-boards.py. Edit here, not on the old site.
+heading: "2006"
+sortKey: 2006
+members:
+  - name: "Julia Venesmaa"
+    role: "Sihteeri"
+  - name: "Jussi Valtonen"
+    role: "Fuksikapteeni"
+  - name: "Petri Valkama"
+    role: "Yrityssuhdevastaava"
+  - name: "Lauri Tolvas"
+    role: "Excumestari"
+  - name: "Mikko Sjöberg"
+    role: "Ulkoministeri"
+  - name: "Sebastian Knight"
+    role: "Opintovastaava"
+  - name: "Elina Happonen"
+    role: "Rahastonhoitaja"
+  - name: "Paavo Häppölä"
+    role: "Isäntä"
+  - name: "Tuukka Eloranta"
+    role: "Puheenjohtaja"
+  - name: "Kimi Arima"
+    role: "Sisä- ja Kulttuuriministeri"

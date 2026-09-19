@@ -1,0 +1,27 @@
+# Prodeko's 2015 board, imported from https://www.prodeko.org/fi/guild/board/edelliset-hallitukset/
+# by tools/import-boards.py. Edit here, not on the old site.
+heading: "2015"
+sortKey: 2015
+members:
+  - name: "Reko Vaherkoski"
+    role: "Fuksikapteeni"
+  - name: "Lasse Linnavirta"
+    role: "Rahastonhoitaja"
+  - name: "Veikko Kovanen"
+    role: "Mediakeisari"
+  - name: "Laura Karinen"
+    role: "Sisä- ja kulttuuriministeri"
+  - name: "Henri Jarrett"
+    role: "Ulkoministeri"
+  - name: "Konsta Huuki"
+    role: "Isäntä"
+  - name: "Ville Huovinen"
+    role: "Puheenjohtaja"
+  - name: "Tony Hämmäinen"
+    role: "Varapuheenjohtaja, Sihteeri"
+  - name: "Henri Hämäläinen"
+    role: "Yrityssuhdevastaava"
+  - name: "Ossi Hakulinen"
+    role: "Opintovastaava"
+  - name: "Otto Bergius"
+    role: "Excumestari"

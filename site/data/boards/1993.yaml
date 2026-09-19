@@ -1,0 +1,25 @@
+# Prodeko's 1993 board, imported from https://www.prodeko.org/fi/guild/board/edelliset-hallitukset/
+# by tools/import-boards.py. Edit here, not on the old site.
+heading: "1993"
+sortKey: 1993
+members:
+  - name: "Helena Yli-Renko"
+    role: "Tiedotussihteeri"
+  - name: "Tomi Virtanen"
+    role: "Excursiomestarti"
+  - name: "Tomi Torri"
+    role: "Ulkoministeri"
+  - name: "Mikko Toivonen"
+    role: "Rahastonhoitaja"
+  - name: "Antti Salminen"
+    role: "Projektisihteeri"
+  - name: "Pirkka Palomäki"
+    role: "Isäntä"
+  - name: "Sami Lampinen"
+    role: "Varapuheenjohtaja, sisäministeri"
+  - name: "Elina Itälä"
+    role: "Fuksikapteeni"
+  - name: "Kaj Hagros"
+    role: "Puheenjohtaja"
+  - name: "Marja Blomqvist"
+    role: "Opintoäiti"

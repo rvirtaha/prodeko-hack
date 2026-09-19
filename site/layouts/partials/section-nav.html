@@ -1,0 +1,23 @@
+{{/* The other pages in the same section, as a sidebar list. Rendered only
+     where there is more than one, so a section holding a single page does not
+     get a list of itself. */}}
+{{ $section := .CurrentSection }}
+{{ $siblings := $section.RegularPages }}
+{{/* Skipped in two places. At the root the "section" is the whole language, so
+     its pages are the handful of top-level ones and the list reads as a random
+     assortment. On a section's own index the cards above already are this
+     list, and repeating it directly underneath reads as a mistake. */}}
+{{ if and (gt (len $siblings) 1) (not $section.IsHome) (ne $section.RelPermalink .RelPermalink) }}
+  <nav class="section-nav" aria-label="{{ $section.Title }}">
+    <div class="sidebar-list-title">{{ $section.Title }}</div>
+    <ul class="sidebar-list">
+      {{ range $siblings }}
+        <li>
+          <a href="{{ .RelPermalink }}"{{ if eq .RelPermalink $.RelPermalink }} class="current" aria-current="page"{{ end }}>
+            <span>{{ .Title }}</span><span aria-hidden="true">→</span>
+          </a>
+        </li>
+      {{ end }}
+    </ul>
+  </nav>
+{{ end }}

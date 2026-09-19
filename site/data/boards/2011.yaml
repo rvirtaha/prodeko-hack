@@ -1,0 +1,25 @@
+# Prodeko's 2011 board, imported from https://www.prodeko.org/fi/guild/board/edelliset-hallitukset/
+# by tools/import-boards.py. Edit here, not on the old site.
+heading: "2011"
+sortKey: 2011
+members:
+  - name: "Susanna Tulokas"
+    role: "Ulkoministeri"
+  - name: "Emma Nermes"
+    role: "Kauppa- ja Teollisuusministeri, Yrityssuhteet"
+  - name: "Jaakko Laukkanen"
+    role: "Isäntä"
+  - name: "Vili Lappalainen"
+    role: "Excumestari"
+  - name: "Jukka Kujala"
+    role: "Sisä- ja kulttuuriministeri"
+  - name: "Juho Hoikka"
+    role: "Varapuheenjohtaja, Sihteeri"
+  - name: "Martti Heikkilä"
+    role: "Puheenjohtaja"
+  - name: "Lari Haataja"
+    role: "Mediakeisari"
+  - name: "Cara Casserly"
+    role: "Opintovastaava"
+  - name: "Arttu Anttonen"
+    role: "Fuksikapteeni"

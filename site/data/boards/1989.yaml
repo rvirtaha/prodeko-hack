@@ -1,0 +1,25 @@
+# Prodeko's 1989 board, imported from https://www.prodeko.org/fi/guild/board/edelliset-hallitukset/
+# by tools/import-boards.py. Edit here, not on the old site.
+heading: "1989"
+sortKey: 1989
+members:
+  - name: "Jouko Seppä"
+    role: "Rahastonhoitaja"
+  - name: "Jukka Räikkönen"
+    role: "Opintoihme"
+  - name: "Satu Rahikainen"
+    role: "Tiedotuspäällikkö"
+  - name: "Juha Pankakoski"
+    role: "Excursiomestarit"
+  - name: "Marko Luhtala"
+    role: "Excursiomestarit"
+  - name: "Kimmo Järvelin"
+    role: "Puheenjohtaja"
+  - name: "Ari Hyppönen"
+    role: "Sihteeri"
+  - name: "Mika Gerlander"
+    role: "Isäntä"
+  - name: "Mari Forsten"
+    role: "Emäntä"
+  - name: "Antti Arppe"
+    role: "Varapuheenjohtaja"

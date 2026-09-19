@@ -1,5 +1,7 @@
 {{ $navItems := index hugo.Data.navigation .Language.Lang }}
 {{ $megamenu := index hugo.Data.megamenu .Language.Lang }}
+{{ $isFi := eq .Language.Lang "fi" }}
+<a class="skip-link" href="#main">{{ if $isFi }}Siirry sisältöön{{ else }}Skip to content{{ end }}</a>
 <header class="site-header" id="site-header">
   <div class="container bar">
     <a class="logo" href="{{ "/" | relLangURL }}">
@@ -7,7 +9,7 @@
         <img src="{{ .RelPermalink }}" alt="{{ $.Site.Title }}">
       {{ end }}
     </a>
-    <nav>
+    <nav class="desktop-nav" aria-label="{{ if $isFi }}Päävalikko{{ else }}Main{{ end }}">
       <ul class="nav-list">
         {{ range $navItems }}
           <li{{ if strings.HasPrefix $.RelPermalink .url }} class="current"{{ end }}{{ with .menuKey }} data-mega="{{ . }}"{{ end }}>
@@ -17,14 +19,10 @@
       </ul>
     </nav>
     <div class="side">
-      <div class="lang-switch">
-        {{ range .Site.Home.AllTranslations }}
-          <a class="{{ if eq .Language.Lang $.Language.Lang }}current{{ end }}" href="{{ .Permalink }}">{{ .Language.Lang | upper }}</a>
-        {{ end }}
-      </div>
-      <a class="btn btn-secondary" href="/admin/">{{ if eq .Language.Lang "fi" }}Kirjaudu{{ else }}Log in{{ end }}</a>
+      {{ partial "lang-switch.html" . }}
+      <a class="btn btn-secondary" href="/admin/">{{ if $isFi }}Kirjaudu{{ else }}Log in{{ end }}</a>
     </div>
-    <button type="button" class="nav-toggle" aria-expanded="false" aria-controls="site-header" aria-label="{{ if eq .Language.Lang "fi" }}Valikko{{ else }}Menu{{ end }}">
+    <button type="button" class="nav-toggle" aria-expanded="false" aria-controls="mobile-nav" aria-label="{{ if $isFi }}Valikko{{ else }}Menu{{ end }}">
       <span class="nav-toggle-bars"></span>
     </button>
   </div>
@@ -37,8 +35,12 @@
           <div class="mega-col">
             <div class="mega-col-title">{{ .title }}</div>
             {{ range .links }}
-              {{ if .url }}
-                <a href="{{ .url }}"><span>{{ .label }}</span><span>→</span></a>
+              {{ if and .members (not site.Params.members) }}
+                {{/* A link into the member tree, in a build that has no member
+                     tree. Naming the address here would publish it. */}}
+                <span class="mega-link-disabled">{{ .label }}</span>
+              {{ else if .url }}
+                <a href="{{ .url }}"><span>{{ .label }}</span><span aria-hidden="true">→</span></a>
               {{ else }}
                 <span class="mega-link-disabled">{{ .label }}</span>
               {{ end }}
@@ -48,4 +50,49 @@
       </div>
     </div>
   {{ end }}
+
+  {{/* The phone menu. The mega-panels above are a hover affordance that touch
+       never triggers, so every link in them is repeated here as an accordion.
+       Without this the roughly thirty pages that only the mega-menu reaches
+       would have no address a phone can get to. */}}
+  <nav class="mobile-nav" id="mobile-nav" aria-label="{{ if $isFi }}Valikko{{ else }}Menu{{ end }}">
+    <div class="container">
+      {{ range $navItems }}
+        {{ $columns := "" }}
+        {{ with .menuKey }}{{ $columns = index $megamenu . }}{{ end }}
+        {{ if $columns }}
+          <details class="m-group"{{ if strings.HasPrefix $.RelPermalink .url }} open{{ end }}>
+            <summary>{{ .title }}</summary>
+            <div class="m-group-body">
+              <a class="m-overview" href="{{ .url }}">
+                <span>{{ if $isFi }}Osion etusivu{{ else }}Section home{{ end }}</span><span aria-hidden="true">→</span>
+              </a>
+              {{ $groupTitle := .title }}
+              {{ range $columns }}
+                {{/* The first column of a mega-menu usually repeats the
+                     section's own name; here that would read as the same word
+                     twice in a row, so it is left out. */}}
+                {{ if ne .title $groupTitle }}<div class="m-col-title">{{ .title }}</div>{{ end }}
+                {{ range .links }}
+                  {{ if and .members (not site.Params.members) }}
+                    <span class="m-link-disabled">{{ .label }}</span>
+                  {{ else if .url }}
+                    <a href="{{ .url }}"><span>{{ .label }}</span><span aria-hidden="true">→</span></a>
+                  {{ else }}
+                    <span class="m-link-disabled">{{ .label }}</span>
+                  {{ end }}
+                {{ end }}
+              {{ end }}
+            </div>
+          </details>
+        {{ else }}
+          <a class="m-top" href="{{ .url }}"><span>{{ .title }}</span><span aria-hidden="true">→</span></a>
+        {{ end }}
+      {{ end }}
+      <div class="m-actions">
+        {{ partial "lang-switch.html" . }}
+        <a class="btn btn-secondary" href="/admin/">{{ if $isFi }}Kirjaudu{{ else }}Log in{{ end }}</a>
+      </div>
+    </div>
+  </nav>
 </header>

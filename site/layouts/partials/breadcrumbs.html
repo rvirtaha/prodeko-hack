@@ -1,0 +1,16 @@
+{{/* The trail from the language home down to the current page. Ancestors come
+     back nearest-first, so the range walks them in reverse. Section pages that
+     Hugo generates without an _index.md carry the directory name as their
+     title, which is why every section in this site has one. */}}
+{{ $home := .Site.Home }}
+<nav class="breadcrumbs" aria-label="{{ if eq .Language.Lang "fi" }}Murupolku{{ else }}Breadcrumb{{ end }}">
+  <ol>
+    <li><a href="{{ $home.RelPermalink }}">{{ if eq .Language.Lang "fi" }}Etusivu{{ else }}Home{{ end }}</a></li>
+    {{ range (.Ancestors.Reverse) }}
+      {{ if ne .RelPermalink $home.RelPermalink }}
+        <li><a href="{{ .RelPermalink }}">{{ .Title }}</a></li>
+      {{ end }}
+    {{ end }}
+    <li><span aria-current="page">{{ .Title }}</span></li>
+  </ol>
+</nav>

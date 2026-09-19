@@ -1,0 +1,27 @@
+# Prodeko's 1996 board, imported from https://www.prodeko.org/fi/guild/board/edelliset-hallitukset/
+# by tools/import-boards.py. Edit here, not on the old site.
+heading: "1996"
+sortKey: 1996
+members:
+  - name: "Ilkka Vanhanen"
+    role: "Excursiomestari, varapuheenjohtaja"
+  - name: "Perttu Nihti"
+    role: "Fuksikapteeni (1996-1997)"
+  - name: "Sari Naukkarinen"
+    role: "Fuksikapteeni (1995-96)"
+  - name: "Nuutti Kuosa"
+    role: "Rahastonhoitaja"
+  - name: "Henriikka Juusela"
+    role: "Juhlavuosivastaava"
+  - name: "Kimmo Jaakkola"
+    role: "Yritysvastaava"
+  - name: "Jarna Hakala"
+    role: "Tiedotusvastaava"
+  - name: "Ville Haapalinna"
+    role: "Puheenjohtaja"
+  - name: "Samu Eränen"
+    role: "Opintovastaava"
+  - name: "Petteri Barman"
+    role: "Ulkoministeri"
+  - name: "Ari ”Arssi” Backholm"
+    role: "Isäntä"

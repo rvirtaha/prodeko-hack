@@ -1,9 +1,13 @@
 {{ define "main" }}
-  <h1>{{ .Title }}</h1>
-  {{ .Content }}
-  <ul>
-    {{ range .Pages }}
-      <li><a href="{{ .RelPermalink }}">{{ .Title }}</a></li>
-    {{ end }}
-  </ul>
+  {{ $cards := slice }}
+  {{ range .Pages }}
+    {{ $summary := "" }}
+    {{ with .Description }}{{ $summary = . }}{{ else }}{{ $summary = .Summary | plainify | truncate 140 }}{{ end }}
+    {{ $cards = $cards | append (printf `<a class="index-card" href="%s"><span class="name">%s</span><span class="desc">%s</span><span class="go" aria-hidden="true">→</span></a>` .RelPermalink .Title $summary) }}
+  {{ end }}
+  {{ $body := slice (string .Content) }}
+  {{ if $cards }}
+    {{ $body = $body | append (printf `<div class="index-grid">%s</div>` (delimit $cards "")) }}
+  {{ end }}
+  {{ partial "page-shell.html" (dict "page" . "body" (delimit $body "" | safeHTML)) }}
 {{ end }}

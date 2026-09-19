@@ -20,7 +20,7 @@
 
 <div class="container">
   {{ with .Params.announcement }}
-    <div style="margin-top:-56px;position:relative;z-index:1;max-width:28rem">
+    <div class="announcement-wrap">
       <div class="announcement">
         <div class="rainbow-rule"></div>
         <div class="body">
@@ -37,7 +37,7 @@
     <div class="audiences">
       {{ range . }}
         <a class="audience-card" href="{{ .url }}">
-          <div class="bar" style="background:var(--pd-blue)"></div>
+          <div class="bar"></div>
           <div class="body">
             {{ with .kicker }}<span class="kicker">{{ . }}</span>{{ end }}
             <div class="title">{{ .title }}</div>
@@ -55,13 +55,19 @@
       <span class="sub">{{ .Params.valuesSub }}</span>
     </div>
     {{ with .Params.values }}
+      {{/* The blurb is repeated as text because it is baked into the artwork
+           at a size that is legible only at full resolution — in this grid the
+           body copy on the image renders at about six pixels. */}}
       <div class="values-grid">
         {{ range . }}
           {{ $value := . }}
           {{ $slug := $value.name | urlize }}
-          {{ with resources.Get (printf "images/values/arvo-%s.jpg" $slug) }}
-            <img src="{{ .RelPermalink }}" alt="{{ $value.name }}">
-          {{ end }}
+          <figure class="value">
+            {{ with resources.Get (printf "images/values/arvo-%s.jpg" $slug) }}
+              <img src="{{ .RelPermalink }}" alt="{{ $value.name }}" loading="lazy">
+            {{ end }}
+            {{ with $value.blurb }}<figcaption>{{ . }}</figcaption>{{ end }}
+          </figure>
         {{ end }}
       </div>
     {{ end }}
@@ -69,7 +75,8 @@
 </div>
 
 <section class="photo-band">
-  {{ with resources.Get "images/pages/page-guild.png" }}<img src="{{ .RelPermalink }}" alt="">{{ end }}
+  {{ $photo := resources.Get "images/pages/page-guild.png" }}
+    {{ with $photo }}{{ with .Crop "850x690 TopLeft" }}<img src="{{ .RelPermalink }}" alt="" loading="lazy">{{ end }}{{ end }}
   <div class="caption">
     <div>
       <div class="caption-title">{{ .Params.bandTitle }}</div>
@@ -82,7 +89,7 @@
   <div class="container">
     <div class="section-title-row">
       <h2 class="section-title">{{ .Params.partnersTitle }}</h2>
-      {{ with .Params.partnersLinkUrl }}<a class="sub" href="{{ . }}" style="border-bottom:none;color:var(--pd-blue-light)">{{ $.Params.partnersLinkText }} →</a>{{ end }}
+      {{ with .Params.partnersLinkUrl }}<a class="sub sub-link" href="{{ . }}">{{ $.Params.partnersLinkText }} →</a>{{ end }}
     </div>
     <div class="partners-grid">
       {{ range hugo.Data.partners }}

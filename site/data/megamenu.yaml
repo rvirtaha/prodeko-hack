@@ -12,12 +12,18 @@ fi:
           url: /fi/guild/arvot/
         - label: Hallitus 2026
           url: /fi/guild/board/hallitus/
+        - label: Hallituksen toiminta
+          url: /fi/guild/board/
+        - label: Edelliset hallitukset
+          url: /fi/guild/board/edelliset-hallitukset/
         - label: Toimihenkilöt 2026
           url: /fi/guild/toimarit/toimihenkilot/
+        - label: Toimarien toiminta
+          url: /fi/guild/toimarit/
         - label: Häirintäyhdyshenkilöt
           url: /fi/guild/hairintayhdyshenkilot/
         - label: Säännöt ja asetukset
-          url: /fi/guild/guild-rules/rules/
+          url: /fi/guild/guild-rules/
         - label: Kunnianosoitukset
           url: /fi/guild/kunnianosoitukset/
         - label: Urheilu
@@ -39,6 +45,8 @@ fi:
           url: /fi/new-students/asuminen-ja-elaminen/
         - label: Fuksipisteet
           url: /fi/new-students/fuksipisteet/
+        - label: Kaikki fukseille
+          url: /fi/new-students/
     - title: Opinnot
       links:
         - label: Keneen otan yhteyttä
@@ -51,11 +59,17 @@ fi:
           url: /fi/opinnot/tohtoriopinnoista/
         - label: Tärkeitä linkkejä
           url: /fi/opinnot/tarkeita-linkkeja/
+        - label: Kaikki opinnoista
+          url: /fi/opinnot/
     - title: Palvelut
       links:
+        - label: Kaikki palvelut
+          url: /fi/palvelut/
         - label: Viikkotiedote
           url: https://viikkotiedote.prodeko.org
         - label: Kokouspöytäkirjat
+          url: /fi/jasenille/poytakirjat/
+          members: true
         - label: Kulukorvaukset
           url: https://prodeko.kululaskut.fi
         - label: Galleria
@@ -66,6 +80,8 @@ fi:
           url: /fi/palvelut/prodeko-fund/
         - label: Store
           url: https://store.prodeko.org
+        - label: ESTIEM LG Helsinki
+          url: /fi/estiem-lg-helsinki/
   prospective:
     - title: Abeille
       links:
@@ -91,6 +107,8 @@ fi:
       links:
         - label: Yrityssuhteet
           url: /fi/yrityssuhteet/
+        - label: Tietoa yrityksille
+          url: /fi/yrityssuhteet/yrityksille/
         - label: Yritysvierailut
           url: /fi/yrityssuhteet/yritysvierailut/
         - label: Rekrytointi
@@ -140,12 +158,18 @@ en:
           url: /en/guild/values/
         - label: Board 2026
           url: /en/guild/board/board/
+        - label: What the board does
+          url: /en/guild/board/
+        - label: Previous boards
+          url: /en/guild/board/previous-boards/
         - label: Officials 2026
           url: /en/guild/guild-officials/guild-officials/
+        - label: What the officials do
+          url: /en/guild/guild-officials/
         - label: Harassment contact persons
           url: /en/guild/harassment-contact-persons/
         - label: Rules and regulations
-          url: /en/guild/rules/rules/
+          url: /en/guild/rules/
         - label: Honours
           url: /en/guild/honour/
         - label: Sports
@@ -166,22 +190,31 @@ en:
           url: /en/new-students/living/
         - label: Fuksi points
           url: /en/new-students/freshmen-points/
+        - label: All new-student pages
+          url: /en/new-students/
     - title: Studies
       links:
         - label: Who to contact
-          url: /en/studies/
+          url: /en/studies/who-to-contact/
         - label: Studies FAQ
-          url: /en/studies/
+          url: /en/studies/studies-faq/
         - label: Meeting news
+          url: /en/studies/meeting-news/
         - label: Doctoral studies
-          url: /en/studies/
+          url: /en/studies/doctoral-studies/
         - label: Important links
+          url: /en/studies/important-links/
+        - label: All study pages
           url: /en/studies/
     - title: Services
       links:
+        - label: All services
+          url: /en/services/
         - label: Weekly letter
           url: https://viikkotiedote.prodeko.org
         - label: Meeting minutes
+          url: /en/members/minutes/
+          members: true
         - label: Expense claims
           url: https://prodeko.kululaskut.fi
         - label: Gallery
@@ -192,6 +225,8 @@ en:
           url: /en/services/prodeko-fund/
         - label: Store
           url: https://store.prodeko.org
+        - label: ESTIEM LG Helsinki
+          url: /en/estiem-lg-helsinki/
   prospective:
     - title: Prospective students
       links:
@@ -205,7 +240,7 @@ en:
         - label: Successful alumni
         - label: Students' paths to IEM
         - label: Important links
-          url: /en/studies/studies/
+          url: /en/studies/important-links/
     - title: Languages
       links:
         - label: Suomeksi
@@ -216,6 +251,8 @@ en:
       links:
         - label: Corporate relations
           url: /en/yrityssuhteet/
+        - label: About corporate relations
+          url: /en/yrityssuhteet/about/
         - label: Company visits
           url: /en/yrityssuhteet/excursions/
         - label: Recruitment
@@ -238,6 +275,7 @@ en:
         - label: About the alumni
           url: /en/alumni/about-alumni/
         - label: Alumni newsletters
+          url: /fi/alumni/tietoa-alumnista/alumnitiedotteet/
         - label: Alumni boards
           url: /en/alumni/about-alumni/previous-alumni-boards/
         - label: Alumni rules

@@ -1,0 +1,25 @@
+# Prodeko's 2012 board, imported from https://www.prodeko.org/fi/guild/board/edelliset-hallitukset/
+# by tools/import-boards.py. Edit here, not on the old site.
+heading: "2012"
+sortKey: 2012
+members:
+  - name: "Tuisku Suomala"
+    role: "Kauppa- ja teollisuusministeri, Yrityssuhteet"
+  - name: "Niko Snirvi"
+    role: "Excumestari"
+  - name: "Kristian Sjölund"
+    role: "Mediakeisari"
+  - name: "Lotta Kujala"
+    role: "Isäntä"
+  - name: "Jukka Kujala"
+    role: "Puheenjohtaja"
+  - name: "Heikki Koponen"
+    role: "Opintovastaava"
+  - name: "Toni Kaario"
+    role: "Ulkoministeri"
+  - name: "Roberto Cacciatore"
+    role: "Fuksikapteeni"
+  - name: "Salli Antila"
+    role: "Sisä- ja kulttuuriministeri"
+  - name: "Ilari Alén"
+    role: "Varapuheenjohtaja, Sihteeri"

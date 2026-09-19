@@ -1,6 +1,7 @@
 ---
 title: Prospective students
 translationKey: abit
+description: How to apply to Industrial Engineering and Management at Aalto, and what student life and the first year look like.
 layout: prospective-hub
 source: raw-website design export, Prodeko-site.dc.html
 prospKicker: Prospective students

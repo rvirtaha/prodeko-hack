@@ -1,0 +1,27 @@
+# Prodeko's 1999 board, imported from https://www.prodeko.org/fi/guild/board/edelliset-hallitukset/
+# by tools/import-boards.py. Edit here, not on the old site.
+heading: "1999"
+sortKey: 1999
+members:
+  - name: "Mona Weck"
+    role: "Opintovastaava"
+  - name: "Jussi Vähäkylä"
+    role: "Isäntä"
+  - name: "Tiina Suvanto"
+    role: "Ulkoministeri"
+  - name: "Juha Risikko"
+    role: "Yritysvastaava"
+  - name: "Jussi Räisänen"
+    role: "Puheenjohtaja"
+  - name: "Mikko Pulkkinen"
+    role: "Sisä- ja kultturiministeri"
+  - name: "Jukka Paajanen"
+    role: "WWW-vastaava"
+  - name: "Markku Multamäki"
+    role: "Mediakeisari & sihteeri"
+  - name: "Heikki Kivilaakso"
+    role: "Rahastonhoitaja"
+  - name: "Jaakko Hallavo"
+    role: "Excursiomestari"
+  - name: "Jarno Alhonen"
+    role: "Fuksikapteeni (1999-2000)"

@@ -2,9 +2,10 @@
 title: Tohtoriopinnoista
 translationKey: opinnot-tohtoriopinnoista
 sourceURL: https://prodeko.org/fi/opinnot/tohtoriopinnoista/
+description: Materiaalit ja yhteystiedot Prodekon huhtikuussa 2024 järjestämästä tohtoriohjelmatuokiosta.
 ---
 
-### Tohtoriohjelmatuokio, huhtikuu 2024
+## Tohtoriohjelmatuokio, huhtikuu 2024
 
 Prodeko järjesti huhtikuussa 2024 tohtoriohjelmatuokion, jossa tohtoriohjelman suunnittelija Jaakko Autio ja tohtorikoulutettava David Wunder esittelivät tohtoriopintoja ja vastasivat osallistujien kysymyksiin.
 

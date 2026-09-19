@@ -1,4 +1,6 @@
 {{ $isFi := eq .Language.Lang "fi" }}
+{{ $columns := index hugo.Data.footer .Language.Lang }}
+{{ $privacy := cond $isFi "/fi/tietosuoja/" "/en/privacy-policy/" }}
 <footer class="site-footer">
   <div class="rainbow-rule"></div>
   <div class="container">
@@ -15,15 +17,17 @@
           {{ end }}
         </p>
       </div>
-      {{ range index hugo.Data.navigation .Language.Lang }}
-        <div>
-          <div class="col-title">{{ .title }}</div>
-          {{ with .children }}
-            <ul class="links">
-              {{ range . }}<li><a href="{{ .url }}">{{ .title }}</a></li>{{ end }}
-            </ul>
-          {{ end }}
-        </div>
+      {{/* <details> rather than <div>: on a phone these four groups are about
+           1500px of link under every page, so the stylesheet collapses them.
+           Open by default, so a desktop reader and anything without CSS sees
+           the whole footer. */}}
+      {{ range $columns }}
+        <details class="footer-group" open>
+          <summary><div class="col-title">{{ .title }}</div></summary>
+          <ul class="links">
+            {{ range .links }}<li><a href="{{ .url }}">{{ .label }}</a></li>{{ end }}
+          </ul>
+        </details>
       {{ end }}
     </div>
   </div>
@@ -40,6 +44,9 @@
   </div>
   <div class="container bottom">
     <span>Tuotantotalouden kilta Prodeko ry · PL 15500, 00076 Aalto · TUAS-talo, Maarintie 8, 02150 Espoo</span>
-    <span>1966 – 2026</span>
+    <span class="bottom-links">
+      <a href="{{ $privacy }}">{{ if $isFi }}Tietosuojaseloste{{ else }}Privacy notice{{ end }}</a>
+      <span>1966 – 2026</span>
+    </span>
   </div>
 </footer>

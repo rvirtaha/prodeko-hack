@@ -1,0 +1,107 @@
+# Read by layouts/partials/footer.html. One list of columns per language.
+# The footer is where pages live that belong to no mega-menu section — the
+# privacy notices, the service pages and the ESTIEM local group — so anything
+# added under site/content/ has an address a reader can reach from any page.
+fi:
+  - title: Kilta
+    links:
+      - label: Arvot
+        url: /fi/guild/arvot/
+      - label: Hallitus 2026
+        url: /fi/guild/board/hallitus/
+      - label: Toimihenkilöt 2026
+        url: /fi/guild/toimarit/toimihenkilot/
+      - label: Säännöt ja asetukset
+        url: /fi/guild/guild-rules/
+      - label: Kunnianosoitukset
+        url: /fi/guild/kunnianosoitukset/
+      - label: Jäseneksi
+        url: /fi/guild/jaseneksi/
+  - title: Opiskelijalle
+    links:
+      - label: Fukseille
+        url: /fi/new-students/
+      - label: Opinnot
+        url: /fi/opinnot/
+      - label: Abeille
+        url: /fi/abit/
+      - label: Häirintäyhdyshenkilöt
+        url: /fi/guild/hairintayhdyshenkilot/
+      - label: ESTIEM LG Helsinki
+        url: /fi/estiem-lg-helsinki/
+  - title: Palvelut
+    links:
+      - label: Kaikki palvelut
+        url: /fi/palvelut/
+      - label: Aallon ja AYY:n palvelut
+        url: /fi/palvelut/aallon-ja-ayyn-palveluita-2/
+      - label: Prodeko-rahasto
+        url: /fi/palvelut/prodeko-fund/
+      - label: Viikkotiedote
+        url: https://viikkotiedote.prodeko.org
+      - label: Galleria
+        url: https://gallery.prodeko.org
+      - label: Ilmokilke
+        url: https://ilmo.prodeko.org
+  - title: Yhteystiedot
+    links:
+      - label: Yrityksille
+        url: /fi/yrityssuhteet/
+      - label: Alumni
+        url: /fi/alumni/
+      - label: hallitus@prodeko.org
+        url: mailto:hallitus@prodeko.org
+      - label: yrityssuhteet@prodeko.org
+        url: mailto:yrityssuhteet@prodeko.org
+
+en:
+  - title: Guild
+    links:
+      - label: Values
+        url: /en/guild/values/
+      - label: Board 2026
+        url: /en/guild/board/board/
+      - label: Officials 2026
+        url: /en/guild/guild-officials/guild-officials/
+      - label: Rules and regulations
+        url: /en/guild/rules/
+      - label: Honours
+        url: /en/guild/honour/
+      - label: Joining the guild
+        url: /en/guild/joining-guild/
+  - title: For students
+    links:
+      - label: New students
+        url: /en/new-students/
+      - label: Studies
+        url: /en/studies/
+      - label: Prospective students
+        url: /en/prospective-students/
+      - label: Harassment contact persons
+        url: /en/guild/harassment-contact-persons/
+      - label: ESTIEM LG Helsinki
+        url: /en/estiem-lg-helsinki/
+  - title: Services
+    links:
+      - label: All services
+        url: /en/services/
+      - label: Aalto and AYY services
+        url: /en/services/aalto-and-ayy-services-3/
+      - label: Prodeko Fund
+        url: /en/services/prodeko-fund/
+      - label: Weekly letter
+        url: https://viikkotiedote.prodeko.org
+      - label: Gallery
+        url: https://gallery.prodeko.org
+      - label: Ilmokilke
+        url: https://ilmo.prodeko.org
+  - title: Contact
+    links:
+      - label: For companies
+        url: /en/yrityssuhteet/
+      - label: Alumni
+        url: /en/alumni/
+      - label: hallitus@prodeko.org
+        url: mailto:hallitus@prodeko.org
+      - label: yrityssuhteet@prodeko.org
+        url: mailto:yrityssuhteet@prodeko.org

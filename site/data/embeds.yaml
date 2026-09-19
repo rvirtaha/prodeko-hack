@@ -1,24 +1,36 @@
-# Read by layouts/shortcodes/embed.html. One entry per interactive Prodeko
+# Read by layouts/_shortcodes/embed.html. One entry per interactive Prodeko
 # service that the site links to instead of rebuilding, per
 # docs/superpowers/specs/2026-09-18-prodeko-git-cms-design.md.
+#
+# `frame: true` embeds the service in an iframe as well as linking to it. Every
+# service currently sends `frame-ancestors 'self'`, so a browser refuses to
+# paint any of them here and a frame would be an empty box; set it per service
+# once that service allows this origin.
 ilmo:
   label: Ilmoittautumiset ja tapahtumakalenteri
+  labelEn: Event sign-up and calendar
   baseURL: https://ilmo.prodeko.org
 viikkotiedote:
   label: Viikkotiedote
+  labelEn: Weekly letter
   baseURL: https://viikkotiedote.prodeko.org
 gallery:
   label: Kuvagalleria
+  labelEn: Photo gallery
   baseURL: https://gallery.prodeko.org
 store:
   label: Verkkokauppa
+  labelEn: Webshop
   baseURL: https://store.prodeko.org
 kululaskut:
   label: Kulukorvaukset
+  labelEn: Expense claims
   baseURL: https://prodeko.kululaskut.fi
 vaalit:
   label: Vaalit
+  labelEn: Elections
   baseURL: https://vaalit.prodeko.org
 vaalikoppi:
   label: Vaalikoppi
+  labelEn: Voting booth
   baseURL: https://vaalikoppi.prodeko.org

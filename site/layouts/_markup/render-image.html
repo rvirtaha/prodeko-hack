@@ -1,0 +1,19 @@
+{{/* Every image in page content links to itself at full size.
+
+     The migrated pages carry a few images that are documents rather than
+     decoration — the orientation week timetable is the whole of its page, and
+     at 342px every event label in it is an unreadable smudge. Without a way to
+     open the original, that page says nothing on a phone. */}}
+{{ $alt := .PlainText }}
+{{ $title := .Title }}
+<figure class="content-image">
+  <a href="{{ .Destination | safeURL }}" target="_blank" rel="noopener">
+    <img src="{{ .Destination | safeURL }}" alt="{{ $alt }}"{{ with $title }} title="{{ . }}"{{ end }} loading="lazy">
+  </a>
+  <figcaption>
+    {{ with $alt }}<span>{{ . }}</span>{{ end }}
+    <a href="{{ .Destination | safeURL }}" target="_blank" rel="noopener">
+      {{ if eq page.Language.Lang "fi" }}Avaa kuva täysikokoisena{{ else }}Open the image full size{{ end }} <span aria-hidden="true">↗</span>
+    </a>
+  </figcaption>
+</figure>

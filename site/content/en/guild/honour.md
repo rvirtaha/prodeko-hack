@@ -1,5 +1,6 @@
 ---
-title: Honours
+title: Guild honours and awards
+description: A list of the honours the guild has awarded since 1969.
 translationKey: guild-kunnianosoitukset
 layout: archive
 dataset: honours

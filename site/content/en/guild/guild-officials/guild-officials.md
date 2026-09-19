@@ -1,5 +1,6 @@
 ---
 title: Officials
+description: The guild officials serving this year and the positions they hold.
 translationKey: guild-toimarit-toimihenkilot
 layout: people
 dataset: officials

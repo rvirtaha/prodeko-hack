@@ -1,0 +1,19 @@
+# Prodeko's 1972 board, imported from https://www.prodeko.org/fi/guild/board/edelliset-hallitukset/
+# by tools/import-boards.py. Edit here, not on the old site.
+heading: "1972"
+sortKey: 1972
+members:
+  - name: "Tuomo Taina"
+    role: "Ekskursiomestari"
+  - name: "Riitta Saari"
+    role: "Sihteeri"
+  - name: "Hannu Laakso"
+    role: "Varapuheenjohtaja"
+  - name: "Airi Kupiainen"
+    role: "Emäntä"
+  - name: "Timo Känsälä"
+    role: "Isäntä"
+  - name: "Matti Hietala"
+    role: "Puheenjohtaja"
+  - name: "Aulis Gustafsson"
+    role: "Rahastonhoitaja"

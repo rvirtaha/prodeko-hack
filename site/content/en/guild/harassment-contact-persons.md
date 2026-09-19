@@ -1,5 +1,6 @@
 ---
 title: Harassment Contact Persons
+description: Prodeko's five harassment contact persons introduce themselves and explain how to reach them confidentially.
 translationKey: guild-hairintayhdyshenkilot
 sourceURL: https://prodeko.org/en/guild/harassment-contact-persons/
 ---
@@ -16,9 +17,9 @@ Prodeko has five harassment contact persons: Aino Soinio, Aino Salmi, Kalle Saar
 
 Hello! I'm Aino Soinio, a sixth year prodekoian. Parties are fun, but sometimes I feel mentally middle-aged and love chillin' at home with Downton Abbey :) I'm reliable and a pretty nice person, so if you ever need someone to talk to, just send me a message! Even about the weather if nothing else ;)
 
-*[aino.soinio@aalto.fi](mailto:suvi.rinkineva@aalto.fi)*
+*[aino.soinio@aalto.fi](mailto:aino.soinio@aalto.fi)*
 
-*[+358 449745644]()*
+*+358 449745644*
 
 *TG: @qlonqqu*
 
@@ -28,8 +29,9 @@ Hello! I'm Aino Soinio, a sixth year prodekoian. Parties are fun, but sometimes 
 
 Hellou! I’m Aino Salmi, a Prodeko fresher ’23. In my free time I love to hang out with friends, and I also enjoy running if it is a good day ;) Feel free to contact me if anything is on your mind, I am happy to help!
 
-*[aino.e.salmi@aalto.fi](http://mailto:aino.e.salmi@aalto.fi)*
- [+358 44 9297924]()
+*[aino.e.salmi@aalto.fi](mailto:aino.e.salmi@aalto.fi)*
+
+*+358 44 9297924*
 
 TG: @salmiaino
 
@@ -75,4 +77,4 @@ If you wish, you can also contact AYY’s harassment contact persons or SCI’s 
 
 **SCI’s Manager of Academic Affairs:**
 
-Mari Knuuttila, [mari.knuuttila@aalto.fi](mailto:mari.knuuttila@aalto.fi), [+358 50 537 3358]()
+Mari Knuuttila, [mari.knuuttila@aalto.fi](mailto:mari.knuuttila@aalto.fi), +358 50 537 3358

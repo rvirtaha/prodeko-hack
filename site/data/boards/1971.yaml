@@ -1,0 +1,19 @@
+# Prodeko's 1971 board, imported from https://www.prodeko.org/fi/guild/board/edelliset-hallitukset/
+# by tools/import-boards.py. Edit here, not on the old site.
+heading: "1971"
+sortKey: 1971
+members:
+  - name: "Antti Talpila"
+    role: "Ekskursiomestari"
+  - name: "Juha Suomalainen"
+    role: "Puheenjohtaja"
+  - name: "Markku Salimäki"
+    role: "Rahastonhoitaja"
+  - name: "Riitta Saari"
+    role: "Emäntä"
+  - name: "Helena Komulainen"
+    role: "Sihteeri"
+  - name: "Juha Kekkonen"
+    role: "Varapuheenjohtaja"
+  - name: "Matti Hietala"
+    role: "Isäntä"

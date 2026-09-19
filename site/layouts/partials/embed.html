@@ -1,17 +1,48 @@
 {{- /*
-  The frame every Prodeko service embed is rendered in.
+  The card an existing Prodeko service is linked from.
 
-  Takes url, label and an optional height. The link below the frame is what a
-  visitor gets when the service refuses to be framed or the request fails, so
-  it is not decoration; the label is the service's address for that reason.
+  Takes {url, label, note, frame, height}. Every Prodeko service currently
+  sends `frame-ancestors 'self'`, so a browser refuses to paint any of them
+  inside this origin: an iframe here reserves several hundred pixels and then
+  renders nothing, which on the events page left two thirds of a short page as
+  an empty rectangle. So the frame is opt-in per service, through `frame: true`
+  in data/embeds.yaml, and the card is what the reader actually gets.
 
-  Styling belongs to the templates: this writes one embed class and nothing
-  else.
+  Turn `frame` on for a service once it allows this origin to frame it.
 */ -}}
 {{- $url := .url -}}
 {{- $label := .label -}}
+{{- $note := .note | default "" -}}
+{{- $frame := .frame | default false -}}
 {{- $height := .height | default 700 -}}
+{{- $isFi := eq page.Language.Lang "fi" -}}
 <div class="embed">
-  <iframe src="{{ $url }}" title="{{ $label }}" width="100%" height="{{ $height }}" loading="lazy"></iframe>
-  <p><a href="{{ $url }}">{{ $label }}</a></p>
+  <div class="embed-head">
+    <div>
+      <span class="kicker">{{ if $isFi }}Prodekon palvelu{{ else }}A Prodeko service{{ end }}</span>
+      <div class="embed-title">{{ $label }}</div>
+      <p class="embed-note">
+        {{ with $note }}{{ . }}{{ else }}
+          {{ if $isFi }}
+            Palvelu on erillinen ja avautuu omassa välilehdessään.
+          {{ else }}
+            The service is separate and opens in its own tab.
+          {{ end }}
+        {{ end }}
+      </p>
+    </div>
+    <a class="btn btn-primary" href="{{ $url }}" target="_blank" rel="noopener">
+      {{ if $isFi }}Avaa palvelu{{ else }}Open the service{{ end }} <span aria-hidden="true">→</span>
+    </a>
+  </div>
+  {{ if $frame }}
+    <div class="embed-frame" style="min-height:{{ $height }}px">
+      <p class="embed-fallback">
+        {{ if $isFi }}Palvelu avautuu omassa ikkunassaan, jos se ei lataudu tähän.
+        {{ else }}The service opens in its own window if it does not load here.{{ end }}
+        <a href="{{ $url }}" target="_blank" rel="noopener">{{ $url }}</a>
+      </p>
+      <iframe src="{{ $url }}" title="{{ $label }}" height="{{ $height }}" loading="lazy"></iframe>
+    </div>
+  {{ end }}
 </div>

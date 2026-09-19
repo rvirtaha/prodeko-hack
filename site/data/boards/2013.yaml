@@ -1,0 +1,25 @@
+# Prodeko's 2013 board, imported from https://www.prodeko.org/fi/guild/board/edelliset-hallitukset/
+# by tools/import-boards.py. Edit here, not on the old site.
+heading: "2013"
+sortKey: 2013
+members:
+  - name: "Jyri Yli-Villamo"
+    role: "Isäntä"
+  - name: "Marianne Vikkula"
+    role: "Rahastonhoitaja"
+  - name: "Marko Sommarberg"
+    role: "Ulkoministeri"
+  - name: "Julius Säilä"
+    role: "Opintovastaava"
+  - name: "Pasi Lohi"
+    role: "Mediakeisari, Sihteeri"
+  - name: "Christine Korjus"
+    role: "Sisä- ja kulttuuriministeri"
+  - name: "Heikki Koponen"
+    role: "Puheenjohtaja"
+  - name: "Markus Junkkari"
+    role: "Excumestari"
+  - name: "Oskari Hyvärinen"
+    role: "Varapuheenjohtaja"
+  - name: "Simo Hellgrén"
+    role: "Fuksikapteeni"

@@ -1,0 +1,25 @@
+# Prodeko's 1979 board, imported from https://www.prodeko.org/fi/guild/board/edelliset-hallitukset/
+# by tools/import-boards.py. Edit here, not on the old site.
+heading: "1979"
+sortKey: 1979
+members:
+  - name: "Pekka Salmi"
+    role: "Isäntä"
+  - name: "Marianne Mustonen"
+    role: "Emäntä"
+  - name: "Jussi Mankki"
+    role: "Puheenjohtaja"
+  - name: "Olavi Luotonen"
+    role: "Varapuheenjohtaja"
+  - name: "Simo Lassila"
+    role: "Ekskursiomestari"
+  - name: "Staffans Lars-Olof"
+    role: "Lyhyt ekskursiomestari"
+  - name: "Helena Hyypä"
+    role: "Sihteeri"
+  - name: "Juha Hynynen"
+    role: "Tiedotussihteeri"
+  - name: "Jarmo Honkamaa"
+    role: "Rahastonhoitaja"
+  - name: "Riitta Holmström"
+    role: "Emäntä"

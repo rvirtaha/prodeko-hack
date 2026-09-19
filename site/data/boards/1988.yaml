@@ -1,0 +1,27 @@
+# Prodeko's 1988 board, imported from https://www.prodeko.org/fi/guild/board/edelliset-hallitukset/
+# by tools/import-boards.py. Edit here, not on the old site.
+heading: "1988"
+sortKey: 1988
+members:
+  - name: "Ilkka Toivola"
+    role: "Opintoihme (-1.3.)"
+  - name: "Pekka Tamminen"
+    role: "Excursiomestari"
+  - name: "Risto Siilasmaa"
+    role: "Excursiomestari"
+  - name: "Jukka Räikkönen"
+    role: "Opintoihme (1.3.-)"
+  - name: "Satu Rahikainen"
+    role: "Emäntä"
+  - name: "Mika Nurmi"
+    role: "Rahastonhoitaja"
+  - name: "Maarika Mattheiszen"
+    role: "Kulttuuriattasea"
+  - name: "Matti Kanninen"
+    role: "Puheenjohtaja"
+  - name: "Timo Huttunen"
+    role: "Varapuheenjohtaja"
+  - name: "Antti Arppe"
+    role: "Isäntä"
+  - name: "Petri Allas"
+    role: "Sihteeri"

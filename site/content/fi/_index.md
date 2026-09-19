@@ -2,6 +2,8 @@
 title: Prodeko
 source: raw-website design export, Prodeko-site.dc.html
 translationKey: home
+description: Prodeko ry on Aalto-yliopiston tuotantotalouden opiskelijoiden kilta
+  ja ainejärjestö.
 heroKicker: Tuotantotalouden kilta · Aalto-yliopisto
 heroTitle: Tervetuloa opiskelemaan Aallon tutalle
 ctaJoin: Hae jäseneksi
@@ -42,10 +44,15 @@ valuesTitle: Prodekon arvot
 valuesSub: Määritetty vuonna 2017. Viisi arvoa, viisi haalarin väriä.
 values:
   - name: Think big
+    blurb: "Be bold. Trust yourself and your skills. Take risks, but not blindly — do so with entrepreneurial responsibility, ownership and humility."
   - name: Get things done
+    blurb: "Take initiative. Have a can-do attitude. Value results, not working hours. Be efficient, but above all be effective — what you do and don't do are equally important."
   - name: Learn and grow
+    blurb: "Be curious. Keep learning. Embrace imperfection. Know that your qualities aren't fixed — you can grow and develop throughout life."
   - name: Give back
+    blurb: "Support. Collaborate. Value your community. Don't ask what others can do for you, ask what you can do for others."
   - name: Be a good person
+    blurb: "Act with integrity. Be worthy of trust. Meet others with kindness. Remember that who you are is more important than what you do."
 bandTitle: Yhdistämässä tutalaisia jo vuodesta 1966
 bandSub: Meidät tunnistaa muusta juhlakansasta sateenkaarin varustettujen
   haalarien ja päätähuimaavan menon ansiosta.

@@ -2,6 +2,7 @@
 title: Lifelong learning
 translationKey: alumni-lifelong-learning
 sourceURL: https://prodeko.org/fi/alumni/lifelong-learning/
+description: Prodekon ja Prodekon Alumnin yhteinen projekti, joka tukee elinikäistä oppimista Prodeko-yhteisössä vertaisryhmien ja lyhytkurssien avulla.
 ---
 
 Lifelong learning on Prodekon ja Prodekon Alumnin yhteinen projekti, joka käynnistettiin keväällä 2018 ja ensimmäiset visiot julkaistiin yleisölle huhtikuun lopussa Prodeko-seminaarissa. Hankkeen tarkoitus on tukea ja mahdollistaa elinikäisen oppimisen tapoja ja merkitystä Prodeko-yhteisössä.

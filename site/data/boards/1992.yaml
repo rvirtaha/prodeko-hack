@@ -1,0 +1,27 @@
+# Prodeko's 1992 board, imported from https://www.prodeko.org/fi/guild/board/edelliset-hallitukset/
+# by tools/import-boards.py. Edit here, not on the old site.
+heading: "1992"
+sortKey: 1992
+members:
+  - name: "Markus Tarkiainen"
+    role: "Fuksikapteeni"
+  - name: "Pekka Suonio"
+    role: "Excursiomestarit"
+  - name: "Jyri Soininen"
+    role: "Excursiomestarit"
+  - name: "Riku Österman"
+    role: "Rahastonhoitaja"
+  - name: "Arto Nuutila"
+    role: "Puheenjohtaja"
+  - name: "Juha-Matti Lehtonen"
+    role: "Opintoihme"
+  - name: "Sami Lampinen"
+    role: "Isäntä"
+  - name: "Kati Huttunen"
+    role: "Infobossi"
+  - name: "Kaj Hagros"
+    role: "Varapuheenjohtaja sisäministeri"
+  - name: "Marja Blomqvist"
+    role: "Ulkoministeri"
+  - name: "Pia Alanne"
+    role: "Sihteeri"

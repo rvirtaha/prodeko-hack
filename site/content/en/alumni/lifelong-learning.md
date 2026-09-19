@@ -1,5 +1,6 @@
 ---
 title: Lifelong learning
+description: A joint project of Prodeko and Prodeko Alumni that supports continuous learning in the Prodeko community after graduation.
 translationKey: alumni-lifelong-learning
 sourceURL: https://prodeko.org/en/alumni/lifelong-learning/
 ---
@@ -16,8 +17,8 @@ Lifelong learning has its own web page, where you can find more information abou
 
 2. **Act independently:** Read books, watch documents, reflect your successes and failures
 
-3. **Participate:** Take part in xx
+3. **Participate:** Take part in [peer group activities](https://lifelonglearning.prodeko.org/#vertais)
 
-4.**Co-create:** Facilitate peer groups and share your learning with others
+4. **Co-create:** Facilitate peer groups and share your learning with others
 
 During the Autumn of 2018 the first afterwork-like courses started that enabled prodeko members to learn from another.

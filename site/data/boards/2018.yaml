@@ -1,0 +1,27 @@
+# Prodeko's 2018 board, imported from https://www.prodeko.org/fi/guild/board/edelliset-hallitukset/
+# by tools/import-boards.py. Edit here, not on the old site.
+heading: "2018"
+sortKey: 2018
+members:
+  - name: "Sanni Vilmi"
+    role: "Excumestari"
+  - name: "Otto Saaranto"
+    role: "Rahastonhoitaja"
+  - name: "Timo Riski"
+    role: "Mediakeisari"
+  - name: "Johannes Rantala"
+    role: "Yrityssuhdevastaava"
+  - name: "Eemil Oikari"
+    role: "Varapuheenjohtaja"
+  - name: "Rita Myllymäki"
+    role: "Sisä- ja kulttuuriministeri"
+  - name: "Teemu Mikola"
+    role: "Ulkoministeri"
+  - name: "Miki Lehto"
+    role: "Fuksikapteeni"
+  - name: "Niko Kinnunen"
+    role: "Isäntä"
+  - name: "Olli Kiikkilä"
+    role: "Puheenjohtaja"
+  - name: "Sara Ikonen"
+    role: "Opintovastaava"

@@ -1,5 +1,6 @@
 ---
 title: Jäsenille
+description: "Killan jäsenille tarkoitetut sivut: kokouspöytäkirjat ja Prolekon arkisto."
 translationKey: members
 reviewed: 2026-09-18
 owner: hallitus

@@ -1,0 +1,27 @@
+# Prodeko's 2002 board, imported from https://www.prodeko.org/fi/guild/board/edelliset-hallitukset/
+# by tools/import-boards.py. Edit here, not on the old site.
+heading: "2002"
+sortKey: 2002
+members:
+  - name: "Hanna-Kaisa Sävelkoski"
+    role: "Sihteeri"
+  - name: "Mikko Rönkkö"
+    role: "Fuksikapteeni"
+  - name: "Merja Nurminen"
+    role: "Puheenjohtaja"
+  - name: "Markus Mäkelä"
+    role: "Yrityssuhdevastaava"
+  - name: "Mikko Laine"
+    role: "Uusmediakeisari"
+  - name: "Anni Kauranen"
+    role: "Opintovastaava"
+  - name: "Maija Kaukonen"
+    role: "Isäntä"
+  - name: "Juhani Kankaanpää"
+    role: "Excumestari"
+  - name: "Liisa Ikonen"
+    role: "Sisä- ja Kulttuuriministeri"
+  - name: "Maija Hellman"
+    role: "Rahastonhoitaja"
+  - name: "Eeva-Kaisa Ahonen"
+    role: "Ulkoministeri"

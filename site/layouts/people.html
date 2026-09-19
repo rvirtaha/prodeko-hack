@@ -7,14 +7,11 @@
 
      The year archive template (archive.html) covers every year at once. */}}
 {{ define "main" }}
-  <article>
-    <h1>{{ .Title }}</h1>
-    {{ .Content }}
-    {{ with .Params.dataset }}
-      {{ $group := index hugo.Data . (string $.Params.year) }}
-      {{ with $group }}
-        {{ partial "people-grid.html" .members }}
-      {{ end }}
+  {{ $body := slice (string .Content) }}
+  {{ with .Params.dataset }}
+    {{ with index hugo.Data . (string $.Params.year) }}
+      {{ $body = $body | append (string (partial "people-grid.html" .members)) }}
     {{ end }}
-  </article>
+  {{ end }}
+  {{ partial "page-shell.html" (dict "page" . "body" (delimit $body "" | safeHTML)) }}
 {{ end }}

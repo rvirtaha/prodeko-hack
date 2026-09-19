@@ -1,5 +1,6 @@
 ---
 title: Arvot
+description: Prodekon viisi yhteistä arvoa ja arvotyö, jolla ne määriteltiin killan 50-vuotisjuhlavuoden kunniaksi 2016–2017.
 translationKey: guild-arvot
 sourceURL: https://prodeko.org/fi/guild/arvot/
 reviewed: 2026-09-18

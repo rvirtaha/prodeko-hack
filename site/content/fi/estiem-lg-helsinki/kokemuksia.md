@@ -1,6 +1,7 @@
 ---
 title: Kokemuksia ja matkakertomuksia
 translationKey: estiem-lg-helsinki-kokemuksia
+description: Prodekolaisten matkakertomuksia ESTIEM-tapahtumista Karlsruhessa, Eindhovenissa ja Montafonissa.
 sourceURL: https://prodeko.org/fi/estiem-lg-helsinki/kokemuksia/
 ---
 

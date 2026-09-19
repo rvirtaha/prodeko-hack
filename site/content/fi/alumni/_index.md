@@ -1,6 +1,7 @@
 ---
 title: Alumni
 translationKey: alumni
+description: Prodekon Alumni ry on tuotantotalouden alumnien yhdistys, joka ylläpitää alumniverkostoa ja järjestää jäsenilleen tapahtumia.
 layout: alumni-hub
 source: raw-website design export, Prodeko-site.dc.html
 alumniKicker: Alumni

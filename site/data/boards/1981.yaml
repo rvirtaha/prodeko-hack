@@ -1,0 +1,25 @@
+# Prodeko's 1981 board, imported from https://www.prodeko.org/fi/guild/board/edelliset-hallitukset/
+# by tools/import-boards.py. Edit here, not on the old site.
+heading: "1981"
+sortKey: 1981
+members:
+  - name: "Jari Tuomala"
+    role: "Puheenjohtaja"
+  - name: "Hanna Topi-Hulmi"
+    role: "Opintovastaava"
+  - name: "Mikko Talsi"
+    role: "Varapuheenjohtaja"
+  - name: "Timo Seppäläinen"
+    role: "Isäntä"
+  - name: "Anne Nyysti"
+    role: "Tiedotussihteeri"
+  - name: "Sari-Leena Nikula"
+    role: "Emäntä"
+  - name: "Ukko Lappalainen"
+    role: "Sihteeri"
+  - name: "Heikki Ellonen"
+    role: "Excursiomestarit"
+  - name: "Ari Borg"
+    role: "Excursiomestarit"
+  - name: "Karlos Artto"
+    role: "Rahastonhoitaja"
