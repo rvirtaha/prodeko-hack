@@ -19,7 +19,7 @@ Hello! I'm Aino Soinio, a sixth year prodekoian. Parties are fun, but sometimes 
 
 *[aino.soinio@aalto.fi](mailto:aino.soinio@aalto.fi)*
 
-*+358 449745644*
+*[+358 44 974 5644](tel:+358449745644)*
 
 *TG: @qlonqqu*
 
@@ -31,9 +31,9 @@ Hellou! I’m Aino Salmi, a Prodeko fresher ’23. In my free time I love to han
 
 *[aino.e.salmi@aalto.fi](mailto:aino.e.salmi@aalto.fi)*
 
-*+358 44 9297924*
+*[+358 44 929 7924](tel:+358449297924)*
 
-TG: @salmiaino
+*TG: @salmiaino*
 
 ![](https://static.prodeko.org/media/filer_public_thumbnails/public/2026/01/16/hary-kuva_kalle.jpg__480x505_q85_subsampling-2.jpg)
 
@@ -41,11 +41,11 @@ TG: @salmiaino
 
 Hi, this is Kalle, a second-year Prodeko student! I am an approachable and social guy, with whom you can discuss anything confidentially. I work as a ferry driver, which gives me a good balance to school. Get in touch if something is weighing on your mind and we can think things through together.
 
-kalle.saarivuori@aalto.fi
+*[kalle.saarivuori@aalto.fi](mailto:kalle.saarivuori@aalto.fi)*
 
-+358 409673050
+*[+358 40 967 3050](tel:+358409673050)*
 
-TG: @kallesaarivuori
+*TG: @kallesaarivuori*
 
 ![](https://static.prodeko.org/media/filer_public_thumbnails/public/2026/01/07/2026-01-07_144401.jpg__427x640_q85_subject_location-427%2C642_subsampling-2.jpg)
 
@@ -53,11 +53,11 @@ TG: @kallesaarivuori
 
 Hello! My name is Jenni and I'm a freshman from the class of ’22. I’m easily inspired by new experiences and new people, but I also appreciate quiet moments and everyday routines. If something’s on your mind, you can always message me or come say hi on campus!
 
-jenni.palukka@aalto.fi
+*[jenni.palukka@aalto.fi](mailto:jenni.palukka@aalto.fi)*
 
-+358 45 163 8667
+*[+358 45 163 8667](tel:+358451638667)*
 
-TG: @jennipalukka
+*TG: @jennipalukka*
 
 ![](https://static.prodeko.org/media/filer_public_thumbnails/public/2026/01/07/2026-01-07_144414.jpg__480x640_q85_subsampling-2.jpg)
 
@@ -65,11 +65,11 @@ TG: @jennipalukka
 
 Hello! I’m Elli, a Prodeko fresher ‘24. I really enjoy hitting the gym, listening to music and spending time with my dog. If you ever need someone to talk to, feel free to contact me so we can think things through!
 
-elli.lahtinen@aalto.fi
+*[elli.lahtinen@aalto.fi](mailto:elli.lahtinen@aalto.fi)*
 
-+358406822249
+*[+358 40 682 2249](tel:+358406822249)*
 
-TG: @ElliLahtinen
+*TG: @ElliLahtinen*
 
 If you wish, you can also contact AYY’s harassment contact persons or SCI’s Manager of Academic Affairs. SCI's Manager of Academic Affairs can help you in situations regarding Aalto staff.
 
@@ -77,4 +77,4 @@ If you wish, you can also contact AYY’s harassment contact persons or SCI’s 
 
 **SCI’s Manager of Academic Affairs:**
 
-Mari Knuuttila, [mari.knuuttila@aalto.fi](mailto:mari.knuuttila@aalto.fi), +358 50 537 3358
+Mari Knuuttila, [mari.knuuttila@aalto.fi](mailto:mari.knuuttila@aalto.fi), [+358 50 537 3358](tel:+358505373358)

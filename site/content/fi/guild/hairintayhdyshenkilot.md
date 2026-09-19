@@ -31,9 +31,9 @@ Moikku! Mä oon Aino Salmi, Prodekon fuksi vuosimallia ’23. Vapaa-ajalla rakas
 
 *[aino.e.salmi@aalto.fi](mailto:aino.e.salmi@aalto.fi)*
 
-[+358 44 929 7924](tel:+358449297924)
+*[+358 44 929 7924](tel:+358449297924)*
 
-TG: @salmiaino
+*TG: @salmiaino*
 
 ![](https://static.prodeko.org/media/filer_public_thumbnails/public/2026/01/16/hary-kuva_kalle.jpg__480x505_q85_subsampling-2.jpg)
 
@@ -41,11 +41,11 @@ TG: @salmiaino
 
 Moi, tässä Kalle, prodekofuksi '24! Olen helposti lähestyttävä ja sosiaalinen tyyppi, jonka kanssa voi keskustella luottamuksellisesti mistä vaan. Harrastan lossinkuljettajan hommia, saan siitä hyvää vastapainoa koulunkäyntiin. Ole yhteydessä jos jokin painaa mieltäsi niin pohditaan asioita yhdessä eteenpäin.
 
-Kalle.saarivuori@aalto.fi
+*[kalle.saarivuori@aalto.fi](mailto:kalle.saarivuori@aalto.fi)*
 
-+358 40 9673050
+*[+358 40 967 3050](tel:+358409673050)*
 
-TG: @kallesaarivuori
+*TG: @kallesaarivuori*
 
 ![](https://static.prodeko.org/media/filer_public_thumbnails/public/2026/01/07/2026-01-07_144401.jpg__427x640_q85_subject_location-427%2C642_subsampling-2.jpg)
 
@@ -53,11 +53,11 @@ TG: @kallesaarivuori
 
 Helou! Täällä kirjoittelee Jenni, fuksi vuosimallia ’22. Oon helposti uusista asioista ja ihmisistä innostuva tyyppi, mutta vastapainoksi rakastan myös rauhaa ja rutiineja. Mulle on tosi tärkeää, ettei kukaan jäisi yksin huoliensa kanssa. Jos joku asia painaa mieltä, mulle saa aina laittaa viestiä tai nykäistä hihasta kampuksella!
 
-jenni.palukka@aalto.fi
+*[jenni.palukka@aalto.fi](mailto:jenni.palukka@aalto.fi)*
 
-+358 45 163 8667
+*[+358 45 163 8667](tel:+358451638667)*
 
-TG: @jennipalukka
+*TG: @jennipalukka*
 
 ![](https://static.prodeko.org/media/filer_public_thumbnails/public/2026/01/07/2026-01-07_144414.jpg__480x640_q85_subsampling-2.jpg)
 
@@ -65,11 +65,11 @@ TG: @jennipalukka
 
 Moikka! Oon Elli, Prodekon fuksi ‘24. Mun ihan lemppari tekemistä on sporttailu, musan kuuntelu ja koiran kanssa hengailu. Oon rauhallinen ja lämmin tyyppi, tuu vaan juttelemaan, jos mikään vaivaa tai pohdituttaa!
 
-elli.lahtinen@aalto.fi
+*[elli.lahtinen@aalto.fi](mailto:elli.lahtinen@aalto.fi)*
 
-+358 40 682 2249
+*[+358 40 682 2249](tel:+358406822249)*
 
-TG: @ElliLahtinen
+*TG: @ElliLahtinen*
 
 Mikäli haluat, voit ottaa myös suoraan yhteyttä AYY:n häirintäyhdyshenkilöihin tai SCI:n opintopäälikköön. SCI:n opintopäälikkö auttaa erityisesti korkeakouluhenkilökuntaan liittyvissä tilanteissa.
 

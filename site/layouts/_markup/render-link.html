@@ -1,0 +1,5 @@
+{{/* Go's template URL filter permits only http, https and mailto, so a tel:
+     link written in content would otherwise come out as #ZgotmplZ. The
+     harassment contacts and the fuksikapteeni are reachable by phone, and on a
+     phone that link is the point. */}}
+<a href="{{ .Destination | safeURL }}"{{ with .Title }} title="{{ . }}"{{ end }}>{{ .Text }}</a>
