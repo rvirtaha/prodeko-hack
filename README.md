@@ -64,8 +64,9 @@ member page has no public address to guess. The public build reads only
 list, from `sitemap.xml` and from anything else generated out of loaded pages.
 
 `check-trees.sh` fails the build if a member section appears in the public tree,
-is named anywhere inside it, or is missing from the member tree. Run it after
-both builds; CI runs it too.
+is named anywhere inside it, or is missing from the member tree. It also fails
+if the member tree names the counting endpoint. Run it after both builds; CI
+runs it too.
 
 Neither build passes `--gc`. The two share one resource cache under
 `site/resources/`, and a garbage collecting pass deletes the cached image
@@ -81,6 +82,22 @@ navigation entry into the member section belongs behind that condition until
 Caddy enforces the login. `data/megamenu.yaml` marks such an entry with
 `members: true`, and the header renders it as plain text where there is no
 member tree.
+
+## Counting visitors
+
+The public tree counts pageviews with [GoatCounter](https://www.goatcounter.com/)
+running on Prodeko's own server: pageviews per path, referrer, language,
+country, device class, and a click event on each "Avaa palvelu" button. It
+stores nothing on a visitor's device, which is why the site carries no cookie
+banner; the privacy notice describes what is recorded and carries the opt-out
+button. The member tree is not counted at all, and `check-trees.sh` asserts it.
+
+The dashboard is at [analytics.prodeko.org](https://analytics.prodeko.org),
+behind a Prodeko sign-in that requires the `prodeko-org-admin` role. The
+deployment lives in the infra-prodeko repository, in the `goatcounter` and
+`analytics_gate` roles;
+[the design document](docs/superpowers/specs/2026-09-19-analytics-design.md)
+explains what is measured and why there is no banner.
 
 ## Checking the site
 

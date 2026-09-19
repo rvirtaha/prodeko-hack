@@ -1,0 +1,39 @@
+{{- /*
+  The opt-out button on the privacy notice, and the whole of what replaces a
+  cookie banner. count.js reads localStorage.skipgc on every pageview and
+  sends nothing at all when it holds "t"; this button is how a visitor sets
+  and clears that value, which is the only thing this site ever writes to a
+  visitor's device.
+
+  It reflects the current state rather than assuming it, because the page is
+  static and cached and the flag lives in the browser. The label is read off
+  the button's own data attributes so the Finnish and the English wording
+  stay in the template rather than in the script.
+
+  Queried by attribute rather than reached from document.currentScript: the
+  shortcode is used inside Markdown, where goldmark wraps the button in a
+  paragraph and lets the script tag start a block of its own, so the two are
+  not siblings. localStorage throws rather than returning null in some
+  privacy modes, so every access is guarded and a failure leaves an inert
+  button instead of a broken page.
+*/ -}}
+{{- $isFi := eq page.Language.Lang "fi" -}}
+<p><button type="button" class="btn btn-primary" data-analytics-optout data-off="{{ if $isFi }}Älä laske käyntejäni{{ else }}Don't count my visits{{ end }}" data-on="{{ if $isFi }}Käyntejäsi ei lasketa{{ else }}Your visits are not counted{{ end }}"></button></p>
+<script>
+  document.querySelectorAll("[data-analytics-optout]").forEach(function (button) {
+    var skipped = function () {
+      try { return localStorage.getItem("skipgc") === "t"; } catch (e) { return false; }
+    };
+    var render = function () {
+      button.textContent = skipped() ? button.dataset.on : button.dataset.off;
+      button.setAttribute("aria-pressed", String(skipped()));
+    };
+    button.addEventListener("click", function () {
+      try {
+        if (skipped()) { localStorage.removeItem("skipgc"); } else { localStorage.setItem("skipgc", "t"); }
+      } catch (e) { /* storage unavailable: nothing is counted from it either */ }
+      render();
+    });
+    render();
+  });
+</script>

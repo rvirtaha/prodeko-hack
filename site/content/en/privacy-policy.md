@@ -5,7 +5,7 @@ description: "Prodeko ry's privacy notice on how the guild collects, uses and st
 sourceURL: https://prodeko.org/en/privacy-policy/
 ---
 
-This is the register and privacy notice of Prodeko Ry in accordance with the henkilötietolaki (the Personal Data Act, sections 10 and 24) and the EU General Data Protection Regulation (GDPR). Drawn up 23.05.2018. Last modified 25.05.2026.
+This is the register and privacy notice of Prodeko Ry in accordance with the henkilötietolaki (the Personal Data Act, sections 10 and 24) and the EU General Data Protection Regulation (GDPR). Drawn up 23.05.2018. Last modified 19.09.2026.
 
 This privacy notice describes how Tuotantotalouden Kilta Prodeko ry collects, uses and processes users' personal data. It applies to all of Prodeko's digital services, which are specified in more detail at the end of this document.
 
@@ -28,13 +28,15 @@ When you use Prodeko's website, technical log data such as the IP address, opera
 
 ## 3. Disclosure of data and third parties
 
-As a rule, we do not disclose data to other parties or outside the EU and EEA countries. In our operations, however, we use the following external service providers, which process data in accordance with their own privacy notices: Mailman, Mailchimp, SendGrid, Google Analytics, Google AdWords, Kide.app, Stripe, kululaskut.fi
+As a rule, we do not disclose data to other parties or outside the EU and EEA countries. In our operations, however, we use the following external service providers, which process data in accordance with their own privacy notices: Mailman, Mailchimp, SendGrid, Kide.app, Stripe, kululaskut.fi
 
 All the service providers we use comply with the EU data protection regulation.
 
 ### Use of cookies
 
-When using our digital services you accept that cookies may be stored on your device. Cookies are small text files that the browser stores on the user's terminal device. We use cookies, for example, to maintain sessions (so that the user does not have to log in again every time) as well as to ensure that the services work and to monitor visitor numbers. Some third-party plugins (e.g. Google's statistics services) may set their own cookies. If you wish, you can block the use of cookies in your browser settings.
+Cookies are small text files that the browser stores on the user's terminal device. Prodeko's main website stores no cookie and no other identifier on your device: the counting of visitor numbers uses no cookie either, and the site carries no third-party plugin that would set one of its own.
+
+Services that require a login, such as the member pages and event sign-up, use a session cookie. It is strictly necessary for providing the service you asked for — without it you would not stay logged in — and it is used for nothing else. If you wish, you can block the use of cookies in your browser settings, in which case the services requiring a login will not work.
 
 ## 4. Rights of the data subject
 
@@ -46,7 +48,17 @@ The use of certain services or parts of them has been restricted on the basis of
 
 **www.prodeko.org**
 
-The service functions as Prodeko's main website and it contains a wide range of material, some of which is visible only to logged-in users. Credentials for the service are created for a guild member when they join as a member. Personal data may appear on the site in the minutes of the board, in the contact details of the guild's officials and in study accounts. Traffic on the main site is monitored with Google Analytics and the site uses the Google AdWords tool for targeting marketing (you can block targeting at google.com/settings/ads)
+The service functions as Prodeko's main website and it contains a wide range of material, some of which is visible only to logged-in users. Credentials for the service are created for a guild member when they join as a member. Personal data may appear on the site in the minutes of the board, in the contact details of the guild's officials and in study accounts.
+
+Visitor numbers on this site are counted by GoatCounter, running on Prodeko's own server. It stores no cookie and no other identifier on your device, and the data is not passed to any third party. For each page view we record the address of the page, the page you arrived from, the language and type your browser reports, the screen width, and an approximate location at country level. We also count how many times the links on these pages to Prodeko's other services, such as event sign-up or the webshop, have been opened; of those, only the link's destination and the time are recorded.
+
+Your IP address is not stored: it is held in the server's memory for at most eight hours in order to recognise a single visit, and is then gone. We therefore cannot identify you and cannot follow your visits from one day to the next. Member pages behind a login are not counted at all. The data is deleted after 24 months.
+
+The lawful basis is the controller's legitimate interest (GDPR Article 6(1)(f)): the guild wants to know which of its own pages are used and which are not.
+
+You can opt out with the button below. It stores one entry in your browser whose only purpose is to stop the counting on this device.
+
+{{< analytics-optout >}}
 
 Prodeko's electronic matrikkeli is integrated into the main site; there, members of both the guild and the guild's alumni association can view the information the others have shared. When you join Prodeko as a member, we record the personal data required for joining (full name, place of residence, field of study and major, email address and membership of AYY). In addition to this, we record in the register the administrative membership data derived from the time of and grounds for joining (excursion year class, membership end date and membership type). We also collect data that you enter voluntarily while using the service, such as your work history. If you purchase Prodeko membership through an external provider, such as kide.app, the service provider may store and share data about you with us in addition to the above. You can always find more information about this in the terms of use of the service provider in question. Registered users can edit their membership data and, if necessary, delete their data. The maintenance, administration and practices of the electronic matrikkeli are described in more detail in the matrikkeli's register notice.
 
