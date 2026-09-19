@@ -1,0 +1,105 @@
+# The content-editor MCP server, cmd/mcp/. Built and pushed as
+# prodekoregistry.azurecr.io/prodeko-mcp:v1, consumed by the prodeko_mcp
+# Ansible role.
+#
+# Deliberately free of BuildKit-only syntax: no `# syntax=` directive, no
+# heredocs, no `RUN --mount=type=cache`, no `ADD --checksum`. Rootless Docker
+# on fuse-overlayfs cannot do cross-stage COPY under BuildKit, so this image
+# has to remain buildable with DOCKER_BUILDKIT=0. See DEV.md.
+#
+# Not distroless, unlike the sibling Dockerfile for cmd/proxy/. This server
+# execs git, hugo and site/check-trees.sh, so it needs a real userland.
+
+FROM golang:1.27-bookworm AS build
+
+# The site pins hugo extended at this version and the image has to agree with
+# it: an editor's build has to fail and succeed for the same reasons CI's
+# does. Bump together with HUGO_VERSION in .github/workflows/build.yml.
+#
+# Pinned by content, not just by tag. A release asset can be replaced; the
+# checksum is what makes the download the artefact that was reviewed.
+ARG HUGO_VERSION=0.166.0
+ARG HUGO_SHA256=0e39b901e3f919f1daae05c8ff64f0c14c8a348ef46886d63f8e6d1bb2653885
+
+WORKDIR /src
+
+# Dependencies first, so a source-only change does not re-download them.
+COPY go.mod go.sum ./
+RUN go mod download
+
+COPY . .
+
+# Not CGO_ENABLED=0: the runtime is Debian, not scratch, and hugo extended
+# drags in glibc and libstdc++ regardless, so a static binary buys nothing
+# here. It is built static anyway because nothing in this module needs cgo,
+# which keeps the binary independent of the runtime's glibc version.
+RUN CGO_ENABLED=0 GOOS=linux go build \
+        -trimpath \
+        -ldflags="-s -w" \
+        -o /out/prodeko-mcp \
+        ./cmd/mcp
+
+# Same download as the CI workflow, with the checksum verified before the
+# tarball is opened. Only the `hugo` member is extracted; the release also
+# carries a licence and a readme nothing execs.
+RUN set -eu; \
+    curl -sSLo /tmp/hugo.tar.gz \
+        "https://github.com/gohugoio/hugo/releases/download/v${HUGO_VERSION}/hugo_extended_${HUGO_VERSION}_linux-amd64.tar.gz"; \
+    echo "${HUGO_SHA256}  /tmp/hugo.tar.gz" | sha256sum -c -; \
+    tar xzf /tmp/hugo.tar.gz -C /out hugo; \
+    /out/hugo version
+
+
+FROM debian:bookworm-slim
+
+# git and hugo are execed per request; bash is check-trees.sh's interpreter
+# (`#!/usr/bin/env bash`, and it uses `set -o pipefail`); ca-certificates is
+# what lets the server reach Keycloak, GitHub's API and `git push` over TLS.
+# coreutils, grep and sed are part of the base image and are what
+# check-trees.sh is otherwise built from.
+#
+# libstdc++6 is hugo extended's own dependency: the embedded SCSS transpiler
+# is C++, and without it hugo cannot even print its version.
+RUN set -eu; \
+    apt-get update; \
+    DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+        ca-certificates \
+        git \
+        bash \
+        libstdc++6; \
+    rm -rf /var/lib/apt/lists/*
+
+COPY --from=build /out/hugo /usr/local/bin/hugo
+COPY --from=build /out/prodeko-mcp /usr/local/bin/prodeko-mcp
+
+# The state directory, matching prodeko_mcp_container_state_dir. In production
+# a bind mount from the host covers this path and carries the host's ownership
+# through, which is why the uid below is the same number the role chowns the
+# host directory to. It exists in the image so an unmounted container still
+# starts and fails on the missing clone rather than on a missing directory.
+#
+# It is also HOME. The server builds the environment of every git and hugo it
+# execs from scratch and sets HOME to MCP_STATE_DIR, so git's identity
+# fallback, its config and hugo's resource cache all land on the mount rather
+# than on the read-only image layer. HOME is set here too, for the server
+# process itself.
+#
+# Nothing sets safe.directory here, and nothing can: the only gitconfig git
+# reads under that environment is $HOME/.gitconfig, which lives on the mount
+# and not in the image. Matching uids is the whole mechanism — if the host
+# directory is not owned by this uid, git refuses the clone as dubiously
+# owned on the first request.
+RUN mkdir -p /var/lib/prodeko-mcp && chown 65532:65532 /var/lib/prodeko-mcp
+ENV HOME=/var/lib/prodeko-mcp
+
+# Numeric, with no matching passwd entry, so it cannot be confused with a
+# named account the base image happens to ship. It has to equal
+# prodeko_mcp_uid in the role's defaults.
+USER 65532:65532
+WORKDIR /var/lib/prodeko-mcp
+
+# LISTEN_ADDR in the rendered .env is :8080 and compose publishes it on the
+# loopback port Caddy proxies to.
+EXPOSE 8080
+
+ENTRYPOINT ["/usr/local/bin/prodeko-mcp"]
