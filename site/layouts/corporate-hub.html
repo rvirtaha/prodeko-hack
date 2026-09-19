@@ -21,14 +21,19 @@
 </section>
 
 <div class="container">
-  <section class="two-col">
+  <section class="hub-section">
     <h2 class="section-title">{{ .Params.offerTitle }}</h2>
     <div class="card-grid">
       {{ range .Params.offers }}
         <div class="info-card">
           <div class="bar"></div>
           <div class="body">
-            <div class="title">{{ .title }}</div>
+            {{/* An offer names a url when a page describes that form of
+                 collaboration in full; the ones the guild only arranges by
+                 email have none. */}}
+            <div class="title">
+              {{ if .url }}<a href="{{ .url }}">{{ .title }}</a>{{ else }}{{ .title }}{{ end }}
+            </div>
             <p>{{ .body }}</p>
           </div>
         </div>
@@ -39,21 +44,14 @@
   <section class="hub-body">
     <div>
       <h2 class="section-title">{{ .Params.partnersTitle | default "Prodeko Network" }}</h2>
-      <div class="partners-grid">
-        {{ range hugo.Data.partners }}
-          {{ $partner := . }}
-          <div class="partner-tile">
-            {{ with resources.Get $partner.logo }}<img src="{{ .RelPermalink }}" alt="{{ $partner.name }}">{{ end }}
-          </div>
-        {{ end }}
-      </div>
+      {{ partial "partner-grid.html" . }}
     </div>
     <aside class="sidebar-card">
       <div class="rainbow-rule"></div>
       <div class="body">
         <div class="sidebar-list-title">{{ .Params.contactTitle | default "Contact" }}</div>
         <div class="contact-person">
-          <div class="avatar">N.N.</div>
+          <div class="avatar" aria-hidden="true">{{ range first 2 (split .Params.corpContactName " ") }}{{ substr . 0 1 }}{{ end }}</div>
           <div>
             <div class="contact-name">{{ .Params.corpContactName }}</div>
             <div class="contact-role">{{ .Params.corpContactRole }}</div>

@@ -17,7 +17,7 @@ numbers:
     label: jäsenmaksu / lukuvuosi
 sections:
   - title: Hallitusvirat
-    body: Hallitus valitaan vuosittain syyskokouksessa ja vastaa killan toiminnasta kalenterivuoden ajan. Kokouspöytäkirjat ovat jäsenten luettavissa Palvelut-osiossa.
+    body: Hallitus valitaan vuosittain syyskokouksessa ja vastaa killan toiminnasta kalenterivuoden ajan. Kokouspöytäkirjat ovat jäsenten luettavissa Jäsenille-osiossa.
     items:
       - name: Puheenjohtaja
         desc: Kokonaisuus, edustus ja yhteydet laitokseen ja AYY:hyn.
@@ -31,6 +31,9 @@ sections:
         desc: Viikkotiedote, jäsenrekisteri ja viestintä.
       - name: Abivastaava
         desc: Abisivut, abimentorointi ja lukiovierailut.
+      - name: Hallitus ja toimihenkilöt
+        url: /fi/guild/hallitus-ja-toimihenkilot/
+        desc: Tämän vuoden hallitus ja toimarit, virkojen kuvaukset ja edelliset hallitukset.
   - title: Toimarivirat
     body: Toimihenkilöt tekevät tapahtumat, urheilun, kulttuurin ja kansainvälisen toiminnan vapaaehtoisina. Toimariksi voi hakea kuka tahansa jäsen, ja ensimmäinen vuosi on helpoin hetki aloittaa.
     items:
@@ -48,16 +51,25 @@ sections:
       - name: Jäsenyys 8 €
         desc: Lukuvuosittainen. Haku kesäkuun jälkeen tulevalle lukuvuodelle.
       - name: Jäsenhakemus
+        url: https://membership.prodeko.org/apply
         desc: membership.prodeko.org/apply · maksu pankkikortilla.
 guildRoomTitle: Kiltahuone
 guildRoomBody: TUAS-talo, Maarintie 8, 02150 Espoo. Kahvi-, tee- ja biljardisponssit tervetulleita.
 docsTitle: Säännöt ja asetukset
 docs:
-  - Killan säännöt
-  - Ohjesäännöt
-  - Asetukset
-  - Kunnianosoitukset
-  - Kokouspöytäkirjat
+  - label: Killan säännöt
+    url: /fi/guild/guild-rules/rules/
+  - label: Ohjesäännöt
+    url: /fi/guild/guild-rules/guidelines/
+  - label: Asetukset
+    url: /fi/guild/guild-rules/decrees/
+  - label: Kunnianosoitukset
+    url: /fi/guild/kunnianosoitukset/
+  # Pöytäkirjat itself sits behind the member gate, and check-trees.sh forbids
+  # the public tree from naming any address below /fi/jasenille/. The landing
+  # page is the door and is published on purpose.
+  - label: Kokouspöytäkirjat
+    url: /fi/jasenille/
 contactTitle: Ota yhteyttä
 contactAddress: "Tuotantotalouden kilta Prodeko ry\nPL 15500, 00076 Aalto\nTUAS-talo, Maarintie 8, 02150 Espoo\nhallitus@prodeko.org"
 ---

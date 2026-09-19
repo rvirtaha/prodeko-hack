@@ -13,7 +13,7 @@ Killan varsinaisiksi jäseniksi voidaan hyväksyä jäsenmaksunsa maksaneet Aalt
 
 ## Alumni
 
-Prodekon Alumni ry on yhdistys, joka on suunnattu Aallon tuotantotalouden linjan alumneille. Yhdistys ylläpitää alumniverkostoa ja järjestää jäsenistölleen tapahtumia. Yhdistyksellä ei ole jäsenmaksua ja kaikki valmistuneet tuotantotalouden opiskelijat liitetään yhdistyksen jäseniksi automaattisesti. Lisätietoa saa alumniyhdistyksen hallitukselta [alumni@prodeko.org](mailto:alumni@prodeko.org). Lue lisää näiltä sivuilta ja [tämän linkin](https://alumni.prodeko.org/) takaa. **Alumnin jäseneksi voi hakea laittamalla alumnikoordinaattori Akseli Köngäkselle sähköpostia (akseli.kongas@aalto.fi).**
+Prodekon Alumni ry on yhdistys, joka on suunnattu Aallon tuotantotalouden linjan alumneille. Yhdistys ylläpitää alumniverkostoa ja järjestää jäsenistölleen tapahtumia. Yhdistyksellä ei ole jäsenmaksua ja kaikki valmistuneet tuotantotalouden opiskelijat liitetään yhdistyksen jäseniksi automaattisesti. Lisätietoa saa alumniyhdistyksen hallitukselta [alumni@prodeko.org](mailto:alumni@prodeko.org). Lue lisää [näiltä sivuilta](/fi/alumni/) ja [tämän linkin](https://alumni.prodeko.org/) takaa. **Alumnin jäseneksi voi hakea laittamalla alumnikoordinaattori Akseli Köngäkselle sähköpostia (akseli.kongas@aalto.fi).**
 
 ## Muut jäsenet
 
@@ -23,7 +23,7 @@ Killan vanhaksi jäseneksi voidaan hyväksyä tutkintonsa suorittanut ihminen, j
 
 **HUOM: Uusien opiskelijoiden ei tarvitse hankkia jäsenyyttä ennen opiskeluiden alkua! Jäsenmaksun maksamiselle annetaan mahdollisuus orientaatioviikolla.**
 
-Vuodesta 2023 eteenpäin jäsenmaksua ei voi maksaa lukuvuosi-ilmottautumisen yhteydessä. Nykyiset jäsenet voivat maksaa jäsenmaksunsa osoitteesta [prodeko.org/jasenmaksu](https://membership.prodeko.org/apply). **Jäseneksi liitytään täyttämällä [tämän linkin](https://membership.prodeko.org/apply) takaa löytyvä jäsenhakemuslomake.** Jäsenyydet ovat lukuvuosittaisia ja kesäkuun jälkeen voi hakea jäsenyyttä tulevalle lukuvuodelle.
+Vuodesta 2023 eteenpäin jäsenmaksua ei voi maksaa lukuvuosi-ilmottautumisen yhteydessä. Nykyiset jäsenet voivat maksaa jäsenmaksunsa osoitteessa [membership.prodeko.org/apply](https://membership.prodeko.org/apply). **Jäseneksi liitytään täyttämällä [jäsenhakemus](https://membership.prodeko.org/apply).** Jäsenyydet ovat lukuvuosittaisia ja kesäkuun jälkeen voi hakea jäsenyyttä tulevalle lukuvuodelle.
 
 Jäsenyys maksaa 8 euroa. Jäsenenä sinut lisätään myös automaattisesti tiedotussähköpostilistoillemme.
 

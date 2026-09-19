@@ -1,0 +1,18 @@
+{{/* A page whose address is kept alive purely to send its visitors on —
+     the shape of Hugo's own alias stub, with the target read from front
+     matter so it can name another service. The audit reads the meta refresh
+     and treats the page as an alias rather than an orphan. */}}
+{{ $to := .Params.redirectTo }}
+<!DOCTYPE html>
+<html lang="{{ .Site.Language.Lang }}">
+  <head>
+    <meta charset="utf-8" />
+    <title>{{ .Title }}</title>
+    <link rel="canonical" href="{{ $to }}" />
+    <meta name="robots" content="noindex" />
+    <meta http-equiv="refresh" content="0; url={{ $to }}" />
+  </head>
+  <body>
+    <a href="{{ $to }}">{{ $to }}</a>
+  </body>
+</html>

@@ -136,21 +136,25 @@
               <a class="m-overview" href="{{ .url }}">
                 <span>{{ if $isFi }}Osion etusivu{{ else }}Section home{{ end }}</span><span aria-hidden="true">→</span>
               </a>
-              {{ $groupTitle := .title }}
+              {{/* A column of the mega-menu is an accordion of its own: a
+                   section carries up to four of them and some thirty links,
+                   which as one list is a scroll long enough that the menu's
+                   other sections fall off the screen. */}}
               {{ range $columns }}
-                {{/* The first column of a mega-menu usually repeats the
-                     section's own name; here that would read as the same word
-                     twice in a row, so it is left out. */}}
-                {{ if ne .title $groupTitle }}<div class="m-col-title">{{ .title }}</div>{{ end }}
-                {{ range .links }}
-                  {{ if and .members (not site.Params.members) }}
-                    <span class="m-link-disabled">{{ .label }}</span>
-                  {{ else if .url }}
-                    <a href="{{ .url }}"><span>{{ .label }}</span><span aria-hidden="true">→</span></a>
-                  {{ else }}
-                    <span class="m-link-disabled">{{ .label }}</span>
-                  {{ end }}
-                {{ end }}
+                <details class="m-sub">
+                  <summary>{{ .title }}</summary>
+                  <div class="m-sub-body">
+                    {{ range .links }}
+                      {{ if and .members (not site.Params.members) }}
+                        <span class="m-link-disabled">{{ .label }}</span>
+                      {{ else if .url }}
+                        <a href="{{ .url }}"><span>{{ .label }}</span><span aria-hidden="true">→</span></a>
+                      {{ else }}
+                        <span class="m-link-disabled">{{ .label }}</span>
+                      {{ end }}
+                    {{ end }}
+                  </div>
+                </details>
               {{ end }}
             </div>
           </details>

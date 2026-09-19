@@ -12,10 +12,15 @@
   --weight-bold:700;     /* slide titles, logos */
   --weight-extrabold:800;/* logo lockups only */
 
-  /* Kiikkilä Spacing™ — tracking for all-caps headings and banners.
-     ~200/1000 em in normal use, 500/1000 em reserved for logo lockups. */
+  /* Kiikkilä Spacing™ — tracking for all-caps labels and banners.
+     ~200/1000 em in normal use, 500/1000 em reserved for logo lockups.
+     Those figures are set for caps at label size, around 11–14px. The same
+     em value on a 44px or 64px heading opens every word into loose letters
+     that have to be read one at a time, so display type takes a trace of
+     tracking instead — enough to keep caps from touching, no more. */
   --track-tight:-0.01em;
   --track-normal:0em;
+  --track-display:0.02em;
   --track-caps:0.2em;
   --track-caps-wide:0.32em;
   --track-logo:0.5em;

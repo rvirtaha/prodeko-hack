@@ -47,7 +47,7 @@
   syncFooter(phone);
   phone.addEventListener("change", syncFooter);
 
-  // Mobile nav toggle: below 860px (see main.css) the nav list and the
+  // Mobile nav toggle: below 1100px (see main.css) the nav list and the
   // language/login block are hidden behind this button instead of shown
   // inline, since there's no room for them next to the logo.
   var toggle = header.querySelector(".nav-toggle");

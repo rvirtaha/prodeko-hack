@@ -4,6 +4,12 @@
 #
 # menuKey, where present, names a key in data/megamenu.yaml: the header
 # shows that item's columns in a mega-menu on hover/click.
+#
+# A url may be an external address. The events item is one: the calendar and
+# the sign-up forms live in Ilmokilke, so the bar takes a reader straight
+# there rather than through a page whose only content is a link onward.
+# /fi/tapahtumat/ and /en/events/ remain as addresses for anyone arriving
+# from an old link or from search.
 fi:
   - title: Kilta
     url: /fi/guild/
@@ -18,7 +24,7 @@ fi:
     url: /fi/alumni/
     menuKey: alumni
   - title: Tapahtumat
-    url: /fi/tapahtumat/
+    url: https://ilmo.prodeko.org
 
 en:
   - title: Guild
@@ -34,4 +40,4 @@ en:
     url: /en/alumni/
     menuKey: alumni
   - title: Events
-    url: /en/events/
+    url: https://ilmo.prodeko.org

@@ -25,6 +25,6 @@ Muualla suoritettujen korkeakouluopintojen hyväksilukemisesta osaksi tutkintoas
 
 Seuraavien linkkien alle on listattu sopivat sivuaineet.
 
-[Kandivaiheen tekniset sivuaineet](https://www.aalto.fi/fi/ohjelmat/teknistieteellinen-kandidaattiohjelma/opetussuunnitelma-2022-2024#15-tuotantotalouden-opiskelijat)
+[Kandivaiheen tekniset sivuaineet](https://www.aalto.fi/fi/ohjelmat/teknistieteellinen-kandidaattiohjelma/opetussuunnitelma-2026-2028#44-sivuaine-25-op)
 
-[Maisterivaiheen tekniset sivuaineet](https://www.aalto.fi/en/programmes/masters-programme-in-industrial-engineering-and-management/curriculum-2022-2024#17-minor)
+[Maisterivaiheen tekniset sivuaineet](https://www.aalto.fi/en/programmes/masters-programme-in-industrial-engineering-and-management/curriculum-2026-2028#10-minor-20-ects)

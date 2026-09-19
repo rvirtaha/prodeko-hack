@@ -22,15 +22,19 @@ contactTitle: Ota yhteyttä
 offerTitle: Yhteistyömuodot
 offers:
   - title: Yritysvierailut
+    url: /fi/yrityssuhteet/yritysvierailut/
     body: "Fuksiexcursio ja excursiot läpi vuoden. Hyvän työnantajamielikuvan luominen kannattaa aloittaa jo ensimmäisestä vuosikurssista alkaen. Yhteys: excumestari@prodeko.org."
   - title: Sponsorointi
+    url: /fi/yrityssuhteet/yrityksille/#luo-hyvä-kuva-ja-ylläpidä-sitä
     body: Vuosijuhla Diskonttaus lokakuussa, Prodeko-seminaari huhtikuussa, PuoliPitkät-matkat, kiltahuone ja kuntosali sekä haalarimainokset.
   - title: Rekrytointi
+    url: /fi/yrityssuhteet/rekrytointi/
     body: Kesätyö- ja diplomityöpaikat viikkotiedotteeseen ja tälle sivustolle. Prodeko tekee yhteistyötä usean yrityksen kanssa, joten hyvän kuvan ylläpitäminen parantaa ilmoituksen tehokkuutta.
   - title: Projektikurssit
+    url: /fi/yrityssuhteet/yrityksille/#osallistu-projektikurssille
     body: "Anna 4–5 opiskelijan ryhmälle yrityksellenne toteutettava projekti: strategia, operaatiot, markkinatutkimus, hankintatoimi tai toimitusketjun hallinta. Aiheet ovat pitkälle toimeksiantajan valittavissa."
-corpContactName: Yrityssuhdevastaava
-corpContactRole: Hallitus 2026
+corpContactName: Tuomas Ylimäki
+corpContactRole: Yrityssuhdevastaava, hallitus 2026
 corpContactBody: Kaikkiin kysymyksiin yrityssuhteista vastaa kiltamme yrityssuhdevastaava. Uudet ideat ovat aina tervetulleita ja hallituksemme voi auttaa niiden hiomisessa.
 ---
 

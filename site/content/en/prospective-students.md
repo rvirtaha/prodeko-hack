@@ -26,7 +26,7 @@ applySteps:
 lifeTitle: Student life
 life:
   - title: Haalarit
-    body: "The overalls are the IEM student's badge: a blue boilersuit and a five-colour stripe. Handed to first-years in the autumn."
+    body: "The overalls are the IEM student's badge: a white boilersuit and a five-colour stripe. Handed to first-years in the autumn."
   - title: Sitsit
     body: A seated dinner party with songs and speeches. The fuksi sitsit are your first, not your last.
   - title: The fuksi year

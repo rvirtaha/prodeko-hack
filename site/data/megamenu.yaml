@@ -1,34 +1,45 @@
 # The mega-menu columns from raw-website/Prodeko-site.dc.html, keyed by the
-# same menuKey used in data/navigation.yaml. Each link is {label, url}; url
-# is omitted where nothing in site/content/ or an external service actually
-# covers that item yet - the template renders those as plain text rather
-# than a dead link. Links to ilmo/viikkotiedote/gallery/store/kululaskut
-# reuse the base addresses in data/embeds.yaml.
+# same menuKey used in data/navigation.yaml. Each link is {label, url}, and
+# every entry names a page of this site or a service the guild runs: a menu
+# item is a promise, and the menu only makes promises the site keeps. An
+# entry marked members: true names a page of the gated member tree, which
+# the template prints as plain text in a build that carries no such tree.
+# Links to ilmo/viikkotiedote/gallery/store/kululaskut reuse the base
+# addresses in data/embeds.yaml.
 fi:
   guild:
     - title: Kilta
       links:
         - label: Arvot
           url: /fi/guild/arvot/
-        - label: Hallitus 2026
-          url: /fi/guild/board/hallitus/
-        - label: Hallituksen toiminta
-          url: /fi/guild/board/
-        - label: Edelliset hallitukset
-          url: /fi/guild/board/edelliset-hallitukset/
-        - label: Toimihenkilöt 2026
-          url: /fi/guild/toimarit/toimihenkilot/
-        - label: Toimarien toiminta
-          url: /fi/guild/toimarit/
         - label: Häirintäyhdyshenkilöt
           url: /fi/guild/hairintayhdyshenkilot/
         - label: Säännöt ja asetukset
           url: /fi/guild/guild-rules/
         - label: Kunnianosoitukset
           url: /fi/guild/kunnianosoitukset/
+        # The guild's sports are PoRa's, and PoRa keeps its own site.
         - label: Urheilu
+          url: https://raittiusseura.org
         - label: Jäseneksi
           url: /fi/guild/jaseneksi/
+    # A column of its own: as part of the Kilta column these six drowned the
+    # other guild pages, and the site's own tree keeps them under one
+    # subsection anyway.
+    - title: Hallitus ja toimarit
+      links:
+        - label: Hallitus ja toimihenkilöt
+          url: /fi/guild/hallitus-ja-toimihenkilot/
+        - label: Hallitus 2026
+          url: /fi/guild/hallitus-ja-toimihenkilot/hallitus/
+        - label: Hallituksen toiminta
+          url: /fi/guild/hallitus-ja-toimihenkilot/hallituksen-toiminta/
+        - label: Edelliset hallitukset
+          url: /fi/guild/hallitus-ja-toimihenkilot/edelliset-hallitukset/
+        - label: Toimihenkilöt 2026
+          url: /fi/guild/hallitus-ja-toimihenkilot/toimihenkilot/
+        - label: Toimarien toiminta
+          url: /fi/guild/hallitus-ja-toimihenkilot/toimarien-toiminta/
     - title: Fukseille
       links:
         - label: Tervetuloa tutalle!
@@ -89,19 +100,12 @@ fi:
           url: /fi/abit/
         - label: Opinnot
           url: /fi/opinnot/
-        - label: Hakeminen 2026
-          url: /fi/abit/
-        - label: Abimentorointi 2026
-          url: /fi/abit/
-        - label: Menestyneitä tutalaisia
-        - label: Abien polkuja tutalle
         - label: Tärkeitä linkkejä
           url: /fi/opinnot/tarkeita-linkkeja/
     - title: Kielet
       links:
         - label: In English
           url: /en/prospective-students/
-        - label: På svenska
   corporate:
     - title: Yrityksille
       links:
@@ -139,7 +143,7 @@ fi:
         - label: Omat jäsentiedot
           url: https://membership.prodeko.org
         - label: Matrikkelin tietosuojaseloste
-          url: /fi/alumni/tietoa-alumnista/matrikkelin-tietosuojasleoste/
+          url: /fi/alumni/tietoa-alumnista/matrikkelin-tietosuojaseloste/
     - title: Toiminta
       links:
         - label: Neuvottelukunta
@@ -148,7 +152,9 @@ fi:
           url: /fi/alumni/lifelong-learning/
         - label: Prodeko Ventures
           url: /fi/alumni/prodeko-ventures/
+        # The seminar is organised anew each spring and lives on its own site.
         - label: Prodeko-seminaari
+          url: https://seminar.prodeko.org
 
 en:
   guild:
@@ -156,16 +162,6 @@ en:
       links:
         - label: Values
           url: /en/guild/values/
-        - label: Board 2026
-          url: /en/guild/board/board/
-        - label: What the board does
-          url: /en/guild/board/
-        - label: Previous boards
-          url: /en/guild/board/previous-boards/
-        - label: Officials 2026
-          url: /en/guild/guild-officials/guild-officials/
-        - label: What the officials do
-          url: /en/guild/guild-officials/
         - label: Harassment contact persons
           url: /en/guild/harassment-contact-persons/
         - label: Rules and regulations
@@ -173,15 +169,32 @@ en:
         - label: Honours
           url: /en/guild/honour/
         - label: Sports
+          url: https://raittiusseura.org/en/etusivu
         - label: Joining the guild
           url: /en/guild/joining-guild/
+    # A column of its own: as part of the Guild column these six drowned the
+    # other guild pages, and the site's own tree keeps them under one
+    # subsection anyway.
+    - title: Board and officials
+      links:
+        - label: Board and officials
+          url: /en/guild/board-and-officials/
+        - label: Board 2026
+          url: /en/guild/board-and-officials/board/
+        - label: What the board does
+          url: /en/guild/board-and-officials/what-the-board-does/
+        - label: Previous boards
+          url: /en/guild/board-and-officials/previous-boards/
+        - label: Officials 2026
+          url: /en/guild/board-and-officials/officials/
+        - label: What the officials do
+          url: /en/guild/board-and-officials/what-the-officials-do/
     - title: New students
       links:
         - label: Welcome to IEM
           url: /en/new-students/welcome-to-prodeko/
-        - label: Fuksi guide 2026
-          url: /en/new-students/survival-guide-2024/
-        - label: Orientation week 2026
+        - label: Survival Guide
+          url: /en/new-students/survival-guide/
         - label: Student life ABC
           url: /en/new-students/studentlife/
         - label: First-year studies
@@ -234,18 +247,12 @@ en:
           url: /en/prospective-students/
         - label: Studies
           url: /en/studies/
-        - label: Applying 2026
-          url: /en/prospective-students/
-        - label: Mentoring 2026
-        - label: Successful alumni
-        - label: Students' paths to IEM
         - label: Important links
           url: /en/studies/important-links/
     - title: Languages
       links:
         - label: Suomeksi
           url: /fi/abit/
-        - label: På svenska
   corporate:
     - title: For companies
       links:
@@ -274,7 +281,9 @@ en:
       links:
         - label: About the alumni
           url: /en/alumni/about-alumni/
-        - label: Alumni newsletters
+        # The newsletters themselves are Finnish, and the archive of them is
+        # kept in one place, so the English menu names the language it leads to.
+        - label: Alumni newsletters (in Finnish)
           url: /fi/alumni/tietoa-alumnista/alumnitiedotteet/
         - label: Alumni boards
           url: /en/alumni/about-alumni/previous-alumni-boards/
@@ -292,4 +301,6 @@ en:
           url: /en/alumni/lifelong-learning/
         - label: Prodeko Ventures
           url: /en/alumni/prodeko-ventures/
+        # The seminar is organised anew each spring and lives on its own site.
         - label: Prodeko Seminar
+          url: https://seminar.prodeko.org

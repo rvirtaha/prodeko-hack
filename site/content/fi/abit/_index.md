@@ -26,7 +26,7 @@ applySteps:
 lifeTitle: Opiskelijaelämän ABC
 life:
   - title: Haalarit
-    body: Tutalaisen tunnistaa sinisistä haalareista ja sateenkaariraidasta. Ne jaetaan fukseille syksyllä ja merkit ommellaan itse.
+    body: Tutalaisen tunnistaa valkoisista haalareista ja sateenkaariraidasta. Ne jaetaan fukseille syksyllä ja merkit ommellaan itse.
   - title: Sitsit ja Diskonttaus
     body: Sitsit on istuva juhla lauluineen ja puheineen. Killan vuosijuhlaa Diskonttausta vietetään lokakuun puolivälissä.
   - title: Fuksipisteet

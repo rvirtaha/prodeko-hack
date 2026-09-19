@@ -2,7 +2,10 @@
 title: Hallituksen toiminta
 description: Hallituksen tehtävät, valinta vaalikokouksessa sekä jokaisen hallitusviran vastuualueet Prodekossa.
 translationKey: guild-board
+weight: 20
 sourceURL: https://prodeko.org/fi/guild/board/
+aliases:
+  - /guild/board/
 ---
 
 **Huom: tämä sivu on päivitetty viimeksi 22.10.2024 vastaamaan killan ajantasaista organisaatiorakennetta.**

@@ -28,10 +28,14 @@ alumniJoinBody: All graduates are added automatically. Former full members can a
 alumniJoinEmail: alumni@prodeko.org
 alumniLinksTitle: Alumni site
 alumniLinks:
-  - alumni.prodeko.org
-  - Alumni newsletters
-  - My member details
-  - Register privacy notice
+  - label: alumni.prodeko.org
+    url: https://alumni.prodeko.org
+  - label: Alumni newsletters
+    url: /fi/alumni/tietoa-alumnista/alumnitiedotteet/
+  - label: My member details
+    url: https://membership.prodeko.org
+  - label: Register privacy notice
+    url: /en/alumni/about-alumni/matrikkeli-privacy-notice/
 contactTitle: Contact
 contactAddress: "Prodekon Alumni ry\nPL 15500, 00076 Aalto\nalumni@prodeko.org"
 ---
