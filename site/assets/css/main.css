@@ -592,8 +592,8 @@ a.btn, a.btn:hover { border-bottom: none; }
 .sidebar-card .kicker { color: var(--text-muted); margin-bottom: var(--space-3); display: block; }
 .sidebar-card p { margin: 0; font-size: var(--size-sm); font-weight: var(--weight-light); line-height: var(--leading-loose); }
 .sidebar-list-title { font-size: var(--size-2xs); font-weight: var(--weight-semibold); letter-spacing: var(--track-caps); text-transform: uppercase; color: var(--text-muted); margin-bottom: var(--space-3); }
-.sidebar-list { display: flex; flex-direction: column; gap: var(--space-2); list-style: none; margin: 0; padding: 0; }
-.sidebar-list a { font-size: var(--size-md); font-weight: var(--weight-regular); color: var(--pd-blue-light); display: flex; justify-content: space-between; border-bottom: none; }
+.sidebar-list { display: flex; flex-direction: column; list-style: none; margin: 0; padding: 0; }
+.sidebar-list a { font-size: var(--size-md); font-weight: var(--weight-regular); color: var(--pd-blue-light); display: flex; align-items: center; justify-content: space-between; gap: var(--space-4); min-height: 44px; border-bottom: none; }
 .sidebar-contact { border-top: 1px solid var(--border-subtle); padding-top: var(--space-6); }
 .sidebar-contact p { margin: 0; font-size: var(--size-sm); font-weight: var(--weight-light); line-height: var(--leading-loose); }
 .sidebar-highlight {
@@ -748,7 +748,7 @@ a.btn, a.btn:hover { border-bottom: none; }
 }
 .page-body-wide { grid-template-columns: minmax(0, 1fr); }
 .page-aside { position: sticky; top: 96px; display: flex; flex-direction: column; gap: var(--space-6); }
-.section-nav .sidebar-list a { font-size: var(--size-sm); padding: var(--space-1) 0; }
+.section-nav .sidebar-list a { font-size: var(--size-sm); min-height: 44px; align-items: center; padding: var(--space-2) 0; }
 .section-nav .sidebar-list a.current { color: var(--pd-blue); font-weight: var(--weight-semibold); }
 .source-note { margin: 0; font-size: var(--size-3xs); color: var(--text-muted); line-height: var(--leading-loose); }
 .source-note a { color: var(--text-muted); }
@@ -900,7 +900,10 @@ a.btn, a.btn:hover { border-bottom: none; }
   border-bottom: 1px solid var(--border-subtle);
 }
 .archive-jump a {
-  padding: 6px 12px;
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 6px 14px;
   font-size: var(--size-2xs);
   font-weight: var(--weight-semibold);
   color: var(--pd-blue);
@@ -1036,4 +1039,29 @@ a.btn, a.btn:hover { border-bottom: none; }
   .two-col { grid-template-columns: minmax(0, 1fr); gap: 40px; padding: 40px 0 16px; }
   .hub-section { padding: 40px 0 16px; }
   .hub-body { padding-top: 40px; }
+}
+
+/* The footer carries four link groups plus the partner strip, which on a phone
+   is about 1500px — three screens of it under every page. Collapsing the
+   groups leaves the brand line, four closed rows and the legal line. */
+@media (max-width: 720px) {
+  .site-footer .cols { display: block; padding: var(--space-8) 0 var(--space-4); }
+  .site-footer .footer-group { border-top: 1px solid rgb(246 246 246 / 0.15); }
+  .site-footer .footer-group summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 52px;
+    cursor: pointer;
+    list-style: none;
+  }
+  .site-footer .footer-group summary::-webkit-details-marker { display: none; }
+  .site-footer .footer-group summary::after { content: "+"; font-size: var(--size-lg); opacity: 0.7; }
+  .site-footer .footer-group[open] summary::after { content: "\2013"; }
+  .site-footer .footer-group .col-title { margin: 0; }
+  .site-footer .links { padding-bottom: var(--space-4); }
+  .site-footer .links a { display: flex; align-items: center; min-height: 40px; }
+  .site-footer .brand { margin-bottom: var(--space-6); }
+  .site-footer .network-logos { gap: var(--space-5) var(--space-8); }
+  .site-footer .network-logos img { height: 18px; }
 }

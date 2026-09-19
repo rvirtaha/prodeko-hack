@@ -17,13 +17,17 @@
           {{ end }}
         </p>
       </div>
+      {{/* <details> rather than <div>: on a phone these four groups are about
+           1500px of link under every page, so the stylesheet collapses them.
+           Open by default, so a desktop reader and anything without CSS sees
+           the whole footer. */}}
       {{ range $columns }}
-        <div>
-          <div class="col-title">{{ .title }}</div>
+        <details class="footer-group" open>
+          <summary><div class="col-title">{{ .title }}</div></summary>
           <ul class="links">
             {{ range .links }}<li><a href="{{ .url }}">{{ .label }}</a></li>{{ end }}
           </ul>
-        </div>
+        </details>
       {{ end }}
     </div>
   </div>

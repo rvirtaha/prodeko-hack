@@ -34,6 +34,19 @@
     if (!header.contains(e.target)) closeAll();
   });
 
+  // The footer's four link groups are <details open>, so the whole footer is
+  // there for a reader without CSS or without JavaScript. Below 720px that is
+  // about 1500px of link under every page, so close them; the media query in
+  // main.css gives them a summary row to reopen from.
+  var footerGroups = document.querySelectorAll(".footer-group");
+  var phone = window.matchMedia("(max-width: 720px)");
+  function syncFooter(e) {
+    if (!e.matches) return;
+    footerGroups.forEach(function (g) { g.open = false; });
+  }
+  syncFooter(phone);
+  phone.addEventListener("change", syncFooter);
+
   // Mobile nav toggle: below 860px (see main.css) the nav list and the
   // language/login block are hidden behind this button instead of shown
   // inline, since there's no room for them next to the logo.

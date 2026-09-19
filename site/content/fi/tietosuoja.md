@@ -12,8 +12,9 @@ Tämä tietosuojaseloste kuvaa, kuinka Tuotantotalouden Kilta Prodeko ry kerää
 ## 1. Rekisterinpitäjä ja yhteystiedot
 
 Tuotantotalouden Kilta Prodeko ry
- Postiosoite: PL 15500, 00076 Aalto
- Sähköposti: mediakeisari@prodeko.org
+
+- Postiosoite: PL 15500, 00076 Aalto
+- Sähköposti: mediakeisari@prodeko.org
 
 Tietosuojaan ja omien tietojen käsittelyyn liittyvissä kysymyksissä voit olla yhteydessä yllä mainittuun sähköpostiosoitteeseen.
 
