@@ -109,6 +109,7 @@
   boxes.forEach(function (box) {
     var input = box.querySelector("[data-search]");
     var list = box.querySelector(".search-results");
+    var footer = box.querySelector(".search-footer");
     var status = box.querySelector(".search-status");
     var bundle = input.getAttribute("data-search-members");
     var rows = [];
@@ -141,6 +142,7 @@
 
     function clear() {
       list.textContent = "";
+      footer.textContent = "";
       list.classList.remove("is-expanded");
       rows = [];
       highlight(-1);
@@ -149,11 +151,17 @@
     }
 
     function paint() {
+      var painting = query;
       var shown = results.slice(0, limit);
       // data() is one fragment fetch each, so only the rendered rows ask for
       // one. This is what bounds what a search costs on the wire.
       return Promise.all(shown.map(function (r) { return r.data(); })).then(function (data) {
+        // The reader typed on while these fragments were in flight, and the
+        // newer query has results of its own. Writing these now would put the
+        // old query's rows under the new query's text.
+        if (painting !== query) return;
         list.textContent = "";
+        footer.textContent = "";
         rows = data.map(function (d, i) {
           var a = document.createElement("a");
           a.className = "search-result";
@@ -184,7 +192,7 @@
             list.classList.add("is-expanded");
             paint().then(function () { input.focus(); });
           });
-          list.appendChild(more);
+          footer.appendChild(more);
         }
         input.setAttribute("aria-expanded", rows.length ? "true" : "false");
         highlight(rows.length ? 0 : -1);
