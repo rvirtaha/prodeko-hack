@@ -6,6 +6,7 @@ reviewed: 2026-09-18
 owner: tapahtumatiimi
 ---
 
-Ilmoittaudu tapahtumiin ja katso tuleva kalenteri.
+Killan tapahtumakalenteri ja ilmoittautumiset ovat Ilmokilkkeessä
+osoitteessa [ilmo.prodeko.org](https://ilmo.prodeko.org).
 
 {{< embed service="ilmo" >}}

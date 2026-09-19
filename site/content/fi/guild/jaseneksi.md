@@ -23,7 +23,7 @@ Killan vanhaksi jäseneksi voidaan hyväksyä tutkintonsa suorittanut ihminen, j
 
 **HUOM: Uusien opiskelijoiden ei tarvitse hankkia jäsenyyttä ennen opiskeluiden alkua! Jäsenmaksun maksamiselle annetaan mahdollisuus orientaatioviikolla.**
 
-Vuodesta 2023 eteenpäin jäsenmaksua ei voi maksaa lukuvuosi-ilmottautumisen yhteydessä. Nykyiset jäsenet voivat maksaa jäsenmaksunsa osoitteesta [prodeko.org/jasenmaksu](https://membership.prodeko.org/apply). **Jäseneksi liitytään täyttämällä [tämän linkin](https://membership.prodeko.org/apply) takaa löytyvä jäsenhakemuslomake.** Jäsenyydet ovat lukuvuosittaisia ja kesäkuun jälkeen voi hakea jäsenyyttä tulevalle lukuvuodelle.
+Vuodesta 2023 eteenpäin jäsenmaksua ei voi maksaa lukuvuosi-ilmottautumisen yhteydessä. Nykyiset jäsenet voivat maksaa jäsenmaksunsa osoitteessa [membership.prodeko.org/apply](https://membership.prodeko.org/apply). **Jäseneksi liitytään täyttämällä [jäsenhakemus](https://membership.prodeko.org/apply).** Jäsenyydet ovat lukuvuosittaisia ja kesäkuun jälkeen voi hakea jäsenyyttä tulevalle lukuvuodelle.
 
 Jäsenyys maksaa 8 euroa. Jäsenenä sinut lisätään myös automaattisesti tiedotussähköpostilistoillemme.
 
