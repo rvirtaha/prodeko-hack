@@ -380,12 +380,49 @@ func (t *Toolset) open(id mcpserver.Identity, hint string) (*workdir.Change, err
 // userOf is the branch namespace and the worktree directory both. An identity
 // with no username is a bug in whoever minted the token, and a change under an
 // empty name would be a change under everyone's name.
+//
+// The Keycloak realm uses the email address as the username, and an address
+// is not a branch name: workdir refuses anything outside its narrow pattern.
+// The name is derived here, at the identity boundary, rather than loosening
+// workdir's rule — deterministically, so the same person always lands in the
+// same namespace.
 func userOf(id mcpserver.Identity) (string, error) {
-	user := strings.TrimSpace(id.Username)
-	if user == "" {
+	raw := strings.TrimSpace(id.Username)
+	if raw == "" {
 		return "", errors.New("toolset: the signed-in identity carries no username")
 	}
+	user := namespaceName(raw)
+	if user == "" {
+		return "", fmt.Errorf("toolset: no usable branch name can be made of username %q", raw)
+	}
 	return user, nil
+}
+
+// namespaceName maps a username onto workdir's branch-safe alphabet:
+// lowercased, every excluded rune becomes a hyphen, and the result is trimmed
+// to start and end on a letter or digit. "rvirtaha@hotmail.com" becomes
+// "rvirtaha-hotmail.com". Distinct addresses collide only if they differ
+// solely in excluded runes, which addresses of the same realm do not.
+func namespaceName(raw string) string {
+	mapped := strings.Map(func(r rune) rune {
+		switch {
+		case r >= 'a' && r <= 'z', r >= '0' && r <= '9', r == '.', r == '_', r == '-':
+			return r
+		case r >= 'A' && r <= 'Z':
+			return r + ('a' - 'A')
+		default:
+			return '-'
+		}
+	}, raw)
+	// ".." is a traversal to workdir no matter how it got in.
+	for strings.Contains(mapped, "..") {
+		mapped = strings.ReplaceAll(mapped, "..", ".")
+	}
+	mapped = strings.Trim(mapped, "._-")
+	if len(mapped) > 64 {
+		mapped = strings.Trim(mapped[:64], "._-")
+	}
+	return mapped
 }
 
 // authorOf is the commit author: the verified Keycloak identity and never

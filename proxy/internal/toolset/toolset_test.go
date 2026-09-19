@@ -529,3 +529,25 @@ func TestRenderChangesTellsCommittedFromUnsubmitted(t *testing.T) {
 		t.Errorf("an empty change reads as:\n%s", got)
 	}
 }
+
+// The realm hands out email addresses as usernames; the namespace must come
+// out branch-safe and deterministic.
+func TestUserOfDerivesABranchSafeName(t *testing.T) {
+	for raw, want := range map[string]string{
+		"rvirtaha@hotmail.com": "rvirtaha-hotmail.com",
+		"Maija.Meikäläinen@prodeko.org": "maija.meik-l-inen-prodeko.org",
+		"dev-editor": "dev-editor",
+		"..@..":      "",
+	} {
+		got, err := userOf(mcpserver.Identity{Username: raw})
+		if want == "" {
+			if err == nil {
+				t.Errorf("userOf(%q) accepted, want refusal", raw)
+			}
+			continue
+		}
+		if err != nil || got != want {
+			t.Errorf("userOf(%q) = %q, %v; want %q", raw, got, err, want)
+		}
+	}
+}
