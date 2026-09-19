@@ -24,6 +24,13 @@ disableKinds = ["taxonomy", "term", "rss", "sitemap"]
   # this unset, so such an entry cannot reach the public HTML.
   members = true
 
+  # Answers "is this page served from the gated tree", which `members` does not:
+  # that one answers "may this build mention member pages at all" and is true in
+  # local preview too. Only a page from this tree has a second search index to
+  # merge; a preview page renders both trees into one site and one index, and
+  # has nothing to merge.
+  memberTree = true
+
 [languages]
   [languages.fi]
     contentDir = "content-members/fi"

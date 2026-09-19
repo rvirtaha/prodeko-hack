@@ -13,9 +13,9 @@
       {{ block "main" . }}{{ end }}
     </main>
     {{ partial "footer.html" . }}
-    {{ with resources.Get "js/mega-menu.js" }}
-      {{ $js := . | minify | fingerprint }}
-      <script src="{{ $js.RelPermalink }}" integrity="{{ $js.Data.Integrity }}" defer></script>
-    {{ end }}
+    {{/* One script tag, the way partials/head.html concatenates the stylesheets.
+         Both files are IIFEs, so concatenating them is safe. */}}
+    {{ $js := slice (resources.Get "js/mega-menu.js") (resources.Get "js/search.js") | resources.Concat "js/bundle.js" | minify | fingerprint }}
+    <script src="{{ $js.RelPermalink }}" integrity="{{ $js.Data.Integrity }}" defer></script>
   </body>
 </html>
