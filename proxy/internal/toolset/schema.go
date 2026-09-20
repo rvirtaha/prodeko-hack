@@ -17,6 +17,8 @@ const (
 	ToolWriteFile      = "write_file"
 	ToolEditFile       = "edit_file"
 	ToolBuild          = "build"
+	ToolRender         = "render"
+	ToolScreenshot     = "screenshot"
 	ToolSubmit         = "submit"
 	ToolListMyChanges  = "list_my_changes"
 )
@@ -27,6 +29,11 @@ const (
 	MaxSearchResults     = 500
 	MaxTitleLen          = 120
 	MaxDescriptionLen    = 4000
+
+	// MaxHTMLBytes bounds one render. A built page of this site is around 40 kB,
+	// so a whole one fits; what this stops is a page that grew unnoticed filling
+	// the model's context with markup it did not ask for.
+	MaxHTMLBytes = 120 << 10
 )
 
 var schemaGetConventions = json.RawMessage(`{
@@ -150,6 +157,46 @@ var schemaBuild = json.RawMessage(`{
   "additionalProperties": false
 }`)
 
+var schemaRender = json.RawMessage(`{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "path": {
+      "type": "string",
+      "description": "The page: either the file you edited, \"site/content/fi/tapahtumat.md\", or the address the site serves it at, \"/fi/tapahtumat/\".",
+      "minLength": 1,
+      "maxLength": 512
+    },
+    "selector": {
+      "type": "string",
+      "description": "Optional CSS selector, e.g. \".site-header\" or \"main .index-card\". Every match is returned. Omit it for the whole page, which is around 40 kB.",
+      "maxLength": 300
+    }
+  },
+  "required": ["path"],
+  "additionalProperties": false
+}`)
+
+var schemaScreenshot = json.RawMessage(`{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "path": {
+      "type": "string",
+      "description": "The page: either the file you edited, \"site/content/fi/tapahtumat.md\", or the address the site serves it at, \"/fi/tapahtumat/\".",
+      "minLength": 1,
+      "maxLength": 512
+    },
+    "width": {
+      "type": "integer",
+      "description": "Viewport width in pixels: 1280 for the desktop layout, 390 for a phone. Defaults to 1280.",
+      "enum": [390, 1280]
+    }
+  },
+  "required": ["path"],
+  "additionalProperties": false
+}`)
+
 var schemaSubmit = json.RawMessage(`{
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "type": "object",
@@ -208,6 +255,16 @@ type editFileArgs struct {
 	Path string  `json:"path"`
 	Old  *string `json:"old"`
 	New  *string `json:"new"`
+}
+
+type renderArgs struct {
+	Path     string `json:"path"`
+	Selector string `json:"selector"`
+}
+
+type screenshotArgs struct {
+	Path  string `json:"path"`
+	Width int    `json:"width"`
 }
 
 type submitArgs struct {

@@ -36,12 +36,13 @@ func TestNewRequiresAWorkdir(t *testing.T) {
 	}
 }
 
-// Nine tools, named exactly as the design names them. A rename breaks every
+// Eleven tools, named exactly as the design names them. A rename breaks every
 // saved connector, so the names are asserted rather than assumed.
-func TestTheNineTools(t *testing.T) {
+func TestTheElevenTools(t *testing.T) {
 	want := []string{
 		ToolGetConventions, ToolListFiles, ToolReadFile, ToolSearch,
-		ToolWriteFile, ToolEditFile, ToolBuild, ToolSubmit, ToolListMyChanges,
+		ToolWriteFile, ToolEditFile, ToolBuild, ToolRender, ToolScreenshot,
+		ToolSubmit, ToolListMyChanges,
 	}
 	got := testToolset(t).Tools()
 	if len(got) != len(want) {
@@ -71,6 +72,8 @@ func TestSchemasAreClosedObjectSchemas(t *testing.T) {
 		ToolWriteFile:      {"path", "content"},
 		ToolEditFile:       {"path", "old", "new"},
 		ToolBuild:          nil,
+		ToolRender:         {"path"},
+		ToolScreenshot:     {"path"},
 		ToolSubmit:         {"title"},
 		ToolListMyChanges:  nil,
 	}
@@ -137,6 +140,8 @@ func TestArgumentStructsMatchTheSchemas(t *testing.T) {
 		{ToolSearch, `{"pattern":"x","glob":"*.css","max_results":5}`, &searchArgs{}, &searchArgs{Pattern: "x", Glob: "*.css", MaxResults: 5}},
 		{ToolWriteFile, `{"path":"a.md","content":"hi"}`, &writeFileArgs{}, &writeFileArgs{Path: "a.md", Content: "hi"}},
 		{ToolEditFile, `{"path":"a.css","old":"red","new":"var(--text-heading)"}`, &editFileArgs{}, &editFileArgs{Path: "a.css", Old: ptr("red"), New: ptr("var(--text-heading)")}},
+		{ToolRender, `{"path":"/fi/tapahtumat/","selector":".site-header"}`, &renderArgs{}, &renderArgs{Path: "/fi/tapahtumat/", Selector: ".site-header"}},
+		{ToolScreenshot, `{"path":"site/content/fi/tapahtumat.md","width":390}`, &screenshotArgs{}, &screenshotArgs{Path: "site/content/fi/tapahtumat.md", Width: 390}},
 		{ToolSubmit, `{"title":"Sininen otsikko","description":"miksi"}`, &submitArgs{}, &submitArgs{Title: "Sininen otsikko", Description: "miksi"}},
 	}
 	for _, tc := range cases {
@@ -327,6 +332,8 @@ func TestEveryToolNeedsAnIdentity(t *testing.T) {
 		ToolWriteFile:     `{"path":"site/content/fi/index.md","content":"x"}`,
 		ToolEditFile:      `{"path":"site/content/fi/index.md","old":"a","new":"b"}`,
 		ToolBuild:         `{}`,
+		ToolRender:        `{"path":"/fi/"}`,
+		ToolScreenshot:    `{"path":"/fi/"}`,
 		ToolSubmit:        `{"title":"Otsikko"}`,
 		ToolListMyChanges: `{}`,
 	}

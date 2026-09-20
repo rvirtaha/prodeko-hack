@@ -1,5 +1,5 @@
-// Package toolset is the nine tools the MCP server exposes, built on the fence
-// and the worktree manager.
+// Package toolset is the eleven tools the MCP server exposes, built on the
+// fence, the worktree manager and the preview.
 //
 // File-level tools, not semantic ones: CSS is file-level, and update_page(slug,
 // body) cannot express "make the events header blue". Once file tools exist,
@@ -25,6 +25,7 @@ import (
 
 	"github.com/prodeko/prodeko-hack/proxy/internal/fence"
 	"github.com/prodeko/prodeko-hack/proxy/internal/mcpserver"
+	"github.com/prodeko/prodeko-hack/proxy/internal/preview"
 	"github.com/prodeko/prodeko-hack/proxy/internal/workdir"
 )
 
@@ -36,6 +37,12 @@ type Config struct {
 	// [Conventions], which is the normal case; it exists so a test can assert
 	// on a short text instead of the whole guide.
 	Conventions string
+
+	// ChromiumBin is the headless browser screenshot runs. Empty means the
+	// first of [preview.DefaultBins] on PATH, which is what the server image
+	// installs; it is configurable so a developer can point it at the browser
+	// their machine happens to have.
+	ChromiumBin string
 
 	Logger *slog.Logger     // nil means slog.Default
 	Now    func() time.Time // nil means time.Now
@@ -52,6 +59,7 @@ type Config struct {
 type Toolset struct {
 	mgr         *workdir.Manager
 	conventions string
+	shooter     preview.Shooter
 	log         *slog.Logger
 	now         func() time.Time
 
@@ -75,6 +83,7 @@ func New(cfg Config) (*Toolset, error) {
 	return &Toolset{
 		mgr:         cfg.Workdir,
 		conventions: cfg.Conventions,
+		shooter:     preview.Shooter{Bin: cfg.ChromiumBin, Log: cfg.Logger},
 		log:         cfg.Logger,
 		now:         cfg.Now,
 		current:     make(map[string]*workdir.Change),
@@ -86,7 +95,7 @@ func New(cfg Config) (*Toolset, error) {
 // that drop them.
 func (t *Toolset) Instructions() string { return t.conventions }
 
-// Tools is the nine, in the order a session uses them.
+// Tools is the eleven, in the order a session uses them.
 func (t *Toolset) Tools() []mcpserver.Tool {
 	return []mcpserver.Tool{
 		{
@@ -139,6 +148,20 @@ func (t *Toolset) Tools() []mcpserver.Tool {
 			Call:   text(t.build),
 		},
 		{
+			Name: ToolRender,
+			Description: "Read the built HTML of one page, whole or the subtrees a CSS selector matches. It reads the " +
+				"last build, so build again after an edit or you are reading the previous version.",
+			Schema: schemaRender,
+			Call:   text(t.render),
+		},
+		{
+			Name: ToolScreenshot,
+			Description: "Look at a built page: a picture of the whole page at 1280 px, or 390 px for a phone. A page " +
+				"whose front matter pairs it with another language is captured in both, in one call.",
+			Schema: schemaScreenshot,
+			Call:   t.screenshot,
+		},
+		{
 			Name: ToolSubmit,
 			Description: "Commit the change in the signed-in person's name, push it, and open a draft pull request. " +
 				"Returns the pull request number and the preview URL, which is ready about a minute later.",
@@ -157,8 +180,8 @@ func (t *Toolset) Tools() []mcpserver.Tool {
 
 // prose is a tool that answers in words alone, which is every tool but
 // screenshot. The transport's contract carries pictures as well, and adapting
-// the nine here is cheaper than threading a content type through nine
-// signatures that will never use it.
+// the ten here is cheaper than threading a content type through ten signatures
+// that will never use it.
 type prose func(ctx context.Context, id mcpserver.Identity, args json.RawMessage) (string, error)
 
 // text adapts a prose tool to the transport's contract.
@@ -320,6 +343,121 @@ func (t *Toolset) build(ctx context.Context, id mcpserver.Identity, args json.Ra
 	// A failing build is a result, not a transport failure: its output is the
 	// thing the model has to read.
 	return renderBuild(res), nil
+}
+
+func (t *Toolset) render(ctx context.Context, id mcpserver.Identity, args json.RawMessage) (string, error) {
+	a, err := decode[renderArgs](args)
+	if err != nil {
+		return "", fmt.Errorf("%s: %w", ToolRender, err)
+	}
+	c, err := t.open(id, "")
+	if err != nil {
+		return "", err
+	}
+	page, err := t.site(c).Locate(a.Path)
+	if err != nil {
+		return "", buildFirst(ToolRender, err)
+	}
+	out, err := page.HTML(a.Selector)
+	if err != nil {
+		return "", err
+	}
+	return renderPage(page, a.Selector, out), nil
+}
+
+// screenshot is the one tool whose answer is a picture, so it is the one that
+// does not go through [text].
+func (t *Toolset) screenshot(ctx context.Context, id mcpserver.Identity, args json.RawMessage) (mcpserver.Result, error) {
+	a, err := decode[screenshotArgs](args)
+	if err != nil {
+		return mcpserver.Result{}, fmt.Errorf("%s: %w", ToolScreenshot, err)
+	}
+	width, err := captureWidth(a.Width)
+	if err != nil {
+		return mcpserver.Result{}, err
+	}
+	c, err := t.open(id, "")
+	if err != nil {
+		return mcpserver.Result{}, err
+	}
+
+	site := t.site(c)
+	page, err := site.Locate(a.Path)
+	if err != nil {
+		return mcpserver.Result{}, buildFirst(ToolScreenshot, err)
+	}
+	// The pair is captured in the same call because a layout change is a change
+	// to both languages whether or not anybody remembered to look at the second.
+	others, err := site.Counterparts(page)
+	if err != nil {
+		return mcpserver.Result{}, err
+	}
+
+	srv, err := preview.Serve(site.Output)
+	if err != nil {
+		return mcpserver.Result{}, buildFirst(ToolScreenshot, err)
+	}
+	defer func() {
+		if err := srv.Close(); err != nil {
+			t.log.Warn("toolset: the preview server did not close", "err", err)
+		}
+	}()
+
+	shots := make([]shot, 0, len(others)+1)
+	for _, p := range append([]preview.Page{page}, others...) {
+		taken, err := t.shooter.Capture(ctx, srv.URL+p.URL, width)
+		if err != nil {
+			// Chromium's own words, not a summary of them: what it said is what
+			// tells a maintainer whether the browser or the page is at fault.
+			return mcpserver.Result{}, err
+		}
+		shots = append(shots, shot{page: p, taken: taken})
+	}
+
+	// The stamp is what submit reads to know the editor has looked at a layout
+	// change. A picture that was taken is still the answer when the bookkeeping
+	// fails, so the failure travels in the prose rather than replacing it.
+	var note string
+	if err := c.MarkScreenshot(t.now()); err != nil {
+		t.log.Warn("toolset: recording the screenshot", "branch", c.Branch, "err", err)
+		note = "This screenshot could not be recorded (" + err.Error() +
+			"), so submit may ask for another one."
+	}
+
+	res := mcpserver.Result{Text: renderShots(shots, width, note)}
+	for _, s := range shots {
+		res.Images = append(res.Images, mcpserver.Image{PNG: s.taken.PNG})
+	}
+	return res, nil
+}
+
+// site is the change as the preview package sees it: the tree it is edited in,
+// and the output of its last build.
+func (t *Toolset) site(c *workdir.Change) preview.Site {
+	return preview.Site{Worktree: c.Dir, Output: c.Output()}
+}
+
+// captureWidth is the two widths screenshot takes. The schema states them, and
+// a client that did not validate against it is told them again here rather than
+// being given a picture of a width nobody asked for.
+func captureWidth(width int) (int, error) {
+	switch width {
+	case 0, preview.DesktopWidth:
+		return preview.DesktopWidth, nil
+	case preview.MobileWidth:
+		return preview.MobileWidth, nil
+	default:
+		return 0, fmt.Errorf("%s: width %d is neither %d nor %d", ToolScreenshot, width, preview.DesktopWidth, preview.MobileWidth)
+	}
+}
+
+// buildFirst names the one thing to do about a change that has never been built.
+// Every other refusal is already a sentence the model can act on.
+func buildFirst(tool string, err error) error {
+	if errors.Is(err, preview.ErrNotBuilt) {
+		return fmt.Errorf("%s: this change has not been built yet, so there is nothing to look at. Run %s first", tool, ToolBuild)
+	}
+	return err
 }
 
 func (t *Toolset) submit(ctx context.Context, id mcpserver.Identity, args json.RawMessage) (string, error) {

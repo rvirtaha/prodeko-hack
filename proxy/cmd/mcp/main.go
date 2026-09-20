@@ -3,7 +3,7 @@
 //
 // It serves three things:
 //
-//	POST /mcp                   the MCP streamable HTTP transport, nine tools
+//	POST /mcp                   the MCP streamable HTTP transport, eleven tools
 //	GET  /.well-known/oauth-*   the OAuth discovery documents
 //	GET  /healthz               liveness
 //
@@ -34,6 +34,7 @@ import (
 
 	"github.com/prodeko/prodeko-hack/proxy/internal/mcpserver"
 	"github.com/prodeko/prodeko-hack/proxy/internal/oauthas"
+	"github.com/prodeko/prodeko-hack/proxy/internal/preview"
 	"github.com/prodeko/prodeko-hack/proxy/internal/session"
 	"github.com/prodeko/prodeko-hack/proxy/internal/toolset"
 	"github.com/prodeko/prodeko-hack/proxy/internal/workdir"
@@ -138,11 +139,17 @@ func run(cfg *env, log *slog.Logger) error {
 	}
 
 	tools, err := toolset.New(toolset.Config{
-		Workdir: work,
-		Logger:  log.With("component", "toolset"),
+		Workdir:     work,
+		ChromiumBin: cfg.ChromiumBin,
+		Logger:      log.With("component", "toolset"),
 	})
 	if err != nil {
 		return err
+	}
+	if bin, err := (preview.Shooter{Bin: cfg.ChromiumBin}).Find(); err != nil {
+		log.Warn("no headless Chromium: screenshot will refuse every call", "err", err)
+	} else {
+		log.Info("headless Chromium", "bin", bin)
 	}
 
 	mcp, err := mcpserver.New(mcpserver.Config{
@@ -281,6 +288,10 @@ type env struct {
 	RepoPath string
 	StateDir string
 
+	// ChromiumBin is empty in the server image, where the browser is installed
+	// under a name the preview package already looks for.
+	ChromiumBin string
+
 	KeycloakIssuer       string
 	KeycloakDiscoveryURL string
 	KeycloakClientID     string
@@ -306,6 +317,7 @@ const (
 	envRepoPath       = "MCP_REPO_PATH"
 	envStateDir       = "MCP_STATE_DIR"
 	envDevBearer      = "MCP_DEV_BEARER"
+	envChromiumBin    = "MCP_CHROMIUM_BIN"
 	envIssuer         = "KEYCLOAK_ISSUER"
 	envDiscoveryURL   = "KEYCLOAK_DISCOVERY_URL"
 	envClientID       = "KEYCLOAK_CLIENT_ID"
@@ -368,6 +380,7 @@ func loadEnv(lookup func(string) (string, bool)) (*env, error) {
 		PublicURL:            strings.TrimRight(required(envPublicURL), "/"),
 		RepoPath:             required(envRepoPath),
 		StateDir:             required(envStateDir),
+		ChromiumBin:          get(envChromiumBin),
 		KeycloakIssuer:       keycloakVar(envIssuer),
 		KeycloakDiscoveryURL: get(envDiscoveryURL),
 		KeycloakClientID:     keycloakVar(envClientID),
@@ -448,6 +461,7 @@ func (e *env) String() string {
 		"  public_url     " + e.PublicURL,
 		"  repo_path      " + e.RepoPath,
 		"  state_dir      " + e.StateDir,
+		"  chromium_bin   " + orUnset(e.ChromiumBin),
 		"  issuer         " + e.KeycloakIssuer,
 		"  client_id      " + e.KeycloakClientID,
 		"  client_secret  " + secret(e.KeycloakClientSecret),

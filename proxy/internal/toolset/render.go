@@ -4,7 +4,9 @@ import (
 	"fmt"
 	"strings"
 	"time"
+	"unicode/utf8"
 
+	"github.com/prodeko/prodeko-hack/proxy/internal/preview"
 	"github.com/prodeko/prodeko-hack/proxy/internal/workdir"
 )
 
@@ -105,6 +107,68 @@ func renderSubmit(res workdir.SubmitResult) string {
 	}
 	b.WriteString("\nAsking for another change continues this branch and the same pull request.")
 	return b.String()
+}
+
+// renderPage introduces one built page and then quotes it. The HTML is the
+// answer and is handed over exactly as hugo wrote it, on the far side of a
+// blank line so the sentence about it cannot be mistaken for part of it.
+func renderPage(p preview.Page, selector, out string) string {
+	var b strings.Builder
+	if strings.TrimSpace(selector) == "" {
+		fmt.Fprintf(&b, "%s, as the last build wrote it, %d bytes:\n\n", p.URL, len(out))
+	} else {
+		fmt.Fprintf(&b, "%s, the part matching %q, %d bytes:\n\n", p.URL, strings.TrimSpace(selector), len(out))
+	}
+	if len(out) <= MaxHTMLBytes {
+		b.WriteString(out)
+		return b.String()
+	}
+	b.WriteString(truncate(out, MaxHTMLBytes))
+	fmt.Fprintf(&b, "\n\n... stopped at %d bytes of %d. Pass a CSS selector to read one part of the page.",
+		MaxHTMLBytes, len(out))
+	return b.String()
+}
+
+// truncate cuts to at most n bytes without splitting a character in half.
+func truncate(s string, n int) string {
+	if len(s) <= n {
+		return s
+	}
+	for n > 0 && !utf8.ValidString(s[:n]) {
+		n--
+	}
+	return s[:n]
+}
+
+// shot is one page and the picture taken of it.
+type shot struct {
+	page  preview.Page
+	taken preview.Shot
+}
+
+// renderShots says what the pictures are, in the order they follow it. The model
+// sees images and no filenames, so the prose is the only thing that tells it
+// which language it is looking at.
+func renderShots(shots []shot, width int, note string) string {
+	var b strings.Builder
+	for _, s := range shots {
+		fmt.Fprintf(&b, "%s at %d px wide: %d by %d pixels.\n", s.page.URL, width, s.taken.Width, s.taken.Height)
+		if s.taken.Cut {
+			fmt.Fprintf(&b, "  The page is taller than the capture; this is its top %d pixels.\n", s.taken.Height)
+		}
+	}
+	switch {
+	case len(shots) > 1:
+		fmt.Fprintf(&b, "\n%d languages, paired by translationKey %q. The pictures follow in the order above.\n",
+			len(shots), shots[0].page.TranslationKey)
+	case len(shots) == 1 && shots[0].page.TranslationKey != "":
+		fmt.Fprintf(&b, "\nNo built counterpart carries translationKey %q, so this is %s alone.\n",
+			shots[0].page.TranslationKey, shots[0].page.Lang)
+	}
+	if note != "" {
+		fmt.Fprintf(&b, "\n%s\n", note)
+	}
+	return strings.TrimRight(b.String(), "\n")
 }
 
 func renderChanges(infos []workdir.Info) string {
