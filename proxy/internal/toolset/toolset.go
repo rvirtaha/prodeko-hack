@@ -1,4 +1,4 @@
-// Package toolset is the eleven tools the MCP server exposes, built on the
+// Package toolset is the thirteen tools the MCP server exposes, built on the
 // fence, the worktree manager and the preview.
 //
 // File-level tools, not semantic ones: CSS is file-level, and update_page(slug,
@@ -95,7 +95,7 @@ func New(cfg Config) (*Toolset, error) {
 // that drop them.
 func (t *Toolset) Instructions() string { return t.conventions }
 
-// Tools is the eleven, in the order a session uses them.
+// Tools is the thirteen, in the order a session uses them.
 func (t *Toolset) Tools() []mcpserver.Tool {
 	return []mcpserver.Tool{
 		{
@@ -175,6 +175,20 @@ func (t *Toolset) Tools() []mcpserver.Tool {
 				"preview link.",
 			Schema: schemaListMyChanges,
 			Call:   text(t.listMyChanges),
+		},
+		{
+			Name: ToolGetFeedback,
+			Description: "Read what has been said on a change's pull request: its state, the review verdicts and every " +
+				"comment, verbatim. This is how a request to \"fix what review asked for\" starts.",
+			Schema: schemaGetFeedback,
+			Call:   text(t.getFeedback),
+		},
+		{
+			Name: ToolAbandonChange,
+			Description: "Throw a change away: close its pull request, delete its branch, discard its edits. There is no " +
+				"undo, so confirm with the person before calling this.",
+			Schema: schemaAbandonChange,
+			Call:   text(t.abandonChange),
 		},
 	}
 }
@@ -513,6 +527,69 @@ func (t *Toolset) listMyChanges(ctx context.Context, id mcpserver.Identity, args
 		return "", err
 	}
 	return renderChanges(infos), nil
+}
+
+func (t *Toolset) getFeedback(ctx context.Context, id mcpserver.Identity, args json.RawMessage) (string, error) {
+	a, err := decode[getFeedbackArgs](args)
+	if err != nil {
+		return "", fmt.Errorf("%s: %w", ToolGetFeedback, err)
+	}
+	c, err := t.change(id, a.Slug)
+	if err != nil {
+		return "", err
+	}
+	fb, err := t.mgr.Feedback(ctx, c)
+	if errors.Is(err, workdir.ErrNeverSubmitted) {
+		// An answer, not a failure: asking what review said before submitting
+		// is a natural question with a one-sentence reply.
+		return fmt.Sprintf("%s has no pull request yet, so there is nothing to read. %s opens one.", c.Slug, ToolSubmit), nil
+	}
+	if err != nil {
+		return "", err
+	}
+	return renderFeedback(c.Slug, fb), nil
+}
+
+func (t *Toolset) abandonChange(ctx context.Context, id mcpserver.Identity, args json.RawMessage) (string, error) {
+	a, err := decode[abandonChangeArgs](args)
+	if err != nil {
+		return "", fmt.Errorf("%s: %w", ToolAbandonChange, err)
+	}
+	if strings.TrimSpace(a.Slug) == "" {
+		return "", fmt.Errorf("%s: the slug names what is destroyed, so it is required; %s lists them", ToolAbandonChange, ToolListMyChanges)
+	}
+	user, err := userOf(id)
+	if err != nil {
+		return "", err
+	}
+	c, err := t.mgr.Existing(user, a.Slug)
+	if err != nil {
+		return "", err
+	}
+	res, err := t.mgr.Abandon(ctx, c)
+	if err != nil {
+		return "", err
+	}
+	// The next edit starts fresh rather than landing in a deleted worktree.
+	t.mu.Lock()
+	if t.current[user] == c {
+		delete(t.current, user)
+	}
+	t.mu.Unlock()
+	return renderAbandon(res), nil
+}
+
+// change is the caller's current change, or the named one when a tool that
+// takes a slug was given one.
+func (t *Toolset) change(id mcpserver.Identity, slug string) (*workdir.Change, error) {
+	if strings.TrimSpace(slug) == "" {
+		return t.open(id, "")
+	}
+	user, err := userOf(id)
+	if err != nil {
+		return nil, err
+	}
+	return t.mgr.Existing(user, slug)
 }
 
 // open returns the caller's current change, creating one named after hint when

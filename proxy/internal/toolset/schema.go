@@ -21,6 +21,8 @@ const (
 	ToolScreenshot     = "screenshot"
 	ToolSubmit         = "submit"
 	ToolListMyChanges  = "list_my_changes"
+	ToolGetFeedback    = "get_feedback"
+	ToolAbandonChange  = "abandon_change"
 )
 
 // Defaults and caps that the schema states and the implementation enforces.
@@ -224,6 +226,34 @@ var schemaListMyChanges = json.RawMessage(`{
   "additionalProperties": false
 }`)
 
+var schemaGetFeedback = json.RawMessage(`{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "slug": {
+      "type": "string",
+      "description": "Which change, as list_my_changes names them. Omit it for the change you are working on.",
+      "maxLength": 64
+    }
+  },
+  "additionalProperties": false
+}`)
+
+var schemaAbandonChange = json.RawMessage(`{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "slug": {
+      "type": "string",
+      "description": "Which change to abandon, as list_my_changes names them. Required: this closes its pull request, deletes its branch and discards its edits, so it has to be named, never guessed.",
+      "minLength": 1,
+      "maxLength": 64
+    }
+  },
+  "required": ["slug"],
+  "additionalProperties": false
+}`)
+
 // The argument types, one per schema. They are the Go side of the same
 // contract and must be changed together with it.
 
@@ -270,4 +300,12 @@ type screenshotArgs struct {
 type submitArgs struct {
 	Title       string `json:"title"`
 	Description string `json:"description"`
+}
+
+type getFeedbackArgs struct {
+	Slug string `json:"slug"`
+}
+
+type abandonChangeArgs struct {
+	Slug string `json:"slug"`
 }

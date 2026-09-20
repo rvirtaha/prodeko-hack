@@ -244,3 +244,58 @@ func renderChanges(infos []workdir.Info) string {
 	}
 	return strings.TrimRight(b.String(), "\n")
 }
+
+// renderFeedback is the pull request as the maintainers left it. Bodies are
+// verbatim and indented, so where GitHub's words end and this server's begin
+// stays visible.
+func renderFeedback(slug string, fb workdir.Feedback) string {
+	var b strings.Builder
+	fmt.Fprintf(&b, "%s is pull request #%d (%s), %s.\n", slug, fb.PRNumber, fb.PRURL, fb.State)
+	if fb.CIState != "" {
+		fmt.Fprintf(&b, "Checks: %s.\n", fb.CIState)
+	}
+	if fb.PreviewURL != "" && fb.State == "open" {
+		fmt.Fprintf(&b, "Preview: %s\n", fb.PreviewURL)
+	}
+	if len(fb.Reviews) == 0 && len(fb.Comments) == 0 {
+		b.WriteString("Nobody has reviewed or commented yet.")
+		return b.String()
+	}
+	for _, r := range fb.Reviews {
+		fmt.Fprintf(&b, "\nReview by %s: %s", r.Author, r.State)
+		if !r.At.IsZero() {
+			fmt.Fprintf(&b, " (%s)", r.At.Format(time.RFC3339))
+		}
+		b.WriteByte('\n')
+		writeQuoted(&b, r.Body)
+	}
+	for _, c := range fb.Comments {
+		if c.Path != "" {
+			fmt.Fprintf(&b, "\nComment by %s on %s:%d\n", c.Author, c.Path, c.Line)
+		} else {
+			fmt.Fprintf(&b, "\nComment by %s\n", c.Author)
+		}
+		writeQuoted(&b, c.Body)
+	}
+	return strings.TrimRight(b.String(), "\n")
+}
+
+// writeQuoted indents a body two spaces, line by line.
+func writeQuoted(b *strings.Builder, body string) {
+	for _, line := range strings.Split(strings.TrimRight(body, "\n"), "\n") {
+		b.WriteString("  " + line + "\n")
+	}
+}
+
+// renderAbandon says what is gone, and what refused to go.
+func renderAbandon(res workdir.AbandonResult) string {
+	var b strings.Builder
+	fmt.Fprintf(&b, "Abandoned %s: the branch %s and its edits are gone.", res.Slug, res.Branch)
+	if res.PRNumber > 0 {
+		fmt.Fprintf(&b, " Pull request #%d is closed.", res.PRNumber)
+	}
+	if res.Note != "" {
+		b.WriteString(" Left to a maintainer: " + res.Note + ".")
+	}
+	return b.String()
+}
