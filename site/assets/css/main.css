@@ -1153,6 +1153,46 @@ img { display: block; max-width: 100%; }
 .archive-group { margin: var(--space-12) 0; scroll-margin-top: 90px; }
 .archive-group h2 { font-size: var(--size-xl); color: var(--pd-blue); border-bottom: 2px solid var(--pd-blue); padding-bottom: var(--space-2); }
 
+/* ===== Grouped archive rows (layouts/partials/people-grid.html) =====
+
+   One row per year or per TIMES team: the shared value in a label column, the
+   names running as text beside it. A card per person put a box around every
+   name and repeated the year in each one, which turned seventeen honorary
+   members into seventeen boxes saying 1986. Rules between the rows carry the
+   grouping instead of borders around the names. */
+.name-rows { margin: var(--space-4) 0; }
+.name-row {
+  display: grid;
+  grid-template-columns: 12rem minmax(0, 1fr);
+  gap: var(--space-1) var(--space-6);
+  padding: var(--space-3) 0;
+  border-top: 1px solid var(--border-subtle);
+}
+.name-row:last-child { border-bottom: 1px solid var(--border-subtle); }
+.prose h3.name-row-label {
+  margin: 0;
+  font-size: var(--size-sm);
+  font-weight: var(--weight-semibold);
+  color: var(--pd-blue);
+  font-variant-numeric: tabular-nums;
+  line-height: var(--leading-normal);
+}
+.prose ul.name-list { margin: 0; padding: 0; list-style: none; }
+.prose .name-list li {
+  display: inline;
+  margin: 0;
+  font-size: var(--size-sm);
+  font-weight: var(--weight-light);
+  line-height: var(--leading-normal);
+}
+/* The separator is generated rather than typed so a name never ends a line
+   with a dangling dot, and so copying the list out gives plain names. */
+.prose .name-list li:not(:last-child)::after {
+  content: "\00b7";
+  margin: 0 var(--space-2);
+  color: var(--pd-blue-light);
+}
+
 .skip-link {
   position: absolute;
   width: 1px;
@@ -1191,6 +1231,10 @@ img { display: block; max-width: 100%; }
 
 @media (max-width: 720px) {
   .container { padding: 0 var(--space-6); }
+
+  /* The label column costs more than it gives on a phone: at 390px it left the
+     names about half the width and broke them into a narrow ragged column. */
+  .name-row { grid-template-columns: minmax(0, 1fr); gap: var(--space-1); }
 
   .hero-home .inner { padding-block: 76px 52px; }
   .hero-home h1 { font-size: clamp(30px, 9vw, 44px); max-width: none; }

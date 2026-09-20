@@ -3,17 +3,56 @@
 
      roleEn is used on an English page where the entry has one. The historical
      archive has only Finnish titles: those were the offices' names at the
-     time, and most have no English form the guild has ever used. */}}
+     time, and most have no English form the guild has ever used.
+
+     Two shapes, because the data has two. A board or a set of officials is a
+     list of distinct offices with one person in each, so every card carries a
+     name and a title of its own: that is the card grid. The honours archive is
+     the other shape — "role" there is the award year, or the TIMES team the
+     person was on, and up to seventeen people share one value — so a card per
+     person repeats the year seventeen times and reads as noise. Those entries
+     are gathered under the shared value instead, one compact row per year or
+     team, in the order the data file lists them.
+
+     The switch is the dataset the page's front matter pointed archive.html at,
+     since archive.html is read-only here and cannot pass a flag: honours is
+     the only dataset with the shared-value shape. */}}
 {{ $isFi := eq page.Language.Lang "fi" }}
+{{ $grouped := eq page.Params.dataset "honours" }}
 {{ with . }}
-  <ul class="people-grid">
+  {{ if $grouped }}
+    {{ $members := . }}
+    {{ $labels := slice }}
     {{ range . }}
-      {{ $role := .role }}
-      {{ if and (not $isFi) .roleEn }}{{ $role = .roleEn }}{{ end }}
-      <li class="person">
-        <span class="person-name">{{ .name }}</span>
-        {{ with $role }}<span class="person-role">{{ . }}</span>{{ end }}
-      </li>
+      {{ $label := .role }}
+      {{ if and (not $isFi) .roleEn }}{{ $label = .roleEn }}{{ end }}
+      {{ if not (in $labels $label) }}{{ $labels = $labels | append $label }}{{ end }}
     {{ end }}
-  </ul>
+    <div class="name-rows">
+      {{ range $labels }}
+        {{ $label := . }}
+        <div class="name-row">
+          <h3 class="name-row-label">{{ $label }}</h3>
+          <ul class="name-list">
+            {{- range $members -}}
+              {{ $role := .role }}
+              {{ if and (not $isFi) .roleEn }}{{ $role = .roleEn }}{{ end }}
+              {{- if eq $role $label }}<li>{{ .name }}</li>{{ end -}}
+            {{- end -}}
+          </ul>
+        </div>
+      {{ end }}
+    </div>
+  {{ else }}
+    <ul class="people-grid">
+      {{ range . }}
+        {{ $role := .role }}
+        {{ if and (not $isFi) .roleEn }}{{ $role = .roleEn }}{{ end }}
+        <li class="person">
+          <span class="person-name">{{ .name }}</span>
+          {{ with $role }}<span class="person-role">{{ . }}</span>{{ end }}
+        </li>
+      {{ end }}
+    </ul>
+  {{ end }}
 {{ end }}

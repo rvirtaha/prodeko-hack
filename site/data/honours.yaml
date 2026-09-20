@@ -10,15 +10,15 @@ kunniajasenet:
   heading: Kunniajäsenet
   sortKey: 4
   members:
-    - name: Prof. Eino Niini
+    - name: Prof. Eino Niini (k. 1987)
       role: "1969"
-    - name: Prof. Carl E. Carlson
+    - name: Prof. Carl E. Carlson (k. 2010)
       role: "1986"
-    - name: Prof. Sauli Häkkinen
+    - name: Prof. Sauli Häkkinen (k. 2006)
       role: "1986"
     - name: TkT Hannes Kulvik
       role: "1986"
-    - name: TkT Markku Nurmi
+    - name: TkT Markku Nurmi (k. 2010)
       role: "1986"
     - name: DI Mikko Sajaniemi
       role: "1986"
@@ -26,9 +26,9 @@ kunniajasenet:
       role: "1986"
     - name: DI Petteri Walldén
       role: "1986"
-    - name: Prof. Hans Andersin
+    - name: Prof. Hans Andersin (k. 2010)
       role: "1991"
-    - name: Prof. Tauno Olkkonen
+    - name: Prof. Tauno Olkkonen (k. 2018)
       role: "1991"
     - name: Prof. Martti M. Kaila
       role: "1996"
