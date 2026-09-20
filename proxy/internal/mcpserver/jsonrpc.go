@@ -2,6 +2,7 @@ package mcpserver
 
 import (
 	"bytes"
+	"encoding/base64"
 	"encoding/json"
 )
 
@@ -132,13 +133,40 @@ type callToolResult struct {
 	IsError bool      `json:"isError,omitempty"`
 }
 
+// content is one block of a tool result: prose, or a base64 PNG. The members of
+// the other kind are omitted rather than sent empty, so an image block is an
+// image block and nothing else.
+//
+// Text is a pointer because an empty text block is still a text block: the
+// member is required, and omitempty on a string would drop the one thing the
+// block has to carry.
 type content struct {
-	Type string `json:"type"` // always "text"
-	Text string `json:"text"`
+	Type     string  `json:"type"`
+	Text     *string `json:"text,omitempty"`
+	Data     string  `json:"data,omitempty"`     // base64, images only
+	MIMEType string  `json:"mimeType,omitempty"` // images only
 }
 
-func textResult(s string, isErr bool) callToolResult {
-	return callToolResult{Content: []content{{Type: "text", Text: s}}, IsError: isErr}
+// The content types this transport emits, and the one image format it emits
+// them in.
+const (
+	contentText  = "text"
+	contentImage = "image"
+	pngMIMEType  = "image/png"
+)
+
+// contentResult puts a tool's answer on the wire: the prose first, then one
+// block per picture.
+func contentResult(res Result, isErr bool) callToolResult {
+	out := callToolResult{Content: []content{{Type: contentText, Text: &res.Text}}, IsError: isErr}
+	for _, img := range res.Images {
+		out.Content = append(out.Content, content{
+			Type:     contentImage,
+			Data:     base64.StdEncoding.EncodeToString(img.PNG),
+			MIMEType: pngMIMEType,
+		})
+	}
+	return out
 }
 
 // callToolParams is what tools/call sends.

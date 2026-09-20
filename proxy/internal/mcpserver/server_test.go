@@ -1,7 +1,9 @@
 package mcpserver
 
 import (
+	"bytes"
 	"context"
+	"encoding/base64"
 	"encoding/json"
 	"errors"
 	"log/slog"
@@ -22,10 +24,20 @@ func testTool(name string) Tool {
 		Name:        name,
 		Description: "a tool",
 		Schema:      json.RawMessage(`{"type":"object","properties":{},"additionalProperties":false}`),
-		Call: func(ctx context.Context, id Identity, args json.RawMessage) (string, error) {
-			return "ok", nil
+		Call: func(ctx context.Context, id Identity, args json.RawMessage) (Result, error) {
+			return Text("ok"), nil
 		},
 	}
+}
+
+// textOf reads a text block. The member is a pointer on the wire, so a block
+// that carries no text at all is told apart from one that carries "".
+func textOf(t *testing.T, c content) string {
+	t.Helper()
+	if c.Text == nil {
+		t.Fatalf("content block %+v has no text member", c)
+	}
+	return *c.Text
 }
 
 func testServer(t *testing.T, tools ...Tool) *Server {
@@ -322,9 +334,9 @@ func TestCallToolDispatch(t *testing.T) {
 	echo := Tool{
 		Name:   "read_file",
 		Schema: json.RawMessage(`{"type":"object"}`),
-		Call: func(ctx context.Context, id Identity, args json.RawMessage) (string, error) {
+		Call: func(ctx context.Context, id Identity, args json.RawMessage) (Result, error) {
 			gotArgs, gotUser = string(args), id
-			return "# Tapahtumat\n", nil
+			return Text("# Tapahtumat\n"), nil
 		},
 	}
 	s := testServer(t, echo)
@@ -344,8 +356,46 @@ func TestCallToolDispatch(t *testing.T) {
 	if res.IsError {
 		t.Error("a tool that succeeded was reported as an error")
 	}
-	if len(res.Content) != 1 || res.Content[0].Type != "text" || res.Content[0].Text != "# Tapahtumat\n" {
+	if len(res.Content) != 1 || res.Content[0].Type != "text" || textOf(t, res.Content[0]) != "# Tapahtumat\n" {
 		t.Fatalf("content = %+v", res.Content)
+	}
+}
+
+// A screenshot is only worth taking if the model gets to look at it: the PNG
+// travels as an MCP image block beside the prose, base64 and typed, and the
+// prose comes first because clients render the blocks in order.
+func TestCallToolReturnsImagesAfterTheProse(t *testing.T) {
+	png := []byte{0x89, 'P', 'N', 'G', 0x0d, 0x0a, 0x1a, 0x0a, 0x00, 0x01}
+	shot := testTool("screenshot")
+	shot.Call = func(ctx context.Context, id Identity, args json.RawMessage) (Result, error) {
+		return Result{Text: "Captured /fi/ at 1280 px.", Images: []Image{{PNG: png}}}, nil
+	}
+	s := testServer(t, shot)
+
+	got := decodeOne(t, post(t, s, `{"jsonrpc":"2.0","id":9,"method":"tools/call","params":{"name":"screenshot","arguments":{}}}`))
+	var res callToolResult
+	if err := json.Unmarshal(got.Result, &res); err != nil {
+		t.Fatalf("tools/call result: %v", err)
+	}
+	if len(res.Content) != 2 {
+		t.Fatalf("content blocks = %d, want the prose and the picture", len(res.Content))
+	}
+	if res.Content[0].Type != "text" || textOf(t, res.Content[0]) != "Captured /fi/ at 1280 px." {
+		t.Errorf("first block = %+v, want the prose", res.Content[0])
+	}
+	img := res.Content[1]
+	if img.Type != "image" || img.MIMEType != "image/png" {
+		t.Errorf("second block = %+v, want a PNG image block", img)
+	}
+	if img.Text != nil {
+		t.Errorf("an image block carries a text member: %+v", img)
+	}
+	data, err := base64.StdEncoding.DecodeString(img.Data)
+	if err != nil {
+		t.Fatalf("image data is not base64: %v", err)
+	}
+	if !bytes.Equal(data, png) {
+		t.Errorf("image data = %x, want the PNG the tool returned", data)
 	}
 }
 
@@ -359,9 +409,9 @@ func TestCallToolFillsInAbsentArguments(t *testing.T) {
 	} {
 		var got string
 		tool := testTool("a")
-		tool.Call = func(ctx context.Context, id Identity, args json.RawMessage) (string, error) {
+		tool.Call = func(ctx context.Context, id Identity, args json.RawMessage) (Result, error) {
 			got = string(args)
-			return "ok", nil
+			return Text("ok"), nil
 		}
 		s := testServer(t, tool)
 
@@ -376,8 +426,8 @@ func TestCallToolFillsInAbsentArguments(t *testing.T) {
 // saying no is the ordinary case of this.
 func TestToolErrorBecomesAnIsErrorResult(t *testing.T) {
 	failing := testTool("write_file")
-	failing.Call = func(ctx context.Context, id Identity, args json.RawMessage) (string, error) {
-		return "", errors.New("fence: site/layouts is read-only")
+	failing.Call = func(ctx context.Context, id Identity, args json.RawMessage) (Result, error) {
+		return Result{}, errors.New("fence: site/layouts is read-only")
 	}
 	s := testServer(t, failing)
 
@@ -396,7 +446,7 @@ func TestToolErrorBecomesAnIsErrorResult(t *testing.T) {
 	if !res.IsError {
 		t.Error("isError is not set on a failed tool call")
 	}
-	if len(res.Content) != 1 || !strings.Contains(res.Content[0].Text, "read-only") {
+	if len(res.Content) != 1 || !strings.Contains(textOf(t, res.Content[0]), "read-only") {
 		t.Fatalf("content = %+v, want the rule that was broken", res.Content)
 	}
 }
@@ -404,7 +454,7 @@ func TestToolErrorBecomesAnIsErrorResult(t *testing.T) {
 // A panicking tool must not cost the connection or the rest of a batch.
 func TestPanickingToolIsContained(t *testing.T) {
 	boom := testTool("build")
-	boom.Call = func(ctx context.Context, id Identity, args json.RawMessage) (string, error) {
+	boom.Call = func(ctx context.Context, id Identity, args json.RawMessage) (Result, error) {
 		panic("nil map")
 	}
 	s := testServer(t, boom, testTool("ping_tool"))
@@ -635,9 +685,9 @@ func TestOversizedBodyIsRefused(t *testing.T) {
 func TestToolSeesTheRequestContext(t *testing.T) {
 	tool := testTool("a")
 	var cancelled bool
-	tool.Call = func(ctx context.Context, id Identity, args json.RawMessage) (string, error) {
+	tool.Call = func(ctx context.Context, id Identity, args json.RawMessage) (Result, error) {
 		cancelled = ctx.Err() != nil
-		return "ok", nil
+		return Text("ok"), nil
 	}
 	s := testServer(t, tool)
 

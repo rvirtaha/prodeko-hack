@@ -194,10 +194,11 @@ func TestToolsAreAcceptedByTheTransport(t *testing.T) {
 // drops the initialize instructions depends on it.
 func TestGetConventionsReturnsTheGuide(t *testing.T) {
 	ts := testToolset(t)
-	got, err := ts.Tools()[0].Call(context.Background(), mcpserver.Identity{Username: "maija"}, nil)
+	res, err := ts.Tools()[0].Call(context.Background(), mcpserver.Identity{Username: "maija"}, nil)
 	if err != nil {
 		t.Fatalf("get_conventions: %v", err)
 	}
+	got := res.Text
 	for _, want := range []string{
 		"site/content-members/", "translationKey", "site/assets/css/tokens", "draft pull request",
 	} {
@@ -210,7 +211,16 @@ func TestGetConventionsReturnsTheGuide(t *testing.T) {
 	}
 }
 
+// call runs one tool and returns the prose it answered with. Every tool but
+// screenshot answers in prose alone, so the pictures are asserted where they
+// are produced rather than in every caller here.
 func call(t *testing.T, ts *Toolset, name string, id mcpserver.Identity, args string) (string, error) {
+	t.Helper()
+	res, err := callTool(t, ts, name, id, args)
+	return res.Text, err
+}
+
+func callTool(t *testing.T, ts *Toolset, name string, id mcpserver.Identity, args string) (mcpserver.Result, error) {
 	t.Helper()
 	for _, tool := range ts.Tools() {
 		if tool.Name == name {
@@ -218,7 +228,7 @@ func call(t *testing.T, ts *Toolset, name string, id mcpserver.Identity, args st
 		}
 	}
 	t.Fatalf("no tool named %q", name)
-	return "", nil
+	return mcpserver.Result{}, nil
 }
 
 var maija = mcpserver.Identity{Username: "maija", Name: "Maija Meikäläinen", Email: "maija@prodeko.org"}

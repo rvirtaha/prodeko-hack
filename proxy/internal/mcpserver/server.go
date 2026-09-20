@@ -49,15 +49,38 @@ type Identity struct {
 	Email    string
 }
 
-// Tool is one callable. Call returns the text the model reads; an error from
-// it is reported to the client as a failed tool result, not as a transport
-// error, because a refusal is something the model should read and act on.
+// Tool is one callable. Call answers with a [Result]; an error from it is
+// reported to the client as a failed tool result, not as a transport error,
+// because a refusal is something the model should read and act on.
 type Tool struct {
 	Name        string
 	Description string
 	Schema      json.RawMessage // JSON Schema for the arguments object
-	Call        func(ctx context.Context, id Identity, args json.RawMessage) (string, error)
+	Call        func(ctx context.Context, id Identity, args json.RawMessage) (Result, error)
 }
+
+// Result is a tool's answer: prose the model reads, and the pictures that prose
+// is about.
+//
+// A picture has to travel as content. The PNG screenshot captures lives on the
+// server's state volume, which no client can open, and a model told where a
+// file is has still not seen it. The prose comes first in the content list,
+// because clients render the blocks in order and the sentence is what says what
+// the picture is.
+type Result struct {
+	Text   string
+	Images []Image
+}
+
+// Image is one picture a tool answers with. PNG is the only format there is
+// here: it is what headless Chromium writes and what every MCP client renders.
+type Image struct {
+	PNG []byte
+}
+
+// Text is the answer of a tool that has only prose to give, which is every
+// tool but screenshot.
+func Text(s string) Result { return Result{Text: s} }
 
 // Authenticator turns the bearer token of a request into an identity. An
 // error, of any kind, is a 401; the reason is logged and never returned.
@@ -369,16 +392,17 @@ func (s *Server) callTool(ctx context.Context, id Identity, req request) *respon
 	out, err := s.invoke(ctx, tool, id, args)
 	if err != nil {
 		s.log.Info("tool refused", "tool", tool.Name, "user", id.Username, "err", err, "took", time.Since(started))
-		return resultResponse(req.ID, textResult(err.Error(), true))
+		return resultResponse(req.ID, contentResult(Text(err.Error()), true))
 	}
-	s.log.Info("tool ran", "tool", tool.Name, "user", id.Username, "bytes", len(out), "took", time.Since(started))
-	return resultResponse(req.ID, textResult(out, false))
+	s.log.Info("tool ran", "tool", tool.Name, "user", id.Username,
+		"bytes", len(out.Text), "images", len(out.Images), "took", time.Since(started))
+	return resultResponse(req.ID, contentResult(out, false))
 }
 
 // invoke runs one tool, turning a panic into an ordinary error. A bug in one
 // tool must not drop the answers to the rest of a batch, and the model reading
 // the result is better served by a sentence than by a closed connection.
-func (s *Server) invoke(ctx context.Context, t Tool, id Identity, args json.RawMessage) (out string, err error) {
+func (s *Server) invoke(ctx context.Context, t Tool, id Identity, args json.RawMessage) (out Result, err error) {
 	defer func() {
 		if p := recover(); p != nil {
 			s.log.Error("tool panicked", "tool", t.Name, "user", id.Username, "panic", p)

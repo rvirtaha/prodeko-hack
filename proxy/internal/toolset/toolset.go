@@ -94,64 +94,81 @@ func (t *Toolset) Tools() []mcpserver.Tool {
 			Description: "How prodeko.org is laid out and how to edit it: the two content roots, the Finnish/English " +
 				"translationKey pairing, the design tokens, and what is editable and what is not. Read this first.",
 			Schema: schemaGetConventions,
-			Call:   t.getConventions,
+			Call:   text(t.getConventions),
 		},
 		{
 			Name: ToolListFiles,
 			Description: "List the editable files. The tree is a few hundred files, so listing it unfiltered is " +
 				"reasonable; pass a glob to narrow it.",
 			Schema: schemaListFiles,
-			Call:   t.listFiles,
+			Call:   text(t.listFiles),
 		},
 		{
 			Name: ToolReadFile,
 			Description: "Read a file, optionally a line range. Prefer a range for large files: site/assets/css/main.css " +
 				"is over a thousand lines and reading it whole every turn is the expensive habit.",
 			Schema: schemaReadFile,
-			Call:   t.readFile,
+			Call:   text(t.readFile),
 		},
 		{
 			Name: ToolSearch,
 			Description: "Search the editable files with a regular expression, line by line. This is how you find which " +
 				"template renders a heading and which rule styles it.",
 			Schema: schemaSearch,
-			Call:   t.search,
+			Call:   text(t.search),
 		},
 		{
 			Name: ToolWriteFile,
 			Description: "Write a whole file. Use it for a new page or a wholesale rewrite; prefer edit_file for a change " +
 				"inside an existing file.",
 			Schema: schemaWriteFile,
-			Call:   t.writeFile,
+			Call:   text(t.writeFile),
 		},
 		{
 			Name: ToolEditFile,
 			Description: "Replace an exact piece of text in a file. The old text must appear exactly once, so include " +
 				"enough surrounding lines to make it unique.",
 			Schema: schemaEditFile,
-			Call:   t.editFile,
+			Call:   text(t.editFile),
 		},
 		{
 			Name: ToolBuild,
 			Description: "Build the site and run its tree check. Returns the errors verbatim when it fails. Run it after " +
 				"editing and always before submitting.",
 			Schema: schemaBuild,
-			Call:   t.build,
+			Call:   text(t.build),
 		},
 		{
 			Name: ToolSubmit,
 			Description: "Commit the change in the signed-in person's name, push it, and open a draft pull request. " +
 				"Returns the pull request number and the preview URL, which is ready about a minute later.",
 			Schema: schemaSubmit,
-			Call:   t.submit,
+			Call:   text(t.submit),
 		},
 		{
 			Name: ToolListMyChanges,
 			Description: "List the signed-in person's own open changes: branch, files touched, pull request, CI state and " +
 				"preview link.",
 			Schema: schemaListMyChanges,
-			Call:   t.listMyChanges,
+			Call:   text(t.listMyChanges),
 		},
+	}
+}
+
+// prose is a tool that answers in words alone, which is every tool but
+// screenshot. The transport's contract carries pictures as well, and adapting
+// the nine here is cheaper than threading a content type through nine
+// signatures that will never use it.
+type prose func(ctx context.Context, id mcpserver.Identity, args json.RawMessage) (string, error)
+
+// text adapts a prose tool to the transport's contract.
+func text(fn prose) func(context.Context, mcpserver.Identity, json.RawMessage) (mcpserver.Result, error) {
+	return func(ctx context.Context, id mcpserver.Identity, args json.RawMessage) (mcpserver.Result, error) {
+		out, err := fn(ctx, id, args)
+		if err != nil {
+			return mcpserver.Result{}, err
+		}
+		return mcpserver.Text(out), nil
 	}
 }
 
