@@ -38,7 +38,7 @@ fi:
       - label: Prodeko-rahasto
         url: /fi/palvelut/prodeko-fund/
       - label: Viikkotiedote
-        url: https://viikkotiedote.prodeko.org
+        url: https://tiedotteet.prodeko.org
       - label: Galleria
         url: https://gallery.prodeko.org
       - label: Ilmokilke
@@ -90,7 +90,7 @@ en:
       - label: Prodeko Fund
         url: /en/services/prodeko-fund/
       - label: Weekly letter
-        url: https://viikkotiedote.prodeko.org
+        url: https://tiedotteet.prodeko.org
       - label: Gallery
         url: https://gallery.prodeko.org
       - label: Ilmokilke
