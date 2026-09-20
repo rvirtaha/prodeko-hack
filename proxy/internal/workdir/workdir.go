@@ -539,6 +539,12 @@ func (m *Manager) Build(ctx context.Context, c *Change) (Result, error) {
 			return finish(false, nil)
 		}
 	}
+	// The stamp is what submit compares against the last edit. A stamp that
+	// could not be written is not a build that did not happen, so the result
+	// stands; the gate will ask for another build, which is the safe way round.
+	if err := c.markBuild(m.cfg.Now()); err != nil {
+		m.log.Warn("workdir: recording the build", "branch", c.Branch, "err", err)
+	}
 	return finish(true, nil)
 }
 

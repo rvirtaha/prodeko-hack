@@ -692,6 +692,67 @@ echo "check-trees: both trees present"
 	}
 }
 
+// The stamps submit reads: a write records an edit, a build that passed records
+// itself, and a build that failed records nothing. Their order is the whole
+// content of the gate, so the order is what is asserted.
+func TestWritesAndBuildsStampTheChange(t *testing.T) {
+	if _, err := exec.LookPath("hugo"); err != nil {
+		t.Skip("hugo is not on PATH")
+	}
+	f := newFixture(t)
+	m := f.manager(t)
+	c := openChange(t, m)
+
+	if st := c.Stamps(); !st.EditedAt.IsZero() || !st.BuiltAt.IsZero() {
+		t.Fatalf("a change nobody has touched reports %+v", st)
+	}
+	if err := c.WriteFile("site/content/fi/uusi.md", []byte("---\ntitle: Uusi\n---\n\nHei.\n")); err != nil {
+		t.Fatalf("WriteFile: %v", err)
+	}
+	edited := c.Stamps()
+	if edited.EditedAt.IsZero() {
+		t.Fatal("a write recorded no edit, so submit would let it through unbuilt")
+	}
+	if !edited.BuiltAt.IsZero() {
+		t.Fatalf("a write recorded a build at %s", edited.BuiltAt)
+	}
+
+	if res, err := m.Build(t.Context(), c); err != nil || !res.OK {
+		t.Fatalf("Build = %+v, %v", res, err)
+	}
+	built := c.Stamps()
+	if !built.BuiltAt.After(built.EditedAt) {
+		t.Fatalf("the build at %s does not come after the edit at %s", built.BuiltAt, built.EditedAt)
+	}
+
+	// A second edit puts the change back behind its build, which is what makes
+	// submit ask for another one.
+	if err := c.WriteFile("site/content/fi/uusi.md", []byte("---\ntitle: Uusi\n---\n\nHei taas.\n")); err != nil {
+		t.Fatalf("the second WriteFile: %v", err)
+	}
+	if again := c.Stamps(); !again.EditedAt.After(again.BuiltAt) {
+		t.Fatalf("the second edit at %s does not come after the build at %s", again.EditedAt, again.BuiltAt)
+	}
+
+	// A build that failed is not a build: the stamp it would have written is the
+	// one thing standing between a broken change and a pull request.
+	if err := c.WriteFile("site/content/fi/rikki.md",
+		[]byte("---\ntitle: Rikki\n---\n\n{{< nosuchshortcode >}}\n")); err != nil {
+		t.Fatalf("WriteFile: %v", err)
+	}
+	before := c.Stamps().BuiltAt
+	res, err := m.Build(t.Context(), c)
+	if err != nil {
+		t.Fatalf("Build: %v", err)
+	}
+	if res.OK {
+		t.Fatal("the fixture built with an undefined shortcode")
+	}
+	if got := c.Stamps().BuiltAt; !got.Equal(before) {
+		t.Fatalf("a failed build moved the stamp from %s to %s", before, got)
+	}
+}
+
 // The layout fence applies to the write itself and not only to the path: a
 // template that builds an asset is read-only whatever it is called, and the
 // refusal has to land before anything reaches the disk.

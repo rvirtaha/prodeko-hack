@@ -45,7 +45,7 @@ a writable partial is often a change to the stylesheet beside it.
 
 A template you may write is still a template every page goes through: a partial
 renders in both languages and on pages nobody asked you to touch. Look at what
-you changed with ` + "`" + `screenshot` + "`" + ` before you submit it.
+you changed with ` + "`" + `screenshot` + "`" + ` before you submit it; the server insists on it.
 
 ## Two languages, one page
 
@@ -86,8 +86,7 @@ edit with ` + "`" + `edit_file` + "`" + `; do not read it whole every turn.
 
 Search, read, edit, then ` + "`" + `build` + "`" + `. The build is a few hundred milliseconds and
 it runs the site's own tree check as well, so a broken shortcode or an
-unclosed template action comes back in the same turn that made it. Build
-before you submit, always.
+unclosed template action comes back in the same turn that made it.
 
 Then look at it: ` + "`" + `screenshot` + "`" + ` gives you a picture of the built page, both
 languages in one call when the page has a pair, and ` + "`" + `render` + "`" + ` gives you the
@@ -97,6 +96,14 @@ markup when the markup is the question. Edit again until it is right.
 name, pushes the branch and opens a draft pull request with a preview link.
 The preview is ready about a minute later. Asking for another tweak afterwards
 continues the same change and updates the same pull request.
+
+Three things ` + "`" + `submit` + "`" + ` insists on, and refuses without:
+
+    a build since the last edit, so nothing broken is proposed;
+    for a change touching site/layouts/, a screenshot since the last edit,
+      because a template also renders on the pages you were not looking at;
+    for a change touching site/layouts/, a description of what looks
+      different, which is what a maintainer reads before the diff.
 
 ## What this cannot do
 

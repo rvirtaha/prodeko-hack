@@ -209,7 +209,7 @@ var schemaSubmit = json.RawMessage(`{
     },
     "description": {
       "type": "string",
-      "description": "Optional body: what changed and why. The editor's name and the touched files are added automatically.",
+      "description": "The body: what changed and why. Required for a change touching site/layouts/, where it has to say what looks different now. The editor's name and the touched files are added automatically.",
       "maxLength": 4000
     }
   },

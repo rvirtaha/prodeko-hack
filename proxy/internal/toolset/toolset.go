@@ -163,8 +163,9 @@ func (t *Toolset) Tools() []mcpserver.Tool {
 		},
 		{
 			Name: ToolSubmit,
-			Description: "Commit the change in the signed-in person's name, push it, and open a draft pull request. " +
-				"Returns the pull request number and the preview URL, which is ready about a minute later.",
+			Description: "Commit the change in the signed-in person's name, push it, and open a draft pull request with a " +
+				"preview link. A change under site/layouts/ is refused without a screenshot since its last edit and a " +
+				"description of what looks different.",
 			Schema: schemaSubmit,
 			Call:   text(t.submit),
 		},
@@ -483,6 +484,17 @@ func (t *Toolset) submit(ctx context.Context, id mcpserver.Identity, args json.R
 	c, err := t.open(id, title)
 	if err != nil {
 		return "", err
+	}
+	files, err := c.Touched()
+	if err != nil {
+		return "", fmt.Errorf("%s: the files in this change cannot be listed, so whether it is ready cannot be established: %w", ToolSubmit, err)
+	}
+	// An empty change is not gated: submit's own answer is that there is nothing
+	// to submit, which is the more useful sentence than "build first".
+	if len(files) > 0 {
+		if err := gate(c.Stamps(), files, description); err != nil {
+			return "", err
+		}
 	}
 	res, err := t.mgr.Submit(ctx, c, author, title, description)
 	if err != nil {
