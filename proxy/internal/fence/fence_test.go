@@ -30,6 +30,15 @@ func TestRulesCoverTheDesignedTree(t *testing.T) {
 		if r.Write != write {
 			t.Errorf("rule %q: write = %v, want %v", r.Prefix, r.Write, write)
 		}
+		// get_conventions prints this line and nothing else about the root, so a
+		// root with nothing to say about itself is a root the model never hears of.
+		if r.What == "" {
+			t.Errorf("rule %q says nothing about what lives there", r.Prefix)
+		}
+		// site/layouts is the one root where Write is not the whole answer.
+		if perFile := r.Prefix == LayoutsRoot; r.PerFile != perFile {
+			t.Errorf("rule %q: per file = %v, want %v", r.Prefix, r.PerFile, perFile)
+		}
 	}
 }
 

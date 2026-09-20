@@ -8,6 +8,7 @@ import (
 
 	"github.com/prodeko/prodeko-hack/proxy/internal/mcpserver"
 	"github.com/prodeko/prodeko-hack/proxy/internal/oauthas"
+	"github.com/prodeko/prodeko-hack/proxy/internal/upload"
 )
 
 func completeEnv() map[string]string {
@@ -167,7 +168,7 @@ func (f fakeRegistrar) Register(mux *http.ServeMux) {
 
 // Health is unauthenticated and says only that the process is listening.
 func TestHealthz(t *testing.T) {
-	h := routes(fakeRegistrar{path: oauthas.MetadataPath}, fakeRegistrar{path: mcpserver.Path})
+	h := routes(fakeRegistrar{path: oauthas.MetadataPath}, fakeRegistrar{path: mcpserver.Path}, fakeRegistrar{path: upload.Path})
 
 	rec := httptest.NewRecorder()
 	h.ServeHTTP(rec, httptest.NewRequest(http.MethodGet, "/healthz", nil))
@@ -182,10 +183,10 @@ func TestHealthz(t *testing.T) {
 	}
 }
 
-func TestRoutesMountBothServers(t *testing.T) {
-	h := routes(fakeRegistrar{path: oauthas.MetadataPath}, fakeRegistrar{path: mcpserver.Path})
+func TestRoutesMountAllThreeServers(t *testing.T) {
+	h := routes(fakeRegistrar{path: oauthas.MetadataPath}, fakeRegistrar{path: mcpserver.Path}, fakeRegistrar{path: upload.Path})
 
-	for _, path := range []string{oauthas.MetadataPath, mcpserver.Path} {
+	for _, path := range []string{oauthas.MetadataPath, mcpserver.Path, upload.Path} {
 		rec := httptest.NewRecorder()
 		h.ServeHTTP(rec, httptest.NewRequest(http.MethodGet, path, nil))
 		if rec.Code != http.StatusOK {

@@ -164,11 +164,24 @@ func (c *Change) write(rel string, content []byte) error {
 	if err != nil {
 		return err
 	}
+	// The path says whether a template may be written at all; this says whether
+	// this template and these bytes may be, which is the asset pipeline rule.
+	if err := c.fence.CheckTemplate(rel, content); err != nil {
+		return err
+	}
 	if err := c.roomForOneMore(rel, int64(len(content))); err != nil {
 		return err
 	}
 	if err := os.MkdirAll(filepath.Dir(abs), 0o755); err != nil {
 		return fmt.Errorf("workdir: making the directory for %s: %w", rel, err)
+	}
+	// The edit stamp is bumped before the bytes land, never after: submit reads
+	// it to insist on a build, and a stamp that cannot be written has to stop
+	// the write rather than leave an edit nothing knows about. A stamp slightly
+	// older than the write it records still orders correctly against the build
+	// that preceded it, which is the only comparison anybody makes of it.
+	if err := c.markEdit(c.mgr.cfg.Now()); err != nil {
+		return err
 	}
 	if err := os.WriteFile(abs, content, 0o644); err != nil {
 		return fmt.Errorf("workdir: writing %s: %w", rel, err)

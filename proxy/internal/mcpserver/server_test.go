@@ -528,7 +528,7 @@ func TestProtocolErrors(t *testing.T) {
 		},
 		{
 			name:       "unknown method",
-			body:       `{"jsonrpc":"2.0","id":1,"method":"resources/list"}`,
+			body:       `{"jsonrpc":"2.0","id":1,"method":"sampling/createMessage"}`,
 			wantStatus: http.StatusOK,
 			wantCode:   codeMethodNotFound,
 			wantIn:     "tools/call",

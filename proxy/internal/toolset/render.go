@@ -6,6 +6,7 @@ import (
 	"time"
 	"unicode/utf8"
 
+	"github.com/prodeko/prodeko-hack/proxy/internal/lint"
 	"github.com/prodeko/prodeko-hack/proxy/internal/preview"
 	"github.com/prodeko/prodeko-hack/proxy/internal/workdir"
 )
@@ -59,18 +60,49 @@ func renderMatches(matches []workdir.Match, pattern string, capped int) string {
 }
 
 func renderBuild(res workdir.Result) string {
+	var b strings.Builder
 	out := strings.TrimRight(res.Output, "\n")
 	if res.OK {
-		if out == "" {
-			return fmt.Sprintf("Build OK in %s.", res.Duration.Round(time.Millisecond))
+		fmt.Fprintf(&b, "Build OK in %s.", res.Duration.Round(time.Millisecond))
+		if out != "" {
+			fmt.Fprintf(&b, "\n\n%s", out)
 		}
-		return fmt.Sprintf("Build OK in %s.\n\n%s", res.Duration.Round(time.Millisecond), out)
+	} else {
+		if out == "" {
+			out = "(the build failed and said nothing)"
+		}
+		fmt.Fprintf(&b, "Build failed after %s. The output is verbatim:\n\n%s",
+			res.Duration.Round(time.Millisecond), out)
 	}
-	if out == "" {
-		out = "(the build failed and said nothing)"
+	// The findings come after hugo's words and never instead of them, and they
+	// do not change what the build said about itself: the site either built or
+	// it did not, and these are things to look at on the way past.
+	writeFindings(&b, "The stylesheets", res.CSS,
+		"A stylesheet a browser cannot parse is a stylesheet it drops rules out of, quietly.")
+	writeFindings(&b, "The built pages", res.HTML,
+		"Markup a browser has to guess at is markup that lands differently in different browsers.")
+	return b.String()
+}
+
+// writeFindings quotes what a check noticed, one line each, exactly as it was
+// found. The closing sentence is why the list is worth a turn; without it a
+// model reading "Build OK" has every reason to move on.
+func writeFindings(b *strings.Builder, what string, findings []lint.Finding, why string) {
+	if len(findings) == 0 {
+		return
 	}
-	return fmt.Sprintf("Build failed after %s. The output is verbatim:\n\n%s",
-		res.Duration.Round(time.Millisecond), out)
+	fmt.Fprintf(b, "\n\n%s, %d thing", what, len(findings))
+	if len(findings) > 1 {
+		b.WriteByte('s')
+	}
+	b.WriteString(":\n")
+	for _, f := range findings {
+		fmt.Fprintf(b, "  %s\n", f)
+	}
+	if len(findings) >= lint.MaxFindings {
+		fmt.Fprintf(b, "  ... stopped at %d; the same mistake in one template shows on every page that uses it.\n", lint.MaxFindings)
+	}
+	b.WriteString(why)
 }
 
 func renderSubmit(res workdir.SubmitResult) string {
@@ -208,6 +240,116 @@ func renderChanges(infos []workdir.Info) string {
 		}
 		if in.Dirty && len(in.Files) > 0 {
 			b.WriteString("  has edits that were never submitted\n")
+		}
+	}
+	return strings.TrimRight(b.String(), "\n")
+}
+
+// renderFeedback is the pull request as the maintainers left it. Bodies are
+// verbatim and indented, so where GitHub's words end and this server's begin
+// stays visible.
+func renderFeedback(slug string, fb workdir.Feedback) string {
+	var b strings.Builder
+	fmt.Fprintf(&b, "%s is pull request #%d (%s), %s.\n", slug, fb.PRNumber, fb.PRURL, fb.State)
+	if fb.CIState != "" {
+		fmt.Fprintf(&b, "Checks: %s.\n", fb.CIState)
+	}
+	if fb.PreviewURL != "" && fb.State == "open" {
+		fmt.Fprintf(&b, "Preview: %s\n", fb.PreviewURL)
+	}
+	if len(fb.Reviews) == 0 && len(fb.Comments) == 0 {
+		b.WriteString("Nobody has reviewed or commented yet.")
+		return b.String()
+	}
+	for _, r := range fb.Reviews {
+		fmt.Fprintf(&b, "\nReview by %s: %s", r.Author, r.State)
+		if !r.At.IsZero() {
+			fmt.Fprintf(&b, " (%s)", r.At.Format(time.RFC3339))
+		}
+		b.WriteByte('\n')
+		writeQuoted(&b, r.Body)
+	}
+	for _, c := range fb.Comments {
+		if c.Path != "" {
+			fmt.Fprintf(&b, "\nComment by %s on %s:%d\n", c.Author, c.Path, c.Line)
+		} else {
+			fmt.Fprintf(&b, "\nComment by %s\n", c.Author)
+		}
+		writeQuoted(&b, c.Body)
+	}
+	return strings.TrimRight(b.String(), "\n")
+}
+
+// writeQuoted indents a body two spaces, line by line.
+func writeQuoted(b *strings.Builder, body string) {
+	for _, line := range strings.Split(strings.TrimRight(body, "\n"), "\n") {
+		b.WriteString("  " + line + "\n")
+	}
+}
+
+// renderAbandon says what is gone, and what refused to go.
+func renderAbandon(res workdir.AbandonResult) string {
+	var b strings.Builder
+	fmt.Fprintf(&b, "Abandoned %s: the branch %s and its edits are gone.", res.Slug, res.Branch)
+	if res.PRNumber > 0 {
+		fmt.Fprintf(&b, " Pull request #%d is closed.", res.PRNumber)
+	}
+	if res.Note != "" {
+		b.WriteString(" Left to a maintainer: " + res.Note + ".")
+	}
+	return b.String()
+}
+
+// maxTranslationRows bounds each list translation_status prints. The counts
+// above the lists carry the size of the problem; the rows carry where to
+// start.
+const maxTranslationRows = 30
+
+// renderTranslationStatus is the fi/en report: what has no pair, what
+// drifted, what cannot pair at all.
+func renderTranslationStatus(s workdir.TranslationStatus, filter string) string {
+	scope := "the content tree"
+	if filter != "" {
+		scope = filter
+	}
+	if s.Total == 0 {
+		return "No pages under " + scope + "."
+	}
+	var b strings.Builder
+	fmt.Fprintf(&b, "%d pages under %s: %d missing their other language, %d pairs drifted apart, %d with no translationKey.\n",
+		s.Total, scope, len(s.Missing), len(s.Stale), len(s.Unkeyed))
+
+	if len(s.Missing) > 0 {
+		b.WriteString("\nOnly one language:\n")
+		for i, p := range s.Missing {
+			if i == maxTranslationRows {
+				fmt.Fprintf(&b, "  ... and %d more\n", len(s.Missing)-i)
+				break
+			}
+			fmt.Fprintf(&b, "  %s (%s only)\n", p.Path, p.Lang)
+		}
+	}
+	if len(s.Stale) > 0 {
+		b.WriteString("\nDrifted apart, widest gap first:\n")
+		for i, pair := range s.Stale {
+			if i == maxTranslationRows {
+				fmt.Fprintf(&b, "  ... and %d more\n", len(s.Stale)-i)
+				break
+			}
+			fmt.Fprintf(&b, "  %s: %s (%s) was edited %s; %s (%s) not since %s\n",
+				pair.Key,
+				pair.Newer.Path, pair.Newer.Lang, pair.Newer.At.Format("2006-01-02"),
+				pair.Older.Path, pair.Older.Lang, pair.Older.At.Format("2006-01-02"))
+		}
+	}
+	if len(s.Unkeyed) > 0 {
+		b.WriteString("\nNo translationKey, so no pairing:\n")
+		for i, p := range s.Unkeyed {
+			if i == maxTranslationRows {
+				fmt.Fprintf(&b, "  ... and %d more\n", len(s.Unkeyed)-i)
+				break
+			}
+			b.WriteString("  " + p + "\n")
 		}
 	}
 	return strings.TrimRight(b.String(), "\n")

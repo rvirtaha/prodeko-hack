@@ -31,12 +31,13 @@ const (
 
 // PullRequest is the part of GitHub's pull request object this server uses.
 type PullRequest struct {
-	Number  int    `json:"number"`
-	HTMLURL string `json:"html_url"`
-	State   string `json:"state"`
-	Draft   bool   `json:"draft"`
-	Title   string `json:"title"`
-	Head    struct {
+	Number   int    `json:"number"`
+	HTMLURL  string `json:"html_url"`
+	State    string `json:"state"`
+	Draft    bool   `json:"draft"`
+	Title    string `json:"title"`
+	MergedAt string `json:"merged_at"` // "" until merged; GitHub closes a merged PR
+	Head     struct {
 		Ref string `json:"ref"`
 		SHA string `json:"sha"`
 	} `json:"head"`

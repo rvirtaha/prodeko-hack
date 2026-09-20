@@ -1,4 +1,4 @@
-// Package toolset is the eleven tools the MCP server exposes, built on the
+// Package toolset is the fifteen tools the MCP server exposes, built on the
 // fence, the worktree manager and the preview.
 //
 // File-level tools, not semantic ones: CSS is file-level, and update_page(slug,
@@ -26,6 +26,7 @@ import (
 	"github.com/prodeko/prodeko-hack/proxy/internal/fence"
 	"github.com/prodeko/prodeko-hack/proxy/internal/mcpserver"
 	"github.com/prodeko/prodeko-hack/proxy/internal/preview"
+	"github.com/prodeko/prodeko-hack/proxy/internal/upload"
 	"github.com/prodeko/prodeko-hack/proxy/internal/workdir"
 )
 
@@ -44,6 +45,12 @@ type Config struct {
 	// their machine happens to have.
 	ChromiumBin string
 
+	// Uploads and PublicURL make begin_image_upload work: the tokens it
+	// mints, and the address of the upload page they open. With either
+	// absent the tool refuses and says the endpoint is not configured.
+	Uploads   *upload.Tokens
+	PublicURL string
+
 	Logger *slog.Logger     // nil means slog.Default
 	Now    func() time.Time // nil means time.Now
 }
@@ -60,6 +67,8 @@ type Toolset struct {
 	mgr         *workdir.Manager
 	conventions string
 	shooter     preview.Shooter
+	uploads     *upload.Tokens
+	publicURL   string
 	log         *slog.Logger
 	now         func() time.Time
 
@@ -84,6 +93,8 @@ func New(cfg Config) (*Toolset, error) {
 		mgr:         cfg.Workdir,
 		conventions: cfg.Conventions,
 		shooter:     preview.Shooter{Bin: cfg.ChromiumBin, Log: cfg.Logger},
+		uploads:     cfg.Uploads,
+		publicURL:   strings.TrimRight(cfg.PublicURL, "/"),
 		log:         cfg.Logger,
 		now:         cfg.Now,
 		current:     make(map[string]*workdir.Change),
@@ -95,7 +106,7 @@ func New(cfg Config) (*Toolset, error) {
 // that drop them.
 func (t *Toolset) Instructions() string { return t.conventions }
 
-// Tools is the eleven, in the order a session uses them.
+// Tools is the fifteen, in the order a session uses them.
 func (t *Toolset) Tools() []mcpserver.Tool {
 	return []mcpserver.Tool{
 		{
@@ -142,8 +153,8 @@ func (t *Toolset) Tools() []mcpserver.Tool {
 		},
 		{
 			Name: ToolBuild,
-			Description: "Build the site and run its tree check. Returns the errors verbatim when it fails. Run it after " +
-				"editing and always before submitting.",
+			Description: "Build the site, run its tree check, and check the built markup and the stylesheets. Returns " +
+				"everything it found verbatim. submit refuses a change that has not been built since its last edit.",
 			Schema: schemaBuild,
 			Call:   text(t.build),
 		},
@@ -163,8 +174,9 @@ func (t *Toolset) Tools() []mcpserver.Tool {
 		},
 		{
 			Name: ToolSubmit,
-			Description: "Commit the change in the signed-in person's name, push it, and open a draft pull request. " +
-				"Returns the pull request number and the preview URL, which is ready about a minute later.",
+			Description: "Commit the change in the signed-in person's name, push it, and open a draft pull request with a " +
+				"preview link. A change under site/layouts/ is refused without a screenshot since its last edit and a " +
+				"description of what looks different.",
 			Schema: schemaSubmit,
 			Call:   text(t.submit),
 		},
@@ -174,6 +186,35 @@ func (t *Toolset) Tools() []mcpserver.Tool {
 				"preview link.",
 			Schema: schemaListMyChanges,
 			Call:   text(t.listMyChanges),
+		},
+		{
+			Name: ToolBeginImageUpload,
+			Description: "Start an image upload: returns a link the person opens to drop a JPEG or PNG into this " +
+				"change. The bytes never travel through the chat, so this link is the only way to add a photo.",
+			Schema: schemaBeginImageUpload,
+			Meta:   uploadToolMeta,
+			Call:   text(t.beginImageUpload),
+		},
+		{
+			Name: ToolGetFeedback,
+			Description: "Read what has been said on a change's pull request: its state, the review verdicts and every " +
+				"comment, verbatim. This is how a request to \"fix what review asked for\" starts.",
+			Schema: schemaGetFeedback,
+			Call:   text(t.getFeedback),
+		},
+		{
+			Name: ToolTranslationStatus,
+			Description: "Which pages are missing their Finnish or English side, and which pairs drifted apart: one side " +
+				"edited after the other. Age is the last commit, so an edit in this change counts once it is submitted.",
+			Schema: schemaTranslationStatus,
+			Call:   text(t.translationStatus),
+		},
+		{
+			Name: ToolAbandonChange,
+			Description: "Throw a change away: close its pull request, delete its branch, discard its edits. There is no " +
+				"undo, so confirm with the person before calling this.",
+			Schema: schemaAbandonChange,
+			Call:   text(t.abandonChange),
 		},
 	}
 }
@@ -484,6 +525,17 @@ func (t *Toolset) submit(ctx context.Context, id mcpserver.Identity, args json.R
 	if err != nil {
 		return "", err
 	}
+	files, err := c.Touched()
+	if err != nil {
+		return "", fmt.Errorf("%s: the files in this change cannot be listed, so whether it is ready cannot be established: %w", ToolSubmit, err)
+	}
+	// An empty change is not gated: submit's own answer is that there is nothing
+	// to submit, which is the more useful sentence than "build first".
+	if len(files) > 0 {
+		if err := gate(c.Stamps(), files, description); err != nil {
+			return "", err
+		}
+	}
 	res, err := t.mgr.Submit(ctx, c, author, title, description)
 	if err != nil {
 		return "", err
@@ -503,6 +555,93 @@ func (t *Toolset) listMyChanges(ctx context.Context, id mcpserver.Identity, args
 	return renderChanges(infos), nil
 }
 
+func (t *Toolset) getFeedback(ctx context.Context, id mcpserver.Identity, args json.RawMessage) (string, error) {
+	a, err := decode[getFeedbackArgs](args)
+	if err != nil {
+		return "", fmt.Errorf("%s: %w", ToolGetFeedback, err)
+	}
+	c, err := t.change(id, a.Slug)
+	if err != nil {
+		return "", err
+	}
+	fb, err := t.mgr.Feedback(ctx, c)
+	if errors.Is(err, workdir.ErrNeverSubmitted) {
+		// An answer, not a failure: asking what review said before submitting
+		// is a natural question with a one-sentence reply.
+		return fmt.Sprintf("%s has no pull request yet, so there is nothing to read. %s opens one.", c.Slug, ToolSubmit), nil
+	}
+	if err != nil {
+		return "", err
+	}
+	return renderFeedback(c.Slug, fb), nil
+}
+
+func (t *Toolset) translationStatus(ctx context.Context, id mcpserver.Identity, args json.RawMessage) (string, error) {
+	a, err := decode[translationStatusArgs](args)
+	if err != nil {
+		return "", fmt.Errorf("%s: %w", ToolTranslationStatus, err)
+	}
+	filter := strings.TrimSpace(a.Path)
+	if filter != "" {
+		clean, err := fence.Clean(filter)
+		if err != nil {
+			return "", err
+		}
+		filter = clean
+	}
+	c, err := t.open(id, "")
+	if err != nil {
+		return "", err
+	}
+	status, err := t.mgr.TranslationStatus(ctx, c, filter)
+	if err != nil {
+		return "", err
+	}
+	return renderTranslationStatus(status, filter), nil
+}
+
+func (t *Toolset) abandonChange(ctx context.Context, id mcpserver.Identity, args json.RawMessage) (string, error) {
+	a, err := decode[abandonChangeArgs](args)
+	if err != nil {
+		return "", fmt.Errorf("%s: %w", ToolAbandonChange, err)
+	}
+	if strings.TrimSpace(a.Slug) == "" {
+		return "", fmt.Errorf("%s: the slug names what is destroyed, so it is required; %s lists them", ToolAbandonChange, ToolListMyChanges)
+	}
+	user, err := userOf(id)
+	if err != nil {
+		return "", err
+	}
+	c, err := t.mgr.Existing(user, a.Slug)
+	if err != nil {
+		return "", err
+	}
+	res, err := t.mgr.Abandon(ctx, c)
+	if err != nil {
+		return "", err
+	}
+	// The next edit starts fresh rather than landing in a deleted worktree.
+	t.mu.Lock()
+	if t.current[user] == c {
+		delete(t.current, user)
+	}
+	t.mu.Unlock()
+	return renderAbandon(res), nil
+}
+
+// change is the caller's current change, or the named one when a tool that
+// takes a slug was given one.
+func (t *Toolset) change(id mcpserver.Identity, slug string) (*workdir.Change, error) {
+	if strings.TrimSpace(slug) == "" {
+		return t.open(id, "")
+	}
+	user, err := userOf(id)
+	if err != nil {
+		return nil, err
+	}
+	return t.mgr.Existing(user, slug)
+}
+
 // open returns the caller's current change, creating one named after hint when
 // there is none. Reads need a tree as much as writes do, so this is on the
 // path of every tool except get_conventions and list_my_changes.
@@ -511,6 +650,12 @@ func (t *Toolset) open(id mcpserver.Identity, hint string) (*workdir.Change, err
 	if err != nil {
 		return nil, err
 	}
+	return t.openUser(user, hint)
+}
+
+// openUser is open for a caller that already holds the namespaced username:
+// the upload handler, whose token carries it instead of a bearer identity.
+func (t *Toolset) openUser(user, hint string) (*workdir.Change, error) {
 	t.mu.Lock()
 	defer t.mu.Unlock()
 	if c, ok := t.current[user]; ok {
@@ -602,30 +747,22 @@ func authorOf(id mcpserver.Identity) (workdir.Author, error) {
 // checkPath is the lexical half of the fence, applied before a worktree is
 // opened: a path no rule covers is refused without costing a clone, and the
 // refusal names where work is possible instead. The authoritative check is the
-// change's own fence, which also follows symlinks; this never replaces it.
+// change's own fence, which also follows symlinks and reads what a template
+// already contains; this never replaces it.
 func checkPath(rel string, write bool) (string, error) {
 	clean, err := fence.Clean(rel)
 	if err != nil {
 		return "", err
 	}
-	rule, ok := fence.Match(clean)
-	if !ok {
-		return "", fmt.Errorf("%w: %s is under no rule; the editable roots are %s", fence.ErrOutside, clean, editableRoots())
+	if _, ok := fence.Match(clean); !ok {
+		return "", fmt.Errorf("%w: %s is under no rule; the editable roots are %s", fence.ErrOutside, clean, fence.Roots())
 	}
-	if write && !rule.Write {
-		return "", fmt.Errorf("%w: %s matches %s", fence.ErrReadOnly, clean, rule)
+	if write {
+		if err := fence.Writable(clean); err != nil {
+			return "", err
+		}
 	}
 	return clean, nil
-}
-
-// editableRoots is the allowlist as the model should hear it named.
-func editableRoots() string {
-	rules := fence.Rules()
-	names := make([]string, len(rules))
-	for i, r := range rules {
-		names[i] = r.String()
-	}
-	return strings.Join(names, ", ")
 }
 
 // hintFor names a change after the file the first edit touched, which is as

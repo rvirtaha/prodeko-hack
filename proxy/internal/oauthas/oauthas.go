@@ -67,11 +67,18 @@ const (
 )
 
 var (
-	ErrUnknownClient   = errors.New("oauthas: unknown client")
-	ErrBadRedirectURI  = errors.New("oauthas: redirect_uri does not match the registration")
-	ErrUnknownCode     = errors.New("oauthas: unknown or expired authorization code")
-	ErrBadVerifier     = errors.New("oauthas: the PKCE verifier does not match the challenge")
-	ErrMissingRoles    = errors.New("oauthas: the account is missing a required realm role")
+	ErrUnknownClient  = errors.New("oauthas: unknown client")
+	ErrBadRedirectURI = errors.New("oauthas: redirect_uri does not match the registration")
+	ErrUnknownCode    = errors.New("oauthas: unknown or expired authorization code")
+	ErrBadVerifier    = errors.New("oauthas: the PKCE verifier does not match the challenge")
+	ErrMissingRoles   = errors.New("oauthas: the account is missing a required realm role")
+)
+
+// DefaultAccessContact is who a refused sign-in is pointed at when
+// MCP_ACCESS_CONTACT is unset.
+const DefaultAccessContact = "the guild's IT team"
+
+var (
 	ErrNotImplemented  = errors.New("oauthas: not implemented")
 	ErrUnsupportedFlow = errors.New("oauthas: only the authorization_code grant is supported")
 )
@@ -115,6 +122,10 @@ type Config struct {
 	Keycloak Keycloak
 	Sessions Issuer
 	Tokens   Verifier
+
+	// AccessContact is who a refused sign-in is told to ask: the person or
+	// team that grants the media role. Empty means DefaultAccessContact.
+	AccessContact string
 
 	// RequiredRoles is MCP_REQUIRED_ROLES: the realm roles an account must
 	// hold, all of them. The conjunction is the point - hand-granted media
@@ -179,6 +190,9 @@ func New(cfg Config) (*Server, error) {
 	}
 	cfg.RequiredRoles = roles
 
+	if strings.TrimSpace(cfg.AccessContact) == "" {
+		cfg.AccessContact = DefaultAccessContact
+	}
 	if cfg.TokenTTL == 0 {
 		cfg.TokenTTL = DefaultTokenTTL
 	}
@@ -393,8 +407,8 @@ func (s *Server) Callback(w http.ResponseWriter, r *http.Request) {
 			"required", s.cfg.RequiredRoles, "missing", missing)
 		s.redirectError(w, r, p.RedirectURI, p.ClientState, "access_denied",
 			fmt.Sprintf("editing the website requires the realm roles %s, and this account does not hold all of them. "+
-				"A lapsed guild membership is the usual cause; otherwise ask the guild's IT team for the rest.",
-				strings.Join(s.cfg.RequiredRoles, ", ")))
+				"A lapsed guild membership is the usual cause; otherwise ask %s for the rest.",
+				strings.Join(s.cfg.RequiredRoles, ", "), s.cfg.AccessContact))
 		return
 	}
 

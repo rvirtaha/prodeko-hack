@@ -108,7 +108,7 @@ func TestAnUnparsableScreenshotStampReadsAsNever(t *testing.T) {
 	f := newFixture(t)
 	c := openChange(t, f.manager(t))
 
-	mustWrite(t, c.screenshotStamp(), "viime viikolla\n")
+	mustWrite(t, filepath.Join(c.previewRoot(), screenshotStamp), "viime viikolla\n")
 	if at := c.ScreenshotAt(); !at.IsZero() {
 		t.Fatalf("an unparsable stamp reads as %s, want the zero time", at)
 	}

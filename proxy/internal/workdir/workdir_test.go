@@ -692,6 +692,137 @@ echo "check-trees: both trees present"
 	}
 }
 
+// Hugo answers one question and the checks answer two more: a page whose markup
+// does not close and a stylesheet that does not parse both build perfectly well.
+// A finding is reported without changing what hugo said about the build.
+func TestBuildReportsTheCheckFindings(t *testing.T) {
+	if _, err := exec.LookPath("hugo"); err != nil {
+		t.Skip("hugo is not on PATH")
+	}
+	m := newFixture(t).manager(t)
+	c := openChange(t, m)
+
+	// A page layout is writable, and this is the mistake it is writable for.
+	if err := c.WriteFile("site/layouts/page.html",
+		[]byte("<html><body><div class=\"card\">{{ .Content }}</body></html>\n")); err != nil {
+		t.Fatalf("WriteFile: %v", err)
+	}
+	if err := c.WriteFile("site/assets/css/main.css", []byte(".a { color: red }\n}\n")); err != nil {
+		t.Fatalf("WriteFile: %v", err)
+	}
+
+	res, err := m.Build(t.Context(), c)
+	if err != nil {
+		t.Fatalf("Build: %v (output %q)", err, res.Output)
+	}
+	if !res.OK {
+		t.Fatalf("hugo refused a site it has no quarrel with: %s", res.Output)
+	}
+	if len(res.CSS) != 1 {
+		t.Fatalf("the stylesheet check found %d things, want 1: %v", len(res.CSS), res.CSS)
+	}
+	if res.CSS[0].Where != "site/assets/css/main.css" || res.CSS[0].Line != 2 {
+		t.Errorf("the finding is at %s:%d, want site/assets/css/main.css:2", res.CSS[0].Where, res.CSS[0].Line)
+	}
+	if len(res.HTML) == 0 {
+		t.Fatal("the page check found nothing on a page with an unclosed div")
+	}
+	if !strings.Contains(res.HTML[0].Text, "<div>") {
+		t.Errorf("the finding does not name the element: %s", res.HTML[0])
+	}
+	// The finding names a built page, which is the thing that can be looked at.
+	if !strings.HasSuffix(res.HTML[0].Where, ".html") {
+		t.Errorf("the finding names %q, want a built page", res.HTML[0].Where)
+	}
+}
+
+// The stamps submit reads: a write records an edit, a build that passed records
+// itself, and a build that failed records nothing. Their order is the whole
+// content of the gate, so the order is what is asserted.
+func TestWritesAndBuildsStampTheChange(t *testing.T) {
+	if _, err := exec.LookPath("hugo"); err != nil {
+		t.Skip("hugo is not on PATH")
+	}
+	f := newFixture(t)
+	m := f.manager(t)
+	c := openChange(t, m)
+
+	if st := c.Stamps(); !st.EditedAt.IsZero() || !st.BuiltAt.IsZero() {
+		t.Fatalf("a change nobody has touched reports %+v", st)
+	}
+	if err := c.WriteFile("site/content/fi/uusi.md", []byte("---\ntitle: Uusi\n---\n\nHei.\n")); err != nil {
+		t.Fatalf("WriteFile: %v", err)
+	}
+	edited := c.Stamps()
+	if edited.EditedAt.IsZero() {
+		t.Fatal("a write recorded no edit, so submit would let it through unbuilt")
+	}
+	if !edited.BuiltAt.IsZero() {
+		t.Fatalf("a write recorded a build at %s", edited.BuiltAt)
+	}
+
+	if res, err := m.Build(t.Context(), c); err != nil || !res.OK {
+		t.Fatalf("Build = %+v, %v", res, err)
+	}
+	built := c.Stamps()
+	if !built.BuiltAt.After(built.EditedAt) {
+		t.Fatalf("the build at %s does not come after the edit at %s", built.BuiltAt, built.EditedAt)
+	}
+
+	// A second edit puts the change back behind its build, which is what makes
+	// submit ask for another one.
+	if err := c.WriteFile("site/content/fi/uusi.md", []byte("---\ntitle: Uusi\n---\n\nHei taas.\n")); err != nil {
+		t.Fatalf("the second WriteFile: %v", err)
+	}
+	if again := c.Stamps(); !again.EditedAt.After(again.BuiltAt) {
+		t.Fatalf("the second edit at %s does not come after the build at %s", again.EditedAt, again.BuiltAt)
+	}
+
+	// A build that failed is not a build: the stamp it would have written is the
+	// one thing standing between a broken change and a pull request.
+	if err := c.WriteFile("site/content/fi/rikki.md",
+		[]byte("---\ntitle: Rikki\n---\n\n{{< nosuchshortcode >}}\n")); err != nil {
+		t.Fatalf("WriteFile: %v", err)
+	}
+	before := c.Stamps().BuiltAt
+	res, err := m.Build(t.Context(), c)
+	if err != nil {
+		t.Fatalf("Build: %v", err)
+	}
+	if res.OK {
+		t.Fatal("the fixture built with an undefined shortcode")
+	}
+	if got := c.Stamps().BuiltAt; !got.Equal(before) {
+		t.Fatalf("a failed build moved the stamp from %s to %s", before, got)
+	}
+}
+
+// The layout fence applies to the write itself and not only to the path: a
+// template that builds an asset is read-only whatever it is called, and the
+// refusal has to land before anything reaches the disk.
+func TestWritesApplyTheLayoutFence(t *testing.T) {
+	c := openChange(t, newFixture(t).manager(t))
+
+	const partial = "site/layouts/partials/nosto.html"
+	if err := c.WriteFile(partial, []byte("<div class=\"nosto\">Hei</div>\n")); err != nil {
+		t.Fatalf("writing a partial: %v", err)
+	}
+	if err := c.WriteFile(partial, []byte("{{ partialCached \"nosto.html\" . }}\n")); !errors.Is(err, fence.ErrReadOnly) {
+		t.Fatalf("writing partialCached into a partial = %v, want %v", err, fence.ErrReadOnly)
+	}
+	// The refused write must not have landed, or the fence would be a warning.
+	data, err := os.ReadFile(filepath.Join(c.Dir, filepath.FromSlash(partial)))
+	if err != nil {
+		t.Fatalf("reading the partial back: %v", err)
+	}
+	if strings.Contains(string(data), "partialCached") {
+		t.Fatalf("the refused write landed anyway: %q", data)
+	}
+	if err := c.WriteFile("site/layouts/baseof.html", []byte("<html></html>\n")); !errors.Is(err, fence.ErrReadOnly) {
+		t.Fatalf("writing the page skeleton = %v, want %v", err, fence.ErrReadOnly)
+	}
+}
+
 // ------------------------------------------------------------------ submit --
 
 func TestSubmitDryRunCommitsAuthoredByTheEditorAndPushesToOrigin(t *testing.T) {

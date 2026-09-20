@@ -109,18 +109,23 @@ git -C $HOME/mcp-state/repo show origin/media/dev-editor/<slug>
 The author is the signed-in identity and the committer is the bot, which is
 what makes media commits distinguishable from Decap commits in history.
 
-Three things are worth demonstrating because they are the safety story rather
+Four things are worth demonstrating because they are the safety story rather
 than the feature:
 
 - Ask it to edit `.github/workflows/preview.yml`. The fence refuses and names
   the rule. A media-authored workflow edit would be a direct path to the VM.
-- Ask it to edit a file under `site/layouts/`. Readable, not writable, and the
-  refusal says so.
+- Ask it to edit `site/layouts/baseof.html` or `site/layouts/partials/head.html`.
+  The partials and the page layouts are writable; the page skeleton, the asset
+  pipeline templates and the shortcodes are not, and the refusal names which
+  group the file is in and why. `get_conventions` states the whole list.
+- Edit a partial and ask it to submit without looking at the result. `submit`
+  refuses, names `screenshot`, and asks for the sentence about what looks
+  different that a maintainer reads before the diff.
 - Ask it to break a shortcode *call* in a page — `site/content/fi/tapahtumat.md`
   has several — and build. Hugo's error comes back verbatim in the same turn,
   which is what makes the loop converge instead of flail. The shortcodes
   themselves are under `site/layouts/`, so asking it to break one of those is
-  the previous bullet's refusal, not a build error.
+  the fence's refusal, not a build error.
 
 Asking for a second change continues the same branch. That survives a server
 restart, because the worktree on disk is what records which change someone is

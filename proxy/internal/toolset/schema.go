@@ -10,17 +10,21 @@ import "encoding/json"
 //
 // Tool names are stable. Renaming one breaks every saved connector.
 const (
-	ToolGetConventions = "get_conventions"
-	ToolListFiles      = "list_files"
-	ToolReadFile       = "read_file"
-	ToolSearch         = "search"
-	ToolWriteFile      = "write_file"
-	ToolEditFile       = "edit_file"
-	ToolBuild          = "build"
-	ToolRender         = "render"
-	ToolScreenshot     = "screenshot"
-	ToolSubmit         = "submit"
-	ToolListMyChanges  = "list_my_changes"
+	ToolGetConventions    = "get_conventions"
+	ToolListFiles         = "list_files"
+	ToolReadFile          = "read_file"
+	ToolSearch            = "search"
+	ToolWriteFile         = "write_file"
+	ToolEditFile          = "edit_file"
+	ToolBuild             = "build"
+	ToolRender            = "render"
+	ToolScreenshot        = "screenshot"
+	ToolSubmit            = "submit"
+	ToolListMyChanges     = "list_my_changes"
+	ToolGetFeedback       = "get_feedback"
+	ToolAbandonChange     = "abandon_change"
+	ToolTranslationStatus = "translation_status"
+	ToolBeginImageUpload  = "begin_image_upload"
 )
 
 // Defaults and caps that the schema states and the implementation enforces.
@@ -119,7 +123,7 @@ var schemaWriteFile = json.RawMessage(`{
     },
     "content": {
       "type": "string",
-      "description": "The whole new contents of the file. Text only, at most 2 MB; images are uploaded through Decap, not through this tool."
+      "description": "The whole new contents of the file. Text only, at most 2 MB; images arrive through begin_image_upload, not through this tool."
     }
   },
   "required": ["path", "content"],
@@ -209,7 +213,7 @@ var schemaSubmit = json.RawMessage(`{
     },
     "description": {
       "type": "string",
-      "description": "Optional body: what changed and why. The editor's name and the touched files are added automatically.",
+      "description": "The body: what changed and why. Required for a change touching site/layouts/, where it has to say what looks different now. The editor's name and the touched files are added automatically.",
       "maxLength": 4000
     }
   },
@@ -221,6 +225,60 @@ var schemaListMyChanges = json.RawMessage(`{
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "type": "object",
   "properties": {},
+  "additionalProperties": false
+}`)
+
+var schemaGetFeedback = json.RawMessage(`{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "slug": {
+      "type": "string",
+      "description": "Which change, as list_my_changes names them. Omit it for the change you are working on.",
+      "maxLength": 64
+    }
+  },
+  "additionalProperties": false
+}`)
+
+var schemaAbandonChange = json.RawMessage(`{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "slug": {
+      "type": "string",
+      "description": "Which change to abandon, as list_my_changes names them. Required: this closes its pull request, deletes its branch and discards its edits, so it has to be named, never guessed.",
+      "minLength": 1,
+      "maxLength": 64
+    }
+  },
+  "required": ["slug"],
+  "additionalProperties": false
+}`)
+
+var schemaTranslationStatus = json.RawMessage(`{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "path": {
+      "type": "string",
+      "description": "Optional repository-relative prefix, e.g. \"site/content/fi/kilta\". Omit it for the whole content tree.",
+      "maxLength": 512
+    }
+  },
+  "additionalProperties": false
+}`)
+
+var schemaBeginImageUpload = json.RawMessage(`{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "purpose": {
+      "type": "string",
+      "description": "What the image is for, e.g. \"vujut 2026 kuvat\". It names the change the upload lands in.",
+      "maxLength": 120
+    }
+  },
   "additionalProperties": false
 }`)
 
@@ -270,4 +328,20 @@ type screenshotArgs struct {
 type submitArgs struct {
 	Title       string `json:"title"`
 	Description string `json:"description"`
+}
+
+type getFeedbackArgs struct {
+	Slug string `json:"slug"`
+}
+
+type abandonChangeArgs struct {
+	Slug string `json:"slug"`
+}
+
+type translationStatusArgs struct {
+	Path string `json:"path"`
+}
+
+type beginImageUploadArgs struct {
+	Purpose string `json:"purpose"`
 }

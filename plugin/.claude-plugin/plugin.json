@@ -1,0 +1,14 @@
+{
+  "name": "prodeko-editor",
+  "description": "Edit prodeko.org from Claude: content, data, CSS, layouts and images, every change a draft pull request",
+  "version": "0.2.0",
+  "author": {
+    "name": "Prodeko"
+  },
+  "homepage": "https://github.com/rvirtaha/prodeko-hack",
+  "keywords": [
+    "prodeko",
+    "cms",
+    "hugo"
+  ]
+}

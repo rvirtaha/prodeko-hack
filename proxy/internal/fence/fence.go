@@ -50,22 +50,38 @@ const maxPathLen = 512
 type Rule struct {
 	Prefix string
 	Write  bool
+
+	// What is the one line get_conventions gives the root: what lives there, in
+	// the words the model reads. It is here rather than in the tool layer
+	// because the server states the editable tree in exactly one place.
+	What string
+
+	// PerFile marks the root where Write is not the whole answer, which is
+	// site/layouts/: inside it the layout groups decide, file by file. A caller
+	// asking about a path rather than about a root wants [Writable].
+	PerFile bool
 }
 
 // String names the rule the way an error message wants to say it.
 func (r Rule) String() string {
-	if r.Write {
+	switch {
+	case r.PerFile:
+		return r.Prefix + "** (read; " + WritableLayouts() + " writable)"
+	case r.Write:
 		return r.Prefix + "** (read and write)"
+	default:
+		return r.Prefix + "** (read only)"
 	}
-	return r.Prefix + "** (read only)"
 }
 
 // rules is the whole allowlist, in the order a path is matched against it.
 //
-// site/layouts is readable and not writable on purpose: reading a template is
-// how "the events header" resolves to a CSS selector, while writing one would
-// make this a second developer interface and break the promise that editors
-// and developers cannot break each other's half of the site.
+// site/layouts is readable whole and writable in part: the partials and the
+// page layouts are an appearance, which is what the media team is here to
+// change and what a screenshot shows them, while the skeleton, the asset
+// pipeline, the render hooks and the shortcodes are how the site is wired. The
+// layout groups in layouts.go are the whole of that distinction; the rule here
+// only says that the answer is per file.
 //
 // Everything absent is denied, and four of those absences carry the security
 // of the feature: .github (the preview workflow runs with a deploy key in
@@ -73,12 +89,12 @@ func (r Rule) String() string {
 // split), site/static/admin (what Decap editors may write), and
 // site/check-trees.sh (the audit the build runs).
 var rules = []Rule{
-	{Prefix: "site/content/", Write: true},
-	{Prefix: "site/content-members/", Write: true},
-	{Prefix: "site/data/", Write: true},
-	{Prefix: "site/assets/css/", Write: true},
-	{Prefix: "site/assets/images/", Write: true},
-	{Prefix: "site/layouts/", Write: false},
+	{Prefix: "site/content/", Write: true, What: "public pages, Finnish and English"},
+	{Prefix: "site/content-members/", Write: true, What: "member-only pages, same shape"},
+	{Prefix: "site/data/", Write: true, What: "YAML: navigation, boards, partners, footer"},
+	{Prefix: "site/assets/css/", Write: true, What: "the stylesheet and the design tokens"},
+	{Prefix: "site/assets/images/", Write: true, What: "images already in the repository"},
+	{Prefix: "site/layouts/", PerFile: true, What: "the Hugo templates, some of them writable"},
 }
 
 // Rules returns the allowlist. The slice is a copy; the fence is fixed at
@@ -153,8 +169,8 @@ func (f *Fence) CheckChange(paths []string, totalBytes int64) error {
 		if err != nil {
 			return err
 		}
-		if !rule.Write {
-			return fmt.Errorf("%w: %s matches %s", ErrReadOnly, clean, rule)
+		if err := writable(clean, rule); err != nil {
+			return err
 		}
 	}
 	return nil
@@ -177,8 +193,8 @@ func (f *Fence) CheckStage(rel string) (int64, error) {
 	if err != nil {
 		return 0, err
 	}
-	if !rule.Write {
-		return 0, fmt.Errorf("%w: %s matches %s", ErrReadOnly, clean, rule)
+	if err := writable(clean, rule); err != nil {
+		return 0, err
 	}
 	// locate resolves every symlink on the path and refuses one that leaves the
 	// worktree; Lstat then refuses one that stays inside it.
@@ -240,8 +256,8 @@ func (f *Fence) ResolveWrite(rel string, size int64) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	if !rule.Write {
-		return "", fmt.Errorf("%w: %s matches %s", ErrReadOnly, clean, rule)
+	if err := writable(clean, rule); err != nil {
+		return "", err
 	}
 	if size > MaxFileBytes {
 		return "", fmt.Errorf("%w: %d bytes for %s, at most %d in one file", ErrTooLarge, size, clean, MaxFileBytes)
@@ -353,14 +369,16 @@ func lexical(rel string) (string, Rule, error) {
 	}
 	rule, ok := Match(clean)
 	if !ok {
-		return "", Rule{}, fmt.Errorf("%w: %s is under no rule; the editable roots are %s", ErrOutside, clean, summary())
+		return "", Rule{}, fmt.Errorf("%w: %s is under no rule; the editable roots are %s", ErrOutside, clean, Roots())
 	}
 	return clean, rule, nil
 }
 
-// summary names the allowlist for a refusal, so a model that asked for
-// site/hugo.toml learns where it may work instead.
-func summary() string {
+// Roots names the allowlist for a refusal, so a model that asked for
+// site/hugo.toml learns where it may work instead. It is the fence's own
+// sentence about itself, and the tool layer quotes it rather than keeping a
+// second copy that can disagree.
+func Roots() string {
 	names := make([]string, len(rules))
 	for i, r := range rules {
 		names[i] = r.String()

@@ -204,6 +204,22 @@ func captureArgs(bin, profile, file, url string, width, height int) []string {
 		"--disable-dev-shm-usage",
 		"--no-first-run",
 		"--no-default-browser-check",
+		// A full Google Chrome starts sync, GCM registration, component update
+		// and a keyring lookup over D-Bus, none of which a screenshot needs.
+		// On a machine without those services it retries them instead of
+		// rendering and the capture times out with nothing written. A
+		// de-Googled Chromium or the headless shell ignores what does not
+		// apply to it, so the flags cost the server image nothing.
+		"--disable-background-networking",
+		"--disable-sync",
+		"--disable-component-update",
+		"--disable-default-apps",
+		"--disable-extensions",
+		"--disable-breakpad",
+		"--no-pings",
+		"--mute-audio",
+		"--password-store=basic",
+		"--use-mock-keychain",
 		// A scrollbar down the side of the picture is furniture, not layout.
 		"--hide-scrollbars",
 		"--force-device-scale-factor=1",

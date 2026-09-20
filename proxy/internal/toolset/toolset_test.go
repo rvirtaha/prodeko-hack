@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/prodeko/prodeko-hack/proxy/internal/fence"
+	"github.com/prodeko/prodeko-hack/proxy/internal/lint"
 	"github.com/prodeko/prodeko-hack/proxy/internal/mcpserver"
 	"github.com/prodeko/prodeko-hack/proxy/internal/workdir"
 )
@@ -36,13 +37,14 @@ func TestNewRequiresAWorkdir(t *testing.T) {
 	}
 }
 
-// Eleven tools, named exactly as the design names them. A rename breaks every
+// Fifteen tools, named exactly as the design names them. A rename breaks every
 // saved connector, so the names are asserted rather than assumed.
-func TestTheElevenTools(t *testing.T) {
+func TestTheFifteenTools(t *testing.T) {
 	want := []string{
 		ToolGetConventions, ToolListFiles, ToolReadFile, ToolSearch,
 		ToolWriteFile, ToolEditFile, ToolBuild, ToolRender, ToolScreenshot,
-		ToolSubmit, ToolListMyChanges,
+		ToolSubmit, ToolListMyChanges, ToolBeginImageUpload, ToolGetFeedback,
+		ToolTranslationStatus, ToolAbandonChange,
 	}
 	got := testToolset(t).Tools()
 	if len(got) != len(want) {
@@ -65,17 +67,21 @@ func TestTheElevenTools(t *testing.T) {
 // every one has to be a closed object schema.
 func TestSchemasAreClosedObjectSchemas(t *testing.T) {
 	required := map[string][]string{
-		ToolGetConventions: nil,
-		ToolListFiles:      nil,
-		ToolReadFile:       {"path"},
-		ToolSearch:         {"pattern"},
-		ToolWriteFile:      {"path", "content"},
-		ToolEditFile:       {"path", "old", "new"},
-		ToolBuild:          nil,
-		ToolRender:         {"path"},
-		ToolScreenshot:     {"path"},
-		ToolSubmit:         {"title"},
-		ToolListMyChanges:  nil,
+		ToolGetConventions:    nil,
+		ToolListFiles:         nil,
+		ToolReadFile:          {"path"},
+		ToolSearch:            {"pattern"},
+		ToolWriteFile:         {"path", "content"},
+		ToolEditFile:          {"path", "old", "new"},
+		ToolBuild:             nil,
+		ToolRender:            {"path"},
+		ToolScreenshot:        {"path"},
+		ToolSubmit:            {"title"},
+		ToolListMyChanges:     nil,
+		ToolBeginImageUpload:  nil,
+		ToolGetFeedback:       nil,
+		ToolTranslationStatus: nil,
+		ToolAbandonChange:     {"slug"},
 	}
 
 	for _, tool := range testToolset(t).Tools() {
@@ -216,6 +222,67 @@ func TestGetConventionsReturnsTheGuide(t *testing.T) {
 	}
 }
 
+// get_conventions is the server's only statement of what may be edited, so it
+// has to be generated from the fence rather than written beside it: a guide that
+// drifts from the allowlist tells the model it may edit what it may not.
+func TestGetConventionsStatesTheFence(t *testing.T) {
+	got := testToolset(t).Instructions()
+	for _, r := range fence.Rules() {
+		if !strings.Contains(got, r.Prefix+"**") {
+			t.Errorf("the guide does not name the root %q", r.Prefix)
+		}
+		if !strings.Contains(got, r.What) {
+			t.Errorf("the guide does not say what lives in %q", r.Prefix)
+		}
+	}
+	for _, g := range fence.LayoutGroups() {
+		if !strings.Contains(got, g.Paths) {
+			t.Errorf("the guide does not name the template group %q", g.Paths)
+		}
+		// The reasons are wrapped into the listing, so the whole line is not
+		// there to look for; the first words of it are enough to tell whether it
+		// was printed at all.
+		if head := firstWords(g.Why, 5); !strings.Contains(got, head) {
+			t.Errorf("the guide does not give the reason for %q (looked for %q)", g.Paths, head)
+		}
+	}
+
+	// The gates are enforcement rather than advice, and this is where the server
+	// says what it enforces.
+	for _, want := range []string{ToolBuild, ToolScreenshot, "site/layouts/"} {
+		if !strings.Contains(got, want) {
+			t.Errorf("the guide does not mention %q", want)
+		}
+	}
+}
+
+func firstWords(text string, n int) string {
+	words := strings.Fields(text)
+	if len(words) > n {
+		words = words[:n]
+	}
+	return strings.Join(words, " ")
+}
+
+// Wrapping is what makes the generated part of the guide read like the written
+// part; a word longer than the measure still gets a line of its own rather than
+// being cut in half.
+func TestWrap(t *testing.T) {
+	got := wrap("the shell every page is rendered into, head to scripts", 20)
+	want := []string{"the shell every page", "is rendered into,", "head to scripts"}
+	if strings.Join(got, "|") != strings.Join(want, "|") {
+		t.Errorf("wrap = %q, want %q", got, want)
+	}
+	for _, line := range wrap("site/layouts/partials/lang-switch.html is fenced", 10) {
+		if line == "" {
+			t.Error("wrap produced an empty line")
+		}
+	}
+	if got := wrap("   ", 10); got != nil {
+		t.Errorf("wrap of nothing = %q, want nothing", got)
+	}
+}
+
 // call runs one tool and returns the prose it answered with. Every tool but
 // screenshot answers in prose alone, so the pictures are asserted where they
 // are produced rather than in every caller here.
@@ -255,6 +322,10 @@ func TestPathsOutsideTheFenceAreRefused(t *testing.T) {
 		{"write the tree check", ToolEditFile, `{"path":"site/check-trees.sh","old":"a","new":"b"}`, fence.ErrOutside},
 		{"write a template", ToolWriteFile, `{"path":"site/layouts/index.html","content":"x"}`, fence.ErrReadOnly},
 		{"edit a template", ToolEditFile, `{"path":"site/layouts/index.html","old":"a","new":"b"}`, fence.ErrReadOnly},
+		{"write the page skeleton", ToolWriteFile, `{"path":"site/layouts/baseof.html","content":"x"}`, fence.ErrReadOnly},
+		{"write the head", ToolEditFile, `{"path":"site/layouts/partials/head.html","old":"a","new":"b"}`, fence.ErrReadOnly},
+		{"write a shortcode", ToolWriteFile, `{"path":"site/layouts/_shortcodes/ilmo.html","content":"x"}`, fence.ErrReadOnly},
+		{"write a render hook", ToolWriteFile, `{"path":"site/layouts/_markup/render-image.html","content":"x"}`, fence.ErrReadOnly},
 		{"read a workflow", ToolReadFile, `{"path":".github/workflows/preview.yml"}`, fence.ErrOutside},
 		{"traverse out", ToolReadFile, `{"path":"site/content/../../etc/passwd"}`, fence.ErrBadPath},
 		{"traverse out encoded", ToolReadFile, `{"path":"site/content/%2e%2e/etc/passwd"}`, fence.ErrBadPath},
@@ -276,6 +347,25 @@ func TestTemplatesAreReadable(t *testing.T) {
 	_, err := call(t, testToolset(t), ToolReadFile, maija, `{"path":"site/layouts/index.html"}`)
 	if errors.Is(err, fence.ErrOutside) || errors.Is(err, fence.ErrReadOnly) {
 		t.Fatalf("read_file of a template was refused by the fence: %v", err)
+	}
+}
+
+// The partials and the page layouts are the point of this iteration: a write to
+// one has to get past the fence and fail on something else entirely, which here
+// is the fixture's empty repository.
+func TestWritableTemplatesPassTheFence(t *testing.T) {
+	ts := testToolset(t)
+	for _, args := range []string{
+		`{"path":"site/layouts/partials/header.html","content":"<header></header>"}`,
+		`{"path":"site/layouts/partials/uusi-nosto.html","content":"<div></div>"}`,
+		`{"path":"site/layouts/home.html","content":"{{ define \"main\" }}{{ end }}"}`,
+		`{"path":"site/layouts/section.html","content":"{{ define \"main\" }}{{ end }}"}`,
+		`{"path":"site/layouts/page.html","content":"{{ define \"main\" }}{{ end }}"}`,
+	} {
+		_, err := call(t, ts, ToolWriteFile, maija, args)
+		if errors.Is(err, fence.ErrOutside) || errors.Is(err, fence.ErrReadOnly) {
+			t.Errorf("the fence refused %s: %v", args, err)
+		}
 	}
 }
 
@@ -463,6 +553,52 @@ func TestRenderBuild(t *testing.T) {
 	ok := renderBuild(workdir.Result{OK: true, Duration: 220 * time.Millisecond})
 	if !strings.Contains(ok, "OK") || !strings.Contains(ok, "220ms") {
 		t.Errorf("renderBuild of a clean build = %q", ok)
+	}
+	if strings.Contains(ok, "stylesheet") || strings.Contains(ok, "pages") {
+		t.Errorf("a clean build reports checks that found nothing:\n%s", ok)
+	}
+}
+
+// The checks' findings are quoted the way they were found, after hugo's words
+// and never instead of them. They say nothing about whether the site built: that
+// is hugo's answer, and it stands.
+func TestRenderBuildQuotesTheFindings(t *testing.T) {
+	got := renderBuild(workdir.Result{
+		OK:       true,
+		Duration: 310 * time.Millisecond,
+		CSS: []lint.Finding{{
+			Where: "site/assets/css/main.css", Line: 412,
+			Text: "a } here closes nothing; everything after it is read as a selector",
+		}},
+		HTML: []lint.Finding{{
+			Where: "fi/tapahtumat/index.html", Line: 88,
+			Text: "<div> is never closed, so the browser guesses where it ends",
+		}},
+	})
+	for _, want := range []string{
+		"Build OK",
+		"site/assets/css/main.css:412: a } here closes nothing",
+		"fi/tapahtumat/index.html:88: <div> is never closed",
+	} {
+		if !strings.Contains(got, want) {
+			t.Errorf("renderBuild omits %q:\n%s", want, got)
+		}
+	}
+	// One finding is one thing, not "1 things".
+	if strings.Contains(got, "1 things") {
+		t.Errorf("renderBuild counts one finding as several:\n%s", got)
+	}
+
+	// A failing build says so first; the findings are still worth reading.
+	failed := renderBuild(workdir.Result{
+		Output: `ERROR render of "/fi/" failed: unclosed action`,
+		CSS:    []lint.Finding{{Where: "site/assets/css/main.css", Line: 9, Text: "a { opens here and is never closed"}},
+	})
+	if !strings.Contains(failed, "Build failed") || !strings.Contains(failed, "unclosed action") {
+		t.Errorf("a failed build does not lead with hugo's words:\n%s", failed)
+	}
+	if !strings.Contains(failed, "main.css:9") {
+		t.Errorf("a failed build drops the stylesheet findings:\n%s", failed)
 	}
 }
 
