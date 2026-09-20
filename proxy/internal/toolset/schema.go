@@ -123,7 +123,7 @@ var schemaWriteFile = json.RawMessage(`{
     },
     "content": {
       "type": "string",
-      "description": "The whole new contents of the file. Text only, at most 2 MB; images are uploaded through Decap, not through this tool."
+      "description": "The whole new contents of the file. Text only, at most 2 MB; images arrive through begin_image_upload, not through this tool."
     }
   },
   "required": ["path", "content"],
