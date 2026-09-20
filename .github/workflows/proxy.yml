@@ -64,6 +64,23 @@ jobs:
       - name: Vet
         run: go vet ./...
 
+      # The capture tests photograph a real page when they find a browser, and
+      # the runner image ships full Google Chrome — the one browser the server
+      # never runs, and one that spends the capture timeout retrying D-Bus and
+      # Google services a runner does not have. Testing the browser the image
+      # actually ships means putting it on PATH here; the preview package
+      # prefers it over the runner's Chrome once it is there. The version and
+      # checksum are read out of Dockerfile.mcp so the pin lives in one place.
+      - name: Install chrome-headless-shell
+        run: |
+          version=$(sed -n 's/^ARG CHROMIUM_VERSION=//p' Dockerfile.mcp)
+          sha256=$(sed -n 's/^ARG CHROMIUM_SHA256=//p' Dockerfile.mcp)
+          curl -sSLo "$RUNNER_TEMP/chromium.zip" \
+            "https://storage.googleapis.com/chrome-for-testing-public/${version}/linux64/chrome-headless-shell-linux64.zip"
+          echo "${sha256}  $RUNNER_TEMP/chromium.zip" | sha256sum -c -
+          unzip -q "$RUNNER_TEMP/chromium.zip" -d "$RUNNER_TEMP/chromium"
+          echo "$RUNNER_TEMP/chromium/chrome-headless-shell-linux64" >> "$GITHUB_PATH"
+
       # This compiles every package and its tests, so there is no separate
       # build step. -race, and only -race, because sessions and half-finished
       # sign-ins are shared maps read by concurrent handlers; a race there

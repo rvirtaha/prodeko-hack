@@ -207,10 +207,9 @@ func captureArgs(bin, profile, file, url string, width, height int) []string {
 		// A full Google Chrome starts sync, GCM registration, component update
 		// and a keyring lookup over D-Bus, none of which a screenshot needs.
 		// On a machine without those services it retries them instead of
-		// rendering and the capture times out with nothing written — which is
-		// exactly what CI runners are. A de-Googled Chromium or the headless
-		// shell ignores what does not apply to it, so the flags cost the
-		// server image nothing.
+		// rendering and the capture times out with nothing written. A
+		// de-Googled Chromium or the headless shell ignores what does not
+		// apply to it, so the flags cost the server image nothing.
 		"--disable-background-networking",
 		"--disable-sync",
 		"--disable-component-update",
