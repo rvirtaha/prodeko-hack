@@ -13,7 +13,7 @@ ilmo:
 viikkotiedote:
   label: Viikkotiedote
   labelEn: Weekly letter
-  baseURL: https://viikkotiedote.prodeko.org
+  baseURL: https://tiedotteet.prodeko.org
 gallery:
   label: Kuvagalleria
   labelEn: Photo gallery

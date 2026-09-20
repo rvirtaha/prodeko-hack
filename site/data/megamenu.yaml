@@ -77,7 +77,7 @@ fi:
         - label: Kaikki palvelut
           url: /fi/palvelut/
         - label: Viikkotiedote
-          url: https://viikkotiedote.prodeko.org
+          url: https://tiedotteet.prodeko.org
         - label: Kokouspöytäkirjat
           url: /fi/jasenille/poytakirjat/
           members: true
@@ -224,7 +224,7 @@ en:
         - label: All services
           url: /en/services/
         - label: Weekly letter
-          url: https://viikkotiedote.prodeko.org
+          url: https://tiedotteet.prodeko.org
         - label: Meeting minutes
           url: /en/members/minutes/
           members: true

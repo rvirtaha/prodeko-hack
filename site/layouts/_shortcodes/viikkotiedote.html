@@ -3,7 +3,12 @@
 
       {{< viikkotiedote >}}           the newest bulletin
       {{< viikkotiedote issue="412" >}} one issue
+
+  The origin is the guild's name for the bulletin service; the path below it is
+  this site's assumption about how that service names an issue, and the service
+  as it stands today publishes only a front page, so an issue number arrives
+  there rather than at the issue.
 */ -}}
 {{- $issue := .Get "issue" | default "" -}}
-{{- $url := cond (ne $issue "") (printf "https://viikkotiedote.prodeko.org/%s/" $issue) "https://viikkotiedote.prodeko.org/" -}}
-{{ partial "embed.html" (dict "url" $url "label" "viikkotiedote.prodeko.org" "height" 900) }}
+{{- $url := cond (ne $issue "") (printf "https://tiedotteet.prodeko.org/%s/" $issue) "https://tiedotteet.prodeko.org/" -}}
+{{ partial "embed.html" (dict "url" $url "label" "tiedotteet.prodeko.org" "height" 900) }}
