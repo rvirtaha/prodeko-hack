@@ -118,6 +118,9 @@ than the feature:
   The partials and the page layouts are writable; the page skeleton, the asset
   pipeline templates and the shortcodes are not, and the refusal names which
   group the file is in and why. `get_conventions` states the whole list.
+- Edit a partial and ask it to submit without looking at the result. `submit`
+  refuses, names `screenshot`, and asks for the sentence about what looks
+  different that a maintainer reads before the diff.
 - Ask it to break a shortcode *call* in a page — `site/content/fi/tapahtumat.md`
   has several — and build. Hugo's error comes back verbatim in the same turn,
   which is what makes the loop converge instead of flail. The shortcodes
