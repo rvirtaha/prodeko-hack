@@ -37,13 +37,14 @@ func TestNewRequiresAWorkdir(t *testing.T) {
 	}
 }
 
-// Eleven tools, named exactly as the design names them. A rename breaks every
+// Fifteen tools, named exactly as the design names them. A rename breaks every
 // saved connector, so the names are asserted rather than assumed.
-func TestTheElevenTools(t *testing.T) {
+func TestTheFifteenTools(t *testing.T) {
 	want := []string{
 		ToolGetConventions, ToolListFiles, ToolReadFile, ToolSearch,
 		ToolWriteFile, ToolEditFile, ToolBuild, ToolRender, ToolScreenshot,
-		ToolSubmit, ToolListMyChanges,
+		ToolSubmit, ToolListMyChanges, ToolBeginImageUpload, ToolGetFeedback,
+		ToolTranslationStatus, ToolAbandonChange,
 	}
 	got := testToolset(t).Tools()
 	if len(got) != len(want) {
@@ -66,17 +67,21 @@ func TestTheElevenTools(t *testing.T) {
 // every one has to be a closed object schema.
 func TestSchemasAreClosedObjectSchemas(t *testing.T) {
 	required := map[string][]string{
-		ToolGetConventions: nil,
-		ToolListFiles:      nil,
-		ToolReadFile:       {"path"},
-		ToolSearch:         {"pattern"},
-		ToolWriteFile:      {"path", "content"},
-		ToolEditFile:       {"path", "old", "new"},
-		ToolBuild:          nil,
-		ToolRender:         {"path"},
-		ToolScreenshot:     {"path"},
-		ToolSubmit:         {"title"},
-		ToolListMyChanges:  nil,
+		ToolGetConventions:    nil,
+		ToolListFiles:         nil,
+		ToolReadFile:          {"path"},
+		ToolSearch:            {"pattern"},
+		ToolWriteFile:         {"path", "content"},
+		ToolEditFile:          {"path", "old", "new"},
+		ToolBuild:             nil,
+		ToolRender:            {"path"},
+		ToolScreenshot:        {"path"},
+		ToolSubmit:            {"title"},
+		ToolListMyChanges:     nil,
+		ToolBeginImageUpload:  nil,
+		ToolGetFeedback:       nil,
+		ToolTranslationStatus: nil,
+		ToolAbandonChange:     {"slug"},
 	}
 
 	for _, tool := range testToolset(t).Tools() {

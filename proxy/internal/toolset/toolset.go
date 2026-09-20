@@ -1,4 +1,4 @@
-// Package toolset is the thirteen tools the MCP server exposes, built on the
+// Package toolset is the fifteen tools the MCP server exposes, built on the
 // fence, the worktree manager and the preview.
 //
 // File-level tools, not semantic ones: CSS is file-level, and update_page(slug,
@@ -26,6 +26,7 @@ import (
 	"github.com/prodeko/prodeko-hack/proxy/internal/fence"
 	"github.com/prodeko/prodeko-hack/proxy/internal/mcpserver"
 	"github.com/prodeko/prodeko-hack/proxy/internal/preview"
+	"github.com/prodeko/prodeko-hack/proxy/internal/upload"
 	"github.com/prodeko/prodeko-hack/proxy/internal/workdir"
 )
 
@@ -44,6 +45,12 @@ type Config struct {
 	// their machine happens to have.
 	ChromiumBin string
 
+	// Uploads and PublicURL make begin_image_upload work: the tokens it
+	// mints, and the address of the upload page they open. With either
+	// absent the tool refuses and says the endpoint is not configured.
+	Uploads   *upload.Tokens
+	PublicURL string
+
 	Logger *slog.Logger     // nil means slog.Default
 	Now    func() time.Time // nil means time.Now
 }
@@ -60,6 +67,8 @@ type Toolset struct {
 	mgr         *workdir.Manager
 	conventions string
 	shooter     preview.Shooter
+	uploads     *upload.Tokens
+	publicURL   string
 	log         *slog.Logger
 	now         func() time.Time
 
@@ -84,6 +93,8 @@ func New(cfg Config) (*Toolset, error) {
 		mgr:         cfg.Workdir,
 		conventions: cfg.Conventions,
 		shooter:     preview.Shooter{Bin: cfg.ChromiumBin, Log: cfg.Logger},
+		uploads:     cfg.Uploads,
+		publicURL:   strings.TrimRight(cfg.PublicURL, "/"),
 		log:         cfg.Logger,
 		now:         cfg.Now,
 		current:     make(map[string]*workdir.Change),
@@ -95,7 +106,7 @@ func New(cfg Config) (*Toolset, error) {
 // that drop them.
 func (t *Toolset) Instructions() string { return t.conventions }
 
-// Tools is the thirteen, in the order a session uses them.
+// Tools is the fifteen, in the order a session uses them.
 func (t *Toolset) Tools() []mcpserver.Tool {
 	return []mcpserver.Tool{
 		{
@@ -175,6 +186,14 @@ func (t *Toolset) Tools() []mcpserver.Tool {
 				"preview link.",
 			Schema: schemaListMyChanges,
 			Call:   text(t.listMyChanges),
+		},
+		{
+			Name: ToolBeginImageUpload,
+			Description: "Start an image upload: returns a link the person opens to drop a JPEG or PNG into this " +
+				"change. The bytes never travel through the chat, so this link is the only way to add a photo.",
+			Schema: schemaBeginImageUpload,
+			Meta:   uploadToolMeta,
+			Call:   text(t.beginImageUpload),
 		},
 		{
 			Name: ToolGetFeedback,
@@ -631,6 +650,12 @@ func (t *Toolset) open(id mcpserver.Identity, hint string) (*workdir.Change, err
 	if err != nil {
 		return nil, err
 	}
+	return t.openUser(user, hint)
+}
+
+// openUser is open for a caller that already holds the namespaced username:
+// the upload handler, whose token carries it instead of a bearer identity.
+func (t *Toolset) openUser(user, hint string) (*workdir.Change, error) {
 	t.mu.Lock()
 	defer t.mu.Unlock()
 	if c, ok := t.current[user]; ok {

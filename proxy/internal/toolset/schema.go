@@ -24,6 +24,7 @@ const (
 	ToolGetFeedback       = "get_feedback"
 	ToolAbandonChange     = "abandon_change"
 	ToolTranslationStatus = "translation_status"
+	ToolBeginImageUpload  = "begin_image_upload"
 )
 
 // Defaults and caps that the schema states and the implementation enforces.
@@ -268,6 +269,19 @@ var schemaTranslationStatus = json.RawMessage(`{
   "additionalProperties": false
 }`)
 
+var schemaBeginImageUpload = json.RawMessage(`{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "purpose": {
+      "type": "string",
+      "description": "What the image is for, e.g. \"vujut 2026 kuvat\". It names the change the upload lands in.",
+      "maxLength": 120
+    }
+  },
+  "additionalProperties": false
+}`)
+
 // The argument types, one per schema. They are the Go side of the same
 // contract and must be changed together with it.
 
@@ -326,4 +340,8 @@ type abandonChangeArgs struct {
 
 type translationStatusArgs struct {
 	Path string `json:"path"`
+}
+
+type beginImageUploadArgs struct {
+	Purpose string `json:"purpose"`
 }

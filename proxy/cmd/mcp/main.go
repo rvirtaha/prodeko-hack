@@ -37,6 +37,7 @@ import (
 	"github.com/prodeko/prodeko-hack/proxy/internal/preview"
 	"github.com/prodeko/prodeko-hack/proxy/internal/session"
 	"github.com/prodeko/prodeko-hack/proxy/internal/toolset"
+	"github.com/prodeko/prodeko-hack/proxy/internal/upload"
 	"github.com/prodeko/prodeko-hack/proxy/internal/workdir"
 )
 
@@ -138,9 +139,19 @@ func run(cfg *env, log *slog.Logger) error {
 		log.Warn("GITHUB_TOKEN or GITHUB_REPO is unset: submit will push to the local origin only and open no pull request")
 	}
 
+	// The upload tokens sign with the session secret: one secret, one
+	// process, and a token that outlives a restart was going to expire in
+	// fifteen minutes anyway.
+	uploads, err := upload.NewTokens([]byte(cfg.SessionSecret), nil)
+	if err != nil {
+		return err
+	}
+
 	tools, err := toolset.New(toolset.Config{
 		Workdir:     work,
 		ChromiumBin: cfg.ChromiumBin,
+		Uploads:     uploads,
+		PublicURL:   cfg.PublicURL,
 		Logger:      log.With("component", "toolset"),
 	})
 	if err != nil {
@@ -157,6 +168,8 @@ func run(cfg *env, log *slog.Logger) error {
 		Version:             serverVersion,
 		Instructions:        tools.Instructions(),
 		Tools:               tools.Tools(),
+		Prompts:             toolset.Prompts(),
+		Resources:           toolset.UIResources(cfg.PublicURL),
 		Authenticate:        authenticator(cfg, as),
 		ResourceMetadataURL: as.ResourceMetadataURL(),
 		Logger:              log.With("component", "mcpserver"),
@@ -165,9 +178,15 @@ func run(cfg *env, log *slog.Logger) error {
 		return err
 	}
 
+	up := &upload.Handler{
+		Tokens: uploads,
+		Save:   tools.SaveImage,
+		Log:    log.With("component", "upload"),
+	}
+
 	srv := &http.Server{
 		Addr:              cfg.ListenAddr,
-		Handler:           routes(as, mcp),
+		Handler:           routes(as, mcp, up),
 		ReadHeaderTimeout: readHeaderTimeout,
 		ReadTimeout:       readTimeout,
 		WriteTimeout:      writeTimeout,
@@ -228,14 +247,16 @@ type registrar interface {
 	Register(*http.ServeMux)
 }
 
-func routes(as, mcp registrar) http.Handler {
+func routes(as, mcp, up registrar) http.Handler {
 	mux := http.NewServeMux()
 
 	// The authorization server first: its two well-known documents and its
-	// flow endpoints are unauthenticated by definition, and the transport
-	// authenticates itself.
+	// flow endpoints are unauthenticated by definition, the transport
+	// authenticates itself, and the upload endpoint's single-use token is
+	// its whole session.
 	as.Register(mux)
 	mcp.Register(mux)
+	up.Register(mux)
 
 	// Liveness only: the process is listening. It says nothing about Keycloak,
 	// GitHub or the clone, and it is deliberately unauthenticated so the
