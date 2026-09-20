@@ -22,6 +22,9 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
+      # proxy/Dockerfile.mcp installs hugo for the editing MCP server and pins
+      # the same release, so an editor's build fails and succeeds for the same
+      # reasons this one does. Bump both: proxy.yml fails the moment they drift.
       HUGO_VERSION: 0.166.0
       # Where the built site is actually served. hugo.toml declares the eventual
       # address, prodeko.org, which is what every canonical link, sitemap entry
