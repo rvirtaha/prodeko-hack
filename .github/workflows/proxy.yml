@@ -1,4 +1,4 @@
-name: Proxy
+name: Proxy and MCP
 
 on:
   push:
@@ -12,6 +12,13 @@ on:
       - "proxy/**"
       - ".github/workflows/proxy.yml"
       - ".github/known_hosts"
+  # Redeploying the MCP server by hand, for when the path filters and the change
+  # detection below agree that nothing changed but the server on the VM still
+  # has to come back from a known image — a lost container, a rolled back host,
+  # a rotated secret. The checks run first as on any other event, so a hand
+  # redeploy still ships a proved image. Of the two deploys only deploy-mcp
+  # takes a dispatch; the proxy deploy's condition names push.
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -24,6 +31,12 @@ jobs:
     defaults:
       run:
         working-directory: proxy
+    # Which of the two services the commit can have changed. Consumed by the
+    # deploy jobs below; computed here because this is the job that already has
+    # the checkout.
+    outputs:
+      mcp: ${{ steps.changes.outputs.mcp }}
+      proxy: ${{ steps.changes.outputs.proxy }}
     env:
       # proxy/go.mod declares the 1.27 line; this is the patch release the
       # module is developed against. The Dockerfile pins golang:1.27-bookworm
@@ -36,6 +49,92 @@ jobs:
       GOTOOLCHAIN: local
     steps:
       - uses: actions/checkout@v5
+        with:
+          # The change detection below diffs against a commit the default
+          # single-commit checkout does not have: the pushed-over tip on a push,
+          # the merge base on a pull request. 0 also brings origin/main, which
+          # the pull request half needs by name.
+          fetch-depth: 0
+
+      # Both images are built from proxy/, so the workflow's own path filter
+      # cannot tell them apart: a commit touching only cmd/proxy/ would still
+      # redeploy the MCP server and drop every editor's in-flight session.
+      #
+      # Exclusion, not inclusion. Everything under proxy/ counts for both
+      # services unless it is listed below as provably one service's own, so a
+      # new shared package redeploys both by default. Getting the lists wrong
+      # that way costs a redundant deploy; the other way round it ships a
+      # service that silently keeps running last week's code.
+      #
+      # Plain git, no marketplace action, for the reasons set out in build.yml —
+      # tj-actions/changed-files is the precedent that argument is drawn from.
+      - name: Detect which services changed
+        id: changes
+        # The repository root, against the job's proxy/ default: git ls-files
+        # below is limited to the directory it runs in and names its files
+        # relative to it, so from proxy/ it matches none of the patterns and the
+        # whole-tree fallback would conclude that nothing changed. git diff is
+        # indifferent to the working directory and prints root-relative paths
+        # either way.
+        working-directory: ${{ github.workspace }}
+        env:
+          BEFORE: ${{ github.event.before }}
+        run: |
+          case "$GITHUB_EVENT_NAME" in
+            push)
+              base="$BEFORE"
+              ;;
+            pull_request)
+              base=$(git merge-base origin/main HEAD) || base=""
+              ;;
+            *)
+              base=""
+              ;;
+          esac
+
+          # An all-zero before is a branch's first push and a before that is no
+          # longer in the history is what a force push leaves behind. Neither
+          # has a diff, so every unresolvable base falls back to the whole tree,
+          # which deploys both services rather than skipping a real change.
+          if [ -n "$base" ] && ! git rev-parse --verify --quiet "$base^{commit}" > /dev/null; then
+            base=""
+          fi
+          if [ -n "$base" ]; then
+            files=$(git diff --name-only "$base" HEAD)
+          else
+            echo "no usable base revision; treating the whole tree as changed"
+            files=$(git ls-files)
+          fi
+
+          # One service's own paths, which is to say the other one's exclusion
+          # list: a commit confined to proxy/cmd/mcp/ cannot have changed the
+          # proxy, so it is mcp_only that proxy_relevant filters out below.
+          mcp_only='^proxy/(cmd/mcp/|Dockerfile\.mcp$)'
+          proxy_only='^proxy/(cmd/proxy/|Dockerfile$|dev/|[^/]+\.md$)'
+
+          # No grep -q in these pipelines. -q exits on the first match, and the
+          # upstream grep would then die of SIGPIPE, which pipefail turns into a
+          # failed pipeline and a silent false.
+          mcp_relevant=$(printf '%s\n' "$files" | grep -E '^proxy/' | grep -vE "$proxy_only" || true)
+          proxy_relevant=$(printf '%s\n' "$files" | grep -E '^proxy/' | grep -vE "$mcp_only" || true)
+
+          mcp=false
+          proxy=false
+          if [ -n "$mcp_relevant" ]; then mcp=true; fi
+          if [ -n "$proxy_relevant" ]; then proxy=true; fi
+
+          # This file decides how both services are built and shipped, so a
+          # change to it has to be proved against both of them.
+          if [ -n "$(printf '%s\n' "$files" | grep -xF '.github/workflows/proxy.yml' || true)" ]; then
+            mcp=true
+            proxy=true
+          fi
+
+          echo "changed paths:"
+          printf '%s\n' "$files"
+          echo "mcp=$mcp proxy=$proxy"
+          echo "mcp=$mcp" >> "$GITHUB_OUTPUT"
+          echo "proxy=$proxy" >> "$GITHUB_OUTPUT"
 
       - uses: actions/setup-go@v7
         with:
@@ -96,6 +195,55 @@ jobs:
       - name: Build the image
         run: DOCKER_BUILDKIT=0 docker build -t cms-auth-proxy:ci .
 
+      # The second image out of the same directory, for the same reasons, built
+      # the same way.
+      - name: Build the MCP image
+        run: DOCKER_BUILDKIT=0 docker build -f Dockerfile.mcp -t prodeko-mcp:ci .
+
+      # Unlike the proxy's distroless image, this one carries a userland, and
+      # three things about it are load-bearing at run time and invisible at
+      # build time. The uid has to equal prodeko_mcp_uid in the Ansible role: a
+      # mismatch shows up as git calling the bind-mounted clone dubiously owned
+      # on the first request, long after the deploy went green. git and hugo are
+      # execed per request, and hugo extended in particular cannot even print
+      # its version without libstdc++6 — an apt line away from being dropped.
+      #
+      # --entrypoint sh because the image's entrypoint is the server, which
+      # would block waiting for a connection. set -e inside, so a tool that
+      # fails fails the container rather than being papered over by the exit
+      # status of the last command in the list.
+      - name: Check the MCP image's user and tools
+        run: |
+          out=$(docker run --rm --entrypoint sh prodeko-mcp:ci \
+            -c 'set -e; id -u; git --version; hugo version')
+          printf '%s\n' "$out"
+          # The first of the three lines, by expansion rather than a pipe into
+          # head, which would hit the same SIGPIPE-under-pipefail trap the change
+          # detection step avoids.
+          uid=${out%%$'\n'*}
+          if [ "$uid" != "65532" ]; then
+            echo "image runs as uid '$uid', expected 65532"
+            exit 1
+          fi
+
+      # An editor's build has to fail and succeed for the same reasons this
+      # repository's own build does, which it only does while the two Hugo pins
+      # name the same release. Both files carry a comment pointing at the other;
+      # this step is what makes ignoring those comments loud. The emptiness test
+      # matters as much as the comparison, and is why either grep is allowed to
+      # come back with nothing: a renamed variable makes both find nothing, and
+      # two empty strings compare equal.
+      - name: Check the MCP image pins the site's Hugo version
+        working-directory: ${{ github.workspace }}
+        run: |
+          workflow=$(grep -oP '^\s*HUGO_VERSION:\s*"?\K[0-9.]+' .github/workflows/build.yml || true)
+          image=$(grep -oP '^ARG HUGO_VERSION=\K[0-9.]+' proxy/Dockerfile.mcp || true)
+          echo "build.yml: '$workflow', Dockerfile.mcp: '$image'"
+          if [ -z "$workflow" ] || [ -z "$image" ] || [ "$workflow" != "$image" ]; then
+            echo "the two Hugo pins have to name the same release"
+            exit 1
+          fi
+
   # Pushes the image to the registry prodeko-vm2 pulls from, then asks the VM
   # to deploy it. A registry rather than the streamed tarball the site uses,
   # because a compiled service in a container has a natural place to live and
@@ -104,7 +252,7 @@ jobs:
   # everything on the far side of the SSH command below.
   deploy:
     needs: check
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && needs.check.outputs.proxy == 'true'
     runs-on: ubuntu-latest
     # The environment, not the if: above, is the load-bearing part. Fork pull
     # requests never get secrets, but same-repo branch pull requests do. An
@@ -175,3 +323,91 @@ jobs:
             -o UserKnownHostsFile=.github/known_hosts \
             deploy-cms-auth-proxy@prodeko.org \
             "IMAGE_TAG=sha-$SHA /srv/www/cms-auth-proxy/deploy.sh"
+
+  # The same thing for the other image out of proxy/: the content-editor MCP
+  # server built from cmd/mcp/. Its own registry repository, deploy user, key and
+  # concurrency group rather than a second step in the job above, so that a stuck
+  # MCP deploy cannot hold the editor login proxy hostage and either leaked key
+  # reaches one service only. See ansible/roles/prodeko_mcp in the infra-prodeko
+  # repository, which owns the deploy directory and the forced command below.
+  deploy-mcp:
+    needs: check
+    # A dispatch skips the change gate but not the branch test: a human asking
+    # for a redeploy has a reason the diff cannot see, but building an arbitrary
+    # branch and pushing it as :main is not something anybody asked for.
+    if: >-
+      github.ref == 'refs/heads/main'
+      && (github.event_name == 'workflow_dispatch'
+      || (github.event_name == 'push' && needs.check.outputs.mcp == 'true'))
+    runs-on: ubuntu-latest
+    # The environment, not the if: above, is the load-bearing part. Fork pull
+    # requests never get secrets, but same-repo branch pull requests do. An
+    # environment whose deployment branch policy allows only main turns branch
+    # protection into credential protection.
+    environment: production
+    # Queue rather than cancel. Two deploys racing would have the VM pull two
+    # tags and the one that finishes last wins, which need not be the newer
+    # commit.
+    concurrency:
+      group: deploy-prodeko-mcp
+      cancel-in-progress: false
+    env:
+      REGISTRY: prodekoregistry.azurecr.io
+      IMAGE: prodekoregistry.azurecr.io/prodeko-mcp
+      # The ACR admin user. Not a secret, and the same name the VM logs in
+      # with; its password is the Key Vault secret acr-admin-password.
+      REGISTRY_USERNAME: prodekoregistry
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Log in to the container registry
+        env:
+          REGISTRY_PASSWORD: ${{ secrets.ACR_PASSWORD }}
+        run: |
+          printf '%s' "$REGISTRY_PASSWORD" \
+            | docker login "$REGISTRY" -u "$REGISTRY_USERNAME" --password-stdin
+
+      # Two tags for one image. sha-<40 hex> is what the deploy asks for and
+      # what .image-tag on the VM records, so a rollback names an exact build.
+      # main is the floating pointer deploy.sh falls back to when the host has
+      # never deployed before and has no .image-tag to read.
+      #
+      # DOCKER_BUILDKIT=0 matches the check job above: the image that ships is
+      # built by the same builder that proved the Dockerfile stays free of
+      # BuildKit-only syntax.
+      - name: Build and push the image
+        working-directory: proxy
+        env:
+          SHA: ${{ github.sha }}
+        run: |
+          DOCKER_BUILDKIT=0 docker build \
+            -f Dockerfile.mcp \
+            -t "$IMAGE:sha-$SHA" \
+            -t "$IMAGE:main" \
+            .
+          docker push "$IMAGE:sha-$SHA"
+          docker push "$IMAGE:main"
+
+      # Plain openssh-client from the runner image, no marketplace action, for
+      # the reasons set out at length in build.yml. The host key is committed
+      # to .github/known_hosts and the SSH target is the apex, so a future VM
+      # move fails closed on the pin instead of deploying to the wrong host.
+      #
+      # The command is the only one the deploy key is allowed to run: sshd
+      # forces ssh-deploy-wrapper.sh, whose regex accepts this line and
+      # nothing else. The path is spelled out here and in the role's
+      # prodeko_mcp_compose_dir, so the two have to move together.
+      - name: Deploy on prodeko-vm2
+        env:
+          DEPLOY_KEY: ${{ secrets.PRODEKO_MCP_DEPLOY_KEY }}
+          SHA: ${{ github.sha }}
+        run: |
+          key="$RUNNER_TEMP/deploy_key"
+          install -m 600 /dev/null "$key"
+          printf '%s\n' "$DEPLOY_KEY" > "$key"
+          ssh -i "$key" \
+            -o IdentitiesOnly=yes \
+            -o StrictHostKeyChecking=yes \
+            -o UserKnownHostsFile=.github/known_hosts \
+            deploy-prodeko-mcp@prodeko.org \
+            "IMAGE_TAG=sha-$SHA /opt/prodeko-mcp/deploy.sh"
