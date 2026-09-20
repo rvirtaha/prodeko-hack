@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "prodeko-editor": {
+      "type": "http",
+      "url": "https://edit.prodeko.org/mcp"
+    }
+  }
+}
