@@ -100,8 +100,8 @@ var layoutGroups = []LayoutGroup{
 	},
 	{
 		Paths: "everything else under site/layouts/**",
-		Why: "page types of their own — the hub layouts, people.html, archive.html — and whatever " +
-			"else the theme is wired with. Which layout a page is rendered with is a developer's choice.",
+		Why: "page types of their own (the hub layouts, people.html, archive.html) and whatever else " +
+			"the theme is wired with. Which layout a page is rendered with is a developer's choice.",
 		match: func(string) bool { return true },
 	},
 }
@@ -170,12 +170,17 @@ func writable(clean string, rule Rule) error {
 // refusal quotes the group's own line, because "why not" is the thing the model
 // has to hear: it decides whether to edit something else or to hand the request
 // to a developer.
+//
+// The line is quoted after a dash rather than read into the sentence, because
+// the groups are named in the plural as often as in the singular and a template
+// that "is the render hooks" reads like a mistake in the tool rather than in the
+// request.
 func layoutWritable(clean string) error {
 	g := layoutGroupFor(clean)
 	if g.Write {
 		return nil
 	}
-	return fmt.Errorf("%w: %s is %s It is outside the fence, deliberately. Writable templates are %s",
+	return fmt.Errorf("%w: %s — %s It is outside the fence, deliberately; writable templates are %s",
 		ErrReadOnly, clean, g.Why, WritableLayouts())
 }
 
