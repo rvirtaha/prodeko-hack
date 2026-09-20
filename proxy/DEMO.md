@@ -114,8 +114,10 @@ than the feature:
 
 - Ask it to edit `.github/workflows/preview.yml`. The fence refuses and names
   the rule. A media-authored workflow edit would be a direct path to the VM.
-- Ask it to edit a file under `site/layouts/`. Readable, not writable, and the
-  refusal says so.
+- Ask it to edit `site/layouts/baseof.html` or `site/layouts/partials/head.html`.
+  The partials and the page layouts are writable; the page skeleton, the asset
+  pipeline templates and the shortcodes are not, and the refusal names which
+  group the file is in and why. `get_conventions` states the whole list.
 - Ask it to break a shortcode *call* in a page — `site/content/fi/tapahtumat.md`
   has several — and build. Hugo's error comes back verbatim in the same turn,
   which is what makes the loop converge instead of flail. The shortcodes

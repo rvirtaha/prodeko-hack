@@ -216,6 +216,67 @@ func TestGetConventionsReturnsTheGuide(t *testing.T) {
 	}
 }
 
+// get_conventions is the server's only statement of what may be edited, so it
+// has to be generated from the fence rather than written beside it: a guide that
+// drifts from the allowlist tells the model it may edit what it may not.
+func TestGetConventionsStatesTheFence(t *testing.T) {
+	got := testToolset(t).Instructions()
+	for _, r := range fence.Rules() {
+		if !strings.Contains(got, r.Prefix+"**") {
+			t.Errorf("the guide does not name the root %q", r.Prefix)
+		}
+		if !strings.Contains(got, r.What) {
+			t.Errorf("the guide does not say what lives in %q", r.Prefix)
+		}
+	}
+	for _, g := range fence.LayoutGroups() {
+		if !strings.Contains(got, g.Paths) {
+			t.Errorf("the guide does not name the template group %q", g.Paths)
+		}
+		// The reasons are wrapped into the listing, so the whole line is not
+		// there to look for; the first words of it are enough to tell whether it
+		// was printed at all.
+		if head := firstWords(g.Why, 5); !strings.Contains(got, head) {
+			t.Errorf("the guide does not give the reason for %q (looked for %q)", g.Paths, head)
+		}
+	}
+
+	// The gates are enforcement rather than advice, and this is where the server
+	// says what it enforces.
+	for _, want := range []string{ToolBuild, ToolScreenshot, "site/layouts/"} {
+		if !strings.Contains(got, want) {
+			t.Errorf("the guide does not mention %q", want)
+		}
+	}
+}
+
+func firstWords(text string, n int) string {
+	words := strings.Fields(text)
+	if len(words) > n {
+		words = words[:n]
+	}
+	return strings.Join(words, " ")
+}
+
+// Wrapping is what makes the generated part of the guide read like the written
+// part; a word longer than the measure still gets a line of its own rather than
+// being cut in half.
+func TestWrap(t *testing.T) {
+	got := wrap("the shell every page is rendered into, head to scripts", 20)
+	want := []string{"the shell every page", "is rendered into,", "head to scripts"}
+	if strings.Join(got, "|") != strings.Join(want, "|") {
+		t.Errorf("wrap = %q, want %q", got, want)
+	}
+	for _, line := range wrap("site/layouts/partials/lang-switch.html is fenced", 10) {
+		if line == "" {
+			t.Error("wrap produced an empty line")
+		}
+	}
+	if got := wrap("   ", 10); got != nil {
+		t.Errorf("wrap of nothing = %q, want nothing", got)
+	}
+}
+
 // call runs one tool and returns the prose it answered with. Every tool but
 // screenshot answers in prose alone, so the pictures are asserted where they
 // are produced rather than in every caller here.
@@ -255,6 +316,10 @@ func TestPathsOutsideTheFenceAreRefused(t *testing.T) {
 		{"write the tree check", ToolEditFile, `{"path":"site/check-trees.sh","old":"a","new":"b"}`, fence.ErrOutside},
 		{"write a template", ToolWriteFile, `{"path":"site/layouts/index.html","content":"x"}`, fence.ErrReadOnly},
 		{"edit a template", ToolEditFile, `{"path":"site/layouts/index.html","old":"a","new":"b"}`, fence.ErrReadOnly},
+		{"write the page skeleton", ToolWriteFile, `{"path":"site/layouts/baseof.html","content":"x"}`, fence.ErrReadOnly},
+		{"write the head", ToolEditFile, `{"path":"site/layouts/partials/head.html","old":"a","new":"b"}`, fence.ErrReadOnly},
+		{"write a shortcode", ToolWriteFile, `{"path":"site/layouts/_shortcodes/ilmo.html","content":"x"}`, fence.ErrReadOnly},
+		{"write a render hook", ToolWriteFile, `{"path":"site/layouts/_markup/render-image.html","content":"x"}`, fence.ErrReadOnly},
 		{"read a workflow", ToolReadFile, `{"path":".github/workflows/preview.yml"}`, fence.ErrOutside},
 		{"traverse out", ToolReadFile, `{"path":"site/content/../../etc/passwd"}`, fence.ErrBadPath},
 		{"traverse out encoded", ToolReadFile, `{"path":"site/content/%2e%2e/etc/passwd"}`, fence.ErrBadPath},
@@ -276,6 +341,25 @@ func TestTemplatesAreReadable(t *testing.T) {
 	_, err := call(t, testToolset(t), ToolReadFile, maija, `{"path":"site/layouts/index.html"}`)
 	if errors.Is(err, fence.ErrOutside) || errors.Is(err, fence.ErrReadOnly) {
 		t.Fatalf("read_file of a template was refused by the fence: %v", err)
+	}
+}
+
+// The partials and the page layouts are the point of this iteration: a write to
+// one has to get past the fence and fail on something else entirely, which here
+// is the fixture's empty repository.
+func TestWritableTemplatesPassTheFence(t *testing.T) {
+	ts := testToolset(t)
+	for _, args := range []string{
+		`{"path":"site/layouts/partials/header.html","content":"<header></header>"}`,
+		`{"path":"site/layouts/partials/uusi-nosto.html","content":"<div></div>"}`,
+		`{"path":"site/layouts/home.html","content":"{{ define \"main\" }}{{ end }}"}`,
+		`{"path":"site/layouts/section.html","content":"{{ define \"main\" }}{{ end }}"}`,
+		`{"path":"site/layouts/page.html","content":"{{ define \"main\" }}{{ end }}"}`,
+	} {
+		_, err := call(t, ts, ToolWriteFile, maija, args)
+		if errors.Is(err, fence.ErrOutside) || errors.Is(err, fence.ErrReadOnly) {
+			t.Errorf("the fence refused %s: %v", args, err)
+		}
 	}
 }
 

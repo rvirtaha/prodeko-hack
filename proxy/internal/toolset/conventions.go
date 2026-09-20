@@ -1,14 +1,26 @@
 package toolset
 
-// conventions is what get_conventions returns and what rides in the MCP
-// initialize instructions. It is advice, not enforcement: the enforcement
-// layer is the fence and a maintainer's review. It exists because a model that
-// knows the bilingual pairing and the token layer writes changes a maintainer
-// merges, and one that does not writes changes a maintainer has to explain.
+import (
+	"fmt"
+	"strings"
+
+	"github.com/prodeko/prodeko-hack/proxy/internal/fence"
+)
+
+// conventionsHead is the first half of what get_conventions returns and what
+// rides in the MCP initialize instructions. Most of the guide is advice rather
+// than enforcement: the enforcement layer is the fence and a maintainer's
+// review. It exists because a model that knows the bilingual pairing and the
+// token layer writes changes a maintainer merges, and one that does not writes
+// changes a maintainer has to explain.
 //
 // It is prose rather than a schema on purpose. The model reads it once per
 // session, and a list of rules with reasons is what it can act on.
-const conventions = `# Editing prodeko.org
+//
+// The editable tree between the two halves is generated from the fence, because
+// the server states that list exactly once and every other document — this
+// guide, the skill, the README — reads it from here.
+const conventionsHead = `# Editing prodeko.org
 
 The site is Hugo. Pages are Markdown with YAML front matter, lists of people
 and links are YAML data files, and the look is plain CSS. A change you make
@@ -17,21 +29,23 @@ site deploys. Nothing you do publishes directly.
 
 ## The tree you can see
 
-    site/content/**          public pages, Finnish and English
-    site/content-members/**  member-only pages, same shape
-    site/data/**             YAML: navigation, boards, partners, footer
-    site/assets/css/**       the stylesheet and the design tokens
-    site/assets/images/**    images already in the repository
-    site/layouts/**          the Hugo templates - readable, not writable
+`
 
+// conventionsTail is everything after the generated tree.
+const conventionsTail = `
 Everything else is invisible: the build configuration, the workflows, the
 Decap editor configuration, the proxy, the tools, the docs. Those decide what
 the build is allowed to do and who may edit, so they are not editable from
 here. Asking for them is not a mistake worth apologising for; just tell the
 person what you cannot reach and why.
 
-Read templates freely. "The events header" only becomes a CSS selector by
-reading the template that renders it.
+Read every template freely, the fenced ones included. "The events header" only
+becomes a CSS selector by reading the template that renders it, and a change to
+a writable partial is often a change to the stylesheet beside it.
+
+A template you may write is still a template every page goes through: a partial
+renders in both languages and on pages nobody asked you to touch. Look at what
+you changed with ` + "`" + `screenshot` + "`" + ` before you submit it.
 
 ## Two languages, one page
 
@@ -75,6 +89,10 @@ it runs the site's own tree check as well, so a broken shortcode or an
 unclosed template action comes back in the same turn that made it. Build
 before you submit, always.
 
+Then look at it: ` + "`" + `screenshot` + "`" + ` gives you a picture of the built page, both
+languages in one call when the page has a pair, and ` + "`" + `render` + "`" + ` gives you the
+markup when the markup is the question. Edit again until it is right.
+
 ` + "`" + `submit` + "`" + ` commits everything in the change, authored in the signed-in person's
 name, pushes the branch and opens a draft pull request with a preview link.
 The preview is ready about a minute later. Asking for another tweak afterwards
@@ -94,4 +112,71 @@ Configuration, workflows and the build: outside the fence, deliberately.
 // Conventions is the site guide the tools hand to the model. It is returned by
 // get_conventions and carried in the MCP initialize instructions, because a
 // client is free to ignore either one.
-func Conventions() string { return conventions }
+func Conventions() string { return conventionsHead + editableTree() + conventionsTail }
+
+// editableTree is the fence, stated. The roots come from [fence.Rules] and the
+// template groups from [fence.LayoutGroups], so what this prints is what the
+// server will actually permit: a hand-written copy of the list would be one
+// release away from telling the model it may edit something it may not.
+func editableTree() string {
+	var b strings.Builder
+	rules := fence.Rules()
+	width := 0
+	for _, r := range rules {
+		if n := len(r.Prefix) + len("**"); n > width {
+			width = n
+		}
+	}
+	for _, r := range rules {
+		fmt.Fprintf(&b, "    %-*s  %s\n", width, r.Prefix+"**", r.What)
+	}
+
+	var writable, fenced []fence.LayoutGroup
+	for _, g := range fence.LayoutGroups() {
+		if g.Write {
+			writable = append(writable, g)
+		} else {
+			fenced = append(fenced, g)
+		}
+	}
+	b.WriteString("\n### Templates you may write\n\n")
+	writeGroups(&b, writable)
+	b.WriteString("\n### Templates that stay read only\n\n")
+	writeGroups(&b, fenced)
+	return b.String()
+}
+
+// writeGroups lays out one group per entry: the paths, then the fence's own
+// line about them. The reason is printed rather than summarised, because "why
+// not" is what tells the model whether to edit something else or to hand the
+// request to a developer.
+func writeGroups(b *strings.Builder, groups []fence.LayoutGroup) {
+	for _, g := range groups {
+		fmt.Fprintf(b, "    %s\n", g.Paths)
+		for _, line := range wrap(g.Why, 66) {
+			fmt.Fprintf(b, "        %s\n", line)
+		}
+	}
+}
+
+// wrap breaks a line of prose at whitespace, so the generated part of the guide
+// reads like the written part instead of running off the edge of it.
+func wrap(text string, width int) []string {
+	var lines []string
+	line := ""
+	for _, word := range strings.Fields(text) {
+		switch {
+		case line == "":
+			line = word
+		case len(line)+1+len(word) <= width:
+			line += " " + word
+		default:
+			lines = append(lines, line)
+			line = word
+		}
+	}
+	if line != "" {
+		lines = append(lines, line)
+	}
+	return lines
+}

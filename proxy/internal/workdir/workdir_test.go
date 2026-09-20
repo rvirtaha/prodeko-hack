@@ -692,6 +692,32 @@ echo "check-trees: both trees present"
 	}
 }
 
+// The layout fence applies to the write itself and not only to the path: a
+// template that builds an asset is read-only whatever it is called, and the
+// refusal has to land before anything reaches the disk.
+func TestWritesApplyTheLayoutFence(t *testing.T) {
+	c := openChange(t, newFixture(t).manager(t))
+
+	const partial = "site/layouts/partials/nosto.html"
+	if err := c.WriteFile(partial, []byte("<div class=\"nosto\">Hei</div>\n")); err != nil {
+		t.Fatalf("writing a partial: %v", err)
+	}
+	if err := c.WriteFile(partial, []byte("{{ partialCached \"nosto.html\" . }}\n")); !errors.Is(err, fence.ErrReadOnly) {
+		t.Fatalf("writing partialCached into a partial = %v, want %v", err, fence.ErrReadOnly)
+	}
+	// The refused write must not have landed, or the fence would be a warning.
+	data, err := os.ReadFile(filepath.Join(c.Dir, filepath.FromSlash(partial)))
+	if err != nil {
+		t.Fatalf("reading the partial back: %v", err)
+	}
+	if strings.Contains(string(data), "partialCached") {
+		t.Fatalf("the refused write landed anyway: %q", data)
+	}
+	if err := c.WriteFile("site/layouts/baseof.html", []byte("<html></html>\n")); !errors.Is(err, fence.ErrReadOnly) {
+		t.Fatalf("writing the page skeleton = %v, want %v", err, fence.ErrReadOnly)
+	}
+}
+
 // ------------------------------------------------------------------ submit --
 
 func TestSubmitDryRunCommitsAuthoredByTheEditorAndPushesToOrigin(t *testing.T) {

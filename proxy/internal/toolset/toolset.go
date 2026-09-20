@@ -602,30 +602,22 @@ func authorOf(id mcpserver.Identity) (workdir.Author, error) {
 // checkPath is the lexical half of the fence, applied before a worktree is
 // opened: a path no rule covers is refused without costing a clone, and the
 // refusal names where work is possible instead. The authoritative check is the
-// change's own fence, which also follows symlinks; this never replaces it.
+// change's own fence, which also follows symlinks and reads what a template
+// already contains; this never replaces it.
 func checkPath(rel string, write bool) (string, error) {
 	clean, err := fence.Clean(rel)
 	if err != nil {
 		return "", err
 	}
-	rule, ok := fence.Match(clean)
-	if !ok {
-		return "", fmt.Errorf("%w: %s is under no rule; the editable roots are %s", fence.ErrOutside, clean, editableRoots())
+	if _, ok := fence.Match(clean); !ok {
+		return "", fmt.Errorf("%w: %s is under no rule; the editable roots are %s", fence.ErrOutside, clean, fence.Roots())
 	}
-	if write && !rule.Write {
-		return "", fmt.Errorf("%w: %s matches %s", fence.ErrReadOnly, clean, rule)
+	if write {
+		if err := fence.Writable(clean); err != nil {
+			return "", err
+		}
 	}
 	return clean, nil
-}
-
-// editableRoots is the allowlist as the model should hear it named.
-func editableRoots() string {
-	rules := fence.Rules()
-	names := make([]string, len(rules))
-	for i, r := range rules {
-		names[i] = r.String()
-	}
-	return strings.Join(names, ", ")
 }
 
 // hintFor names a change after the file the first edit touched, which is as

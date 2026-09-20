@@ -164,6 +164,11 @@ func (c *Change) write(rel string, content []byte) error {
 	if err != nil {
 		return err
 	}
+	// The path says whether a template may be written at all; this says whether
+	// this template and these bytes may be, which is the asset pipeline rule.
+	if err := c.fence.CheckTemplate(rel, content); err != nil {
+		return err
+	}
 	if err := c.roomForOneMore(rel, int64(len(content))); err != nil {
 		return err
 	}
