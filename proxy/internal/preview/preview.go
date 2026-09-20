@@ -91,6 +91,11 @@ func (s Site) Locate(arg string) (Page, error) {
 		return Page{}, fmt.Errorf("%w: %s builds into the member tree, which is not served here", ErrBadPath, rel)
 	case strings.HasPrefix(rel, ContentRoot):
 		return s.pageOfContent(rel)
+	case strings.HasSuffix(rel, ".md"):
+		// A file name is a content path spelled short, and the site serves no
+		// address ending in .md. Naming the root it is missing is the whole fix.
+		return Page{}, fmt.Errorf("%w: %s is a file name; content files are named from the repository root, %s...",
+			ErrBadPath, rel, ContentRoot)
 	default:
 		return s.pageOfAddress(arg)
 	}

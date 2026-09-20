@@ -125,6 +125,7 @@ func TestLocateRefusals(t *testing.T) {
 		{"a page that was never built", "/fi/ei-ole/", ErrNoPage},
 		{"a content file that is not there", "site/content/fi/ei-ole.md", ErrNoPage},
 		{"a content path naming no page", "site/content/fi", ErrBadPath},
+		{"a content path spelled short", "content/fi/tapahtumat.md", ErrBadPath},
 	}
 	for _, tc := range cases {
 		t.Run(tc.name, func(t *testing.T) {

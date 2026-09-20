@@ -55,8 +55,9 @@ the checked-out branch.
 
 `screenshot` runs a headless Chromium. The server image ships one; a server run
 straight off the VM like this uses whatever is on `PATH`, or the one
-`MCP_CHROMIUM_BIN` names. Without a browser that tool refuses and says so at
-startup, and every other tool works as it is.
+`MCP_CHROMIUM_BIN` names. Without a browser, that one tool refuses every call
+naming what it looked for, the startup log warns about it, and every other tool
+works as it is.
 
 `devctl logs -f mcp` follows the server. Every `tools/call` is logged with the
 tool name, the user and how long it took; that log is the audit trail for media
