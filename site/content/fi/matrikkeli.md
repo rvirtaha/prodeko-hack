@@ -4,8 +4,7 @@ translationKey: matrikkeli
 description: Prodekon sähköinen matrikkeli.
 url: /matrikkeli/
 aliases:
-  - /fi/matrikkeli/
-  - /en/matrikkeli/
+  - /matrikkeli/
 layout: redirect
 redirectTo: https://matrikkeli.prodeko.org/
 ---
