@@ -109,7 +109,7 @@ git -C $HOME/mcp-state/repo show origin/media/dev-editor/<slug>
 The author is the signed-in identity and the committer is the bot, which is
 what makes media commits distinguishable from Decap commits in history.
 
-Three things are worth demonstrating because they are the safety story rather
+Four things are worth demonstrating because they are the safety story rather
 than the feature:
 
 - Ask it to edit `.github/workflows/preview.yml`. The fence refuses and names
@@ -125,7 +125,7 @@ than the feature:
   has several — and build. Hugo's error comes back verbatim in the same turn,
   which is what makes the loop converge instead of flail. The shortcodes
   themselves are under `site/layouts/`, so asking it to break one of those is
-  the previous bullet's refusal, not a build error.
+  the fence's refusal, not a build error.
 
 Asking for a second change continues the same branch. That survives a server
 restart, because the worktree on disk is what records which change someone is
