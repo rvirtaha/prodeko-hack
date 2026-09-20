@@ -49,6 +49,27 @@ RUN set -eu; \
     tar xzf /tmp/hugo.tar.gz -C /out hugo; \
     /out/hugo version
 
+# Headless Chromium, which is what the screenshot tool takes its pictures with.
+# Pinned by content the same way hugo is, and for the same reason.
+#
+# chrome-headless-shell and not the browser: it is the headless implementation
+# on its own, it needs no window system, and it is the artefact Google publishes
+# for exactly this. It arrives as a directory rather than a binary — the
+# resource bundles, the ICU data and the software renderer sit beside the
+# executable and it will not start without them.
+ARG CHROMIUM_VERSION=153.0.8010.52
+ARG CHROMIUM_SHA256=944dc1eae654637fed4d57650198774f9c43b45f34e48febb84f43c541b5de76
+
+RUN set -eu; \
+    apt-get update; \
+    DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends unzip; \
+    rm -rf /var/lib/apt/lists/*; \
+    curl -sSLo /tmp/chromium.zip \
+        "https://storage.googleapis.com/chrome-for-testing-public/${CHROMIUM_VERSION}/linux64/chrome-headless-shell-linux64.zip"; \
+    echo "${CHROMIUM_SHA256}  /tmp/chromium.zip" | sha256sum -c -; \
+    unzip -q /tmp/chromium.zip -d /tmp/chromium; \
+    mv /tmp/chromium/chrome-headless-shell-linux64 /out/chrome-headless-shell
+
 
 FROM debian:bookworm-slim
 
@@ -60,17 +81,56 @@ FROM debian:bookworm-slim
 #
 # libstdc++6 is hugo extended's own dependency: the embedded SCSS transpiler
 # is C++, and without it hugo cannot even print its version.
+#
+# Everything from libasound2 down is what chrome-headless-shell links, read off
+# the binary rather than guessed: a headless browser still pulls in the X, ATK
+# and NSS client libraries, although it opens no window and talks to no display.
+# fonts-liberation and fonts-dejavu-core are the fallback faces; the site serves
+# its own webfonts to the browser over the loopback port, and these are what a
+# character none of them covers is drawn with instead of a box.
 RUN set -eu; \
     apt-get update; \
     DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
         ca-certificates \
         git \
         bash \
-        libstdc++6; \
+        libstdc++6 \
+        libasound2 \
+        libatk-bridge2.0-0 \
+        libatk1.0-0 \
+        libatspi2.0-0 \
+        libdbus-1-3 \
+        libdrm2 \
+        libexpat1 \
+        libgbm1 \
+        libglib2.0-0 \
+        libnspr4 \
+        libnss3 \
+        libx11-6 \
+        libxcb1 \
+        libxcomposite1 \
+        libxdamage1 \
+        libxext6 \
+        libxfixes3 \
+        libxi6 \
+        libxkbcommon0 \
+        libxrandr2 \
+        libxrender1 \
+        fonts-liberation \
+        fonts-dejavu-core; \
     rm -rf /var/lib/apt/lists/*
 
 COPY --from=build /out/hugo /usr/local/bin/hugo
 COPY --from=build /out/prodeko-mcp /usr/local/bin/prodeko-mcp
+
+# The browser keeps its directory and is reached through a name on PATH, which
+# is the name the server looks for. Running it here is the assertion that the
+# library list above is complete: a missing one is a build failure rather than a
+# screenshot tool that refuses every call in production.
+COPY --from=build /out/chrome-headless-shell /opt/chrome-headless-shell
+RUN set -eu; \
+    ln -s /opt/chrome-headless-shell/chrome-headless-shell /usr/local/bin/chrome-headless-shell; \
+    chrome-headless-shell --version
 
 # The state directory, matching prodeko_mcp_container_state_dir. In production
 # a bind mount from the host covers this path and carries the host's ownership
