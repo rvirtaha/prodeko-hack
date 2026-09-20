@@ -56,6 +56,7 @@ type Tool struct {
 	Name        string
 	Description string
 	Schema      json.RawMessage // JSON Schema for the arguments object
+	Meta        json.RawMessage // optional _meta on the descriptor, e.g. the MCP Apps ui block
 	Call        func(ctx context.Context, id Identity, args json.RawMessage) (Result, error)
 }
 
@@ -102,6 +103,11 @@ type Config struct {
 
 	Tools        []Tool
 	Authenticate Authenticator
+
+	// Prompts and Resources are optional; empty lists advertise nothing. See
+	// extensions.go for what each is.
+	Prompts   []Prompt
+	Resources []Resource
 
 	// ResourceMetadataURL is the RFC 9728 document a 401 points at, so an MCP
 	// client that has never seen this server can discover how to sign in.
@@ -311,9 +317,15 @@ func (s *Server) dispatch(ctx context.Context, id Identity, req request) *respon
 		return s.listTools(req)
 	case methodToolsCall:
 		return s.callTool(ctx, id, req)
+	case methodPromptsList:
+		return s.listPrompts(req)
+	case methodPromptsGet:
+		return s.getPrompt(req)
+	case methodResourcesList:
+		return s.listResources(req)
+	case methodResourcesRead:
+		return s.readResource(req)
 	default:
-		// resources/list and prompts/list land here by design: the capabilities
-		// advertise tools only, and a client that asks anyway is told so.
 		return errorResponse(req.ID, codeMethodNotFound, "unknown method "+strconv.Quote(req.Method),
 			unknownMethodData{Method: req.Method, Supported: supportedMethods})
 	}
@@ -332,9 +344,16 @@ func (s *Server) initialize(req request) *response {
 		"client", p.ClientInfo.Name, "client_version", p.ClientInfo.Version,
 		"asked", p.ProtocolVersion, "speaking", ProtocolVersion)
 
+	caps := capabilities{Tools: &toolsCapability{}}
+	if len(s.cfg.Prompts) > 0 {
+		caps.Prompts = &promptsCapability{}
+	}
+	if len(s.cfg.Resources) > 0 {
+		caps.Resources = &resourcesCapability{}
+	}
 	return resultResponse(req.ID, initializeResult{
 		ProtocolVersion: ProtocolVersion,
-		Capabilities:    capabilities{Tools: &toolsCapability{}},
+		Capabilities:    caps,
 		ServerInfo:      serverInfo{Name: s.cfg.Name, Version: s.cfg.Version},
 		Instructions:    s.cfg.Instructions,
 	})
@@ -350,6 +369,7 @@ func (s *Server) listTools(req request) *response {
 			Name:        t.Name,
 			Description: t.Description,
 			InputSchema: t.Schema,
+			Meta:        t.Meta,
 		})
 	}
 	return resultResponse(req.ID, toolsListResult{Tools: tools})

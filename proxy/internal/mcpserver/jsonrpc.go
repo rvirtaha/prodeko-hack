@@ -24,14 +24,23 @@ const (
 // The methods this transport answers. The list is data because it is reported
 // to a client that called something else.
 const (
-	methodInitialize  = "initialize"
-	methodInitialized = "notifications/initialized"
-	methodPing        = "ping"
-	methodToolsList   = "tools/list"
-	methodToolsCall   = "tools/call"
+	methodInitialize    = "initialize"
+	methodInitialized   = "notifications/initialized"
+	methodPing          = "ping"
+	methodToolsList     = "tools/list"
+	methodToolsCall     = "tools/call"
+	methodPromptsList   = "prompts/list"
+	methodPromptsGet    = "prompts/get"
+	methodResourcesList = "resources/list"
+	methodResourcesRead = "resources/read"
 )
 
-var supportedMethods = []string{methodInitialize, methodInitialized, methodPing, methodToolsList, methodToolsCall}
+var supportedMethods = []string{
+	methodInitialize, methodInitialized, methodPing,
+	methodToolsList, methodToolsCall,
+	methodPromptsList, methodPromptsGet,
+	methodResourcesList, methodResourcesRead,
+}
 
 // nullID is the id of an error that cannot be attributed to a request: a body
 // that did not parse, or one whose id was null. JSON-RPC requires the member to
@@ -100,11 +109,14 @@ type initializeResult struct {
 	Instructions    string       `json:"instructions,omitempty"`
 }
 
-// capabilities advertises tools and nothing else. There are no resources, no
-// prompts and no sampling: the model runs on the client's side, and this
-// server is hands and guardrails.
+// capabilities advertises what was configured and nothing else. There is no
+// sampling: the model runs on the client's side, and this server is hands and
+// guardrails. Prompts and resources appear only when the toolset declared
+// some, so a client of a server without them is never invited to ask.
 type capabilities struct {
-	Tools *toolsCapability `json:"tools,omitempty"`
+	Tools     *toolsCapability     `json:"tools,omitempty"`
+	Prompts   *promptsCapability   `json:"prompts,omitempty"`
+	Resources *resourcesCapability `json:"resources,omitempty"`
 }
 
 type toolsCapability struct {
@@ -124,6 +136,7 @@ type toolDescriptor struct {
 	Name        string          `json:"name"`
 	Description string          `json:"description"`
 	InputSchema json.RawMessage `json:"inputSchema"`
+	Meta        json.RawMessage `json:"_meta,omitempty"` // the MCP Apps ui block, for a tool with a widget
 }
 
 // callToolResult carries a tool's answer. A refusal by the fence is an
