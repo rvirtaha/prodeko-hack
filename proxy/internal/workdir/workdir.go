@@ -451,11 +451,15 @@ func (c *Change) updatedAt() time.Time {
 	return t
 }
 
-// Build runs hugo into a throwaway output directory, then check-trees.sh if
+// Build runs hugo into the change's own output directory, then check-trees.sh if
 // the site carries one, under one BuildTimeout for both. The command line is
 // fixed: this is the only process this server will ever run on behalf of a
 // client, which is what keeps it a content editor rather than remote code
 // execution with extra steps.
+//
+// The output is kept rather than thrown away, because render and screenshot read
+// it: what the model looks at is the site this build produced, and building a
+// second copy to look at would be a second answer to the same question.
 func (m *Manager) Build(ctx context.Context, c *Change) (Result, error) {
 	if c == nil {
 		return Result{}, ErrNoChange
@@ -468,14 +472,17 @@ func (m *Manager) Build(ctx context.Context, c *Change) (Result, error) {
 		return Result{}, fmt.Errorf("workdir: no hugo site at %s: %w", site, err)
 	}
 
-	if err := os.MkdirAll(m.cfg.StateDir, 0o755); err != nil {
-		return Result{}, fmt.Errorf("workdir: making the state directory: %w", err)
+	// Emptied first, every time. A page deleted from the content tree has to
+	// disappear from the output with it, or render would answer out of a file
+	// the site no longer has; and check-trees.sh is staged in here, which is a
+	// copy that cannot be made on top of last build's.
+	root := c.BuildRoot()
+	if err := os.RemoveAll(root); err != nil {
+		return Result{}, fmt.Errorf("workdir: clearing the last build: %w", err)
 	}
-	tmp, err := os.MkdirTemp(m.cfg.StateDir, "build-")
-	if err != nil {
-		return Result{}, fmt.Errorf("workdir: making a build directory: %w", err)
+	if err := os.MkdirAll(root, 0o755); err != nil {
+		return Result{}, fmt.Errorf("workdir: making the build directory: %w", err)
 	}
-	defer os.RemoveAll(tmp)
 
 	ctx, cancel := context.WithTimeout(ctx, BuildTimeout)
 	defer cancel()
@@ -483,14 +490,14 @@ func (m *Manager) Build(ctx context.Context, c *Change) (Result, error) {
 	started := m.cfg.Now()
 	var buf bytes.Buffer
 	finish := func(ok bool, err error) (Result, error) {
-		out := relativise(buf.String(), c.Dir, tmp)
-		return Result{OK: ok, Output: strings.TrimRight(out, "\n"), Duration: m.cfg.Now().Sub(started)}, err
+		text := relativise(buf.String(), c.Dir, root)
+		return Result{OK: ok, Output: strings.TrimRight(text, "\n"), Duration: m.cfg.Now().Sub(started)}, err
 	}
 
 	// --logLevel error rather than --quiet: quiet mode discards hugo's own
 	// error text along with everything else, and that text is the entire point
 	// of the tool. This keeps the errors and drops the build statistics.
-	out, err := m.run(ctx, site, m.cfg.HugoBin, "--logLevel", "error", "--destination", filepath.Join(tmp, "public"))
+	out, err := m.run(ctx, site, m.cfg.HugoBin, "--logLevel", "error", "--destination", filepath.Join(root, "public"))
 	buf.WriteString(out)
 	if err != nil {
 		if ctx.Err() != nil {
@@ -508,7 +515,7 @@ func (m *Manager) Build(ctx context.Context, c *Change) (Result, error) {
 	members := filepath.Join(site, "content-members")
 	if fileExists(script) && dirExists(members) {
 		out, err = m.run(ctx, site, m.cfg.HugoBin, "--logLevel", "error", "--environment", "members",
-			"--destination", filepath.Join(tmp, "public-members"))
+			"--destination", filepath.Join(root, "public-members"))
 		buf.WriteString(out)
 		if err != nil {
 			if ctx.Err() != nil {
@@ -516,14 +523,14 @@ func (m *Manager) Build(ctx context.Context, c *Change) (Result, error) {
 			}
 			return finish(false, nil)
 		}
-		copied := filepath.Join(tmp, "check-trees.sh")
+		copied := filepath.Join(root, "check-trees.sh")
 		if err := copyFile(script, copied, 0o755); err != nil {
 			return finish(false, fmt.Errorf("workdir: staging check-trees.sh: %w", err))
 		}
-		if err := os.Symlink(members, filepath.Join(tmp, "content-members")); err != nil {
+		if err := os.Symlink(members, filepath.Join(root, "content-members")); err != nil {
 			return finish(false, fmt.Errorf("workdir: staging the member tree: %w", err))
 		}
-		out, err = m.run(ctx, tmp, copied)
+		out, err = m.run(ctx, root, copied)
 		buf.WriteString(out)
 		if err != nil {
 			if ctx.Err() != nil {
