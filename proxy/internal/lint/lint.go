@@ -35,8 +35,9 @@ type Finding struct {
 	Text  string
 }
 
-// String is the form every compiler and every linter has printed since 1978,
-// because it is the form a model and a maintainer both already read.
+// String is file:line:message, the form compilers and linters print, because it
+// is the form a model and a maintainer both already read — and the path in it is
+// the path to pass back to read_file.
 func (f Finding) String() string {
 	if f.Line > 0 {
 		return fmt.Sprintf("%s:%d: %s", f.Where, f.Line, f.Text)
