@@ -1,10 +1,11 @@
 // Command prodeko-content-mcp lets the media team edit prodeko.org from the
 // Claude they already use.
 //
-// It serves three things:
+// It serves four things:
 //
-//	POST /mcp                   the MCP streamable HTTP transport, eleven tools
+//	POST /mcp                   the MCP streamable HTTP transport, fifteen tools
 //	GET  /.well-known/oauth-*   the OAuth discovery documents
+//	GET|POST /upload            the token-authorized image upload
 //	GET  /healthz               liveness
 //
 // plus the authorization server's own /register, /authorize, /oauth/callback
@@ -118,6 +119,7 @@ func run(cfg *env, log *slog.Logger) error {
 		Sessions:      sessions,
 		Tokens:        sessions,
 		RequiredRoles: cfg.RequiredRoles,
+		AccessContact: cfg.AccessContact,
 		Logger:        log.With("component", "oauthas"),
 	})
 	if err != nil {
@@ -318,6 +320,7 @@ type env struct {
 	KeycloakClientID     string
 	KeycloakClientSecret string
 	RequiredRoles        []string
+	AccessContact        string
 
 	SessionSecret string
 	DevBearer     string
@@ -344,6 +347,7 @@ const (
 	envClientID       = "KEYCLOAK_CLIENT_ID"
 	envClientSecret   = "KEYCLOAK_CLIENT_SECRET"
 	envRequiredRoles  = "MCP_REQUIRED_ROLES"
+	envAccessContact  = "MCP_ACCESS_CONTACT"
 	envSessionSecret  = "SESSION_SECRET"
 	envGitHubToken    = "GITHUB_TOKEN"
 	envGitHubRepo     = "GITHUB_REPO"
@@ -410,6 +414,7 @@ func loadEnv(lookup func(string) (string, bool)) (*env, error) {
 		DevBearer:            devBearer,
 		GitHubToken:          get(envGitHubToken),
 		GitHubRepo:           get(envGitHubRepo),
+		AccessContact:        get(envAccessContact),
 		CommitterName:        withDefault(envCommitterName, defaultCommitterName),
 		CommitterEmail:       withDefault(envCommitterEmail, defaultCommitterEmail),
 	}
