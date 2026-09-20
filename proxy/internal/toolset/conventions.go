@@ -86,7 +86,8 @@ edit with ` + "`" + `edit_file` + "`" + `; do not read it whole every turn.
 
 Search, read, edit, then ` + "`" + `build` + "`" + `. The build is a few hundred milliseconds and
 it runs the site's own tree check as well, so a broken shortcode or an
-unclosed template action comes back in the same turn that made it.
+unclosed template action comes back in the same turn that made it. It reads
+the built HTML and the stylesheets too, and quotes what it noticed.
 
 Then look at it: ` + "`" + `screenshot` + "`" + ` gives you a picture of the built page, both
 languages in one call when the page has a pair, and ` + "`" + `render` + "`" + ` gives you the

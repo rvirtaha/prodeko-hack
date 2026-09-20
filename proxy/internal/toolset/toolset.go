@@ -142,8 +142,8 @@ func (t *Toolset) Tools() []mcpserver.Tool {
 		},
 		{
 			Name: ToolBuild,
-			Description: "Build the site and run its tree check. Returns the errors verbatim when it fails. Run it after " +
-				"editing and always before submitting.",
+			Description: "Build the site, run its tree check, and check the built markup and the stylesheets. Returns " +
+				"everything it found verbatim. submit refuses a change that has not been built since its last edit.",
 			Schema: schemaBuild,
 			Call:   text(t.build),
 		},

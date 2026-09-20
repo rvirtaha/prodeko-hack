@@ -6,6 +6,7 @@ import (
 	"time"
 	"unicode/utf8"
 
+	"github.com/prodeko/prodeko-hack/proxy/internal/lint"
 	"github.com/prodeko/prodeko-hack/proxy/internal/preview"
 	"github.com/prodeko/prodeko-hack/proxy/internal/workdir"
 )
@@ -59,18 +60,49 @@ func renderMatches(matches []workdir.Match, pattern string, capped int) string {
 }
 
 func renderBuild(res workdir.Result) string {
+	var b strings.Builder
 	out := strings.TrimRight(res.Output, "\n")
 	if res.OK {
-		if out == "" {
-			return fmt.Sprintf("Build OK in %s.", res.Duration.Round(time.Millisecond))
+		fmt.Fprintf(&b, "Build OK in %s.", res.Duration.Round(time.Millisecond))
+		if out != "" {
+			fmt.Fprintf(&b, "\n\n%s", out)
 		}
-		return fmt.Sprintf("Build OK in %s.\n\n%s", res.Duration.Round(time.Millisecond), out)
+	} else {
+		if out == "" {
+			out = "(the build failed and said nothing)"
+		}
+		fmt.Fprintf(&b, "Build failed after %s. The output is verbatim:\n\n%s",
+			res.Duration.Round(time.Millisecond), out)
 	}
-	if out == "" {
-		out = "(the build failed and said nothing)"
+	// The findings come after hugo's words and never instead of them, and they
+	// do not change what the build said about itself: the site either built or
+	// it did not, and these are things to look at on the way past.
+	writeFindings(&b, "The stylesheets", res.CSS,
+		"A stylesheet a browser cannot parse is a stylesheet it drops rules out of, quietly.")
+	writeFindings(&b, "The built pages", res.HTML,
+		"Markup a browser has to guess at is markup that lands differently in different browsers.")
+	return b.String()
+}
+
+// writeFindings quotes what a check noticed, one line each, exactly as it was
+// found. The closing sentence is why the list is worth a turn; without it a
+// model reading "Build OK" has every reason to move on.
+func writeFindings(b *strings.Builder, what string, findings []lint.Finding, why string) {
+	if len(findings) == 0 {
+		return
 	}
-	return fmt.Sprintf("Build failed after %s. The output is verbatim:\n\n%s",
-		res.Duration.Round(time.Millisecond), out)
+	fmt.Fprintf(b, "\n\n%s, %d thing", what, len(findings))
+	if len(findings) > 1 {
+		b.WriteByte('s')
+	}
+	b.WriteString(":\n")
+	for _, f := range findings {
+		fmt.Fprintf(b, "  %s\n", f)
+	}
+	if len(findings) >= lint.MaxFindings {
+		fmt.Fprintf(b, "  ... stopped at %d; the same mistake in one template shows on every page that uses it.\n", lint.MaxFindings)
+	}
+	b.WriteString(why)
 }
 
 func renderSubmit(res workdir.SubmitResult) string {

@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/prodeko/prodeko-hack/proxy/internal/fence"
+	"github.com/prodeko/prodeko-hack/proxy/internal/lint"
 	"github.com/prodeko/prodeko-hack/proxy/internal/mcpserver"
 	"github.com/prodeko/prodeko-hack/proxy/internal/workdir"
 )
@@ -547,6 +548,52 @@ func TestRenderBuild(t *testing.T) {
 	ok := renderBuild(workdir.Result{OK: true, Duration: 220 * time.Millisecond})
 	if !strings.Contains(ok, "OK") || !strings.Contains(ok, "220ms") {
 		t.Errorf("renderBuild of a clean build = %q", ok)
+	}
+	if strings.Contains(ok, "stylesheet") || strings.Contains(ok, "pages") {
+		t.Errorf("a clean build reports checks that found nothing:\n%s", ok)
+	}
+}
+
+// The checks' findings are quoted the way they were found, after hugo's words
+// and never instead of them. They say nothing about whether the site built: that
+// is hugo's answer, and it stands.
+func TestRenderBuildQuotesTheFindings(t *testing.T) {
+	got := renderBuild(workdir.Result{
+		OK:       true,
+		Duration: 310 * time.Millisecond,
+		CSS: []lint.Finding{{
+			Where: "site/assets/css/main.css", Line: 412,
+			Text: "a } here closes nothing; everything after it is read as a selector",
+		}},
+		HTML: []lint.Finding{{
+			Where: "fi/tapahtumat/index.html", Line: 88,
+			Text: "<div> is never closed, so the browser guesses where it ends",
+		}},
+	})
+	for _, want := range []string{
+		"Build OK",
+		"site/assets/css/main.css:412: a } here closes nothing",
+		"fi/tapahtumat/index.html:88: <div> is never closed",
+	} {
+		if !strings.Contains(got, want) {
+			t.Errorf("renderBuild omits %q:\n%s", want, got)
+		}
+	}
+	// One finding is one thing, not "1 things".
+	if strings.Contains(got, "1 things") {
+		t.Errorf("renderBuild counts one finding as several:\n%s", got)
+	}
+
+	// A failing build says so first; the findings are still worth reading.
+	failed := renderBuild(workdir.Result{
+		Output: `ERROR render of "/fi/" failed: unclosed action`,
+		CSS:    []lint.Finding{{Where: "site/assets/css/main.css", Line: 9, Text: "a { opens here and is never closed"}},
+	})
+	if !strings.Contains(failed, "Build failed") || !strings.Contains(failed, "unclosed action") {
+		t.Errorf("a failed build does not lead with hugo's words:\n%s", failed)
+	}
+	if !strings.Contains(failed, "main.css:9") {
+		t.Errorf("a failed build drops the stylesheet findings:\n%s", failed)
 	}
 }
 

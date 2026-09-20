@@ -29,6 +29,7 @@ import (
 	"time"
 
 	"github.com/prodeko/prodeko-hack/proxy/internal/fence"
+	"github.com/prodeko/prodeko-hack/proxy/internal/lint"
 )
 
 // BranchPrefix is the namespace every change lives in. A branch name that does
@@ -152,6 +153,15 @@ type Result struct {
 	OK       bool
 	Output   string
 	Duration time.Duration
+
+	// HTML and CSS are what the server's own checks noticed about a build that
+	// ran. They do not decide OK: hugo failing means the site does not build,
+	// while an unclosed element on a page nobody touched is a thing to report to
+	// whoever is looking. An HTML finding names a built page and not the
+	// template behind it, so nothing here can be attributed to the change with
+	// enough confidence to refuse it — the person reading is what judges.
+	HTML []lint.Finding
+	CSS  []lint.Finding
 }
 
 // SubmitResult describes what submit did. With a GitHub token it is a draft
@@ -452,7 +462,8 @@ func (c *Change) updatedAt() time.Time {
 }
 
 // Build runs hugo into the change's own output directory, then check-trees.sh if
-// the site carries one, under one BuildTimeout for both. The command line is
+// the site carries one, under one BuildTimeout for both, and finally the
+// server's own checks on the markup and the stylesheets. The command line is
 // fixed: this is the only process this server will ever run on behalf of a
 // client, which is what keeps it a content editor rather than remote code
 // execution with extra steps.
@@ -491,7 +502,20 @@ func (m *Manager) Build(ctx context.Context, c *Change) (Result, error) {
 	var buf bytes.Buffer
 	finish := func(ok bool, err error) (Result, error) {
 		text := relativise(buf.String(), c.Dir, root)
-		return Result{OK: ok, Output: strings.TrimRight(text, "\n"), Duration: m.cfg.Now().Sub(started)}, err
+		res := Result{OK: ok, Output: strings.TrimRight(text, "\n")}
+		// The stylesheets are checked whether the site built or not, because a
+		// stylesheet that does not parse is exactly the mistake hugo builds
+		// happily. The pages are only checked when there are pages: a failed
+		// build leaves the output of the one before it, or none at all.
+		res.CSS = lint.CSS(c.Dir)
+		if ok {
+			res.HTML = lint.HTML(c.Output())
+		}
+		// The duration is what the tool took, checks included: it is read as
+		// "how long will this take me next time", and the checks are part of the
+		// answer.
+		res.Duration = m.cfg.Now().Sub(started)
+		return res, err
 	}
 
 	// --logLevel error rather than --quiet: quiet mode discards hugo's own

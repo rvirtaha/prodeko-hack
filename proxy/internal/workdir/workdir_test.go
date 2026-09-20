@@ -692,6 +692,50 @@ echo "check-trees: both trees present"
 	}
 }
 
+// Hugo answers one question and the checks answer two more: a page whose markup
+// does not close and a stylesheet that does not parse both build perfectly well.
+// A finding is reported without changing what hugo said about the build.
+func TestBuildReportsTheCheckFindings(t *testing.T) {
+	if _, err := exec.LookPath("hugo"); err != nil {
+		t.Skip("hugo is not on PATH")
+	}
+	m := newFixture(t).manager(t)
+	c := openChange(t, m)
+
+	// A page layout is writable, and this is the mistake it is writable for.
+	if err := c.WriteFile("site/layouts/page.html",
+		[]byte("<html><body><div class=\"card\">{{ .Content }}</body></html>\n")); err != nil {
+		t.Fatalf("WriteFile: %v", err)
+	}
+	if err := c.WriteFile("site/assets/css/main.css", []byte(".a { color: red }\n}\n")); err != nil {
+		t.Fatalf("WriteFile: %v", err)
+	}
+
+	res, err := m.Build(t.Context(), c)
+	if err != nil {
+		t.Fatalf("Build: %v (output %q)", err, res.Output)
+	}
+	if !res.OK {
+		t.Fatalf("hugo refused a site it has no quarrel with: %s", res.Output)
+	}
+	if len(res.CSS) != 1 {
+		t.Fatalf("the stylesheet check found %d things, want 1: %v", len(res.CSS), res.CSS)
+	}
+	if res.CSS[0].Where != "site/assets/css/main.css" || res.CSS[0].Line != 2 {
+		t.Errorf("the finding is at %s:%d, want site/assets/css/main.css:2", res.CSS[0].Where, res.CSS[0].Line)
+	}
+	if len(res.HTML) == 0 {
+		t.Fatal("the page check found nothing on a page with an unclosed div")
+	}
+	if !strings.Contains(res.HTML[0].Text, "<div>") {
+		t.Errorf("the finding does not name the element: %s", res.HTML[0])
+	}
+	// The finding names a built page, which is the thing that can be looked at.
+	if !strings.HasSuffix(res.HTML[0].Where, ".html") {
+		t.Errorf("the finding names %q, want a built page", res.HTML[0].Where)
+	}
+}
+
 // The stamps submit reads: a write records an edit, a build that passed records
 // itself, and a build that failed records nothing. Their order is the whole
 // content of the gate, so the order is what is asserted.
