@@ -534,10 +534,10 @@ func TestRenderChangesTellsCommittedFromUnsubmitted(t *testing.T) {
 // out branch-safe and deterministic.
 func TestUserOfDerivesABranchSafeName(t *testing.T) {
 	for raw, want := range map[string]string{
-		"rvirtaha@hotmail.com": "rvirtaha-hotmail.com",
+		"rvirtaha@hotmail.com":          "rvirtaha-hotmail.com",
 		"Maija.Meikäläinen@prodeko.org": "maija.meik-l-inen-prodeko.org",
-		"dev-editor": "dev-editor",
-		"..@..":      "",
+		"dev-editor":                    "dev-editor",
+		"..@..":                         "",
 	} {
 		got, err := userOf(mcpserver.Identity{Username: raw})
 		if want == "" {
