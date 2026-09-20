@@ -42,15 +42,19 @@ func gate(st workdir.Stamps, files []string, description string) error {
 	// pages it breaks are the ones nobody was looking at. A screenshot is the
 	// cheapest thing that makes the editor look at one of them.
 	if templates := layoutFiles(files); len(templates) > 0 {
+		changed := strings.Join(templates, ", ")
+		rendered := "a page it renders"
+		if len(templates) > 1 {
+			rendered = "a page they render"
+		}
 		if !st.ShotAt.After(st.EditedAt) {
 			missing = append(missing, fmt.Sprintf(
-				"Run %s on a page they render: %s changed and nothing has been looked at since the last edit.",
-				ToolScreenshot, strings.Join(templates, ", ")))
+				"Run %s on %s: %s changed and nothing has been looked at since the last edit.",
+				ToolScreenshot, rendered, changed))
 		}
 		if strings.TrimSpace(description) == "" {
-			missing = append(missing, fmt.Sprintf(
-				"Pass a description of what looks different: %s changed, and that sentence is what a maintainer reads before the diff.",
-				strings.Join(templates, ", ")))
+			missing = append(missing,
+				"Pass a description of what looks different now: a template changed, and that sentence is what a maintainer reads before the diff.")
 		}
 	}
 
