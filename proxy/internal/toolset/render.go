@@ -299,3 +299,58 @@ func renderAbandon(res workdir.AbandonResult) string {
 	}
 	return b.String()
 }
+
+// maxTranslationRows bounds each list translation_status prints. The counts
+// above the lists carry the size of the problem; the rows carry where to
+// start.
+const maxTranslationRows = 30
+
+// renderTranslationStatus is the fi/en report: what has no pair, what
+// drifted, what cannot pair at all.
+func renderTranslationStatus(s workdir.TranslationStatus, filter string) string {
+	scope := "the content tree"
+	if filter != "" {
+		scope = filter
+	}
+	if s.Total == 0 {
+		return "No pages under " + scope + "."
+	}
+	var b strings.Builder
+	fmt.Fprintf(&b, "%d pages under %s: %d missing their other language, %d pairs drifted apart, %d with no translationKey.\n",
+		s.Total, scope, len(s.Missing), len(s.Stale), len(s.Unkeyed))
+
+	if len(s.Missing) > 0 {
+		b.WriteString("\nOnly one language:\n")
+		for i, p := range s.Missing {
+			if i == maxTranslationRows {
+				fmt.Fprintf(&b, "  ... and %d more\n", len(s.Missing)-i)
+				break
+			}
+			fmt.Fprintf(&b, "  %s (%s only)\n", p.Path, p.Lang)
+		}
+	}
+	if len(s.Stale) > 0 {
+		b.WriteString("\nDrifted apart, widest gap first:\n")
+		for i, pair := range s.Stale {
+			if i == maxTranslationRows {
+				fmt.Fprintf(&b, "  ... and %d more\n", len(s.Stale)-i)
+				break
+			}
+			fmt.Fprintf(&b, "  %s: %s (%s) was edited %s; %s (%s) not since %s\n",
+				pair.Key,
+				pair.Newer.Path, pair.Newer.Lang, pair.Newer.At.Format("2006-01-02"),
+				pair.Older.Path, pair.Older.Lang, pair.Older.At.Format("2006-01-02"))
+		}
+	}
+	if len(s.Unkeyed) > 0 {
+		b.WriteString("\nNo translationKey, so no pairing:\n")
+		for i, p := range s.Unkeyed {
+			if i == maxTranslationRows {
+				fmt.Fprintf(&b, "  ... and %d more\n", len(s.Unkeyed)-i)
+				break
+			}
+			b.WriteString("  " + p + "\n")
+		}
+	}
+	return strings.TrimRight(b.String(), "\n")
+}

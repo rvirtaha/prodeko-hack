@@ -184,6 +184,13 @@ func (t *Toolset) Tools() []mcpserver.Tool {
 			Call:   text(t.getFeedback),
 		},
 		{
+			Name: ToolTranslationStatus,
+			Description: "Which pages are missing their Finnish or English side, and which pairs drifted apart: one side " +
+				"edited after the other. Age is the last commit, so an edit in this change counts once it is submitted.",
+			Schema: schemaTranslationStatus,
+			Call:   text(t.translationStatus),
+		},
+		{
 			Name: ToolAbandonChange,
 			Description: "Throw a change away: close its pull request, delete its branch, discard its edits. There is no " +
 				"undo, so confirm with the person before calling this.",
@@ -548,6 +555,30 @@ func (t *Toolset) getFeedback(ctx context.Context, id mcpserver.Identity, args j
 		return "", err
 	}
 	return renderFeedback(c.Slug, fb), nil
+}
+
+func (t *Toolset) translationStatus(ctx context.Context, id mcpserver.Identity, args json.RawMessage) (string, error) {
+	a, err := decode[translationStatusArgs](args)
+	if err != nil {
+		return "", fmt.Errorf("%s: %w", ToolTranslationStatus, err)
+	}
+	filter := strings.TrimSpace(a.Path)
+	if filter != "" {
+		clean, err := fence.Clean(filter)
+		if err != nil {
+			return "", err
+		}
+		filter = clean
+	}
+	c, err := t.open(id, "")
+	if err != nil {
+		return "", err
+	}
+	status, err := t.mgr.TranslationStatus(ctx, c, filter)
+	if err != nil {
+		return "", err
+	}
+	return renderTranslationStatus(status, filter), nil
 }
 
 func (t *Toolset) abandonChange(ctx context.Context, id mcpserver.Identity, args json.RawMessage) (string, error) {

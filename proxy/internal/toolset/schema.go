@@ -10,19 +10,20 @@ import "encoding/json"
 //
 // Tool names are stable. Renaming one breaks every saved connector.
 const (
-	ToolGetConventions = "get_conventions"
-	ToolListFiles      = "list_files"
-	ToolReadFile       = "read_file"
-	ToolSearch         = "search"
-	ToolWriteFile      = "write_file"
-	ToolEditFile       = "edit_file"
-	ToolBuild          = "build"
-	ToolRender         = "render"
-	ToolScreenshot     = "screenshot"
-	ToolSubmit         = "submit"
-	ToolListMyChanges  = "list_my_changes"
-	ToolGetFeedback    = "get_feedback"
-	ToolAbandonChange  = "abandon_change"
+	ToolGetConventions    = "get_conventions"
+	ToolListFiles         = "list_files"
+	ToolReadFile          = "read_file"
+	ToolSearch            = "search"
+	ToolWriteFile         = "write_file"
+	ToolEditFile          = "edit_file"
+	ToolBuild             = "build"
+	ToolRender            = "render"
+	ToolScreenshot        = "screenshot"
+	ToolSubmit            = "submit"
+	ToolListMyChanges     = "list_my_changes"
+	ToolGetFeedback       = "get_feedback"
+	ToolAbandonChange     = "abandon_change"
+	ToolTranslationStatus = "translation_status"
 )
 
 // Defaults and caps that the schema states and the implementation enforces.
@@ -254,6 +255,19 @@ var schemaAbandonChange = json.RawMessage(`{
   "additionalProperties": false
 }`)
 
+var schemaTranslationStatus = json.RawMessage(`{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "path": {
+      "type": "string",
+      "description": "Optional repository-relative prefix, e.g. \"site/content/fi/kilta\". Omit it for the whole content tree.",
+      "maxLength": 512
+    }
+  },
+  "additionalProperties": false
+}`)
+
 // The argument types, one per schema. They are the Go side of the same
 // contract and must be changed together with it.
 
@@ -308,4 +322,8 @@ type getFeedbackArgs struct {
 
 type abandonChangeArgs struct {
 	Slug string `json:"slug"`
+}
+
+type translationStatusArgs struct {
+	Path string `json:"path"`
 }
