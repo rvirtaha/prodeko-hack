@@ -1,6 +1,6 @@
 # The content-editor MCP server, cmd/mcp/. Built and pushed as
-# prodekoregistry.azurecr.io/prodeko-mcp:v1, consumed by the prodeko_mcp
-# Ansible role.
+# prodekoregistry.azurecr.io/prodeko-mcp, tagged sha-<40 hex> and main,
+# consumed by the prodeko_mcp Ansible role.
 #
 # Deliberately free of BuildKit-only syntax: no `# syntax=` directive, no
 # heredocs, no `RUN --mount=type=cache`, no `ADD --checksum`. Rootless Docker

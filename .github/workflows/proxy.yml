@@ -379,7 +379,7 @@ jobs:
       # The command is the only one the deploy key is allowed to run: sshd
       # forces ssh-deploy-wrapper.sh, whose regex accepts this line and
       # nothing else. The path is spelled out here and in the role's
-      # prodeko_mcp_deploy_dir, so the two have to move together.
+      # prodeko_mcp_compose_dir, so the two have to move together.
       - name: Deploy on prodeko-vm2
         env:
           DEPLOY_KEY: ${{ secrets.PRODEKO_MCP_DEPLOY_KEY }}
