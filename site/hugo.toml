@@ -29,6 +29,31 @@ disableKinds = ["taxonomy", "term", "rss"]
   # layouts/partials/analytics.html reads it and appends /count.js and /count.
   goatcounter = ""
 
+# Deny by default. Hugo's own defaults let a template run a handful of
+# executables, read the environment and fetch any https URL; this site needs
+# none of that, and templates are the one place an edit turns into code at
+# build time. 'none' is Hugo's keyword for an empty whitelist.
+#
+# The content editor's allowlist keeps this file out of reach, so the closure
+# cannot be edited away from the outside.
+[security]
+  [security.exec]
+    # No dart-sass, no postcss, no node, no git: the stylesheet is plain CSS
+    # and .GitInfo is not used.
+    allow = ['none']
+    osEnv = ['none']
+  [security.funcs]
+    # Governs the getenv and os.Getenv template functions both. It does not
+    # touch HUGO_* configuration overrides, so the publish workflow still
+    # supplies the GoatCounter origin through HUGO_PARAMS_GOATCOUNTER.
+    getenv = ['none']
+  [security.http]
+    # resources.GetRemote, and getJSON and getCSV where they still exist.
+    # Everything the site renders is in the repository.
+    methods = ['none']
+    urls = ['none']
+    mediaTypes = ['none']
+
 [languages]
   [languages.fi]
     label = "Suomi"
