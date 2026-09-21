@@ -6,13 +6,6 @@ layout: alumni-hub
 source: raw-website design export, Prodeko-site.dc.html
 alumniKicker: Alumni
 alumniTitle: Prodekon Alumni ry
-alumniNumbers:
-  - value: "0 €"
-    label: jäsenmaksu
-  - value: "1966"
-    label: ensimmäiset prodekolaiset
-  - value: "1×"
-    label: seminaari vuodessa
 sections:
   - title: Tietoa alumnista
     body: Yhdessä Aalto-yliopiston tuotantotalouden laitoksen sekä killan kanssa Prodeko Alumni muodostaa Prodeko-yhteisön. Tämä yhteisö ei ole vain ainutlaatuinen verkosto monipuolisia ihmisiä, vaan myös suuri voimavara ja inspiraation lähde monille meistä. Alumnitiedotteet, alumnin hallitukset ja säännöt löytyvät alumnin omilta sivuilta.

@@ -6,45 +6,68 @@ layout: guild-hub
 source: raw-website design export, Prodeko-site.dc.html
 guildKicker: The guild
 guildTitle: Prodeko, the Guild of Industrial Engineering and Management
-numbers:
-  - value: "1966"
-    label: founded
-  - value: "1989"
-    label: a guild of its own
-  - value: "2017"
-    label: values defined
-  - value: "8 €"
-    label: membership fee / academic year
 sections:
   - title: Board positions
     body: The board is elected each autumn at the electoral assembly and runs the guild for a calendar year. Twelve members sit on it. The minutes are readable by members in the For members section.
     items:
       - name: President
-        desc: The whole, representation, and relations with the department, AYY and the alumni.
-      - name: Minister of Corporate Relations
-        desc: Partnerships, sponsorship and the Prodeko Network.
-      - name: Excursion Manager
-        desc: Company visits and excursion trips.
-      - name: Fuksi Captain
-        desc: Orientation week, the fuksi guide and the first-year events.
-      - name: Emperor of Media
-        desc: The weekly letter, the member register and communications.
+        desc: Coordinates the guild and represents it in AYY, the alumni and the advisory council.
+      - name: Vice President
+        desc: Supports the President; the seminar, harassment contact persons and officials' wellbeing.
+      - name: Minister of Excursions
+        desc: Excursions, longer excursion trips and the corporate relations team.
+      - name: Captain of Freshmen Education
+        desc: Introducing freshmen to the guild, freshman events and tutor operations.
+      - name: Captain of Master and International Students
+        desc: Master's freshmen, exchange students and advocacy for international students.
+      - name: Minister of Media and Information Technology
+        desc: Communications, the Prodeko brand, the member register and board minutes.
       - name: Minister of Studies
-        desc: Advocacy with the department, the hallopeds and upper secondary outreach.
+        desc: Advocacy, contact with university governance and the study division.
+      - name: Treasurer
+        desc: Bookkeeping, the budget, the financial statement and investments.
+      - name: Minister of Corporate Relations
+        desc: The Prodeko Network, corporate contracts and the corporate relations team.
+      - name: Minister of Internal and Cultural Affairs
+        desc: Guild events, traditions and the culture division.
+      - name: Host
+        desc: Events, the annual ball, the warehouse, keys and room reservations.
+      - name: Minister of Foreign Affairs
+        desc: International cooperation, ESTIEM and the external relations division.
       - name: Board and officials
         url: /en/guild/board-and-officials/
         desc: This year's board and officials, what each does, and previous boards.
   - title: Official positions
     body: Officials run the events, the sports, the culture and the international activities as volunteers. Any member can apply, and the first year is the easiest time to start.
     items:
-      - name: Sports
-        desc: Weekly sports and trying out new ones.
-      - name: ESTIEM LG Helsinki
-        desc: European IEM events and exchanges.
-      - name: Culture and sitsit
-        desc: Sitsit, the annual ball Diskonttaus and evenings in.
-      - name: Harassment contact persons
-        desc: A low threshold to talk to somebody, whatever the situation.
+      - name: Event Committee
+        desc: The host team, songleaders and the song book committee.
+      - name: Freshman Division
+        desc: The tutor responsible and the tutors for freshmen, master's and exchange students.
+      - name: Media Division
+        desc: The web team, communications, high school team and Proleko's editorial team.
+      - name: Guild Room Committee
+        desc: The guild room, gym, billiards, historians and the store.
+      - name: Terrace Committee
+        desc: Looking after the terrace and the events held there.
+      - name: Culture Division
+        desc: The guild's culture events.
+      - name: Seminar Committee
+        desc: Organising the Prodeko Seminar.
+      - name: Annual Ball Committee
+        desc: Organising the annual ball.
+      - name: Prodeko 60 Committee
+        desc: Preparations and events for the anniversary year.
+      - name: Corporate Relations Team
+        desc: Summer job evenings, the summer job guide and recruiting forums.
+      - name: External Relations Division
+        desc: ESTIEM, bar crawl trips, Tutanic and international events.
+      - name: IEM Days Committee
+        desc: IEM Days when they are held in Otaniemi.
+      - name: Study Division
+        desc: Mentoring, major responsibles and the hallopeds.
+      - name: ÄnnÄ Committee
+        desc: Recreation for the guild's Nth-year students.
   - title: Guild meetings
     body: The guild meets at least twice a year and every member has a vote. Additional assemblies are called when the board or a tenth of the members ask for one.
     items:
@@ -61,7 +84,7 @@ sections:
         url: https://membership.prodeko.org/apply
         desc: membership.prodeko.org/apply · pay by card.
 guildRoomTitle: Guild room
-guildRoomBody: TUAS building, Maarintie 8, 02150 Espoo. Donations of coffee, tea and billiard chalk are welcome.
+guildRoomBody: TUAS building, Maarintie 8, 02150 Espoo.
 docsTitle: Official
 docs:
   - label: Rules
