@@ -11,7 +11,13 @@ name: Preview
 # command strings below, and the tarball's two top-level directories.
 on:
   pull_request:
-    types: [opened, synchronize, reopened, closed]
+    types: [opened, synchronize, reopened, closed, ready_for_review]
+
+# ready_for_review is listed because it is not one of the activity types a
+# pull_request trigger listens for by default, and a draft that has never been
+# pushed to since it was opened has therefore had no preview built for the
+# commit a reviewer is about to read. Marking it ready is the moment someone
+# is asked to look at it, so that is the moment the preview has to exist.
 
 # No paths filter, unlike the build workflow. A filter is evaluated against the
 # pull request's current diff, so a branch that touched site/ early and no
