@@ -9,6 +9,11 @@ on:
       - ".github/workflows/build.yml"
       - ".github/known_hosts"
   pull_request:
+    # opened, synchronize and reopened are the default activity types; they are
+    # written out because adding ready_for_review to the list replaces that
+    # default rather than extending it, and dropping one would silently stop
+    # building pull requests. See the note in preview.yml for why it is here.
+    types: [opened, synchronize, reopened, ready_for_review]
     paths:
       - "site/**"
       - "tools/**"
