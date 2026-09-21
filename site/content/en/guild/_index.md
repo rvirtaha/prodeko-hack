@@ -8,7 +8,7 @@ guildKicker: The guild
 guildTitle: Prodeko, the Guild of Industrial Engineering and Management
 sections:
   - title: Board positions
-    body: The board is elected each autumn at the electoral assembly and runs the guild for a calendar year. Twelve members sit on it. The minutes are readable by members in the For members section.
+    body: The board is elected each autumn at the electoral assembly and runs the guild for a calendar year. Twelve members sit on it.
     items:
       - name: President
         desc: Coordinates the guild and represents it in AYY, the alumni and the advisory council.
@@ -34,9 +34,6 @@ sections:
         desc: Events, the annual ball, the warehouse, keys and room reservations.
       - name: Minister of Foreign Affairs
         desc: International cooperation, ESTIEM and the external relations division.
-      - name: Board and officials
-        url: /en/guild/board-and-officials/
-        desc: This year's board and officials, what each does, and previous boards.
   - title: Official positions
     body: Officials run the events, the sports, the culture and the international activities as volunteers. Any member can apply, and the first year is the easiest time to start.
     items:
@@ -62,8 +59,6 @@ sections:
         desc: Summer job evenings, the summer job guide and recruiting forums.
       - name: External Relations Division
         desc: ESTIEM, bar crawl trips, Tutanic and international events.
-      - name: IEM Days Committee
-        desc: IEM Days when they are held in Otaniemi.
       - name: Study Division
         desc: Mentoring, major responsibles and the hallopeds.
       - name: ÄnnÄ Committee
@@ -87,6 +82,8 @@ guildRoomTitle: Guild room
 guildRoomBody: TUAS building, Maarintie 8, 02150 Espoo.
 docsTitle: Official
 docs:
+  - label: Board and officials
+    url: /en/guild/board-and-officials/
   - label: Rules
     url: /en/guild/rules/rules/
   - label: Guidelines

@@ -8,7 +8,7 @@ guildKicker: Kilta
 guildTitle: Tuotantotalouden kilta Prodeko ry
 sections:
   - title: Hallitusvirat
-    body: Hallitus valitaan vuosittain marraskuun vaalikokouksessa virkakohtaisella vaalilla ja vastaa killan toiminnasta kalenterivuoden ajan. Kokouspöytäkirjat ovat jäsenten luettavissa Jäsenille-osiossa.
+    body: Hallitus valitaan vuosittain marraskuun vaalikokouksessa virkakohtaisella vaalilla ja vastaa killan toiminnasta kalenterivuoden ajan.
     items:
       - name: Puheenjohtaja
         desc: Killan toiminnan koordinointi ja edustus AYY:ssä, alumnissa ja neuvottelukunnassa.
@@ -34,9 +34,6 @@ sections:
         desc: Tapahtumat, vuosijuhlat, varasto, avaimet ja tilavaraukset.
       - name: Ulkoministeri
         desc: Kansainvälinen yhteistyö, ESTIEM ja ulkojaos.
-      - name: Hallitus ja toimihenkilöt
-        url: /fi/guild/hallitus-ja-toimihenkilot/
-        desc: Tämän vuoden hallitus ja toimarit, virkojen kuvaukset ja edelliset hallitukset.
   - title: Toimarivirat
     body: Toimihenkilöt tekevät tapahtumat, urheilun, kulttuurin ja kansainvälisen toiminnan vapaaehtoisina. Toimariksi voi hakea kuka tahansa jäsen, ja ensimmäinen vuosi on helpoin hetki aloittaa.
     items:
@@ -62,8 +59,6 @@ sections:
         desc: Kesätyöillat, kesätyöopas ja rekrytointifoorumit.
       - name: Ulkojaos
         desc: ESTIEM, approreissut, Tutanic ja kansainväliset tapahtumat.
-      - name: Tutapäiväjaos
-        desc: Otaniemen Tutapäivät.
       - name: Opintojaos
         desc: Mentorointi, pääainevastaavat ja hallopedit.
       - name: ÄnnÄ-jaos
@@ -80,6 +75,8 @@ guildRoomTitle: Kiltahuone
 guildRoomBody: TUAS-talo, Maarintie 8, 02150 Espoo.
 docsTitle: Säännöt ja asetukset
 docs:
+  - label: Hallitus ja toimihenkilöt
+    url: /fi/guild/hallitus-ja-toimihenkilot/
   - label: Killan säännöt
     url: /fi/guild/guild-rules/rules/
   - label: Ohjesäännöt
