@@ -3,6 +3,14 @@
 
        layout: archive
        dataset: boards   # a top-level key under site/data
+       peopleDisplay: rows   # optional; "cards" (the default) or "rows"
+
+     peopleDisplay picks the partial each group's members are drawn with.
+     "cards" gives one card per person, for a board or a set of officials:
+     distinct offices, one name in each. "rows" gathers the names under
+     their shared role, for data where many people have the same one, such
+     as the award years in honours.yaml. The choice lives here rather than
+     inside the partials so neither has to know which dataset it is drawing.
 
      The dataset is a map from an arbitrary key (a year, a slug) to a group
      of {heading, sortKey, members}. data/boards and data/officials get one
@@ -18,6 +26,7 @@
     {{ $groups = $groups | append . }}
   {{ end }}
   {{ $sorted := sort $groups "sortKey" "desc" }}
+  {{ $display := .Params.peopleDisplay | default "cards" }}
 
   {{ $body := slice (string .Content) }}
 
@@ -32,7 +41,13 @@
   {{ end }}
 
   {{ range $sorted }}
-    {{ $body = $body | append (printf `<section class="archive-group" id="%s"><h2>%s</h2>%s</section>` (.heading | urlize) .heading (partial "people-grid.html" .members)) }}
+    {{ $members := "" }}
+    {{ if eq $display "rows" }}
+      {{ $members = partial "name-rows.html" .members }}
+    {{ else }}
+      {{ $members = partial "people-grid.html" .members }}
+    {{ end }}
+    {{ $body = $body | append (printf `<section class="archive-group" id="%s"><h2>%s</h2>%s</section>` (.heading | urlize) .heading $members) }}
   {{ end }}
 
   {{ partial "page-shell.html" (dict "page" . "body" (delimit $body "" | safeHTML)) }}

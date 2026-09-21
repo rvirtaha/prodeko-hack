@@ -4,6 +4,7 @@ description: Killan myöntämät ansiomerkit ja kunnianosoitukset sekä niiden s
 translationKey: guild-kunnianosoitukset
 layout: archive
 dataset: honours
+peopleDisplay: rows
 sourceURL: https://prodeko.org/fi/guild/kunnianosoitukset/
 reviewed: 2026-09-18
 owner: hallitus

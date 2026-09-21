@@ -1,22 +1,24 @@
-# Real honours from https://www.prodeko.org/fi/guild/kunnianosoitukset/. The
-# member "role" field carries the award year instead of a title, matching
-# the shape layouts/archive.html expects. The Kunniajäsenet list is complete
-# (17 people, 1969-2021); Pro Prodeko only covers the last few years as seed
-# — the full list runs 1991-2025 and belongs to the migration, item H in
-# docs/roadmap.md, along with the Kunnialastu and TIMES categories.
+# Real honours from https://old.prodeko.org/fi/guild/kunnianosoitukset/.
+# The member "role" field carries the award year (for TIMES, the host city,
+# year and placing) instead of a title, matching the shape
+# layouts/archive.html expects. Groups render highest sortKey first.
+#
+# Names are written "Etunimi Sukunimi" throughout; the source list writes
+# "Sukunimi, Etunimi" for the Pro Prodeko years 1991-2019 and
+# "Etunimi Sukunimi" from 2020 on.
 kunniajasenet:
   heading: Kunniajäsenet
-  sortKey: 2
+  sortKey: 4
   members:
-    - name: Prof. Eino Niini
+    - name: Prof. Eino Niini (k. 1987)
       role: "1969"
-    - name: Prof. Carl E. Carlson
+    - name: Prof. Carl E. Carlson (k. 2010)
       role: "1986"
-    - name: Prof. Sauli Häkkinen
+    - name: Prof. Sauli Häkkinen (k. 2006)
       role: "1986"
     - name: TkT Hannes Kulvik
       role: "1986"
-    - name: TkT Markku Nurmi
+    - name: TkT Markku Nurmi (k. 2010)
       role: "1986"
     - name: DI Mikko Sajaniemi
       role: "1986"
@@ -24,9 +26,9 @@ kunniajasenet:
       role: "1986"
     - name: DI Petteri Walldén
       role: "1986"
-    - name: Prof. Hans Andersin
+    - name: Prof. Hans Andersin (k. 2010)
       role: "1991"
-    - name: Prof. Tauno Olkkonen
+    - name: Prof. Tauno Olkkonen (k. 2018)
       role: "1991"
     - name: Prof. Martti M. Kaila
       role: "1996"
@@ -40,12 +42,180 @@ kunniajasenet:
       role: "2016"
     - name: DI Risto Siilasmaa
       role: "2016"
-    - name: Prof Esa Saarinen
+    - name: Prof. Esa Saarinen
       role: "2021"
 pro-prodeko:
-  heading: Pro Prodeko -ansiomerkki (2021–2025)
-  sortKey: 1
+  heading: Pro Prodeko -ansiomerkki
+  sortKey: 3
   members:
+    - name: Antti Arppe
+      role: "1991"
+    - name: Timo Huttunen
+      role: "1991"
+    - name: Matti Kanninen
+      role: "1991"
+    - name: Hans Sohlström
+      role: "1991"
+    - name: Pekka Tamminen
+      role: "1991"
+    - name: Juha Jouppi
+      role: "1992"
+    - name: Mika Gerlander
+      role: "1993"
+    - name: Mika Naumanen
+      role: "1993"
+    - name: Marja Blomqvist
+      role: "1994"
+    - name: Kaj Hagros
+      role: "1994"
+    - name: Ruth Kaila
+      role: "1994"
+    - name: Elina Markkanen
+      role: "1994"
+    - name: Pekka Suonio
+      role: "1994"
+    - name: Antti Salminen
+      role: "1995"
+    - name: Jyri Soininen
+      role: "1995"
+    - name: Riku Österman
+      role: "1995"
+    - name: Elina Itälä
+      role: "1996"
+    - name: Paul Melin
+      role: "1996"
+    - name: Markus Tarkiainen
+      role: "1996"
+    - name: Ville Haapalinna
+      role: "1997"
+    - name: Sari Naukkarinen (nyk. Ståhlberg)
+      role: "1997"
+    - name: Henriikka Juusela
+      role: "1998"
+    - name: Kimmo Kontra
+      role: "1998"
+    - name: Jarna Hakala
+      role: "1999"
+    - name: Perttu Nihti
+      role: "1999"
+    - name: Kaisa Airila (nyk. Seppä)
+      role: "2000"
+    - name: Ari Backholm
+      role: "2000"
+    - name: Jussi Räisänen
+      role: "2000"
+    - name: Timo Ala-Risku
+      role: "2001"
+    - name: Niklas Kari
+      role: "2001"
+    - name: Heikki Kivilaakso
+      role: "2001"
+    - name: Jarno Alhonen
+      role: "2002"
+    - name: Tero Mäkinen
+      role: "2002"
+    - name: Sammeli Sammalkorpi
+      role: "2002"
+    - name: Anne-Mari Laiho
+      role: "2003"
+    - name: Merja Nurminen
+      role: "2003"
+    - name: Juhani Kankaanpää
+      role: "2004"
+    - name: Mikko Laine
+      role: "2004"
+    - name: Markus Mäkelä
+      role: "2004"
+    - name: Pekka Härkönen
+      role: "2005"
+    - name: Mikko Rönkkö
+      role: "2005"
+    - name: Tommi Kemppainen
+      role: "2006"
+    - name: Antti Suorsa
+      role: "2006"
+    - name: Antti Vassinen
+      role: "2006"
+    - name: Tuukka Eloranta
+      role: "2007"
+    - name: Sebastian Knight
+      role: "2007"
+    - name: Paavo Häppölä
+      role: "2008"
+    - name: Tuomo Pesonen
+      role: "2008"
+    - name: Ville Heikkilä
+      role: "2009"
+    - name: Mikko Sjöberg
+      role: "2009"
+    - name: Jussi Valtonen
+      role: "2009"
+    - name: Taneli Hirvola
+      role: "2010"
+    - name: Nelli Lähteenmäki
+      role: "2010"
+    - name: Atso Takala
+      role: "2010"
+    - name: Ville Poikolainen
+      role: "2011"
+    - name: Arjo Laukia
+      role: "2011"
+    - name: Johan Haataja
+      role: "2011"
+    - name: Jarno Lappalainen
+      role: "2012"
+    - name: Juhana Nurmio
+      role: "2012"
+    - name: Tuure Parkkinen
+      role: "2012"
+    - name: Martti Heikkilä
+      role: "2013"
+    - name: Juho Hoikka
+      role: "2013"
+    - name: Lauri Ikonen
+      role: "2013"
+    - name: Emma Nermes
+      role: "2013"
+    - name: Jukka Kujala
+      role: "2014"
+    - name: Heikki Koponen
+      role: "2015"
+    - name: Tuisku Suomala
+      role: "2015"
+    - name: Markus Junkkari
+      role: "2016"
+    - name: Christine Korjus
+      role: "2016"
+    - name: Katriina Suojala
+      role: "2016"
+    - name: Simo Hellgrén
+      role: "2016"
+    - name: Ville Huovinen
+      role: "2017"
+    - name: Pyry Huhtanen
+      role: "2017"
+    - name: Tony Hämmäinen
+      role: "2017"
+    - name: Saana Kivimaa
+      role: "2017"
+    - name: Laura Karinen
+      role: "2018"
+    - name: Reko Vaherkoski
+      role: "2018"
+    - name: Merit Morikawa
+      role: "2019"
+    - name: Eemil Oikari
+      role: "2019"
+    - name: Mikko Sippola
+      role: "2019"
+    - name: Olli Kiikkilä
+      role: "2020"
+    - name: Timo Riski
+      role: "2020"
+    - name: Sara Ikonen
+      role: "2020"
+    - name: Elena Pitkänen
+      role: "2020"
     - name: Rita Myllymäki
       role: "2021"
     - name: Riku Suonsivu
@@ -74,3 +244,315 @@ pro-prodeko:
       role: "2025"
     - name: Iiro Ukkonen
       role: "2025"
+kunnialastu:
+  heading: Kunnialastu
+  sortKey: 2
+  members:
+    - name: Matti Fouchault-Airasmaa
+      role: "2016"
+    - name: Arttu Anttonen
+      role: "2016"
+    - name: Kristian Sjölund
+      role: "2016"
+    - name: Jaakko Laukkanen
+      role: "2016"
+    - name: Laura Korhonen
+      role: "2016"
+    - name: Niko Ahonen
+      role: "2016"
+    - name: Juha Murtoaro
+      role: "2016"
+    - name: Niko Snirvi
+      role: "2016"
+    - name: Oskari Hyvärinen
+      role: "2016"
+    - name: Olli Halminen
+      role: "2016"
+    - name: Jyri Yli-Villamo
+      role: "2016"
+    - name: Henri Jarrett
+      role: "2016"
+    - name: Lauri Mikkola
+      role: "2016"
+    - name: Iina Lappalainen
+      role: "2016"
+    - name: Antti Kaivola
+      role: "2016"
+    - name: Auri Väljä
+      role: "2016"
+    - name: Heta Ruikka
+      role: "2016"
+    - name: Konsta Huuki
+      role: "2017"
+    - name: Henri Hämäläinen
+      role: "2017"
+    - name: Martyna Kosmala
+      role: "2017"
+    - name: Merit Morikawa
+      role: "2017"
+    - name: Mikko Rajala
+      role: "2017"
+    - name: Paavo Pere
+      role: "2017"
+    - name: Matilda Säde
+      role: "2018"
+    - name: Julius Luukkanen
+      role: "2018"
+    - name: Joonas Kaijala
+      role: "2018"
+    - name: Elena Pitkänen
+      role: "2018"
+    - name: Matias Ståhlström
+      role: "2018"
+    - name: Susanna Tamminen
+      role: "2018"
+    - name: Jaakko Hyppönen
+      role: "2019"
+    - name: Olli Kesseli
+      role: "2019"
+    - name: Santeri Kiviniemi
+      role: "2019"
+    - name: Rita Myllymäki
+      role: "2019"
+    - name: Timo Riski
+      role: "2019"
+    - name: Johanna Tavia
+      role: "2019"
+    - name: Kirsikka Mannerkoski
+      role: "2020"
+    - name: Otto Saaranto
+      role: "2020"
+    - name: Juuso Heikkilä
+      role: "2020"
+    - name: Aaro Hämeri
+      role: "2020"
+    - name: Aaro Koski
+      role: "2020"
+    - name: Antti Ihalainen
+      role: "2020"
+    - name: Oona Kallela
+      role: "2021"
+    - name: Eeva Jokinen
+      role: "2021"
+    - name: Tommi Salmi
+      role: "2021"
+    - name: Timofei Telov
+      role: "2021"
+    - name: Laura Lähteenmäki
+      role: "2021"
+    - name: Elina Karjalainen
+      role: "2021"
+    - name: Kalle Hiltunen
+      role: "2021"
+    - name: Heidi Fontell
+      role: "2022"
+    - name: Lotta Mäntylä
+      role: "2022"
+    - name: Meri Kalke
+      role: "2022"
+    - name: Aino Soinio
+      role: "2022"
+    - name: Matleena Rinnekangas
+      role: "2022"
+    - name: Oskari Leppä
+      role: "2022"
+    - name: Ilari Jokinen
+      role: "2022"
+    - name: Sanni Hyytinen
+      role: "2023"
+    - name: Kaisa Korhonen
+      role: "2023"
+    - name: Teemu Koskiahde
+      role: "2023"
+    - name: Sakari Palojoki
+      role: "2023"
+    - name: Ella Talme
+      role: "2023"
+    - name: Pekka Urvas
+      role: "2023"
+    - name: Roosa Toivakka
+      role: "2024"
+    - name: Jaakko Rouste
+      role: "2024"
+    - name: Jenna Liinamaa
+      role: "2024"
+    - name: Taavi Mustajoki
+      role: "2024"
+    - name: Ilona Hemming
+      role: "2024"
+    - name: Vilho Järvi
+      role: "2024"
+    - name: Kalle Kinnala
+      role: "2025"
+    - name: Heini Koivu
+      role: "2025"
+    - name: Siiri Keränen
+      role: "2025"
+    - name: Juho Mäki
+      role: "2025"
+    - name: Charlie Cruz Kauppila
+      role: "2025"
+    - name: Sara Kivi
+      role: "2025"
+times:
+  heading: TIMES-kilpailun menestyjät
+  sortKey: 1
+  members:
+    - name: Markku Suomi
+      role: "Stockholm 1995 – 1. sija"
+    - name: Vesa Tontti
+      role: "Stockholm 1995 – 1. sija"
+    - name: Thomas Ulfstedt
+      role: "Stockholm 1995 – 1. sija"
+    - name: Helena Yli-Reno
+      role: "Stockholm 1995 – 1. sija"
+    - name: Mikko Kumpulainen
+      role: "Helsinki 1996 – 1. sija"
+    - name: Ari Mattila
+      role: "Helsinki 1996 – 1. sija"
+    - name: Sami Sarkamies
+      role: "Helsinki 1996 – 1. sija"
+    - name: Eero Tarjanne
+      role: "Helsinki 1996 – 1. sija"
+    - name: Seppo Aaltonen
+      role: "Enschede 1998 – 2. sija"
+    - name: Guido Baisr
+      role: "Enschede 1998 – 2. sija"
+    - name: Danid Guillon
+      role: "Enschede 1998 – 2. sija"
+    - name: Sam Teerikangas
+      role: "Enschede 1998 – 2. sija"
+    - name: Märtin Grotensfeir
+      role: "Hamburg 1999 – 2. sija"
+    - name: Markus Hiltunen
+      role: "Hamburg 1999 – 2. sija"
+    - name: Matias Järnefelt
+      role: "Hamburg 1999 – 2. sija"
+    - name: Perttu Rönkkö
+      role: "Hamburg 1999 – 2. sija"
+    - name: Jonatan Hongisto
+      role: "Istanbul 2000 – 3. sija"
+    - name: Heikki Kivilaakso
+      role: "Istanbul 2000 – 3. sija"
+    - name: Juha Sääskilahti
+      role: "Istanbul 2000 – 3. sija"
+    - name: Mona West
+      role: "Istanbul 2000 – 3. sija"
+    - name: Niklas Kari
+      role: "Lisbon 2001 – 2. sija"
+    - name: Santeri Korri
+      role: "Lisbon 2001 – 2. sija"
+    - name: Mikko Pulkkinen
+      role: "Lisbon 2001 – 2. sija"
+    - name: Katri Suominen
+      role: "Lisbon 2001 – 2. sija"
+    - name: Tatu Heikkilä
+      role: "Eindhoven 2002 – 1. sija"
+    - name: Kai Kuikkaniemi
+      role: "Eindhoven 2002 – 1. sija"
+    - name: Antti Virtanen
+      role: "Eindhoven 2002 – 1. sija"
+    - name: Laura Itkonen
+      role: "Ilmenau 2003 – 2. sija"
+    - name: Anne-Mari Laiho
+      role: "Ilmenau 2003 – 2. sija"
+    - name: Timo Pinns
+      role: "Ilmenau 2003 – 2. sija"
+    - name: Hanna-Kaisa Sävelkoski
+      role: "Ilmenau 2003 – 2. sija"
+    - name: Michael Falck
+      role: "Hamburg 2004 – 2. sija"
+    - name: Maija Hellman
+      role: "Hamburg 2004 – 2. sija"
+    - name: Mikko Rönkkö
+      role: "Hamburg 2004 – 2. sija"
+    - name: Mailiina Turanlahti
+      role: "Hamburg 2004 – 2. sija"
+    - name: Heikki
+      role: "Zurich 2005 – 2. sija"
+    - name: Toni Lindström
+      role: "Zurich 2005 – 2. sija"
+    - name: Heikki Saukola
+      role: "Zurich 2005 – 2. sija"
+    - name: Teppo Voutilainen
+      role: "Zurich 2005 – 2. sija"
+    - name: Heikki Färkkilä
+      role: "Brussels 2006 – 1. sija"
+    - name: Anni Kauranen
+      role: "Brussels 2006 – 1. sija"
+    - name: Tommi Kemppainen
+      role: "Brussels 2006 – 1. sija"
+    - name: Olli Salo
+      role: "Brussels 2006 – 1. sija"
+    - name: John Dannberg
+      role: "Lyon 2007 – 1. sija"
+    - name: Vesa Haukkavaara
+      role: "Lyon 2007 – 1. sija"
+    - name: Ville Heikkilä
+      role: "Lyon 2007 – 1. sija"
+    - name: Oskar Palva
+      role: "Lyon 2007 – 1. sija"
+    - name: Anni Hietaniemi
+      role: "Karlsruhe 2008 – 1. sija"
+    - name: Sebastian Knight
+      role: "Karlsruhe 2008 – 1. sija"
+    - name: Ilmari Ollila
+      role: "Karlsruhe 2008 – 1. sija"
+    - name: Tuomo Pesonen
+      role: "Karlsruhe 2008 – 1. sija"
+    - name: Iiris Kolu
+      role: "Linköping 2009 – 1. sija"
+    - name: Jussi Lehtinen
+      role: "Linköping 2009 – 1. sija"
+    - name: Tuomas Orpila
+      role: "Linköping 2009 – 1. sija"
+    - name: Timo Tarvola
+      role: "Linköping 2009 – 1. sija"
+    - name: Johan Haataja
+      role: "Ilmenau 2010 – 2. sija"
+    - name: Taneli Hirvola
+      role: "Ilmenau 2010 – 2. sija"
+    - name: Marianne Laaksrisio
+      role: "Ilmenau 2010 – 2. sija"
+    - name: Arjo Laukia
+      role: "Ilmenau 2010 – 2. sija"
+    - name: Anni Iso-Mustajärvi
+      role: "Munich 2012 – 3. sija"
+    - name: Jose Kantola
+      role: "Munich 2012 – 3. sija"
+    - name: Lauri Sippola
+      role: "Munich 2012 – 3. sija"
+    - name: Elisa Terho
+      role: "Munich 2012 – 3. sija"
+    - name: Markus Junkkari
+      role: "Ilmenau 2016 – 3. sija"
+    - name: Pasi Lohi
+      role: "Ilmenau 2016 – 3. sija"
+    - name: Reetta Repo
+      role: "Ilmenau 2016 – 3. sija"
+    - name: Marko Sommarberg
+      role: "Ilmenau 2016 – 3. sija"
+    - name: Juulia Jäppinen
+      role: "Vienna 2018 – 1. sija"
+    - name: Valtteri Vulkko
+      role: "Vienna 2018 – 1. sija"
+    - name: Kerkko Visuri
+      role: "Vienna 2018 – 1. sija"
+    - name: Ossi Karali
+      role: "Vienna 2018 – 1. sija"
+    - name: Joonas Kaijala
+      role: "Porto 2019 – 1. sija"
+    - name: Laura Karinen
+      role: "Porto 2019 – 1. sija"
+    - name: Tommi Silvennoinen
+      role: "Porto 2019 – 1. sija"
+    - name: Kati Vesala
+      role: "Porto 2019 – 1. sija"
+    - name: Matias Tekoniemi
+      role: "Aachen 2025 – 3. sija"
+    - name: Oscar Löfqvist
+      role: "Aachen 2025 – 3. sija"
+    - name: Sakari Palojoki
+      role: "Aachen 2025 – 3. sija"
+    - name: Valtteri Haikarainen
+      role: "Aachen 2025 – 3. sija"

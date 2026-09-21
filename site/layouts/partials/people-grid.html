@@ -3,7 +3,11 @@
 
      roleEn is used on an English page where the entry has one. The historical
      archive has only Finnish titles: those were the offices' names at the
-     time, and most have no English form the guild has ever used. */}}
+     time, and most have no English form the guild has ever used.
+
+     One card per person, so this is for data where each entry carries a
+     title of its own. Where many people share one value, such as an award
+     year, see name-rows.html; the layout picks between them. */}}
 {{ $isFi := eq page.Language.Lang "fi" }}
 {{ with . }}
   <ul class="people-grid">
