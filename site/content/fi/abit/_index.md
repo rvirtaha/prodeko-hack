@@ -56,3 +56,7 @@ abisivuille. Prodeko on tiivis ja aktiivinen yhteisö, jossa jokaiselle
 löytyy oma paikkansa. Järjestämme jäsenillemme monipuolista ohjelmaa
 yritysvierailuista sitseihin, valmennuksista hengailuiltoihin ja
 viikoittaisesta urheilusta erilaisiin lajikokeiluihin.
+
+Tutustu myös [Prodekon abimentorointiin](/fi/abit/abimentorointi/), lue
+[nykyisten opiskelijoiden polkuja tutalle](/fi/abit/opiskelijoiden-polkuja-tutalle/)
+ja tutustu [menestyneisiin tutalaisiin](/fi/abit/menestyneet-tutalaiset/).
