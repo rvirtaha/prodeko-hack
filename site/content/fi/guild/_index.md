@@ -73,7 +73,7 @@ sections:
         desc: membership.prodeko.org/apply · maksu pankkikortilla.
 guildRoomTitle: Kiltahuone
 guildRoomBody: TUAS-talo, Maarintie 8, 02150 Espoo.
-docsTitle: Säännöt ja asetukset
+docsTitle: Tärkeät linkit
 docs:
   - label: Hallitus ja toimihenkilöt
     url: /fi/guild/hallitus-ja-toimihenkilot/

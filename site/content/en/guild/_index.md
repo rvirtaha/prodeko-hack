@@ -80,7 +80,7 @@ sections:
         desc: membership.prodeko.org/apply · pay by card.
 guildRoomTitle: Guild room
 guildRoomBody: TUAS building, Maarintie 8, 02150 Espoo.
-docsTitle: Official
+docsTitle: Important links
 docs:
   - label: Board and officials
     url: /en/guild/board-and-officials/
