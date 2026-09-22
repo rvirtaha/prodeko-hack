@@ -137,14 +137,16 @@ func (t *Toolset) boundChange(user string) *workdir.Change {
 }
 
 // bind sets the session's change. The first write and resume_change are the
-// only callers: nothing else decides what a conversation is working on.
+// only callers: nothing else decides what a conversation is working on. It
+// starts the session itself when none is live, because a resume can be the
+// very first call a process sees, and a binding that needs somebody else to
+// have opened the session would leave the "Resumed" answer standing over
+// edits that land elsewhere.
 func (t *Toolset) bind(user string, c *workdir.Change) {
+	s, _ := t.sessionFor(user)
 	t.mu.Lock()
 	defer t.mu.Unlock()
-	if s, ok := t.sessions[user]; ok {
-		s.change = c
-		s.lastUsed = t.now()
-	}
+	s.change = c
 }
 
 // unbind drops the change a conversation was working on, so the next edit

@@ -530,6 +530,35 @@ func TestResumeBySlugRebinds(t *testing.T) {
 	}
 }
 
+// A restart empties the session map, and picking yesterday's work back up is
+// the first thing a person asks for after one. The resume has to bind on its
+// own: a "Resumed" answer with the edits landing elsewhere is exactly the
+// silently wrong workspace this package exists to end.
+func TestResumeAsTheVeryFirstCallBinds(t *testing.T) {
+	f := newFixture(t)
+
+	c, err := f.mgr.Change("maija", "uutinen")
+	if err != nil {
+		t.Fatalf("Change: %v", err)
+	}
+	if err := c.WriteFile("site/content/fi/uutinen.md", []byte("# Uutinen\n")); err != nil {
+		t.Fatalf("WriteFile: %v", err)
+	}
+
+	if _, err := call(t, f.ts, ToolResumeChange, maija, `{"slug":"uutinen"}`); err != nil {
+		t.Fatalf("resume_change: %v", err)
+	}
+	if _, err := call(t, f.ts, ToolWriteFile, maija, `{"path":"site/content/fi/toinen.md","content":"# Toinen\n"}`); err != nil {
+		t.Fatalf("the write after the resume: %v", err)
+	}
+	if got := f.slugs(t, "maija"); len(got) != 1 || got[0] != "uutinen" {
+		t.Fatalf("open changes = %v, want the resumed one alone", got)
+	}
+	if _, err := os.Stat(filepath.Join(f.worktree("maija", "uutinen"), "site", "content", "fi", "toinen.md")); err != nil {
+		t.Fatalf("the edit did not land in the resumed change: %v", err)
+	}
+}
+
 // A person answering review feedback has the pull request number in front of
 // them and not the slug this server made up, so the number is a way in.
 func TestResumeByPRNumber(t *testing.T) {
