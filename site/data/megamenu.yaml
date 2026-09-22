@@ -87,6 +87,8 @@ fi:
           url: https://gallery.prodeko.org
         - label: Ilmokilke 3.0
           url: https://ilmo.prodeko.org
+        - label: Kiltiskamera
+          url: https://kiltiskamera.prodeko.org
         - label: Prodeko rahasto
           url: /fi/palvelut/prodeko-fund/
         - label: Store
@@ -234,6 +236,8 @@ en:
           url: https://gallery.prodeko.org
         - label: Ilmokilke 3.0
           url: https://ilmo.prodeko.org
+        - label: Guild room camera
+          url: https://kiltiskamera.prodeko.org
         - label: Prodeko Fund
           url: /en/services/prodeko-fund/
         - label: Store
