@@ -247,7 +247,28 @@ var (
 // Change opens the change (user, slug), creating the worktree and the branch
 // on first use and reattaching to them afterwards. The branch is
 // media/<user>/<slug>, based on the origin default branch at creation.
+//
+// A full cap is not the last word on the matter: a change whose pull request
+// was merged or closed is finished, and sweeping those away is what keeps the
+// limit counting work that is still going on. The sweep runs out here rather
+// than inside the attempt: it opens changes of its own, and the attempt holds
+// the manager's lock from end to end.
 func (m *Manager) Change(user, slug string) (*Change, error) {
+	c, err := m.change(user, slug)
+	if !errors.Is(err, ErrTooManyOpen) {
+		return c, err
+	}
+
+	ctx, cancel := context.WithTimeout(context.Background(), GitTimeout)
+	defer cancel()
+	if _, sweepErr := m.ArchiveFinished(ctx, user); sweepErr != nil {
+		m.log.Warn("workdir: sweeping finished changes", "user", user, "err", sweepErr)
+	}
+	return m.change(user, slug)
+}
+
+// change is one attempt at opening a change, refusing rather than making room.
+func (m *Manager) change(user, slug string) (*Change, error) {
 	if !userPattern.MatchString(user) || strings.Contains(user, "..") {
 		return nil, fmt.Errorf("%w: %q", ErrBadUser, user)
 	}
@@ -395,6 +416,11 @@ func (m *Manager) Resume(user string) (*Change, bool, error) {
 func (m *Manager) List(ctx context.Context, user string) ([]Info, error) {
 	if !userPattern.MatchString(user) {
 		return nil, fmt.Errorf("%w: %q", ErrBadUser, user)
+	}
+	// Merged and closed work is not a listing of what somebody is working on,
+	// and GitHub is being asked about every change here anyway.
+	if _, err := m.ArchiveFinished(ctx, user); err != nil {
+		m.log.Warn("workdir: sweeping finished changes", "user", user, "err", err)
 	}
 	slugs, err := m.openSlugs(user)
 	if err != nil {
