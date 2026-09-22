@@ -258,6 +258,30 @@ func TestGetConventionsStatesTheFence(t *testing.T) {
 	}
 }
 
+// Where a conversation's edits land is decided by the server, so the guide is
+// the only place the model can learn it. A guide that says nothing about it
+// leaves the model to guess that yesterday's change is still open, which is
+// exactly what the server refuses to do.
+func TestGetConventionsStatesTheChangeLifecycle(t *testing.T) {
+	// Folded, because where a sentence happens to begin is the guide's business
+	// and not part of what it has to say.
+	got := strings.ToLower(testToolset(t).Instructions())
+	for _, want := range []string{
+		// The two tools that decide what a conversation works on, named so the
+		// model reaches for them instead of editing afresh.
+		ToolResumeChange, ToolListMyChanges,
+		// The lifecycle itself: nothing open until an edit, and finished work
+		// gone without asking.
+		"first edit", "merged",
+		// The cue a person actually gives when they mean the old change.
+		"jatka",
+	} {
+		if !strings.Contains(got, want) {
+			t.Errorf("the guide does not mention %q", want)
+		}
+	}
+}
+
 func firstWords(text string, n int) string {
 	words := strings.Fields(text)
 	if len(words) > n {
