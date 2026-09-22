@@ -21,6 +21,7 @@ const (
 	ToolScreenshot        = "screenshot"
 	ToolSubmit            = "submit"
 	ToolListMyChanges     = "list_my_changes"
+	ToolResumeChange      = "resume_change"
 	ToolGetFeedback       = "get_feedback"
 	ToolAbandonChange     = "abandon_change"
 	ToolTranslationStatus = "translation_status"
@@ -228,6 +229,24 @@ var schemaListMyChanges = json.RawMessage(`{
   "additionalProperties": false
 }`)
 
+var schemaResumeChange = json.RawMessage(`{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "slug": {
+      "type": "string",
+      "description": "Which change to continue, as list_my_changes names them. Give exactly one of slug and pr.",
+      "maxLength": 64
+    },
+    "pr": {
+      "type": "integer",
+      "description": "The pull request number to continue from, e.g. 26 for a change whose review asked for fixes. Give exactly one of slug and pr.",
+      "minimum": 1
+    }
+  },
+  "additionalProperties": false
+}`)
+
 var schemaGetFeedback = json.RawMessage(`{
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "type": "object",
@@ -328,6 +347,13 @@ type screenshotArgs struct {
 type submitArgs struct {
 	Title       string `json:"title"`
 	Description string `json:"description"`
+}
+
+// Slug and PR are the two ways to name one change, and exactly one of them is
+// given: a zero PR is no pull request, since GitHub numbers them from one.
+type resumeChangeArgs struct {
+	Slug string `json:"slug"`
+	PR   int    `json:"pr"`
 }
 
 type getFeedbackArgs struct {

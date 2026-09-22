@@ -212,37 +212,111 @@ func renderChanges(infos []workdir.Info) string {
 		if i > 0 {
 			b.WriteByte('\n')
 		}
-		fmt.Fprintf(&b, "%s\n  branch: %s\n", in.Slug, in.Branch)
-		if !in.UpdatedAt.IsZero() {
-			fmt.Fprintf(&b, "  updated: %s\n", in.UpdatedAt.Format(time.RFC3339))
-		}
-		if len(in.Files) > 0 {
-			fmt.Fprintf(&b, "  files: %s\n", strings.Join(in.Files, ", "))
-		}
-		// A change with no pull request is not necessarily unsubmitted: in a dry
-		// run there is never one to find, and saying "not submitted yet" about
-		// a change that is committed and pushed would send the editor back to
-		// submit a second time. Files with a clean worktree is what "committed"
-		// looks like from here.
-		switch {
-		case in.PRNumber > 0:
-			fmt.Fprintf(&b, "  pull request: #%d %s\n", in.PRNumber, in.PRURL)
-			if in.CIState != "" {
-				fmt.Fprintf(&b, "  checks: %s\n", in.CIState)
-			}
-			if in.PreviewURL != "" {
-				fmt.Fprintf(&b, "  preview: %s\n", in.PreviewURL)
-			}
-		case in.Dirty || len(in.Files) == 0:
-			b.WriteString("  not submitted yet\n")
-		default:
-			b.WriteString("  committed to the branch, with no pull request\n")
-		}
-		if in.Dirty && len(in.Files) > 0 {
-			b.WriteString("  has edits that were never submitted\n")
-		}
+		fmt.Fprintf(&b, "%s\n", in.Slug)
+		writeChange(&b, in)
 	}
 	return strings.TrimRight(b.String(), "\n")
+}
+
+// writeChange is one change under its name: what it touches, and what has
+// become of it on GitHub. list_my_changes and resume_change report the same
+// things about a change, because they are the same things to act on.
+func writeChange(b *strings.Builder, in workdir.Info) {
+	fmt.Fprintf(b, "  branch: %s\n", in.Branch)
+	if !in.UpdatedAt.IsZero() {
+		fmt.Fprintf(b, "  updated: %s\n", in.UpdatedAt.Format(time.RFC3339))
+	}
+	if len(in.Files) > 0 {
+		fmt.Fprintf(b, "  files: %s\n", strings.Join(in.Files, ", "))
+	}
+	// A change with no pull request is not necessarily unsubmitted: in a dry
+	// run there is never one to find, and saying "not submitted yet" about
+	// a change that is committed and pushed would send the editor back to
+	// submit a second time. Files with a clean worktree is what "committed"
+	// looks like from here.
+	switch {
+	case in.PRNumber > 0:
+		fmt.Fprintf(b, "  pull request: #%d %s\n", in.PRNumber, in.PRURL)
+		if in.CIState != "" {
+			fmt.Fprintf(b, "  checks: %s\n", in.CIState)
+		}
+		if in.PreviewURL != "" {
+			fmt.Fprintf(b, "  preview: %s\n", in.PreviewURL)
+		}
+	case in.Dirty || len(in.Files) == 0:
+		b.WriteString("  not submitted yet\n")
+	default:
+		b.WriteString("  committed to the branch, with no pull request\n")
+	}
+	if in.Dirty && len(in.Files) > 0 {
+		b.WriteString("  has edits that were never submitted\n")
+	}
+}
+
+// renderResume says what the person has just picked up. The state a resumed
+// change is in is the first thing to act on: an edit onto a branch whose review
+// asked for something is different work from an edit onto one nobody has seen
+// yet. A change the listing could not describe is named and no more, rather
+// than being given a state it was never read to have.
+func renderResume(in workdir.Info, listed bool) string {
+	var b strings.Builder
+	fmt.Fprintf(&b, "Resumed %s.\n", in.Slug)
+	if listed {
+		writeChange(&b, in)
+	} else {
+		fmt.Fprintf(&b, "  branch: %s\n", in.Branch)
+	}
+	b.WriteString("\nEdits now land on this change.")
+	return b.String()
+}
+
+// noteHeading opens the once-a-session note. It says where the changes came
+// from, because that is what makes the list worth reading: everything on it is
+// work the person may have meant to carry on with.
+const noteHeading = "\n\nNote: you have open changes from before this conversation:\n"
+
+// renderNote is that note: one line a change, short enough to ride on the back
+// of an answer to something else. Where renderChanges describes changes because
+// they were asked about, this interrupts, so it says only what decides whether
+// to pick one up — how far it got, and whether anything in it was never shown to
+// anybody. skip is the change the conversation is already on; it is on the
+// listing but is not news.
+func renderNote(infos []workdir.Info, skip string) string {
+	var b strings.Builder
+	for _, in := range infos {
+		if in.Slug == skip {
+			continue
+		}
+		files := fmt.Sprintf("%d files", len(in.Files))
+		if len(in.Files) == 1 {
+			files = "1 file"
+		}
+		fmt.Fprintf(&b, "  %s: %s", in.Slug, files)
+		// The same three cases writeChange makes, and for the same reason: a dry
+		// run has no pull request to find, so a missing number does not mean
+		// nothing was pushed. Unsubmitted edits are worth naming only where the
+		// change got further than that, which is the one case they are news.
+		switch {
+		case in.PRNumber > 0:
+			fmt.Fprintf(&b, ", pull request #%d", in.PRNumber)
+			if in.CIState != "" {
+				fmt.Fprintf(&b, ", checks %s", in.CIState)
+			}
+			if in.Dirty {
+				b.WriteString(", with edits made since")
+			}
+		case in.Dirty || len(in.Files) == 0:
+			b.WriteString(", not submitted yet")
+		default:
+			b.WriteString(", committed with no pull request")
+		}
+		b.WriteByte('\n')
+	}
+	if b.Len() == 0 {
+		return ""
+	}
+	return noteHeading + b.String() + ToolResumeChange +
+		" continues one of them; otherwise your first edit starts a new change."
 }
 
 // renderFeedback is the pull request as the maintainers left it. Bodies are

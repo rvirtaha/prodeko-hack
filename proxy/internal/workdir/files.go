@@ -42,6 +42,9 @@ type Match struct {
 // repository root and sorted. glob is optional and filters the result with
 // path.Match semantics against the whole relative path.
 func (c *Change) ListFiles(glob string) ([]string, error) {
+	c.mu.RLock()
+	defer c.mu.RUnlock()
+
 	var out []string
 	err := c.walk(func(rel string, _ fs.DirEntry) error {
 		if globMatch(glob, rel) {
@@ -66,6 +69,9 @@ func (c *Change) ReadFile(rel string, start, end int) (string, error) {
 	if start > 0 && end > 0 && end < start {
 		return "", fmt.Errorf("%w: %d..%d ends before it begins", ErrBadRange, start, end)
 	}
+	c.mu.RLock()
+	defer c.mu.RUnlock()
+
 	abs, err := c.fence.ResolveRead(rel)
 	if err != nil {
 		return "", err
@@ -114,6 +120,8 @@ func (c *Change) Search(pattern, glob string, max int) ([]Match, error) {
 	if max <= 0 {
 		max = defaultSearchResults
 	}
+	c.mu.RLock()
+	defer c.mu.RUnlock()
 
 	var out []Match
 	err = c.walk(func(rel string, _ fs.DirEntry) error {

@@ -96,6 +96,23 @@ func (m *Manager) pullRequestForBranch(ctx context.Context, branch string) (Pull
 	return PullRequest{}, false, nil
 }
 
+// PullRequestByNumber is one pull request, in whatever state it is in. It is
+// how resume_change turns a number somebody read on GitHub back into a branch.
+func (m *Manager) PullRequestByNumber(ctx context.Context, number int) (PullRequest, error) {
+	var pr PullRequest
+	path := fmt.Sprintf("/repos/%s/pulls/%d", m.cfg.GitHubRepo, number)
+	err := m.api(ctx, http.MethodGet, path, nil, &pr)
+	return pr, err
+}
+
+// Finished reports work review has ended: merged into the site, or closed
+// without merging. Either way the change under it has nothing left to do, and
+// GitHub closes a merged pull request, so merged_at is what tells the two
+// apart.
+func Finished(pr PullRequest) bool {
+	return pr.MergedAt != "" || pr.State == "closed"
+}
+
 // combinedStatus is the CI state of a commit, as list_my_changes reports it.
 func (m *Manager) combinedStatus(ctx context.Context, sha string) (string, error) {
 	if sha == "" {

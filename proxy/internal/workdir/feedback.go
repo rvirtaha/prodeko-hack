@@ -62,6 +62,9 @@ func (m *Manager) Feedback(ctx context.Context, c *Change) (Feedback, error) {
 	if c == nil {
 		return Feedback{}, ErrNoChange
 	}
+	if c.IsBase() {
+		return Feedback{}, ErrBaseView
+	}
 	if m.DryRun() {
 		return Feedback{}, errors.New("workdir: with no GITHUB_TOKEN there is no pull request to read feedback from")
 	}
@@ -121,6 +124,9 @@ type AbandonResult struct {
 func (m *Manager) Abandon(ctx context.Context, c *Change) (AbandonResult, error) {
 	if c == nil {
 		return AbandonResult{}, ErrNoChange
+	}
+	if c.IsBase() {
+		return AbandonResult{}, ErrBaseView
 	}
 	if err := assertNamespace(c.User, c.Branch); err != nil {
 		return AbandonResult{}, err

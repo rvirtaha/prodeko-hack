@@ -103,8 +103,10 @@ type Manager struct {
 	cfg Config
 	log *slog.Logger
 
-	mu      sync.Mutex
-	changes map[string]*Change // BranchFor(user, slug) -> the one Change for it
+	mu       sync.Mutex
+	changes  map[string]*Change // BranchFor(user, slug) -> the one Change for it
+	base     *Change            // the shared read-only view, made once
+	archived []func(*Change)    // told when a change stops existing
 }
 
 // Change is one editing session on disk: a worktree on its own branch, based
@@ -125,8 +127,21 @@ type Change struct {
 	baseBranch string
 
 	// mu serialises work on this change: one worktree has one index, so two
-	// concurrent writes or a write racing a commit would corrupt it.
-	mu sync.Mutex
+	// concurrent writes or a write racing a commit would corrupt it. Reads hold
+	// it shared, because the shared base view is one tree and one build root for
+	// everybody: a refresh or a build there runs underneath somebody else's
+	// read_file or screenshot unless the two are held apart.
+	mu sync.RWMutex
+}
+
+// View runs fn with the tree and the last build held still: nothing refreshes,
+// rebuilds or commits underneath it. It is what the tools that read the build
+// output through another package hold, the ones that read files holding it for
+// themselves.
+func (c *Change) View(fn func() error) error {
+	c.mu.RLock()
+	defer c.mu.RUnlock()
+	return fn()
 }
 
 // Fence is the allowlist this change is confined to.
@@ -246,7 +261,62 @@ var (
 // Change opens the change (user, slug), creating the worktree and the branch
 // on first use and reattaching to them afterwards. The branch is
 // media/<user>/<slug>, based on the origin default branch at creation.
+//
+// A full cap is not the last word on the matter: a change whose pull request
+// was merged or closed is finished, and sweeping those away is what keeps the
+// limit counting work that is still going on. The sweep runs out here rather
+// than inside the attempt: it opens changes of its own, and the attempt holds
+// the manager's lock from end to end.
 func (m *Manager) Change(user, slug string) (*Change, error) {
+	c, err := m.change(user, slug)
+	if !errors.Is(err, ErrTooManyOpen) {
+		return c, err
+	}
+
+	ctx, cancel := context.WithTimeout(context.Background(), GitTimeout)
+	defer cancel()
+	if _, sweepErr := m.ArchiveFinished(ctx, user); sweepErr != nil {
+		m.log.Warn("workdir: sweeping finished changes", "user", user, "err", sweepErr)
+	}
+	return m.change(user, slug)
+}
+
+// Fresh opens a change nobody has started yet, named after what was asked for.
+// A name already taken takes a number: "main" for the stylesheet is the same
+// name today as it was yesterday, and a conversation's first edit landing in
+// yesterday's worktree — dirty files and all — is the thing this lifecycle
+// exists to stop. Change is for continuing work somebody named; this is for
+// starting some.
+func (m *Manager) Fresh(user, hint string, now time.Time) (*Change, error) {
+	name := Slug(hint, now)
+	if !m.taken(user, name) {
+		return m.Change(user, name)
+	}
+	for n := 2; n <= 9; n++ {
+		numbered := name + "-" + strconv.Itoa(n)
+		if !m.taken(user, numbered) {
+			return m.Change(user, numbered)
+		}
+	}
+	// Nine of one name in a namespace that holds three changes means the
+	// leftovers are old rather than numerous; the timestamp always terminates.
+	return m.Change(user, Slug("", now))
+}
+
+// taken reports whether a slug is already somebody's change. The worktree and
+// the branch are asked separately: a worktree lost to a restart leaves the
+// branch, and reattaching to that branch would inherit its commits.
+func (m *Manager) taken(user, slug string) bool {
+	if dirExists(filepath.Join(m.cfg.StateDir, "wt", user, slug)) {
+		return true
+	}
+	ctx, cancel := context.WithTimeout(context.Background(), GitTimeout)
+	defer cancel()
+	return m.branchExists(ctx, BranchFor(user, slug))
+}
+
+// change is one attempt at opening a change, refusing rather than making room.
+func (m *Manager) change(user, slug string) (*Change, error) {
 	if !userPattern.MatchString(user) || strings.Contains(user, "..") {
 		return nil, fmt.Errorf("%w: %q", ErrBadUser, user)
 	}
@@ -355,45 +425,17 @@ func (m *Manager) openSlugs(user string) ([]string, error) {
 	return out, nil
 }
 
-// Resume is the change a person was last working on, or false when they have
-// none open.
-//
-// Worktrees are on the state volume and outlive the process, so which change
-// somebody is in the middle of has to be read off disk rather than remembered:
-// after a restart the first edit would otherwise open a second branch for the
-// same piece of work, and a change already pushed would be stranded.
-func (m *Manager) Resume(user string) (*Change, bool, error) {
-	if !userPattern.MatchString(user) {
-		return nil, false, fmt.Errorf("%w: %q", ErrBadUser, user)
-	}
-	slugs, err := m.openSlugs(user)
-	if err != nil {
-		return nil, false, err
-	}
-
-	var newest *Change
-	var newestAt time.Time
-	for _, slug := range slugs {
-		c, err := m.Change(user, slug)
-		if err != nil {
-			// A worktree that cannot be opened is not a reason to refuse an
-			// edit; it is a reason to leave it alone and start fresh.
-			m.log.Warn("workdir: skipping an unreadable change", "user", user, "slug", slug, "err", err)
-			continue
-		}
-		if at := c.updatedAt(); newest == nil || at.After(newestAt) {
-			newest, newestAt = c, at
-		}
-	}
-	return newest, newest != nil, nil
-}
-
 // List reports the user's own changes: their worktrees, their branches, and
 // what GitHub knows about them when a token is configured. It never reports
 // another person's change.
 func (m *Manager) List(ctx context.Context, user string) ([]Info, error) {
 	if !userPattern.MatchString(user) {
 		return nil, fmt.Errorf("%w: %q", ErrBadUser, user)
+	}
+	// Merged and closed work is not a listing of what somebody is working on,
+	// and GitHub is being asked about every change here anyway.
+	if _, err := m.ArchiveFinished(ctx, user); err != nil {
+		m.log.Warn("workdir: sweeping finished changes", "user", user, "err", err)
 	}
 	slugs, err := m.openSlugs(user)
 	if err != nil {
@@ -584,6 +626,9 @@ func (m *Manager) Build(ctx context.Context, c *Change) (Result, error) {
 func (m *Manager) Submit(ctx context.Context, c *Change, author Author, title, description string) (SubmitResult, error) {
 	if c == nil {
 		return SubmitResult{}, ErrNoChange
+	}
+	if c.IsBase() {
+		return SubmitResult{}, ErrBaseView
 	}
 	title = strings.TrimSpace(title)
 	if title == "" {

@@ -256,6 +256,19 @@ func (f *fixture) commit(t *testing.T, dir, message string) {
 		"commit", "--quiet", "--message", message)
 }
 
+// pushNewFile moves the origin's default branch on, the way somebody else's
+// merged change does. It works through a clone of its own, so nothing the
+// manager holds is touched behind its back.
+func (f *fixture) pushNewFile(t *testing.T, rel, content string) {
+	t.Helper()
+	dir := filepath.Join(t.TempDir(), "pusher")
+	f.git(t, f.root, "clone", "--quiet", f.origin, dir)
+	mustWrite(t, filepath.Join(dir, rel), content)
+	f.git(t, dir, "add", "-A")
+	f.commit(t, dir, "Add "+rel)
+	f.git(t, dir, "push", "--quiet", "origin", "HEAD:refs/heads/main")
+}
+
 func (f *fixture) config(t *testing.T) Config {
 	t.Helper()
 	return Config{
@@ -402,6 +415,57 @@ func TestChangeCreatesAWorktreeOnItsOwnBranch(t *testing.T) {
 	}
 	if again != c {
 		t.Fatal("reopening a change produced a second object for one worktree")
+	}
+}
+
+// A name derived from a file name repeats itself: the stylesheet is called
+// "main" today and was called "main" yesterday. Fresh is what keeps a new
+// conversation's first edit out of the worktree the last one left behind.
+func TestFreshNeverJoinsAnExistingChange(t *testing.T) {
+	f := newFixture(t)
+	m := f.manager(t)
+	now := time.Date(2026, 9, 22, 9, 0, 0, 0, time.UTC)
+
+	first, err := m.Fresh("maija", "main", now)
+	if err != nil {
+		t.Fatalf("Fresh: %v", err)
+	}
+	if first.Slug != "main" {
+		t.Fatalf("slug = %q, want the name it was asked for", first.Slug)
+	}
+	if err := first.WriteFile("site/assets/css/main.css", []byte("body { color: red }\n")); err != nil {
+		t.Fatalf("writing into the first change: %v", err)
+	}
+
+	second, err := m.Fresh("maija", "main", now)
+	if err != nil {
+		t.Fatalf("the second Fresh: %v", err)
+	}
+	if second.Slug == first.Slug {
+		t.Fatalf("the second change is the first one: %q", second.Slug)
+	}
+	if second.Slug != "main-2" {
+		t.Errorf("slug = %q, want the asked-for name and a number", second.Slug)
+	}
+	// Nothing of the first change's work came along.
+	got, err := second.ReadFile("site/assets/css/main.css", 0, 0)
+	if err != nil {
+		t.Fatalf("reading the stylesheet in the fresh change: %v", err)
+	}
+	if strings.Contains(got, "color: red") {
+		t.Error("the fresh change inherited the other one's edit")
+	}
+
+	// A branch outlives its worktree, and reattaching to one would inherit the
+	// commits on it.
+	taken := BranchFor("maija", "main-3")
+	f.git(t, f.repo, "branch", taken, "main")
+	third, err := m.Fresh("maija", "main", now)
+	if err != nil {
+		t.Fatalf("the third Fresh: %v", err)
+	}
+	if third.Branch == taken {
+		t.Errorf("Fresh reattached to the existing branch %s", taken)
 	}
 }
 
@@ -1217,46 +1281,6 @@ func TestListReportsOnlyTheCallersChanges(t *testing.T) {
 		t.Fatalf("List: %v", err)
 	} else if len(infos) != 1 || infos[0].Slug != "toisen-muutos" {
 		t.Fatalf("List for the second person = %+v", infos)
-	}
-}
-
-// A restart must not strand the change somebody is in the middle of: the
-// worktrees are on disk precisely so the next edit continues the same branch
-// rather than opening a second one for the same work.
-func TestResumeFindsTheChangeOnDisk(t *testing.T) {
-	f := newFixture(t)
-	m := f.manager(t)
-
-	if _, ok, err := m.Resume("maija"); err != nil {
-		t.Fatalf("Resume: %v", err)
-	} else if ok {
-		t.Fatal("Resume found a change for somebody with none open")
-	}
-
-	c := openChange(t, m)
-	if _, err := m.Change("pekka", "toisen-muutos"); err != nil {
-		t.Fatalf("Change: %v", err)
-	}
-
-	// A fresh Manager over the same state directory is what a restart looks
-	// like from here: nothing is remembered in the process.
-	restarted := f.manager(t)
-	got, ok, err := restarted.Resume("maija")
-	if err != nil {
-		t.Fatalf("Resume: %v", err)
-	}
-	if !ok {
-		t.Fatal("Resume lost the open change across a restart")
-	}
-	if got.Branch != c.Branch || got.Dir != c.Dir {
-		t.Errorf("Resume = %s at %s, want %s at %s", got.Branch, got.Dir, c.Branch, c.Dir)
-	}
-
-	// Never somebody else's worktree, whatever its age.
-	if other, ok, err := restarted.Resume("pekka"); err != nil {
-		t.Fatalf("Resume: %v", err)
-	} else if !ok || other.Branch != BranchFor("pekka", "toisen-muutos") {
-		t.Errorf("Resume for the second person = %+v", other)
 	}
 }
 

@@ -1,4 +1,4 @@
-// Package toolset is the fifteen tools the MCP server exposes, built on the
+// Package toolset is the sixteen tools the MCP server exposes, built on the
 // fence, the worktree manager and the preview.
 //
 // File-level tools, not semantic ones: CSS is file-level, and update_page(slug,
@@ -55,14 +55,17 @@ type Config struct {
 	Now    func() time.Time // nil means time.Now
 }
 
-// Toolset holds the open change per person. One person has at most one current
-// change at a time: the tools carry no change argument, because the person is
-// talking about the thing they are working on and asking a model to thread an
-// identifier through the conversation is how the identifier ends up wrong.
+// Toolset holds one session per person: the change that person's conversation
+// is working on, if any. The tools carry no change argument, because the
+// person is talking about the thing they are working on and asking a model to
+// thread an identifier through the conversation is how the identifier ends up
+// wrong.
 //
-// A change is opened lazily by the first write, with a slug derived from what
-// was asked for. submit pushes it; the change stays current afterwards, so
-// "vähän vaaleampi" continues onto the same branch and the same pull request.
+// Reads bound to no change serve from the shared view of the published site,
+// so a conversation that only looks at it opens nothing. The first write opens
+// a change, with a slug derived from what was asked for, and binds it. submit
+// pushes it and the binding stands, so "vähän vaaleampi" continues onto the
+// same branch and the same pull request.
 type Toolset struct {
 	mgr         *workdir.Manager
 	conventions string
@@ -72,8 +75,8 @@ type Toolset struct {
 	log         *slog.Logger
 	now         func() time.Time
 
-	mu      sync.Mutex
-	current map[string]*workdir.Change // username -> the change being edited
+	mu       sync.Mutex
+	sessions map[string]*session // username -> the conversation in progress
 }
 
 func New(cfg Config) (*Toolset, error) {
@@ -89,7 +92,7 @@ func New(cfg Config) (*Toolset, error) {
 	if cfg.Now == nil {
 		cfg.Now = time.Now
 	}
-	return &Toolset{
+	t := &Toolset{
 		mgr:         cfg.Workdir,
 		conventions: cfg.Conventions,
 		shooter:     preview.Shooter{Bin: cfg.ChromiumBin, Log: cfg.Logger},
@@ -97,8 +100,12 @@ func New(cfg Config) (*Toolset, error) {
 		publicURL:   strings.TrimRight(cfg.PublicURL, "/"),
 		log:         cfg.Logger,
 		now:         cfg.Now,
-		current:     make(map[string]*workdir.Change),
-	}, nil
+		sessions:    make(map[string]*session),
+	}
+	// A change can end without this layer asking: the sweep that archives merged
+	// work runs inside a listing. The binding has to go with it.
+	cfg.Workdir.OnArchive(t.released)
+	return t, nil
 }
 
 // Instructions is what the MCP initialize response carries. The conventions
@@ -106,7 +113,7 @@ func New(cfg Config) (*Toolset, error) {
 // that drop them.
 func (t *Toolset) Instructions() string { return t.conventions }
 
-// Tools is the fifteen, in the order a session uses them.
+// Tools is the sixteen, in the order a session uses them.
 func (t *Toolset) Tools() []mcpserver.Tool {
 	return []mcpserver.Tool{
 		{
@@ -114,63 +121,63 @@ func (t *Toolset) Tools() []mcpserver.Tool {
 			Description: "How prodeko.org is laid out and how to edit it: the two content roots, the Finnish/English " +
 				"translationKey pairing, the design tokens, and what is editable and what is not. Read this first.",
 			Schema: schemaGetConventions,
-			Call:   text(t.getConventions),
+			Call:   t.noted(text(t.getConventions)),
 		},
 		{
 			Name: ToolListFiles,
 			Description: "List the editable files. The tree is a few hundred files, so listing it unfiltered is " +
 				"reasonable; pass a glob to narrow it.",
 			Schema: schemaListFiles,
-			Call:   text(t.listFiles),
+			Call:   t.noted(text(t.listFiles)),
 		},
 		{
 			Name: ToolReadFile,
 			Description: "Read a file, optionally a line range. Prefer a range for large files: site/assets/css/main.css " +
 				"is over a thousand lines and reading it whole every turn is the expensive habit.",
 			Schema: schemaReadFile,
-			Call:   text(t.readFile),
+			Call:   t.noted(text(t.readFile)),
 		},
 		{
 			Name: ToolSearch,
 			Description: "Search the editable files with a regular expression, line by line. This is how you find which " +
 				"template renders a heading and which rule styles it.",
 			Schema: schemaSearch,
-			Call:   text(t.search),
+			Call:   t.noted(text(t.search)),
 		},
 		{
 			Name: ToolWriteFile,
 			Description: "Write a whole file. Use it for a new page or a wholesale rewrite; prefer edit_file for a change " +
 				"inside an existing file.",
 			Schema: schemaWriteFile,
-			Call:   text(t.writeFile),
+			Call:   t.noted(text(t.writeFile)),
 		},
 		{
 			Name: ToolEditFile,
 			Description: "Replace an exact piece of text in a file. The old text must appear exactly once, so include " +
 				"enough surrounding lines to make it unique.",
 			Schema: schemaEditFile,
-			Call:   text(t.editFile),
+			Call:   t.noted(text(t.editFile)),
 		},
 		{
 			Name: ToolBuild,
 			Description: "Build the site, run its tree check, and check the built markup and the stylesheets. Returns " +
 				"everything it found verbatim. submit refuses a change that has not been built since its last edit.",
 			Schema: schemaBuild,
-			Call:   text(t.build),
+			Call:   t.noted(text(t.build)),
 		},
 		{
 			Name: ToolRender,
 			Description: "Read the built HTML of one page, whole or the subtrees a CSS selector matches. It reads the " +
 				"last build, so build again after an edit or you are reading the previous version.",
 			Schema: schemaRender,
-			Call:   text(t.render),
+			Call:   t.noted(text(t.render)),
 		},
 		{
 			Name: ToolScreenshot,
 			Description: "Look at a built page: a picture of the whole page at 1280 px, or 390 px for a phone. A page " +
 				"whose front matter pairs it with another language is captured in both, in one call.",
 			Schema: schemaScreenshot,
-			Call:   t.screenshot,
+			Call:   t.noted(t.screenshot),
 		},
 		{
 			Name: ToolSubmit,
@@ -178,14 +185,22 @@ func (t *Toolset) Tools() []mcpserver.Tool {
 				"preview link. A change under site/layouts/ is refused without a screenshot since its last edit and a " +
 				"description of what looks different.",
 			Schema: schemaSubmit,
-			Call:   text(t.submit),
+			Call:   t.noted(text(t.submit)),
 		},
 		{
 			Name: ToolListMyChanges,
 			Description: "List the signed-in person's own open changes: branch, files touched, pull request, CI state and " +
 				"preview link.",
 			Schema: schemaListMyChanges,
-			Call:   text(t.listMyChanges),
+			Call:   t.noted(text(t.listMyChanges)),
+		},
+		{
+			Name: ToolResumeChange,
+			Description: "Continue an existing change instead of starting a new one: by slug as list_my_changes names " +
+				"them, or by pull request number. Edits then land on that change's branch and its pull request. A merged " +
+				"or closed change is finished and cannot be continued.",
+			Schema: schemaResumeChange,
+			Call:   t.noted(text(t.resumeChange)),
 		},
 		{
 			Name: ToolBeginImageUpload,
@@ -193,28 +208,28 @@ func (t *Toolset) Tools() []mcpserver.Tool {
 				"change. The bytes never travel through the chat, so this link is the only way to add a photo.",
 			Schema: schemaBeginImageUpload,
 			Meta:   uploadToolMeta,
-			Call:   text(t.beginImageUpload),
+			Call:   t.noted(text(t.beginImageUpload)),
 		},
 		{
 			Name: ToolGetFeedback,
 			Description: "Read what has been said on a change's pull request: its state, the review verdicts and every " +
 				"comment, verbatim. This is how a request to \"fix what review asked for\" starts.",
 			Schema: schemaGetFeedback,
-			Call:   text(t.getFeedback),
+			Call:   t.noted(text(t.getFeedback)),
 		},
 		{
 			Name: ToolTranslationStatus,
 			Description: "Which pages are missing their Finnish or English side, and which pairs drifted apart: one side " +
 				"edited after the other. Age is the last commit, so an edit in this change counts once it is submitted.",
 			Schema: schemaTranslationStatus,
-			Call:   text(t.translationStatus),
+			Call:   t.noted(text(t.translationStatus)),
 		},
 		{
 			Name: ToolAbandonChange,
 			Description: "Throw a change away: close its pull request, delete its branch, discard its edits. There is no " +
 				"undo, so confirm with the person before calling this.",
 			Schema: schemaAbandonChange,
-			Call:   text(t.abandonChange),
+			Call:   t.noted(text(t.abandonChange)),
 		},
 	}
 }
@@ -245,7 +260,7 @@ func (t *Toolset) listFiles(ctx context.Context, id mcpserver.Identity, args jso
 	if err != nil {
 		return "", fmt.Errorf("%s: %w", ToolListFiles, err)
 	}
-	c, err := t.open(id, "")
+	c, err := t.reading(ctx, id)
 	if err != nil {
 		return "", err
 	}
@@ -271,7 +286,7 @@ func (t *Toolset) readFile(ctx context.Context, id mcpserver.Identity, args json
 	if a.Start > 0 && a.End > 0 && a.End < a.Start {
 		return "", fmt.Errorf("%s: end %d is before start %d", ToolReadFile, a.End, a.Start)
 	}
-	c, err := t.open(id, "")
+	c, err := t.reading(ctx, id)
 	if err != nil {
 		return "", err
 	}
@@ -299,7 +314,7 @@ func (t *Toolset) search(ctx context.Context, id mcpserver.Identity, args json.R
 	if max > MaxSearchResults {
 		max = MaxSearchResults
 	}
-	c, err := t.open(id, "")
+	c, err := t.reading(ctx, id)
 	if err != nil {
 		return "", err
 	}
@@ -323,7 +338,7 @@ func (t *Toolset) writeFile(ctx context.Context, id mcpserver.Identity, args jso
 		return "", fmt.Errorf("%w: %s got %d bytes of content, at most %d in one write",
 			fence.ErrTooLarge, ToolWriteFile, len(a.Content), fence.MaxTextBytes)
 	}
-	c, err := t.open(id, hintFor(rel))
+	c, err := t.writing(id, hintFor(rel))
 	if err != nil {
 		return "", err
 	}
@@ -359,7 +374,7 @@ func (t *Toolset) editFile(ctx context.Context, id mcpserver.Identity, args json
 		return "", fmt.Errorf("%w: %s got %d bytes of replacement, at most %d",
 			fence.ErrTooLarge, ToolEditFile, len(replacement), fence.MaxTextBytes)
 	}
-	c, err := t.open(id, hintFor(rel))
+	c, err := t.writing(id, hintFor(rel))
 	if err != nil {
 		return "", err
 	}
@@ -373,7 +388,7 @@ func (t *Toolset) editFile(ctx context.Context, id mcpserver.Identity, args json
 }
 
 func (t *Toolset) build(ctx context.Context, id mcpserver.Identity, args json.RawMessage) (string, error) {
-	c, err := t.open(id, "")
+	c, err := t.reading(ctx, id)
 	if err != nil {
 		return "", err
 	}
@@ -391,19 +406,30 @@ func (t *Toolset) render(ctx context.Context, id mcpserver.Identity, args json.R
 	if err != nil {
 		return "", fmt.Errorf("%s: %w", ToolRender, err)
 	}
-	c, err := t.open(id, "")
+	c, err := t.reading(ctx, id)
 	if err != nil {
 		return "", err
 	}
-	page, err := t.site(c).Locate(a.Path)
-	if err != nil {
-		return "", buildFirst(ToolRender, err)
-	}
-	out, err := page.HTML(a.Selector)
+	// Held across both steps: the build is read twice, and everybody with no
+	// change of their own shares one build root, so a rebuild between the two
+	// would answer out of half a directory.
+	var answer string
+	err = c.View(func() error {
+		page, err := t.site(c).Locate(a.Path)
+		if err != nil {
+			return buildFirst(ToolRender, err)
+		}
+		out, err := page.HTML(a.Selector)
+		if err != nil {
+			return err
+		}
+		answer = renderPage(page, a.Selector, out)
+		return nil
+	})
 	if err != nil {
 		return "", err
 	}
-	return renderPage(page, a.Selector, out), nil
+	return answer, nil
 }
 
 // screenshot is the one tool whose answer is a picture, so it is the one that
@@ -417,42 +443,52 @@ func (t *Toolset) screenshot(ctx context.Context, id mcpserver.Identity, args js
 	if err != nil {
 		return mcpserver.Result{}, err
 	}
-	c, err := t.open(id, "")
+	c, err := t.reading(ctx, id)
 	if err != nil {
 		return mcpserver.Result{}, err
 	}
 
-	site := t.site(c)
-	page, err := site.Locate(a.Path)
-	if err != nil {
-		return mcpserver.Result{}, buildFirst(ToolScreenshot, err)
-	}
-	// The pair is captured in the same call because a layout change is a change
-	// to both languages whether or not anybody remembered to look at the second.
-	others, err := site.Counterparts(page)
-	if err != nil {
-		return mcpserver.Result{}, err
-	}
-
-	srv, err := preview.Serve(site.Output)
-	if err != nil {
-		return mcpserver.Result{}, buildFirst(ToolScreenshot, err)
-	}
-	defer func() {
-		if err := srv.Close(); err != nil {
-			t.log.Warn("toolset: the preview server did not close", "err", err)
-		}
-	}()
-
-	shots := make([]shot, 0, len(others)+1)
-	for _, p := range append([]preview.Page{page}, others...) {
-		taken, err := t.shooter.Capture(ctx, srv.URL+p.URL, width)
+	// The whole capture happens on one build: the pictures answer for a single
+	// state of the site, and the shared build root is emptied at the start of
+	// every build anybody runs.
+	var shots []shot
+	err = c.View(func() error {
+		site := t.site(c)
+		page, err := site.Locate(a.Path)
 		if err != nil {
-			// Chromium's own words, not a summary of them: what it said is what
-			// tells a maintainer whether the browser or the page is at fault.
-			return mcpserver.Result{}, err
+			return buildFirst(ToolScreenshot, err)
 		}
-		shots = append(shots, shot{page: p, taken: taken})
+		// The pair is captured in the same call because a layout change is a change
+		// to both languages whether or not anybody remembered to look at the second.
+		others, err := site.Counterparts(page)
+		if err != nil {
+			return err
+		}
+
+		srv, err := preview.Serve(site.Output)
+		if err != nil {
+			return buildFirst(ToolScreenshot, err)
+		}
+		defer func() {
+			if err := srv.Close(); err != nil {
+				t.log.Warn("toolset: the preview server did not close", "err", err)
+			}
+		}()
+
+		shots = make([]shot, 0, len(others)+1)
+		for _, p := range append([]preview.Page{page}, others...) {
+			taken, err := t.shooter.Capture(ctx, srv.URL+p.URL, width)
+			if err != nil {
+				// Chromium's own words, not a summary of them: what it said is what
+				// tells a maintainer whether the browser or the page is at fault.
+				return err
+			}
+			shots = append(shots, shot{page: p, taken: taken})
+		}
+		return nil
+	})
+	if err != nil {
+		return mcpserver.Result{}, err
 	}
 
 	// The stamp is what submit reads to know the editor has looked at a layout
@@ -521,9 +557,13 @@ func (t *Toolset) submit(ctx context.Context, id mcpserver.Identity, args json.R
 	if err != nil {
 		return "", err
 	}
-	c, err := t.open(id, title)
+	user, err := userOf(id)
 	if err != nil {
 		return "", err
+	}
+	c := t.boundChange(user)
+	if c == nil {
+		return noChange("submit"), nil
 	}
 	files, err := c.Touched()
 	if err != nil {
@@ -548,11 +588,132 @@ func (t *Toolset) listMyChanges(ctx context.Context, id mcpserver.Identity, args
 	if err != nil {
 		return "", err
 	}
+	// Asked outright, so the once-a-session note has nothing left to add.
+	t.spendNote(user)
 	infos, err := t.mgr.List(ctx, user)
 	if err != nil {
 		return "", err
 	}
 	return renderChanges(infos), nil
+}
+
+// resumeChange puts the conversation back onto a change somebody already
+// started. It is the only way back into one: a change is continued by being
+// named, never by being the newest thing lying about.
+func (t *Toolset) resumeChange(ctx context.Context, id mcpserver.Identity, args json.RawMessage) (string, error) {
+	a, err := decode[resumeChangeArgs](args)
+	if err != nil {
+		return "", fmt.Errorf("%s: %w", ToolResumeChange, err)
+	}
+	slug := strings.TrimSpace(a.Slug)
+	if (slug == "") == (a.PR == 0) {
+		return "", fmt.Errorf("%s: give exactly one of slug and pr; %s lists the slugs", ToolResumeChange, ToolListMyChanges)
+	}
+	if a.PR < 0 {
+		return "", fmt.Errorf("%s: %d is not a pull request number; they are numbered from 1", ToolResumeChange, a.PR)
+	}
+	user, err := userOf(id)
+	if err != nil {
+		return "", err
+	}
+
+	if a.PR != 0 {
+		if t.mgr.DryRun() {
+			return "", fmt.Errorf("%s: this server has no GitHub access, so a pull request number cannot be turned into a change; name it with the slug %s gives",
+				ToolResumeChange, ToolListMyChanges)
+		}
+		pr, err := t.mgr.PullRequestByNumber(ctx, a.PR)
+		if err != nil {
+			return "", err
+		}
+		// A number is as easily somebody else's branch as your own, and the
+		// namespace is the whole of the authorisation here.
+		prefix := workdir.BranchPrefix + user + "/"
+		if !strings.HasPrefix(pr.Head.Ref, prefix) {
+			return "", fmt.Errorf("%s: pull request #%d is on %s, which is not one of your changes; yours are under %s",
+				ToolResumeChange, a.PR, pr.Head.Ref, prefix)
+		}
+		slug = strings.TrimPrefix(pr.Head.Ref, prefix)
+		if workdir.Finished(pr) {
+			return t.retire(ctx, user, slug, pr.Number, prState(pr)), nil
+		}
+	}
+
+	c, err := t.mgr.Existing(user, slug)
+	if errors.Is(err, workdir.ErrNoChange) && a.PR != 0 {
+		// The pull request is proof that the branch exists, so a worktree lost to
+		// a restart is opened again from it.
+		c, err = t.mgr.Change(user, slug)
+	}
+	if err != nil {
+		return "", err
+	}
+	// A pull request the caller named was read a moment ago, so what became of
+	// it is known; a slug says nothing about it, and has to be asked.
+	if a.PR == 0 {
+		if number, state, ok := t.finished(ctx, c); ok {
+			return t.retire(ctx, user, slug, number, state), nil
+		}
+	}
+
+	t.bind(user, c)
+	// The lookups list_my_changes makes, so a change reads the same way whether
+	// it was listed or picked up.
+	infos, err := t.mgr.List(ctx, user)
+	if err != nil {
+		t.log.Warn("toolset: listing a resumed change", "slug", slug, "err", err)
+	}
+	for _, in := range infos {
+		if in.Slug == slug {
+			return renderResume(in, true), nil
+		}
+	}
+	return renderResume(workdir.Info{Slug: c.Slug, Branch: c.Branch}, false), nil
+}
+
+// finished asks GitHub whether review is done with a change, and says what
+// became of its pull request when it is. A state that cannot be read says
+// nothing: refusing a resume nobody can check would strand the work behind an
+// outage, and a dry run knows nothing about pull requests at all.
+func (t *Toolset) finished(ctx context.Context, c *workdir.Change) (number int, state string, ok bool) {
+	if t.mgr.DryRun() {
+		return 0, "", false
+	}
+	fb, err := t.mgr.Feedback(ctx, c)
+	switch {
+	case errors.Is(err, workdir.ErrNeverSubmitted):
+		// Nothing has been decided about work that was never shown to anybody.
+		return 0, "", false
+	case err != nil:
+		t.log.Warn("toolset: reading the state of a change", "slug", c.Slug, "err", err)
+		return 0, "", false
+	case fb.State == "open":
+		return 0, "", false
+	}
+	return fb.PRNumber, fb.State, true
+}
+
+// retire ends a change review has finished with: published or turned down, the
+// worktree under it is litter either way. The sentence names the pull request,
+// because what happened to it is the thing the person is about to be told.
+// Archiving drops whatever binding held it, so the next edit starts fresh.
+func (t *Toolset) retire(ctx context.Context, user, slug string, number int, state string) string {
+	if c, err := t.mgr.Existing(user, slug); err == nil {
+		if err := t.mgr.Archive(ctx, c); err != nil {
+			t.log.Warn("toolset: archiving a finished change", "slug", slug, "err", err)
+		}
+	}
+	return fmt.Sprintf("%s is finished: its pull request #%d was %s. It has been tidied away, and your next edit starts a new change.",
+		slug, number, state)
+}
+
+// prState is the word for what happened to a pull request. GitHub closes a
+// merged one, so merged_at is what tells the two apart.
+func prState(pr workdir.PullRequest) string {
+	if pr.MergedAt != "" {
+		return "merged"
+	}
+	return pr.State
 }
 
 func (t *Toolset) getFeedback(ctx context.Context, id mcpserver.Identity, args json.RawMessage) (string, error) {
@@ -563,6 +724,9 @@ func (t *Toolset) getFeedback(ctx context.Context, id mcpserver.Identity, args j
 	c, err := t.change(id, a.Slug)
 	if err != nil {
 		return "", err
+	}
+	if c == nil {
+		return noChange("read feedback on"), nil
 	}
 	fb, err := t.mgr.Feedback(ctx, c)
 	if errors.Is(err, workdir.ErrNeverSubmitted) {
@@ -589,7 +753,7 @@ func (t *Toolset) translationStatus(ctx context.Context, id mcpserver.Identity, 
 		}
 		filter = clean
 	}
-	c, err := t.open(id, "")
+	c, err := t.reading(ctx, id)
 	if err != nil {
 		return "", err
 	}
@@ -621,60 +785,22 @@ func (t *Toolset) abandonChange(ctx context.Context, id mcpserver.Identity, args
 		return "", err
 	}
 	// The next edit starts fresh rather than landing in a deleted worktree.
-	t.mu.Lock()
-	if t.current[user] == c {
-		delete(t.current, user)
-	}
-	t.mu.Unlock()
+	t.unbind(user, c)
 	return renderAbandon(res), nil
 }
 
-// change is the caller's current change, or the named one when a tool that
-// takes a slug was given one.
+// change is the change a tool that takes a slug works on: the named one, or
+// the conversation's own when no name was given. A nil change with no error is
+// a conversation that has opened none, which the caller answers in words.
 func (t *Toolset) change(id mcpserver.Identity, slug string) (*workdir.Change, error) {
-	if strings.TrimSpace(slug) == "" {
-		return t.open(id, "")
-	}
 	user, err := userOf(id)
 	if err != nil {
 		return nil, err
 	}
-	return t.mgr.Existing(user, slug)
-}
-
-// open returns the caller's current change, creating one named after hint when
-// there is none. Reads need a tree as much as writes do, so this is on the
-// path of every tool except get_conventions and list_my_changes.
-func (t *Toolset) open(id mcpserver.Identity, hint string) (*workdir.Change, error) {
-	user, err := userOf(id)
-	if err != nil {
-		return nil, err
+	if slug = strings.TrimSpace(slug); slug != "" {
+		return t.mgr.Existing(user, slug)
 	}
-	return t.openUser(user, hint)
-}
-
-// openUser is open for a caller that already holds the namespaced username:
-// the upload handler, whose token carries it instead of a bearer identity.
-func (t *Toolset) openUser(user, hint string) (*workdir.Change, error) {
-	t.mu.Lock()
-	defer t.mu.Unlock()
-	if c, ok := t.current[user]; ok {
-		return c, nil
-	}
-	// The map is a cache, not the record: the worktrees on the state volume
-	// are, so that a restart continues the change somebody is in the middle of
-	// instead of quietly opening a second branch for the same work.
-	c, ok, err := t.mgr.Resume(user)
-	if err != nil {
-		return nil, err
-	}
-	if !ok {
-		if c, err = t.mgr.Change(user, workdir.Slug(hint, t.now())); err != nil {
-			return nil, err
-		}
-	}
-	t.current[user] = c
-	return c, nil
+	return t.boundChange(user), nil
 }
 
 // userOf is the branch namespace and the worktree directory both. An identity

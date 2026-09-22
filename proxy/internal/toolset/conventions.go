@@ -106,6 +106,33 @@ Three things ` + "`" + `submit` + "`" + ` insists on, and refuses without:
     for a change touching site/layouts/, a description of what looks
       different, which is what a maintainer reads before the diff.
 
+## One conversation, one change
+
+A conversation starts on a clean checkout of the published site. Looking costs
+nothing: reading, searching and building open no change, and the first edit is
+what opens one. Every edit after that lands in the same change, including the
+tweak asked for after ` + "`" + `submit` + "`" + `.
+
+Half-finished work from before is never picked up for you, because inheriting
+it silently is how an unrelated file ends up in somebody's pull request.
+Continuing it is deliberate: ` + "`" + `resume_change` + "`" + ` takes a slug as
+` + "`" + `list_my_changes` + "`" + ` names them, or a pull request number, and from then on edits
+land on that change's branch and its pull request.
+
+"Jatka", "sama kuin eilen", or a request to fix what review asked for means an
+existing change rather than a second one beside it. Call ` + "`" + `list_my_changes` + "`" + ` and
+offer what you find instead of editing afresh. The first answer you get in a
+conversation names any open changes by itself, so usually you already know.
+
+If nothing is asked for a long while, or the server restarts, the conversation
+stops being tied to its change and the next edit opens a new one. The old change
+is untouched and ` + "`" + `resume_change` + "`" + ` still reaches it, which is what makes
+` + "`" + `list_my_changes` + "`" + ` worth reading before editing again.
+
+Merged and closed changes disappear on their own, so what is listed is what is
+still live. Three may be open at once; a refusal to open a fourth means three
+are genuinely unfinished, and submitting or abandoning one is the way out.
+
 ## What this cannot do
 
 Images: there is no way to hand file bytes to ` + "`" + `write_file` + "`" + `. Point the person at
