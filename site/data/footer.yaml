@@ -43,6 +43,8 @@ fi:
         url: https://gallery.prodeko.org
       - label: Ilmokilke
         url: https://ilmo.prodeko.org
+      - label: Kiltiskamera
+        url: https://kiltiskamera.prodeko.org
   - title: Yhteystiedot
     links:
       - label: Yrityksille
@@ -95,6 +97,8 @@ en:
         url: https://gallery.prodeko.org
       - label: Ilmokilke
         url: https://ilmo.prodeko.org
+      - label: Guild room camera
+        url: https://kiltiskamera.prodeko.org
   - title: Contact
     links:
       - label: For companies
