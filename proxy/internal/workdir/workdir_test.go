@@ -256,6 +256,19 @@ func (f *fixture) commit(t *testing.T, dir, message string) {
 		"commit", "--quiet", "--message", message)
 }
 
+// pushNewFile moves the origin's default branch on, the way somebody else's
+// merged change does. It works through a clone of its own, so nothing the
+// manager holds is touched behind its back.
+func (f *fixture) pushNewFile(t *testing.T, rel, content string) {
+	t.Helper()
+	dir := filepath.Join(t.TempDir(), "pusher")
+	f.git(t, f.root, "clone", "--quiet", f.origin, dir)
+	mustWrite(t, filepath.Join(dir, rel), content)
+	f.git(t, dir, "add", "-A")
+	f.commit(t, dir, "Add "+rel)
+	f.git(t, dir, "push", "--quiet", "origin", "HEAD:refs/heads/main")
+}
+
 func (f *fixture) config(t *testing.T) Config {
 	t.Helper()
 	return Config{

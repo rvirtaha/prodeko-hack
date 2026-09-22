@@ -105,6 +105,7 @@ type Manager struct {
 
 	mu      sync.Mutex
 	changes map[string]*Change // BranchFor(user, slug) -> the one Change for it
+	base    *Change            // the shared read-only view, made once
 }
 
 // Change is one editing session on disk: a worktree on its own branch, based
@@ -584,6 +585,9 @@ func (m *Manager) Build(ctx context.Context, c *Change) (Result, error) {
 func (m *Manager) Submit(ctx context.Context, c *Change, author Author, title, description string) (SubmitResult, error) {
 	if c == nil {
 		return SubmitResult{}, ErrNoChange
+	}
+	if c.IsBase() {
+		return SubmitResult{}, ErrBaseView
 	}
 	title = strings.TrimSpace(title)
 	if title == "" {
