@@ -89,6 +89,8 @@ fi:
           url: https://ilmo.prodeko.org
         - label: Kiltiskamera
           url: https://kiltiskamera.prodeko.org
+        - label: Proleko
+          url: https://old.prodeko.org/en/services/proleko/
         - label: Prodeko rahasto
           url: /fi/palvelut/prodeko-fund/
         - label: Store
@@ -238,6 +240,8 @@ en:
           url: https://ilmo.prodeko.org
         - label: Guild room camera
           url: https://kiltiskamera.prodeko.org
+        - label: Proleko
+          url: https://old.prodeko.org/en/services/proleko/
         - label: Prodeko Fund
           url: /en/services/prodeko-fund/
         - label: Store
