@@ -39,9 +39,19 @@ func (m *Manager) announceArchived(c *Change) {
 	}
 }
 
-// Archive removes a change's local state. The caller established that the
-// change is finished; this only cleans up after it.
+// Archive removes a change's local state and says so. The caller established
+// that the change is finished; this only cleans up after it. The listeners are
+// told once the change is unlocked and gone, so what one of them does with it
+// cannot wait on the removal that prompted it.
 func (m *Manager) Archive(ctx context.Context, c *Change) error {
+	if err := m.archive(ctx, c); err != nil {
+		return err
+	}
+	m.announceArchived(c)
+	return nil
+}
+
+func (m *Manager) archive(ctx context.Context, c *Change) error {
 	if c == nil {
 		return ErrNoChange
 	}
@@ -84,7 +94,6 @@ func (m *Manager) Archive(ctx context.Context, c *Change) error {
 	m.mu.Unlock()
 
 	m.log.Info("workdir: change archived", "user", c.User, "branch", c.Branch)
-	m.announceArchived(c)
 	return nil
 }
 
