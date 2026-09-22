@@ -741,6 +741,12 @@ img { display: block; max-width: 100%; }
 .hero-photo h1 { margin: 0 0 var(--space-5); font-weight: var(--weight-bold); letter-spacing: var(--track-display); text-transform: uppercase; line-height: 1.05; color: var(--pd-white-1); text-shadow: var(--shadow-heading); }
 .hero-photo .kicker { opacity: 0.9; margin-bottom: var(--space-4); display: block; }
 .hero-photo p { margin: 0; max-width: 60ch; font-size: var(--size-lg); font-weight: var(--weight-light); line-height: var(--leading-normal); text-shadow: var(--shadow-heading); }
+/* The site link blue (--text-link) sits on the hero's dark blue overlay at
+   well under 2:1. Links here take the hero's own white ink and keep the
+   underline, so they still read as links; hover drops the underline instead
+   of switching to --text-link-hover, which is the overlay's own colour. */
+.hero-photo a { color: var(--text-on-brand); font-weight: var(--weight-regular); }
+.hero-photo a:hover { color: var(--text-on-brand); border-bottom-color: transparent; }
 
 .hero-prospective { min-height: 560px; display: flex; align-items: flex-end; background: var(--pd-blue-dark); }
 .hero-prospective::before { content: ""; position: absolute; inset: 0; z-index: 1; background: linear-gradient(180deg, rgb(0 40 81 / 0.05) 0%, rgb(0 40 81 / 0.2) 35%, rgb(0 40 81 / 0.88) 62%, rgb(0 40 81 / 0.96) 100%); }
