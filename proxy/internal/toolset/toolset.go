@@ -117,63 +117,63 @@ func (t *Toolset) Tools() []mcpserver.Tool {
 			Description: "How prodeko.org is laid out and how to edit it: the two content roots, the Finnish/English " +
 				"translationKey pairing, the design tokens, and what is editable and what is not. Read this first.",
 			Schema: schemaGetConventions,
-			Call:   text(t.getConventions),
+			Call:   t.noted(text(t.getConventions)),
 		},
 		{
 			Name: ToolListFiles,
 			Description: "List the editable files. The tree is a few hundred files, so listing it unfiltered is " +
 				"reasonable; pass a glob to narrow it.",
 			Schema: schemaListFiles,
-			Call:   text(t.listFiles),
+			Call:   t.noted(text(t.listFiles)),
 		},
 		{
 			Name: ToolReadFile,
 			Description: "Read a file, optionally a line range. Prefer a range for large files: site/assets/css/main.css " +
 				"is over a thousand lines and reading it whole every turn is the expensive habit.",
 			Schema: schemaReadFile,
-			Call:   text(t.readFile),
+			Call:   t.noted(text(t.readFile)),
 		},
 		{
 			Name: ToolSearch,
 			Description: "Search the editable files with a regular expression, line by line. This is how you find which " +
 				"template renders a heading and which rule styles it.",
 			Schema: schemaSearch,
-			Call:   text(t.search),
+			Call:   t.noted(text(t.search)),
 		},
 		{
 			Name: ToolWriteFile,
 			Description: "Write a whole file. Use it for a new page or a wholesale rewrite; prefer edit_file for a change " +
 				"inside an existing file.",
 			Schema: schemaWriteFile,
-			Call:   text(t.writeFile),
+			Call:   t.noted(text(t.writeFile)),
 		},
 		{
 			Name: ToolEditFile,
 			Description: "Replace an exact piece of text in a file. The old text must appear exactly once, so include " +
 				"enough surrounding lines to make it unique.",
 			Schema: schemaEditFile,
-			Call:   text(t.editFile),
+			Call:   t.noted(text(t.editFile)),
 		},
 		{
 			Name: ToolBuild,
 			Description: "Build the site, run its tree check, and check the built markup and the stylesheets. Returns " +
 				"everything it found verbatim. submit refuses a change that has not been built since its last edit.",
 			Schema: schemaBuild,
-			Call:   text(t.build),
+			Call:   t.noted(text(t.build)),
 		},
 		{
 			Name: ToolRender,
 			Description: "Read the built HTML of one page, whole or the subtrees a CSS selector matches. It reads the " +
 				"last build, so build again after an edit or you are reading the previous version.",
 			Schema: schemaRender,
-			Call:   text(t.render),
+			Call:   t.noted(text(t.render)),
 		},
 		{
 			Name: ToolScreenshot,
 			Description: "Look at a built page: a picture of the whole page at 1280 px, or 390 px for a phone. A page " +
 				"whose front matter pairs it with another language is captured in both, in one call.",
 			Schema: schemaScreenshot,
-			Call:   t.screenshot,
+			Call:   t.noted(t.screenshot),
 		},
 		{
 			Name: ToolSubmit,
@@ -181,14 +181,14 @@ func (t *Toolset) Tools() []mcpserver.Tool {
 				"preview link. A change under site/layouts/ is refused without a screenshot since its last edit and a " +
 				"description of what looks different.",
 			Schema: schemaSubmit,
-			Call:   text(t.submit),
+			Call:   t.noted(text(t.submit)),
 		},
 		{
 			Name: ToolListMyChanges,
 			Description: "List the signed-in person's own open changes: branch, files touched, pull request, CI state and " +
 				"preview link.",
 			Schema: schemaListMyChanges,
-			Call:   text(t.listMyChanges),
+			Call:   t.noted(text(t.listMyChanges)),
 		},
 		{
 			Name: ToolResumeChange,
@@ -196,7 +196,7 @@ func (t *Toolset) Tools() []mcpserver.Tool {
 				"them, or by pull request number. Edits then land on that change's branch and its pull request. A merged " +
 				"or closed change is finished and cannot be continued.",
 			Schema: schemaResumeChange,
-			Call:   text(t.resumeChange),
+			Call:   t.noted(text(t.resumeChange)),
 		},
 		{
 			Name: ToolBeginImageUpload,
@@ -204,28 +204,28 @@ func (t *Toolset) Tools() []mcpserver.Tool {
 				"change. The bytes never travel through the chat, so this link is the only way to add a photo.",
 			Schema: schemaBeginImageUpload,
 			Meta:   uploadToolMeta,
-			Call:   text(t.beginImageUpload),
+			Call:   t.noted(text(t.beginImageUpload)),
 		},
 		{
 			Name: ToolGetFeedback,
 			Description: "Read what has been said on a change's pull request: its state, the review verdicts and every " +
 				"comment, verbatim. This is how a request to \"fix what review asked for\" starts.",
 			Schema: schemaGetFeedback,
-			Call:   text(t.getFeedback),
+			Call:   t.noted(text(t.getFeedback)),
 		},
 		{
 			Name: ToolTranslationStatus,
 			Description: "Which pages are missing their Finnish or English side, and which pairs drifted apart: one side " +
 				"edited after the other. Age is the last commit, so an edit in this change counts once it is submitted.",
 			Schema: schemaTranslationStatus,
-			Call:   text(t.translationStatus),
+			Call:   t.noted(text(t.translationStatus)),
 		},
 		{
 			Name: ToolAbandonChange,
 			Description: "Throw a change away: close its pull request, delete its branch, discard its edits. There is no " +
 				"undo, so confirm with the person before calling this.",
 			Schema: schemaAbandonChange,
-			Call:   text(t.abandonChange),
+			Call:   t.noted(text(t.abandonChange)),
 		},
 	}
 }
@@ -563,6 +563,8 @@ func (t *Toolset) listMyChanges(ctx context.Context, id mcpserver.Identity, args
 	if err != nil {
 		return "", err
 	}
+	// Asked outright, so the once-a-session note has nothing left to add.
+	t.spendNote(user)
 	infos, err := t.mgr.List(ctx, user)
 	if err != nil {
 		return "", err

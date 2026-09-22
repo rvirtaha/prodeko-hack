@@ -475,10 +475,16 @@ func TestResumeRefusesAnotherUsersPR(t *testing.T) {
 func TestResumeRefusesAndArchivesAFinishedChange(t *testing.T) {
 	f := newFixture(t, fakePR{number: 9, branch: workdir.BranchFor("maija", "uutinen"), state: "closed", merged: true})
 
-	if _, err := call(t, f.ts, ToolWriteFile, maija, `{"path":"site/content/fi/uutinen.md","content":"# Uutinen\n"}`); err != nil {
-		t.Fatalf("write_file: %v", err)
+	// The change was made in an earlier conversation and merged since, which is
+	// why the tool set knows nothing about it: a leftover worktree is all that
+	// is left of it here.
+	c, err := f.mgr.Change("maija", "uutinen")
+	if err != nil {
+		t.Fatalf("opening the change an earlier conversation left: %v", err)
 	}
-	f.advance(SessionIdle + time.Minute)
+	if err := c.WriteFile("site/content/fi/uutinen.md", []byte("# Uutinen\n")); err != nil {
+		t.Fatalf("writing into it: %v", err)
+	}
 
 	out, err := call(t, f.ts, ToolResumeChange, maija, `{"slug":"uutinen"}`)
 	if err != nil {
@@ -530,5 +536,117 @@ func TestResumeByPRInDryRun(t *testing.T) {
 	}
 	if !strings.Contains(err.Error(), ToolListMyChanges) {
 		t.Errorf("the refusal does not say where a slug comes from: %v", err)
+	}
+}
+
+// ------------------------------------------------------ the proactive note --
+
+// noteMark is the phrase that tells the note apart from whatever answer it is
+// riding on. A test asserting on it is asserting that the note is there at all.
+const noteMark = "open changes from before this conversation"
+
+// Work left over from an earlier conversation has to be mentioned by the server:
+// the model has no other way to learn that it exists, and the moment to offer to
+// continue it is the first thing said, not the third.
+func TestTheNoteAppearsOnceASession(t *testing.T) {
+	f := newFixture(t, fakePR{number: 12, branch: workdir.BranchFor("maija", "uutinen"), state: "open"})
+
+	if _, err := call(t, f.ts, ToolWriteFile, maija, `{"path":"site/content/fi/uutinen.md","content":"# Uutinen\n"}`); err != nil {
+		t.Fatalf("write_file: %v", err)
+	}
+	f.advance(SessionIdle + time.Minute)
+
+	out, err := call(t, f.ts, ToolReadFile, maija, `{"path":"site/content/fi/tapahtumat.md"}`)
+	if err != nil {
+		t.Fatalf("read_file: %v", err)
+	}
+	// The answer to what was asked, and then what to do about the change under
+	// review: its number is what the person will recognise it by.
+	for _, want := range []string{"Tapahtumia tulossa.", noteMark, "uutinen", "#12", ToolResumeChange} {
+		if !strings.Contains(out, want) {
+			t.Errorf("the first answer of the session omits %q:\n%s", want, out)
+		}
+	}
+
+	// Said once: a note on every answer would be a standing instruction rather
+	// than a thing to act on.
+	again, err := call(t, f.ts, ToolReadFile, maija, `{"path":"site/content/fi/tapahtumat.md"}`)
+	if err != nil {
+		t.Fatalf("the second read_file: %v", err)
+	}
+	if strings.Contains(again, noteMark) {
+		t.Errorf("the note was repeated:\n%s", again)
+	}
+}
+
+// Nothing to say is said in no words at all. Most conversations are the first
+// one of the day and a postscript about nothing would train the model to skip
+// the postscript.
+func TestNoNoteWithoutOpenChanges(t *testing.T) {
+	f := newFixture(t)
+
+	out, err := call(t, f.ts, ToolReadFile, maija, `{"path":"site/content/fi/tapahtumat.md"}`)
+	if err != nil {
+		t.Fatalf("read_file: %v", err)
+	}
+	if strings.Contains(out, noteMark) || strings.Contains(out, ToolResumeChange) {
+		t.Errorf("a person with no open changes was told about them:\n%s", out)
+	}
+}
+
+// The change this conversation just opened is not news to it. The note is what
+// was left behind before, and naming the change in hand would be an invitation
+// to resume the thing already being edited.
+func TestTheNoteLeavesOutTheConversationsOwnChange(t *testing.T) {
+	f := newFixture(t)
+
+	if _, err := call(t, f.ts, ToolWriteFile, maija, `{"path":"site/content/fi/vanha.md","content":"# Vanha\n"}`); err != nil {
+		t.Fatalf("write_file: %v", err)
+	}
+	f.advance(SessionIdle + time.Minute)
+
+	out, err := call(t, f.ts, ToolWriteFile, maija, `{"path":"site/content/fi/tiedote.md","content":"# Tiedote\n"}`)
+	if err != nil {
+		t.Fatalf("the write that opens this session's change: %v", err)
+	}
+	_, note, ok := strings.Cut(out, noteMark)
+	if !ok {
+		t.Fatalf("the first answer of the session carries no note:\n%s", out)
+	}
+	if !strings.Contains(note, "vanha") {
+		t.Errorf("the note omits the change left behind:\n%s", note)
+	}
+	if strings.Contains(note, "tiedote") {
+		t.Errorf("the note names the change this conversation is on:\n%s", note)
+	}
+}
+
+// list_my_changes answers the note's question in full, so appending it would
+// print the same list twice. It still spends the note: the person has been told.
+func TestListMyChangesSwallowsTheNote(t *testing.T) {
+	f := newFixture(t)
+
+	if _, err := call(t, f.ts, ToolWriteFile, maija, `{"path":"site/content/fi/uutinen.md","content":"# Uutinen\n"}`); err != nil {
+		t.Fatalf("write_file: %v", err)
+	}
+	f.advance(SessionIdle + time.Minute)
+
+	out, err := call(t, f.ts, ToolListMyChanges, maija, `{}`)
+	if err != nil {
+		t.Fatalf("list_my_changes: %v", err)
+	}
+	if !strings.Contains(out, "uutinen") {
+		t.Fatalf("list_my_changes omits the open change:\n%s", out)
+	}
+	if strings.Contains(out, noteMark) {
+		t.Errorf("list_my_changes carries the note as well as the listing:\n%s", out)
+	}
+
+	after, err := call(t, f.ts, ToolReadFile, maija, `{"path":"site/content/fi/tapahtumat.md"}`)
+	if err != nil {
+		t.Fatalf("read_file: %v", err)
+	}
+	if strings.Contains(after, noteMark) {
+		t.Errorf("the note outlived the listing that answered it:\n%s", after)
 	}
 }

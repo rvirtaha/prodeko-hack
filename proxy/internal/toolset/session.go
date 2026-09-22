@@ -2,6 +2,7 @@ package toolset
 
 import (
 	"context"
+	"encoding/json"
 	"time"
 
 	"github.com/prodeko/prodeko-hack/proxy/internal/mcpserver"
@@ -136,6 +137,72 @@ func (t *Toolset) unbind(user string, c *workdir.Change) {
 	defer t.mu.Unlock()
 	if s, ok := t.sessions[user]; ok && s.change == c {
 		s.change = nil
+	}
+}
+
+// note is the once-a-session mention of what is already open. It rides on the
+// first answer rather than being a message of its own, because a stateless
+// transport gives this server no way to speak first: the one moment the model
+// can be told about yesterday's half-finished work is the moment it says
+// anything at all.
+//
+// It is spent whether or not it comes to anything, so an errand that turns out
+// to have nothing to report does not hand the note on to the next call.
+func (t *Toolset) note(ctx context.Context, id mcpserver.Identity) string {
+	user, err := userOf(id)
+	if err != nil {
+		return ""
+	}
+
+	t.mu.Lock()
+	s, ok := t.sessions[user]
+	pending := ok && s.notePending
+	var bound string
+	if pending {
+		s.notePending = false
+		if s.change != nil {
+			bound = s.change.Slug
+		}
+	}
+	t.mu.Unlock()
+	if !pending {
+		return ""
+	}
+
+	// The listing every open change is read from, so the note and
+	// list_my_changes cannot disagree about what is open — and so a change
+	// merged since the last conversation is swept away rather than offered.
+	infos, err := t.mgr.List(ctx, user)
+	if err != nil {
+		t.log.Warn("toolset: listing open changes for the note", "user", user, "err", err)
+		return ""
+	}
+	return renderNote(infos, bound)
+}
+
+// spendNote marks the note delivered without delivering it. list_my_changes is
+// the one tool whose own answer is the note's contents in full; appending it
+// there would print the same list twice.
+func (t *Toolset) spendNote(user string) {
+	s, _ := t.sessionFor(user)
+	t.mu.Lock()
+	defer t.mu.Unlock()
+	s.notePending = false
+}
+
+// noted appends the session's note to a tool's answer. Every tool is wrapped,
+// because which one a conversation opens with is the client's business: the
+// note belongs to the first call, not to a particular errand.
+func (t *Toolset) noted(fn func(context.Context, mcpserver.Identity, json.RawMessage) (mcpserver.Result, error)) func(context.Context, mcpserver.Identity, json.RawMessage) (mcpserver.Result, error) {
+	return func(ctx context.Context, id mcpserver.Identity, args json.RawMessage) (mcpserver.Result, error) {
+		res, err := fn(ctx, id, args)
+		if err != nil {
+			// A refusal is confusing enough without a postscript about
+			// something else, and the note keeps until the next answer.
+			return res, err
+		}
+		res.Text += t.note(ctx, id)
+		return res, nil
 	}
 }
 
