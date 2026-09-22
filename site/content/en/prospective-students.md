@@ -54,3 +54,7 @@ captainsEmail: abivastaava@prodeko.org
 Industrial Engineering and Management combines technology and business: an
 engineer's tools, commercial understanding and the ability to lead people.
 This page covers how to apply and what the first year looks like.
+
+Also check out [Prodeko's mentoring programme](/en/prospective-students/mentoring-program/),
+read [current students' paths to IEM](/en/prospective-students/student-paths/),
+and meet some [successful IEM alumni](/en/prospective-students/successful-alumni/).
