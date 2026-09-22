@@ -43,6 +43,12 @@ change, and `resume_change`. `workdir.Manager.Resume` and its call site go
 away — the map is no longer a cache of what is on disk but the only binding
 there is.
 
+The first write opens a change that is nobody else's. Its name comes from the
+file that was edited, and a file name repeats: a name already taken by a
+worktree or a branch takes a number, so today's `main.css` edit cannot land in
+the `main` change yesterday left behind. Opening is serialised per person, so
+the two tool calls of one turn cannot each open one.
+
 A working session starts when a tool call arrives for a user with no live
 binding — none was ever set, or the last one expired or was dropped. That
 moment is tracked per user, because two things key on it: the proactive note
@@ -73,8 +79,11 @@ The base view serves `list_files`, `read_file`, `search`,
 `translation_status`, and also `build`, `render` and `screenshot` with a build
 root of its own, so a conversation that only wants to look at the site never
 creates a change. It refreshes with fetch and reset the first time a working
-session touches it, and one mutex serialises refresh, reads and builds —
-adequate for the two or three concurrent editors this serves.
+session touches it, and one lock serialises refresh, reads and builds: a
+refresh or a build has it to itself, reads share it, and a render or screenshot
+holds it across the whole answer, since the build root it reads is emptied at
+the start of every build anybody runs. Adequate for the two or three concurrent
+editors this serves.
 
 Once a binding holds a change, all tools serve from that change, as today.
 
@@ -100,6 +109,11 @@ Wherever the server already consults GitHub about a change — `list_my_changes`
 closed pull request means the change is archived: worktree removed, local
 branch deleted, binding dropped if it was current. Merged work stops counting
 toward `MaxOpenChanges` and disappears from listings, so the cap self-heals.
+
+The sweep runs behind the person's back, inside an errand they asked for
+something else from, so what it takes away has to be work GitHub already has: a
+finished change carrying uncommitted edits is left alone, and `abandon_change`
+is how somebody says out loud that they are done with those.
 
 In dry-run mode nothing is known about pull requests, so changes leave only
 through `abandon_change`, unchanged from today.
