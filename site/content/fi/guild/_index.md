@@ -6,45 +6,63 @@ layout: guild-hub
 source: raw-website design export, Prodeko-site.dc.html
 guildKicker: Kilta
 guildTitle: Tuotantotalouden kilta Prodeko ry
-numbers:
-  - value: "1966"
-    label: perustettu
-  - value: "1989"
-    label: oma kilta
-  - value: "2017"
-    label: arvot määritetty
-  - value: "8 €"
-    label: jäsenmaksu / lukuvuosi
 sections:
   - title: Hallitusvirat
-    body: Hallitus valitaan vuosittain syyskokouksessa ja vastaa killan toiminnasta kalenterivuoden ajan. Kokouspöytäkirjat ovat jäsenten luettavissa Jäsenille-osiossa.
+    body: Hallitus valitaan vuosittain marraskuun vaalikokouksessa virkakohtaisella vaalilla ja vastaa killan toiminnasta kalenterivuoden ajan.
     items:
       - name: Puheenjohtaja
-        desc: Kokonaisuus, edustus ja yhteydet laitokseen ja AYY:hyn.
-      - name: Yrityssuhdevastaava
-        desc: Yritysyhteistyö, sponsorointi ja projektikurssit.
+        desc: Killan toiminnan koordinointi ja edustus AYY:ssä, alumnissa ja neuvottelukunnassa.
+      - name: Varapuheenjohtaja
+        desc: Puheenjohtajan tuki, seminaari, häirintäyhdyshenkilöt ja toimijoiden hyvinvointi.
       - name: Excumestari
-        desc: Yritysvierailut ja PuoliPitkät.
-      - name: Fuksikapteenit
-        desc: Orientaatioviikko, fuksiopas ja fuksipisteet.
+        desc: Excursiot, puolipitkät ja yrityssuhdetiimi.
+      - name: Fuksikapteeni
+        desc: Fuksien perehdytys, fuksitapahtumat ja ISOtoiminta.
+      - name: Maisteri- ja KV-kapteeni
+        desc: Maisterifuksit, vaihto-opiskelijat ja kansainvälisten opiskelijoiden edunvalvonta.
       - name: Mediakeisari
-        desc: Viikkotiedote, jäsenrekisteri ja viestintä.
-      - name: Abivastaava
-        desc: Abisivut, abimentorointi ja lukiovierailut.
-      - name: Hallitus ja toimihenkilöt
-        url: /fi/guild/hallitus-ja-toimihenkilot/
-        desc: Tämän vuoden hallitus ja toimarit, virkojen kuvaukset ja edelliset hallitukset.
+        desc: Viestintä, brändi, jäsenrekisteri ja hallituksen pöytäkirjat.
+      - name: Opintovastaava
+        desc: Edunvalvonta, yhteydet yliopiston hallintoon ja opintojaos.
+      - name: Rahastonhoitaja
+        desc: Kirjanpito, talousarvio, tilinpäätös ja sijoitukset.
+      - name: Yrityssuhdevastaava
+        desc: Prodeko Network, yrityssopimukset ja yrityssuhdetiimi.
+      - name: Sisä- ja kulttuuriministeri
+        desc: Killan tapahtumat, perinteet ja kulttuurijaos.
+      - name: Isäntä
+        desc: Tapahtumat, vuosijuhlat, varasto, avaimet ja tilavaraukset.
+      - name: Ulkoministeri
+        desc: Kansainvälinen yhteistyö, ESTIEM ja ulkojaos.
   - title: Toimarivirat
     body: Toimihenkilöt tekevät tapahtumat, urheilun, kulttuurin ja kansainvälisen toiminnan vapaaehtoisina. Toimariksi voi hakea kuka tahansa jäsen, ja ensimmäinen vuosi on helpoin hetki aloittaa.
     items:
-      - name: Urheilu
-        desc: Viikoittainen urheilu ja lajikokeilut.
-      - name: ESTIEM LG Helsinki
-        desc: Eurooppalaiset tuta-tapahtumat ja vaihdot.
-      - name: Kulttuuri ja sitsit
-        desc: Sitsit, vuosijuhla Diskonttaus ja hengailuillat.
-      - name: Häirintäyhdyshenkilöt
-        desc: Matalan kynnyksen yhteyshenkilöt kaikissa tilanteissa.
+      - name: Tapahtumajaos
+        desc: Juomanlaskijat, lukkarit ja laulukirjatoimikunta.
+      - name: Fuksijaos
+        desc: ISOvastaava, ISOt, MaisteriISOt, KvISOt ja FabuISOt.
+      - name: Mediajaos
+        desc: Webbitiimi, viestintätiimi, abitiimi ja Prolekon toimituskunta.
+      - name: Kiltistoimikunta
+        desc: Kiltahuone, punttis, biljardi, historioitsijat ja kauppa.
+      - name: Terdetoimikunta
+        desc: Terassin ylläpito ja terassitapahtumat.
+      - name: Kulttuurijaos
+        desc: Killan kulttuuritapahtumat.
+      - name: Seminaaritoimikunta
+        desc: Prodeko-seminaarin järjestäminen.
+      - name: Vuosijuhlatoimikunta
+        desc: Vuosijuhlien järjestäminen.
+      - name: Prodeko-60 valmistelutoimikunta
+        desc: Juhlavuoden valmistelut ja tapahtumat.
+      - name: Yrityssuhdetiimi
+        desc: Kesätyöillat, kesätyöopas ja rekrytointifoorumit.
+      - name: Ulkojaos
+        desc: ESTIEM, approreissut, Tutanic ja kansainväliset tapahtumat.
+      - name: Opintojaos
+        desc: Mentorointi, pääainevastaavat ja hallopedit.
+      - name: ÄnnÄ-jaos
+        desc: N-vuosikurssilaisten virkistystoiminta.
   - title: Jäseneksi
     body: "Varsinaisiksi jäseniksi voidaan hyväksyä jäsenmaksunsa maksaneet Aalto-yliopiston tuotantotalouden koulutusohjelman pääaineopiskelijat. Uusien opiskelijoiden ei tarvitse hankkia jäsenyyttä ennen opiskeluiden alkua: jäsenmaksun maksamiselle annetaan mahdollisuus orientaatioviikolla."
     items:
@@ -54,9 +72,11 @@ sections:
         url: https://membership.prodeko.org/apply
         desc: membership.prodeko.org/apply · maksu pankkikortilla.
 guildRoomTitle: Kiltahuone
-guildRoomBody: TUAS-talo, Maarintie 8, 02150 Espoo. Kahvi-, tee- ja biljardisponssit tervetulleita.
-docsTitle: Säännöt ja asetukset
+guildRoomBody: TUAS-talo, Maarintie 8, 02150 Espoo.
+docsTitle: Tärkeät linkit
 docs:
+  - label: Hallitus ja toimihenkilöt
+    url: /fi/guild/hallitus-ja-toimihenkilot/
   - label: Killan säännöt
     url: /fi/guild/guild-rules/rules/
   - label: Ohjesäännöt

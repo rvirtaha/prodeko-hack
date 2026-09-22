@@ -6,13 +6,6 @@ layout: alumni-hub
 source: raw-website design export, Prodeko-site.dc.html
 alumniKicker: Alumni
 alumniTitle: Prodeko Alumni
-alumniNumbers:
-  - value: "0 €"
-    label: membership fee
-  - value: "1966"
-    label: first Prodeko members
-  - value: "1×"
-    label: seminar a year
 sections:
   - title: About the alumni
     body: "Together with Aalto's Department of Industrial Engineering and Management and the guild, Prodeko Alumni forms the Prodeko community: a network of people from many fields, and a source of support and inspiration for many of us. Newsletters, past boards and the rules are on the alumni site."
