@@ -17,6 +17,28 @@ import (
 // change therefore never has to be tidied away by hand once the work in it has
 // been published.
 
+// OnArchive registers a function to be told that a change has stopped
+// existing. The tool set listens, because a sweep can end the change a
+// conversation is in the middle of: a binding that outlives its worktree turns
+// every later call in that conversation into a puzzle about a directory nobody
+// mentioned.
+func (m *Manager) OnArchive(fn func(*Change)) {
+	m.mu.Lock()
+	defer m.mu.Unlock()
+	m.archived = append(m.archived, fn)
+}
+
+// announceArchived tells the listeners, outside the manager's lock: what they
+// do with the news is their own business and none of it belongs here.
+func (m *Manager) announceArchived(c *Change) {
+	m.mu.Lock()
+	listeners := append([]func(*Change){}, m.archived...)
+	m.mu.Unlock()
+	for _, fn := range listeners {
+		fn(c)
+	}
+}
+
 // Archive removes a change's local state. The caller established that the
 // change is finished; this only cleans up after it.
 func (m *Manager) Archive(ctx context.Context, c *Change) error {
@@ -62,6 +84,7 @@ func (m *Manager) Archive(ctx context.Context, c *Change) error {
 	m.mu.Unlock()
 
 	m.log.Info("workdir: change archived", "user", c.User, "branch", c.Branch)
+	m.announceArchived(c)
 	return nil
 }
 
@@ -95,6 +118,18 @@ func (m *Manager) ArchiveFinished(ctx context.Context, user string) ([]string, e
 			return archived, err
 		}
 		if !ok || !Finished(pr) {
+			continue
+		}
+		// Work that was never submitted is nobody's litter. A sweep runs behind
+		// the person's back, so what it takes away has to be work GitHub already
+		// has; edits made after the merge are left where they are, and
+		// abandon_change is how somebody says out loud that they are done with
+		// them.
+		if dirty, err := c.dirtyPaths(ctx); err != nil {
+			m.log.Warn("workdir: reading the worktree status in the sweep", "branch", c.Branch, "err", err)
+			continue
+		} else if len(dirty) > 0 {
+			m.log.Info("workdir: sparing a finished change with uncommitted edits", "branch", c.Branch)
 			continue
 		}
 		if err := m.Archive(ctx, c); err != nil {

@@ -418,6 +418,57 @@ func TestChangeCreatesAWorktreeOnItsOwnBranch(t *testing.T) {
 	}
 }
 
+// A name derived from a file name repeats itself: the stylesheet is called
+// "main" today and was called "main" yesterday. Fresh is what keeps a new
+// conversation's first edit out of the worktree the last one left behind.
+func TestFreshNeverJoinsAnExistingChange(t *testing.T) {
+	f := newFixture(t)
+	m := f.manager(t)
+	now := time.Date(2026, 9, 22, 9, 0, 0, 0, time.UTC)
+
+	first, err := m.Fresh("maija", "main", now)
+	if err != nil {
+		t.Fatalf("Fresh: %v", err)
+	}
+	if first.Slug != "main" {
+		t.Fatalf("slug = %q, want the name it was asked for", first.Slug)
+	}
+	if err := first.WriteFile("site/assets/css/main.css", []byte("body { color: red }\n")); err != nil {
+		t.Fatalf("writing into the first change: %v", err)
+	}
+
+	second, err := m.Fresh("maija", "main", now)
+	if err != nil {
+		t.Fatalf("the second Fresh: %v", err)
+	}
+	if second.Slug == first.Slug {
+		t.Fatalf("the second change is the first one: %q", second.Slug)
+	}
+	if second.Slug != "main-2" {
+		t.Errorf("slug = %q, want the asked-for name and a number", second.Slug)
+	}
+	// Nothing of the first change's work came along.
+	got, err := second.ReadFile("site/assets/css/main.css", 0, 0)
+	if err != nil {
+		t.Fatalf("reading the stylesheet in the fresh change: %v", err)
+	}
+	if strings.Contains(got, "color: red") {
+		t.Error("the fresh change inherited the other one's edit")
+	}
+
+	// A branch outlives its worktree, and reattaching to one would inherit the
+	// commits on it.
+	taken := BranchFor("maija", "main-3")
+	f.git(t, f.repo, "branch", taken, "main")
+	third, err := m.Fresh("maija", "main", now)
+	if err != nil {
+		t.Fatalf("the third Fresh: %v", err)
+	}
+	if third.Branch == taken {
+		t.Errorf("Fresh reattached to the existing branch %s", taken)
+	}
+}
+
 func TestChangeEnforcesTheOpenChangeLimit(t *testing.T) {
 	m := newFixture(t).manager(t)
 	for i := range MaxOpenChanges {

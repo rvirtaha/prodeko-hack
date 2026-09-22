@@ -92,7 +92,7 @@ func New(cfg Config) (*Toolset, error) {
 	if cfg.Now == nil {
 		cfg.Now = time.Now
 	}
-	return &Toolset{
+	t := &Toolset{
 		mgr:         cfg.Workdir,
 		conventions: cfg.Conventions,
 		shooter:     preview.Shooter{Bin: cfg.ChromiumBin, Log: cfg.Logger},
@@ -101,7 +101,11 @@ func New(cfg Config) (*Toolset, error) {
 		log:         cfg.Logger,
 		now:         cfg.Now,
 		sessions:    make(map[string]*session),
-	}, nil
+	}
+	// A change can end without this layer asking: the sweep that archives merged
+	// work runs inside a listing. The binding has to go with it.
+	cfg.Workdir.OnArchive(t.released)
+	return t, nil
 }
 
 // Instructions is what the MCP initialize response carries. The conventions
@@ -406,15 +410,26 @@ func (t *Toolset) render(ctx context.Context, id mcpserver.Identity, args json.R
 	if err != nil {
 		return "", err
 	}
-	page, err := t.site(c).Locate(a.Path)
-	if err != nil {
-		return "", buildFirst(ToolRender, err)
-	}
-	out, err := page.HTML(a.Selector)
+	// Held across both steps: the build is read twice, and everybody with no
+	// change of their own shares one build root, so a rebuild between the two
+	// would answer out of half a directory.
+	var answer string
+	err = c.View(func() error {
+		page, err := t.site(c).Locate(a.Path)
+		if err != nil {
+			return buildFirst(ToolRender, err)
+		}
+		out, err := page.HTML(a.Selector)
+		if err != nil {
+			return err
+		}
+		answer = renderPage(page, a.Selector, out)
+		return nil
+	})
 	if err != nil {
 		return "", err
 	}
-	return renderPage(page, a.Selector, out), nil
+	return answer, nil
 }
 
 // screenshot is the one tool whose answer is a picture, so it is the one that
@@ -433,37 +448,47 @@ func (t *Toolset) screenshot(ctx context.Context, id mcpserver.Identity, args js
 		return mcpserver.Result{}, err
 	}
 
-	site := t.site(c)
-	page, err := site.Locate(a.Path)
-	if err != nil {
-		return mcpserver.Result{}, buildFirst(ToolScreenshot, err)
-	}
-	// The pair is captured in the same call because a layout change is a change
-	// to both languages whether or not anybody remembered to look at the second.
-	others, err := site.Counterparts(page)
+	// The whole capture happens on one build: the pictures answer for a single
+	// state of the site, and the shared build root is emptied at the start of
+	// every build anybody runs.
+	var shots []shot
+	err = c.View(func() error {
+		site := t.site(c)
+		page, err := site.Locate(a.Path)
+		if err != nil {
+			return buildFirst(ToolScreenshot, err)
+		}
+		// The pair is captured in the same call because a layout change is a change
+		// to both languages whether or not anybody remembered to look at the second.
+		others, err := site.Counterparts(page)
+		if err != nil {
+			return err
+		}
+
+		srv, err := preview.Serve(site.Output)
+		if err != nil {
+			return buildFirst(ToolScreenshot, err)
+		}
+		defer func() {
+			if err := srv.Close(); err != nil {
+				t.log.Warn("toolset: the preview server did not close", "err", err)
+			}
+		}()
+
+		shots = make([]shot, 0, len(others)+1)
+		for _, p := range append([]preview.Page{page}, others...) {
+			taken, err := t.shooter.Capture(ctx, srv.URL+p.URL, width)
+			if err != nil {
+				// Chromium's own words, not a summary of them: what it said is what
+				// tells a maintainer whether the browser or the page is at fault.
+				return err
+			}
+			shots = append(shots, shot{page: p, taken: taken})
+		}
+		return nil
+	})
 	if err != nil {
 		return mcpserver.Result{}, err
-	}
-
-	srv, err := preview.Serve(site.Output)
-	if err != nil {
-		return mcpserver.Result{}, buildFirst(ToolScreenshot, err)
-	}
-	defer func() {
-		if err := srv.Close(); err != nil {
-			t.log.Warn("toolset: the preview server did not close", "err", err)
-		}
-	}()
-
-	shots := make([]shot, 0, len(others)+1)
-	for _, p := range append([]preview.Page{page}, others...) {
-		taken, err := t.shooter.Capture(ctx, srv.URL+p.URL, width)
-		if err != nil {
-			// Chromium's own words, not a summary of them: what it said is what
-			// tells a maintainer whether the browser or the page is at fault.
-			return mcpserver.Result{}, err
-		}
-		shots = append(shots, shot{page: p, taken: taken})
 	}
 
 	// The stamp is what submit reads to know the editor has looked at a layout
@@ -671,12 +696,12 @@ func (t *Toolset) finished(ctx context.Context, c *workdir.Change) (number int, 
 // retire ends a change review has finished with: published or turned down, the
 // worktree under it is litter either way. The sentence names the pull request,
 // because what happened to it is the thing the person is about to be told.
+// Archiving drops whatever binding held it, so the next edit starts fresh.
 func (t *Toolset) retire(ctx context.Context, user, slug string, number int, state string) string {
 	if c, err := t.mgr.Existing(user, slug); err == nil {
 		if err := t.mgr.Archive(ctx, c); err != nil {
 			t.log.Warn("toolset: archiving a finished change", "slug", slug, "err", err)
 		}
-		t.unbind(user, c)
 	}
 	return fmt.Sprintf("%s is finished: its pull request #%d was %s. It has been tidied away, and your next edit starts a new change.",
 		slug, number, state)

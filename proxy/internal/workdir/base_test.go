@@ -6,6 +6,7 @@ import (
 	"os"
 	"path/filepath"
 	"testing"
+	"time"
 )
 
 func TestBaseViewReadsTheDefaultBranch(t *testing.T) {
@@ -58,6 +59,46 @@ func TestBaseViewRefusesSubmitAndAbandon(t *testing.T) {
 	}
 	if _, err := os.Stat(filepath.Join(b.Dir, "site", "hugo.toml")); err != nil {
 		t.Fatalf("a refusal removed the base view: %v", err)
+	}
+}
+
+// One view serves everybody, so a refresh or a build belonging to one
+// conversation runs while another is reading. A read holds the view still: the
+// alternative is answering "no such file" about a page that exists, out of a
+// tree git is in the middle of resetting.
+func TestAReadHoldsOffARefreshOfTheBaseView(t *testing.T) {
+	f := newFixture(t)
+	m := f.manager(t)
+	b, err := m.Base()
+	if err != nil {
+		t.Fatalf("Base: %v", err)
+	}
+
+	reading, release := make(chan struct{}), make(chan struct{})
+	viewed := make(chan error, 1)
+	go func() {
+		viewed <- b.View(func() error {
+			close(reading)
+			<-release
+			return nil
+		})
+	}()
+	<-reading
+
+	refreshed := make(chan error, 1)
+	go func() { refreshed <- m.RefreshBase(context.Background()) }()
+	select {
+	case err := <-refreshed:
+		t.Fatalf("RefreshBase ran underneath a read of the view: %v", err)
+	case <-time.After(200 * time.Millisecond):
+	}
+
+	close(release)
+	if err := <-viewed; err != nil {
+		t.Fatalf("View: %v", err)
+	}
+	if err := <-refreshed; err != nil {
+		t.Fatalf("RefreshBase after the read: %v", err)
 	}
 }
 

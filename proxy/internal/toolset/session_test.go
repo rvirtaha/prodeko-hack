@@ -1,6 +1,8 @@
 package toolset
 
 import (
+	"context"
+	"encoding/json"
 	"fmt"
 	"log/slog"
 	"net/http"
@@ -8,8 +10,10 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"slices"
 	"strconv"
 	"strings"
+	"sync"
 	"testing"
 	"time"
 
@@ -269,6 +273,84 @@ func TestTheFirstWriteOpensAFreshChange(t *testing.T) {
 	}
 }
 
+// A change is named after the file the first edit touched, and file names
+// repeat: the stylesheet is "main" every day of the week. A fresh conversation
+// editing the same file as the last one must still get a change of its own, or
+// tomorrow's one-line fix is submitted together with today's eight unfinished
+// files.
+func TestAFreshSessionDoesNotJoinYesterdaysChangeOfTheSameName(t *testing.T) {
+	f := newFixture(t)
+
+	if _, err := call(t, f.ts, ToolWriteFile, maija, `{"path":"site/assets/css/main.css","content":"body { color: red }\n"}`); err != nil {
+		t.Fatalf("write_file: %v", err)
+	}
+	f.advance(SessionIdle + time.Minute)
+
+	if _, err := call(t, f.ts, ToolWriteFile, maija, `{"path":"site/assets/css/main.css","content":"body { color: blue }\n"}`); err != nil {
+		t.Fatalf("the write after the idle window: %v", err)
+	}
+
+	got := f.slugs(t, "maija")
+	slices.Sort(got)
+	if want := []string{"main", "main-2"}; !slices.Equal(got, want) {
+		t.Fatalf("open changes = %v, want %v: the second conversation opened one of its own", got, want)
+	}
+	// Yesterday's work is where it was left, and today's is not on top of it.
+	for slug, want := range map[string]string{"main": "color: red", "main-2": "color: blue"} {
+		body, err := os.ReadFile(filepath.Join(f.worktree("maija", slug), "site", "assets", "css", "main.css"))
+		if err != nil {
+			t.Fatalf("reading %s: %v", slug, err)
+		}
+		if !strings.Contains(string(body), want) {
+			t.Errorf("%s holds %q, want %q", slug, body, want)
+		}
+	}
+}
+
+// A turn can call two tools at once, and the transport gives each its own
+// goroutine. Both would find no change and open one, and the pull request would
+// carry half the errand.
+func TestTwoFirstWritesOpenOneChange(t *testing.T) {
+	f := newFixture(t)
+
+	var write func(context.Context, mcpserver.Identity, json.RawMessage) (mcpserver.Result, error)
+	for _, tool := range f.ts.Tools() {
+		if tool.Name == ToolWriteFile {
+			write = tool.Call
+		}
+	}
+
+	var wg sync.WaitGroup
+	errs := make([]error, 2)
+	for i, args := range []string{
+		`{"path":"site/content/fi/uutinen.md","content":"# Uutinen\n"}`,
+		`{"path":"site/content/fi/toinen.md","content":"# Toinen\n"}`,
+	} {
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
+			_, errs[i] = write(context.Background(), maija, json.RawMessage(args))
+		}()
+	}
+	wg.Wait()
+	for _, err := range errs {
+		if err != nil {
+			t.Fatalf("write_file: %v", err)
+		}
+	}
+
+	if got := f.slugs(t, "maija"); len(got) != 1 {
+		t.Fatalf("open changes = %v, want the one both writes landed in", got)
+	}
+	// Both edits are in it, which is what submit will publish.
+	dir := f.worktree("maija", f.slugs(t, "maija")[0])
+	for _, rel := range []string{"uutinen.md", "toinen.md"} {
+		if _, err := os.Stat(filepath.Join(dir, "site", "content", "fi", rel)); err != nil {
+			t.Errorf("%s is not in the conversation's change: %v", rel, err)
+		}
+	}
+}
+
 // Silence is the only conversation boundary this server can see. An edit after
 // the idle window is a new piece of work and gets a change of its own, rather
 // than landing in yesterday's half-finished one.
@@ -377,6 +459,40 @@ func TestToolsThatNeedAChangeSayWhenThereIsNone(t *testing.T) {
 	}
 	if got := f.slugs(t, "maija"); len(got) != 0 {
 		t.Fatalf("a refusal opened %v", got)
+	}
+}
+
+// A maintainer can merge while the conversation is still going, and the next
+// listing sweeps the merged change away. The conversation has to let go of it
+// with it: a binding pointing at a removed worktree answers every later call
+// with a path the person never mentioned, for the rest of the idle window.
+func TestASweepDropsTheConversationsChange(t *testing.T) {
+	f := newFixture(t, fakePR{number: 12, branch: workdir.BranchFor("maija", "uutinen"), state: "closed", merged: true})
+
+	if _, err := call(t, f.ts, ToolWriteFile, maija, `{"path":"site/content/fi/uutinen.md","content":"# Uutinen\n"}`); err != nil {
+		t.Fatalf("write_file: %v", err)
+	}
+	// Submitted and merged: the worktree holds nothing the site does not, which
+	// is the state the sweep archives.
+	wt := f.worktree("maija", "uutinen")
+	f.git(t, wt, "add", "-A")
+	f.git(t, wt, "-c", "user.name=Maija", "-c", "user.email=maija@prodeko.org",
+		"commit", "--quiet", "--message", "Uutinen")
+
+	if _, err := call(t, f.ts, ToolListMyChanges, maija, `{}`); err != nil {
+		t.Fatalf("list_my_changes: %v", err)
+	}
+	if got := f.slugs(t, "maija"); len(got) != 0 {
+		t.Fatalf("the merged change survived the listing: %v", got)
+	}
+
+	// The conversation carries on, on something new rather than on a worktree
+	// that is gone.
+	if _, err := call(t, f.ts, ToolWriteFile, maija, `{"path":"site/content/fi/toinen.md","content":"# Toinen\n"}`); err != nil {
+		t.Fatalf("the write after the sweep: %v", err)
+	}
+	if got := f.slugs(t, "maija"); len(got) != 1 || got[0] != "toinen" {
+		t.Fatalf("open changes = %v, want a fresh one", got)
 	}
 }
 

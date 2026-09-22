@@ -3,6 +3,7 @@ package toolset
 import (
 	"context"
 	"encoding/json"
+	"sync"
 	"time"
 
 	"github.com/prodeko/prodeko-hack/proxy/internal/mcpserver"
@@ -31,6 +32,12 @@ type session struct {
 	lastUsed    time.Time
 	notePending bool // the open-changes note has not been delivered
 	baseFresh   bool // the base view was brought up to date for this session
+
+	// opening is held while this session's change is being made. Opening one
+	// takes git several seconds, which is long enough for the next tool call of
+	// the same turn to arrive, see no change and open a second one; the loser of
+	// that race would take half the person's edits with it.
+	opening sync.Mutex
 }
 
 // sessionFor returns the caller's live session, starting one when none is.
@@ -98,10 +105,20 @@ func (t *Toolset) writing(id mcpserver.Identity, hint string) (*workdir.Change, 
 // username: the upload handler, whose token carries it instead of a bearer
 // identity.
 func (t *Toolset) writingUser(user, hint string) (*workdir.Change, error) {
+	s, _ := t.sessionFor(user)
+
+	// One at a time, so the second write of a turn waits here and then finds
+	// what the first one opened instead of opening another.
+	s.opening.Lock()
+	defer s.opening.Unlock()
+
 	if c := t.boundChange(user); c != nil {
 		return c, nil
 	}
-	c, err := t.mgr.Change(user, workdir.Slug(hint, t.now()))
+	// Fresh rather than by name: the name comes from the file, so the name a
+	// conversation picks today is the name the last one picked, and continuing
+	// that work is something to be asked for by resume_change.
+	c, err := t.mgr.Fresh(user, hint, t.now())
 	if err != nil {
 		return nil, err
 	}
@@ -135,9 +152,30 @@ func (t *Toolset) bind(user string, c *workdir.Change) {
 func (t *Toolset) unbind(user string, c *workdir.Change) {
 	t.mu.Lock()
 	defer t.mu.Unlock()
-	if s, ok := t.sessions[user]; ok && s.change == c {
+	if s, ok := t.sessions[user]; ok && sameChange(s.change, c) {
 		s.change = nil
 	}
+}
+
+// released is what the manager calls when a change has been archived. The
+// sweep runs wherever GitHub is consulted — a listing, the once-a-session note
+// — so it can end the very change the conversation is editing, and a binding
+// that outlived its worktree answers every later call with a path nobody
+// mentioned. Dropping it here means the next edit starts a change instead.
+func (t *Toolset) released(c *workdir.Change) {
+	t.mu.Lock()
+	defer t.mu.Unlock()
+	for _, s := range t.sessions {
+		if sameChange(s.change, c) {
+			s.change = nil
+		}
+	}
+}
+
+// sameChange is identity by branch rather than by pointer: a change looked up
+// twice is the same change, and the branch is what makes it one.
+func sameChange(a, b *workdir.Change) bool {
+	return a != nil && b != nil && a.Branch != "" && a.Branch == b.Branch
 }
 
 // note is the once-a-session mention of what is already open. It rides on the

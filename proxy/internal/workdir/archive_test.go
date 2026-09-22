@@ -177,6 +177,37 @@ func TestArchiveFinishedIsNilInDryRun(t *testing.T) {
 	}
 }
 
+// The sweep runs behind the person's back, inside a listing they asked for
+// something else from. What it takes away has to be work GitHub already has:
+// an edit made after the merge exists nowhere else, and losing it to a listing
+// is not a thing anybody could have seen coming.
+func TestTheSweepSparesUncommittedWork(t *testing.T) {
+	f := newFixture(t)
+	gh := &githubFake{prs: []pr{
+		{number: 5, branch: BranchFor("maija", "jatkettu"), state: "closed", merged: true},
+	}}
+	m := f.githubManager(t, gh.start(t))
+
+	c, err := m.Change("maija", "jatkettu")
+	if err != nil {
+		t.Fatalf("Change: %v", err)
+	}
+	if err := c.WriteFile("site/content/fi/tapahtumat.md", []byte("---\ntitle: Tapahtumat\n---\n\nUusi teksti.\n")); err != nil {
+		t.Fatalf("writing after the merge: %v", err)
+	}
+
+	archived, err := m.ArchiveFinished(t.Context(), "maija")
+	if err != nil {
+		t.Fatalf("ArchiveFinished: %v", err)
+	}
+	if len(archived) != 0 {
+		t.Errorf("archived = %q, want nothing: the change carries edits nobody has seen", archived)
+	}
+	if _, err := os.Stat(filepath.Join(c.Dir, "site", "content", "fi", "tapahtumat.md")); err != nil {
+		t.Fatalf("the sweep took the uncommitted edit with it: %v", err)
+	}
+}
+
 func TestListArchivesFinishedChanges(t *testing.T) {
 	f := newFixture(t)
 	gh := &githubFake{prs: []pr{

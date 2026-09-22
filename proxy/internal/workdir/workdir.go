@@ -103,9 +103,10 @@ type Manager struct {
 	cfg Config
 	log *slog.Logger
 
-	mu      sync.Mutex
-	changes map[string]*Change // BranchFor(user, slug) -> the one Change for it
-	base    *Change            // the shared read-only view, made once
+	mu       sync.Mutex
+	changes  map[string]*Change // BranchFor(user, slug) -> the one Change for it
+	base     *Change            // the shared read-only view, made once
+	archived []func(*Change)    // told when a change stops existing
 }
 
 // Change is one editing session on disk: a worktree on its own branch, based
@@ -126,8 +127,21 @@ type Change struct {
 	baseBranch string
 
 	// mu serialises work on this change: one worktree has one index, so two
-	// concurrent writes or a write racing a commit would corrupt it.
-	mu sync.Mutex
+	// concurrent writes or a write racing a commit would corrupt it. Reads hold
+	// it shared, because the shared base view is one tree and one build root for
+	// everybody: a refresh or a build there runs underneath somebody else's
+	// read_file or screenshot unless the two are held apart.
+	mu sync.RWMutex
+}
+
+// View runs fn with the tree and the last build held still: nothing refreshes,
+// rebuilds or commits underneath it. It is what the tools that read the build
+// output through another package hold, the ones that read files holding it for
+// themselves.
+func (c *Change) View(fn func() error) error {
+	c.mu.RLock()
+	defer c.mu.RUnlock()
+	return fn()
 }
 
 // Fence is the allowlist this change is confined to.
@@ -265,6 +279,40 @@ func (m *Manager) Change(user, slug string) (*Change, error) {
 		m.log.Warn("workdir: sweeping finished changes", "user", user, "err", sweepErr)
 	}
 	return m.change(user, slug)
+}
+
+// Fresh opens a change nobody has started yet, named after what was asked for.
+// A name already taken takes a number: "main" for the stylesheet is the same
+// name today as it was yesterday, and a conversation's first edit landing in
+// yesterday's worktree — dirty files and all — is the thing this lifecycle
+// exists to stop. Change is for continuing work somebody named; this is for
+// starting some.
+func (m *Manager) Fresh(user, hint string, now time.Time) (*Change, error) {
+	name := Slug(hint, now)
+	if !m.taken(user, name) {
+		return m.Change(user, name)
+	}
+	for n := 2; n <= 9; n++ {
+		numbered := name + "-" + strconv.Itoa(n)
+		if !m.taken(user, numbered) {
+			return m.Change(user, numbered)
+		}
+	}
+	// Nine of one name in a namespace that holds three changes means the
+	// leftovers are old rather than numerous; the timestamp always terminates.
+	return m.Change(user, Slug("", now))
+}
+
+// taken reports whether a slug is already somebody's change. The worktree and
+// the branch are asked separately: a worktree lost to a restart leaves the
+// branch, and reattaching to that branch would inherit its commits.
+func (m *Manager) taken(user, slug string) bool {
+	if dirExists(filepath.Join(m.cfg.StateDir, "wt", user, slug)) {
+		return true
+	}
+	ctx, cancel := context.WithTimeout(context.Background(), GitTimeout)
+	defer cancel()
+	return m.branchExists(ctx, BranchFor(user, slug))
 }
 
 // change is one attempt at opening a change, refusing rather than making room.
