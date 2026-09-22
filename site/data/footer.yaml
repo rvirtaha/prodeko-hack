@@ -45,6 +45,8 @@ fi:
         url: https://ilmo.prodeko.org
       - label: Kiltiskamera
         url: https://kiltiskamera.prodeko.org
+      - label: Proleko
+        url: https://old.prodeko.org/en/services/proleko/
   - title: Yhteystiedot
     links:
       - label: Yrityksille
@@ -99,6 +101,8 @@ en:
         url: https://ilmo.prodeko.org
       - label: Guild room camera
         url: https://kiltiskamera.prodeko.org
+      - label: Proleko
+        url: https://old.prodeko.org/en/services/proleko/
   - title: Contact
     links:
       - label: For companies
