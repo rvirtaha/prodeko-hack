@@ -1,4 +1,4 @@
-// Package toolset is the fifteen tools the MCP server exposes, built on the
+// Package toolset is the sixteen tools the MCP server exposes, built on the
 // fence, the worktree manager and the preview.
 //
 // File-level tools, not semantic ones: CSS is file-level, and update_page(slug,
@@ -109,7 +109,7 @@ func New(cfg Config) (*Toolset, error) {
 // that drop them.
 func (t *Toolset) Instructions() string { return t.conventions }
 
-// Tools is the fifteen, in the order a session uses them.
+// Tools is the sixteen, in the order a session uses them.
 func (t *Toolset) Tools() []mcpserver.Tool {
 	return []mcpserver.Tool{
 		{
@@ -189,6 +189,14 @@ func (t *Toolset) Tools() []mcpserver.Tool {
 				"preview link.",
 			Schema: schemaListMyChanges,
 			Call:   text(t.listMyChanges),
+		},
+		{
+			Name: ToolResumeChange,
+			Description: "Continue an existing change instead of starting a new one: by slug as list_my_changes names " +
+				"them, or by pull request number. Edits then land on that change's branch and its pull request. A merged " +
+				"or closed change is finished and cannot be continued.",
+			Schema: schemaResumeChange,
+			Call:   text(t.resumeChange),
 		},
 		{
 			Name: ToolBeginImageUpload,
@@ -560,6 +568,125 @@ func (t *Toolset) listMyChanges(ctx context.Context, id mcpserver.Identity, args
 		return "", err
 	}
 	return renderChanges(infos), nil
+}
+
+// resumeChange puts the conversation back onto a change somebody already
+// started. It is the only way back into one: a change is continued by being
+// named, never by being the newest thing lying about.
+func (t *Toolset) resumeChange(ctx context.Context, id mcpserver.Identity, args json.RawMessage) (string, error) {
+	a, err := decode[resumeChangeArgs](args)
+	if err != nil {
+		return "", fmt.Errorf("%s: %w", ToolResumeChange, err)
+	}
+	slug := strings.TrimSpace(a.Slug)
+	if (slug == "") == (a.PR == 0) {
+		return "", fmt.Errorf("%s: give exactly one of slug and pr; %s lists the slugs", ToolResumeChange, ToolListMyChanges)
+	}
+	if a.PR < 0 {
+		return "", fmt.Errorf("%s: %d is not a pull request number; they are numbered from 1", ToolResumeChange, a.PR)
+	}
+	user, err := userOf(id)
+	if err != nil {
+		return "", err
+	}
+
+	if a.PR != 0 {
+		if t.mgr.DryRun() {
+			return "", fmt.Errorf("%s: this server has no GitHub access, so a pull request number cannot be turned into a change; name it with the slug %s gives",
+				ToolResumeChange, ToolListMyChanges)
+		}
+		pr, err := t.mgr.PullRequestByNumber(ctx, a.PR)
+		if err != nil {
+			return "", err
+		}
+		// A number is as easily somebody else's branch as your own, and the
+		// namespace is the whole of the authorisation here.
+		prefix := workdir.BranchPrefix + user + "/"
+		if !strings.HasPrefix(pr.Head.Ref, prefix) {
+			return "", fmt.Errorf("%s: pull request #%d is on %s, which is not one of your changes; yours are under %s",
+				ToolResumeChange, a.PR, pr.Head.Ref, prefix)
+		}
+		slug = strings.TrimPrefix(pr.Head.Ref, prefix)
+		if workdir.Finished(pr) {
+			return t.retire(ctx, user, slug, pr.Number, prState(pr)), nil
+		}
+	}
+
+	c, err := t.mgr.Existing(user, slug)
+	if errors.Is(err, workdir.ErrNoChange) && a.PR != 0 {
+		// The pull request is proof that the branch exists, so a worktree lost to
+		// a restart is opened again from it.
+		c, err = t.mgr.Change(user, slug)
+	}
+	if err != nil {
+		return "", err
+	}
+	// A pull request the caller named was read a moment ago, so what became of
+	// it is known; a slug says nothing about it, and has to be asked.
+	if a.PR == 0 {
+		if number, state, ok := t.finished(ctx, c); ok {
+			return t.retire(ctx, user, slug, number, state), nil
+		}
+	}
+
+	t.bind(user, c)
+	// The lookups list_my_changes makes, so a change reads the same way whether
+	// it was listed or picked up.
+	infos, err := t.mgr.List(ctx, user)
+	if err != nil {
+		t.log.Warn("toolset: listing a resumed change", "slug", slug, "err", err)
+	}
+	for _, in := range infos {
+		if in.Slug == slug {
+			return renderResume(in, true), nil
+		}
+	}
+	return renderResume(workdir.Info{Slug: c.Slug, Branch: c.Branch}, false), nil
+}
+
+// finished asks GitHub whether review is done with a change, and says what
+// became of its pull request when it is. A state that cannot be read says
+// nothing: refusing a resume nobody can check would strand the work behind an
+// outage, and a dry run knows nothing about pull requests at all.
+func (t *Toolset) finished(ctx context.Context, c *workdir.Change) (number int, state string, ok bool) {
+	if t.mgr.DryRun() {
+		return 0, "", false
+	}
+	fb, err := t.mgr.Feedback(ctx, c)
+	switch {
+	case errors.Is(err, workdir.ErrNeverSubmitted):
+		// Nothing has been decided about work that was never shown to anybody.
+		return 0, "", false
+	case err != nil:
+		t.log.Warn("toolset: reading the state of a change", "slug", c.Slug, "err", err)
+		return 0, "", false
+	case fb.State == "open":
+		return 0, "", false
+	}
+	return fb.PRNumber, fb.State, true
+}
+
+// retire ends a change review has finished with: published or turned down, the
+// worktree under it is litter either way. The sentence names the pull request,
+// because what happened to it is the thing the person is about to be told.
+func (t *Toolset) retire(ctx context.Context, user, slug string, number int, state string) string {
+	if c, err := t.mgr.Existing(user, slug); err == nil {
+		if err := t.mgr.Archive(ctx, c); err != nil {
+			t.log.Warn("toolset: archiving a finished change", "slug", slug, "err", err)
+		}
+		t.unbind(user, c)
+	}
+	return fmt.Sprintf("%s is finished: its pull request #%d was %s. It has been tidied away, and your next edit starts a new change.",
+		slug, number, state)
+}
+
+// prState is the word for what happened to a pull request. GitHub closes a
+// merged one, so merged_at is what tells the two apart.
+func prState(pr workdir.PullRequest) string {
+	if pr.MergedAt != "" {
+		return "merged"
+	}
+	return pr.State
 }
 
 func (t *Toolset) getFeedback(ctx context.Context, id mcpserver.Identity, args json.RawMessage) (string, error) {

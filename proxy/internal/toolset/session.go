@@ -144,5 +144,5 @@ func (t *Toolset) unbind(user string, c *workdir.Change) {
 // open is its ordinary state and not a failure worth an error.
 func noChange(errand string) string {
 	return "No change is open in this conversation, so there is nothing to " + errand +
-		". An edit opens one; resume_change continues an existing one."
+		". An edit opens one; " + ToolResumeChange + " continues an existing one."
 }

@@ -37,14 +37,14 @@ func TestNewRequiresAWorkdir(t *testing.T) {
 	}
 }
 
-// Fifteen tools, named exactly as the design names them. A rename breaks every
+// Sixteen tools, named exactly as the design names them. A rename breaks every
 // saved connector, so the names are asserted rather than assumed.
-func TestTheFifteenTools(t *testing.T) {
+func TestTheSixteenTools(t *testing.T) {
 	want := []string{
 		ToolGetConventions, ToolListFiles, ToolReadFile, ToolSearch,
 		ToolWriteFile, ToolEditFile, ToolBuild, ToolRender, ToolScreenshot,
-		ToolSubmit, ToolListMyChanges, ToolBeginImageUpload, ToolGetFeedback,
-		ToolTranslationStatus, ToolAbandonChange,
+		ToolSubmit, ToolListMyChanges, ToolResumeChange, ToolBeginImageUpload,
+		ToolGetFeedback, ToolTranslationStatus, ToolAbandonChange,
 	}
 	got := testToolset(t).Tools()
 	if len(got) != len(want) {
@@ -78,6 +78,7 @@ func TestSchemasAreClosedObjectSchemas(t *testing.T) {
 		ToolScreenshot:        {"path"},
 		ToolSubmit:            {"title"},
 		ToolListMyChanges:     nil,
+		ToolResumeChange:      nil,
 		ToolBeginImageUpload:  nil,
 		ToolGetFeedback:       nil,
 		ToolTranslationStatus: nil,
@@ -149,6 +150,7 @@ func TestArgumentStructsMatchTheSchemas(t *testing.T) {
 		{ToolRender, `{"path":"/fi/tapahtumat/","selector":".site-header"}`, &renderArgs{}, &renderArgs{Path: "/fi/tapahtumat/", Selector: ".site-header"}},
 		{ToolScreenshot, `{"path":"site/content/fi/tapahtumat.md","width":390}`, &screenshotArgs{}, &screenshotArgs{Path: "site/content/fi/tapahtumat.md", Width: 390}},
 		{ToolSubmit, `{"title":"Sininen otsikko","description":"miksi"}`, &submitArgs{}, &submitArgs{Title: "Sininen otsikko", Description: "miksi"}},
+		{ToolResumeChange, `{"pr":26}`, &resumeChangeArgs{}, &resumeChangeArgs{PR: 26}},
 	}
 	for _, tc := range cases {
 		if err := json.Unmarshal([]byte(tc.args), tc.into); err != nil {

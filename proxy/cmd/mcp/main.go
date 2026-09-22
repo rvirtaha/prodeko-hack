@@ -3,7 +3,7 @@
 //
 // It serves four things:
 //
-//	POST /mcp                   the MCP streamable HTTP transport, fifteen tools
+//	POST /mcp                   the MCP streamable HTTP transport, sixteen tools
 //	GET  /.well-known/oauth-*   the OAuth discovery documents
 //	GET|POST /upload            the token-authorized image upload
 //	GET  /healthz               liveness
