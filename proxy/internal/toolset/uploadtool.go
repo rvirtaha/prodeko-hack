@@ -59,7 +59,7 @@ func (t *Toolset) beginImageUpload(ctx context.Context, id mcpserver.Identity, a
 	}
 	// The change is opened now, named after the purpose, so the upload has
 	// somewhere to land even when this is the first thing the person asked.
-	if _, err := t.openUser(user, strings.TrimSpace(a.Purpose)); err != nil {
+	if _, err := t.writingUser(user, strings.TrimSpace(a.Purpose)); err != nil {
 		return "", err
 	}
 	token, err := t.uploads.Mint(user)
@@ -80,7 +80,7 @@ func (t *Toolset) SaveImage(user, name string, data []byte) (string, error) {
 	if strings.Contains(name, "/") || strings.Contains(name, "..") {
 		return "", fmt.Errorf("toolset: %q is not a bare file name", name)
 	}
-	c, err := t.openUser(user, "kuva")
+	c, err := t.writingUser(user, "kuva")
 	if err != nil {
 		return "", err
 	}

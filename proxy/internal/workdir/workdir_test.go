@@ -1233,46 +1233,6 @@ func TestListReportsOnlyTheCallersChanges(t *testing.T) {
 	}
 }
 
-// A restart must not strand the change somebody is in the middle of: the
-// worktrees are on disk precisely so the next edit continues the same branch
-// rather than opening a second one for the same work.
-func TestResumeFindsTheChangeOnDisk(t *testing.T) {
-	f := newFixture(t)
-	m := f.manager(t)
-
-	if _, ok, err := m.Resume("maija"); err != nil {
-		t.Fatalf("Resume: %v", err)
-	} else if ok {
-		t.Fatal("Resume found a change for somebody with none open")
-	}
-
-	c := openChange(t, m)
-	if _, err := m.Change("pekka", "toisen-muutos"); err != nil {
-		t.Fatalf("Change: %v", err)
-	}
-
-	// A fresh Manager over the same state directory is what a restart looks
-	// like from here: nothing is remembered in the process.
-	restarted := f.manager(t)
-	got, ok, err := restarted.Resume("maija")
-	if err != nil {
-		t.Fatalf("Resume: %v", err)
-	}
-	if !ok {
-		t.Fatal("Resume lost the open change across a restart")
-	}
-	if got.Branch != c.Branch || got.Dir != c.Dir {
-		t.Errorf("Resume = %s at %s, want %s at %s", got.Branch, got.Dir, c.Branch, c.Dir)
-	}
-
-	// Never somebody else's worktree, whatever its age.
-	if other, ok, err := restarted.Resume("pekka"); err != nil {
-		t.Fatalf("Resume: %v", err)
-	} else if !ok || other.Branch != BranchFor("pekka", "toisen-muutos") {
-		t.Errorf("Resume for the second person = %+v", other)
-	}
-}
-
 func TestBuildTimeoutSurfacesAsItsOwnError(t *testing.T) {
 	f := newFixture(t)
 	// A "hugo" that never finishes is the only honest way to reach the clock.

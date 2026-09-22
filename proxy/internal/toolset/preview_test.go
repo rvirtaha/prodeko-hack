@@ -4,15 +4,11 @@ import (
 	"bytes"
 	"errors"
 	"image/png"
-	"log/slog"
-	"os"
 	"os/exec"
-	"path/filepath"
 	"strings"
 	"testing"
 
 	"github.com/prodeko/prodeko-hack/proxy/internal/preview"
-	"github.com/prodeko/prodeko-hack/proxy/internal/workdir"
 )
 
 func TestRenderPageQuotesTheBuiltHTML(t *testing.T) {
@@ -179,73 +175,15 @@ func TestRenderAndScreenshotAgainstARealBuild(t *testing.T) {
 	}
 }
 
-// toolsetOverARealClone is a tool set with a clone, a worktree and a tiny site
-// behind it. The behaviour under test is what hugo and git do, so neither is
-// mocked; a machine without them skips instead.
+// toolsetOverARealClone is the session fixture's tool set, for the tests that
+// also need hugo. The behaviour under test is what hugo and git do, so neither
+// is mocked; a machine without hugo skips instead.
 func toolsetOverARealClone(t *testing.T) *Toolset {
 	t.Helper()
-	for _, bin := range []string{"git", "hugo"} {
-		if _, err := exec.LookPath(bin); err != nil {
-			t.Skipf("%s is not on PATH", bin)
-		}
+	if _, err := exec.LookPath("hugo"); err != nil {
+		t.Skip("hugo is not on PATH")
 	}
-
-	root := t.TempDir()
-	origin, seed, repo := filepath.Join(root, "origin.git"), filepath.Join(root, "seed"), filepath.Join(root, "repo")
-	site := filepath.Join(seed, "site")
-	for rel, body := range map[string]string{
-		"hugo.toml":                    "baseURL = \"https://example.org/\"\ntitle = \"Fixture\"\n",
-		"content/fi/tapahtumat.md":     "---\ntitle: Tapahtumat\ntranslationKey: events\n---\n\nTapahtumia tulossa.\n",
-		"content/en/events.md":         "---\ntitle: Events\ntranslationKey: events\n---\n\nEvents coming up.\n",
-		"layouts/_default/single.html": "<html><body><h1 class=\"otsikko\">{{ .Title }}</h1>{{ .Content }}</body></html>\n",
-	} {
-		path := filepath.Join(site, filepath.FromSlash(rel))
-		if err := os.MkdirAll(filepath.Dir(path), 0o755); err != nil {
-			t.Fatalf("mkdir: %v", err)
-		}
-		if err := os.WriteFile(path, []byte(body), 0o644); err != nil {
-			t.Fatalf("write %s: %v", rel, err)
-		}
-	}
-
-	fixtureGit(t, root, "init", "--bare", "--initial-branch=main", origin)
-	fixtureGit(t, seed, "init", "--initial-branch=main", ".")
-	fixtureGit(t, seed, "add", "-A")
-	fixtureGit(t, seed, "-c", "user.name=Fixture", "-c", "user.email=fixture@example.org", "commit", "--quiet", "--message", "Seed the site")
-	fixtureGit(t, seed, "remote", "add", "origin", origin)
-	fixtureGit(t, seed, "push", "--quiet", "origin", "main")
-	fixtureGit(t, root, "clone", "--quiet", origin, repo)
-
-	mgr, err := workdir.New(workdir.Config{
-		RepoPath:  repo,
-		StateDir:  filepath.Join(root, "state"),
-		Committer: workdir.Author{Name: "Prodeko media bot", Email: "media-bot@prodeko.org"},
-		Logger:    slog.New(slog.DiscardHandler),
-	})
-	if err != nil {
-		t.Fatalf("workdir.New: %v", err)
-	}
-	ts, err := New(Config{Workdir: mgr, Logger: slog.New(slog.DiscardHandler)})
-	if err != nil {
-		t.Fatalf("New: %v", err)
-	}
-	return ts
-}
-
-func fixtureGit(t *testing.T, dir string, args ...string) {
-	t.Helper()
-	cmd := exec.Command("git", args...)
-	cmd.Dir = dir
-	cmd.Env = []string{
-		"PATH=" + os.Getenv("PATH"),
-		"HOME=" + dir,
-		"GIT_CONFIG_NOSYSTEM=1",
-		"GIT_TERMINAL_PROMPT=0",
-		"LC_ALL=C",
-	}
-	if out, err := cmd.CombinedOutput(); err != nil {
-		t.Fatalf("git %s: %v\n%s", strings.Join(args, " "), err, out)
-	}
+	return newFixture(t).ts
 }
 
 // There is one thing to do about a change nobody has built, and the refusal

@@ -55,14 +55,17 @@ type Config struct {
 	Now    func() time.Time // nil means time.Now
 }
 
-// Toolset holds the open change per person. One person has at most one current
-// change at a time: the tools carry no change argument, because the person is
-// talking about the thing they are working on and asking a model to thread an
-// identifier through the conversation is how the identifier ends up wrong.
+// Toolset holds one session per person: the change that person's conversation
+// is working on, if any. The tools carry no change argument, because the
+// person is talking about the thing they are working on and asking a model to
+// thread an identifier through the conversation is how the identifier ends up
+// wrong.
 //
-// A change is opened lazily by the first write, with a slug derived from what
-// was asked for. submit pushes it; the change stays current afterwards, so
-// "vähän vaaleampi" continues onto the same branch and the same pull request.
+// Reads bound to no change serve from the shared view of the published site,
+// so a conversation that only looks at it opens nothing. The first write opens
+// a change, with a slug derived from what was asked for, and binds it. submit
+// pushes it and the binding stands, so "vähän vaaleampi" continues onto the
+// same branch and the same pull request.
 type Toolset struct {
 	mgr         *workdir.Manager
 	conventions string
@@ -72,8 +75,8 @@ type Toolset struct {
 	log         *slog.Logger
 	now         func() time.Time
 
-	mu      sync.Mutex
-	current map[string]*workdir.Change // username -> the change being edited
+	mu       sync.Mutex
+	sessions map[string]*session // username -> the conversation in progress
 }
 
 func New(cfg Config) (*Toolset, error) {
@@ -97,7 +100,7 @@ func New(cfg Config) (*Toolset, error) {
 		publicURL:   strings.TrimRight(cfg.PublicURL, "/"),
 		log:         cfg.Logger,
 		now:         cfg.Now,
-		current:     make(map[string]*workdir.Change),
+		sessions:    make(map[string]*session),
 	}, nil
 }
 
@@ -245,7 +248,7 @@ func (t *Toolset) listFiles(ctx context.Context, id mcpserver.Identity, args jso
 	if err != nil {
 		return "", fmt.Errorf("%s: %w", ToolListFiles, err)
 	}
-	c, err := t.open(id, "")
+	c, err := t.reading(ctx, id)
 	if err != nil {
 		return "", err
 	}
@@ -271,7 +274,7 @@ func (t *Toolset) readFile(ctx context.Context, id mcpserver.Identity, args json
 	if a.Start > 0 && a.End > 0 && a.End < a.Start {
 		return "", fmt.Errorf("%s: end %d is before start %d", ToolReadFile, a.End, a.Start)
 	}
-	c, err := t.open(id, "")
+	c, err := t.reading(ctx, id)
 	if err != nil {
 		return "", err
 	}
@@ -299,7 +302,7 @@ func (t *Toolset) search(ctx context.Context, id mcpserver.Identity, args json.R
 	if max > MaxSearchResults {
 		max = MaxSearchResults
 	}
-	c, err := t.open(id, "")
+	c, err := t.reading(ctx, id)
 	if err != nil {
 		return "", err
 	}
@@ -323,7 +326,7 @@ func (t *Toolset) writeFile(ctx context.Context, id mcpserver.Identity, args jso
 		return "", fmt.Errorf("%w: %s got %d bytes of content, at most %d in one write",
 			fence.ErrTooLarge, ToolWriteFile, len(a.Content), fence.MaxTextBytes)
 	}
-	c, err := t.open(id, hintFor(rel))
+	c, err := t.writing(id, hintFor(rel))
 	if err != nil {
 		return "", err
 	}
@@ -359,7 +362,7 @@ func (t *Toolset) editFile(ctx context.Context, id mcpserver.Identity, args json
 		return "", fmt.Errorf("%w: %s got %d bytes of replacement, at most %d",
 			fence.ErrTooLarge, ToolEditFile, len(replacement), fence.MaxTextBytes)
 	}
-	c, err := t.open(id, hintFor(rel))
+	c, err := t.writing(id, hintFor(rel))
 	if err != nil {
 		return "", err
 	}
@@ -373,7 +376,7 @@ func (t *Toolset) editFile(ctx context.Context, id mcpserver.Identity, args json
 }
 
 func (t *Toolset) build(ctx context.Context, id mcpserver.Identity, args json.RawMessage) (string, error) {
-	c, err := t.open(id, "")
+	c, err := t.reading(ctx, id)
 	if err != nil {
 		return "", err
 	}
@@ -391,7 +394,7 @@ func (t *Toolset) render(ctx context.Context, id mcpserver.Identity, args json.R
 	if err != nil {
 		return "", fmt.Errorf("%s: %w", ToolRender, err)
 	}
-	c, err := t.open(id, "")
+	c, err := t.reading(ctx, id)
 	if err != nil {
 		return "", err
 	}
@@ -417,7 +420,7 @@ func (t *Toolset) screenshot(ctx context.Context, id mcpserver.Identity, args js
 	if err != nil {
 		return mcpserver.Result{}, err
 	}
-	c, err := t.open(id, "")
+	c, err := t.reading(ctx, id)
 	if err != nil {
 		return mcpserver.Result{}, err
 	}
@@ -521,9 +524,13 @@ func (t *Toolset) submit(ctx context.Context, id mcpserver.Identity, args json.R
 	if err != nil {
 		return "", err
 	}
-	c, err := t.open(id, title)
+	user, err := userOf(id)
 	if err != nil {
 		return "", err
+	}
+	c := t.boundChange(user)
+	if c == nil {
+		return noChange("submit"), nil
 	}
 	files, err := c.Touched()
 	if err != nil {
@@ -564,6 +571,9 @@ func (t *Toolset) getFeedback(ctx context.Context, id mcpserver.Identity, args j
 	if err != nil {
 		return "", err
 	}
+	if c == nil {
+		return noChange("read feedback on"), nil
+	}
 	fb, err := t.mgr.Feedback(ctx, c)
 	if errors.Is(err, workdir.ErrNeverSubmitted) {
 		// An answer, not a failure: asking what review said before submitting
@@ -589,7 +599,7 @@ func (t *Toolset) translationStatus(ctx context.Context, id mcpserver.Identity, 
 		}
 		filter = clean
 	}
-	c, err := t.open(id, "")
+	c, err := t.reading(ctx, id)
 	if err != nil {
 		return "", err
 	}
@@ -621,60 +631,22 @@ func (t *Toolset) abandonChange(ctx context.Context, id mcpserver.Identity, args
 		return "", err
 	}
 	// The next edit starts fresh rather than landing in a deleted worktree.
-	t.mu.Lock()
-	if t.current[user] == c {
-		delete(t.current, user)
-	}
-	t.mu.Unlock()
+	t.unbind(user, c)
 	return renderAbandon(res), nil
 }
 
-// change is the caller's current change, or the named one when a tool that
-// takes a slug was given one.
+// change is the change a tool that takes a slug works on: the named one, or
+// the conversation's own when no name was given. A nil change with no error is
+// a conversation that has opened none, which the caller answers in words.
 func (t *Toolset) change(id mcpserver.Identity, slug string) (*workdir.Change, error) {
-	if strings.TrimSpace(slug) == "" {
-		return t.open(id, "")
-	}
 	user, err := userOf(id)
 	if err != nil {
 		return nil, err
 	}
-	return t.mgr.Existing(user, slug)
-}
-
-// open returns the caller's current change, creating one named after hint when
-// there is none. Reads need a tree as much as writes do, so this is on the
-// path of every tool except get_conventions and list_my_changes.
-func (t *Toolset) open(id mcpserver.Identity, hint string) (*workdir.Change, error) {
-	user, err := userOf(id)
-	if err != nil {
-		return nil, err
+	if slug = strings.TrimSpace(slug); slug != "" {
+		return t.mgr.Existing(user, slug)
 	}
-	return t.openUser(user, hint)
-}
-
-// openUser is open for a caller that already holds the namespaced username:
-// the upload handler, whose token carries it instead of a bearer identity.
-func (t *Toolset) openUser(user, hint string) (*workdir.Change, error) {
-	t.mu.Lock()
-	defer t.mu.Unlock()
-	if c, ok := t.current[user]; ok {
-		return c, nil
-	}
-	// The map is a cache, not the record: the worktrees on the state volume
-	// are, so that a restart continues the change somebody is in the middle of
-	// instead of quietly opening a second branch for the same work.
-	c, ok, err := t.mgr.Resume(user)
-	if err != nil {
-		return nil, err
-	}
-	if !ok {
-		if c, err = t.mgr.Change(user, workdir.Slug(hint, t.now())); err != nil {
-			return nil, err
-		}
-	}
-	t.current[user] = c
-	return c, nil
+	return t.boundChange(user), nil
 }
 
 // userOf is the branch namespace and the worktree directory both. An identity

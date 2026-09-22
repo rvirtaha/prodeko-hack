@@ -377,39 +377,6 @@ func (m *Manager) openSlugs(user string) ([]string, error) {
 	return out, nil
 }
 
-// Resume is the change a person was last working on, or false when they have
-// none open.
-//
-// Worktrees are on the state volume and outlive the process, so which change
-// somebody is in the middle of has to be read off disk rather than remembered:
-// after a restart the first edit would otherwise open a second branch for the
-// same piece of work, and a change already pushed would be stranded.
-func (m *Manager) Resume(user string) (*Change, bool, error) {
-	if !userPattern.MatchString(user) {
-		return nil, false, fmt.Errorf("%w: %q", ErrBadUser, user)
-	}
-	slugs, err := m.openSlugs(user)
-	if err != nil {
-		return nil, false, err
-	}
-
-	var newest *Change
-	var newestAt time.Time
-	for _, slug := range slugs {
-		c, err := m.Change(user, slug)
-		if err != nil {
-			// A worktree that cannot be opened is not a reason to refuse an
-			// edit; it is a reason to leave it alone and start fresh.
-			m.log.Warn("workdir: skipping an unreadable change", "user", user, "slug", slug, "err", err)
-			continue
-		}
-		if at := c.updatedAt(); newest == nil || at.After(newestAt) {
-			newest, newestAt = c, at
-		}
-	}
-	return newest, newest != nil, nil
-}
-
 // List reports the user's own changes: their worktrees, their branches, and
 // what GitHub knows about them when a token is configured. It never reports
 // another person's change.
