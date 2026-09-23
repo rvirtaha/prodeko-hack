@@ -1,6 +1,6 @@
 ---
 title: Studerandenas vägar till produktionsekonomi
-url: /se/studerandenas-vagar/
+url: /sv/studerandenas-vagar/
 description: Nuvarande studerande berättar hur de hamnade på produktionsekonomi vid Aalto.
 ---
 

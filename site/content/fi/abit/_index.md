@@ -61,4 +61,4 @@ Tutustu myös [Prodekon abimentorointiin](/fi/abit/abimentorointi/), lue
 [nykyisten opiskelijoiden polkuja tutalle](/fi/abit/opiskelijoiden-polkuja-tutalle/)
 ja tutustu [menestyneisiin tutalaisiin](/fi/abit/menestyneet-tutalaiset/).
 
-På svenska: [Prodekos abisidor på svenska](/se/)
+På svenska: [Prodekos abisidor på svenska](/sv/)

@@ -1,6 +1,6 @@
 ---
 title: Framgångsrika produktionsekonomer
-url: /se/framgangsrika-produktionsekonomer/
+url: /sv/framgangsrika-produktionsekonomer/
 description: Exempel på karriärvägar och alumners tankar om studierna i produktionsekonomi vid Aalto.
 ---
 

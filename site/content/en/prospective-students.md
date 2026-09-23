@@ -59,4 +59,4 @@ Also check out [Prodeko's mentoring programme](/en/prospective-students/mentorin
 read [current students' paths to IEM](/en/prospective-students/student-paths/),
 and meet some [successful IEM alumni](/en/prospective-students/successful-alumni/).
 
-På svenska: [Prodekos abisidor på svenska](/se/)
+På svenska: [Prodekos abisidor på svenska](/sv/)

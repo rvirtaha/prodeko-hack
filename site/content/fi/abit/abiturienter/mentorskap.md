@@ -1,6 +1,6 @@
 ---
 title: Abimentorskap 2026
-url: /se/mentorskap/
+url: /sv/mentorskap/
 description: Ansök till Prodekos abimentorskap och diskutera studier och framtid med en studerande i produktionsekonomi.
 ---
 
@@ -10,7 +10,7 @@ Funderar du på något som gäller till exempel studentskrivningarna eller studi
 
 I mentorskapet hos Prodeko, gillet för produktionsekonomi vid Aalto-universitetet, har du en unik möjlighet att dela tankar om studier och framtid med en studerande inom teknikområdet.
 
-Om produktionsekonomi vid Aalto eller Prodeko ännu inte är bekanta för dig kan du läsa mer på [våra abisidor](/se/) eller på [prodeko.org](http://prodeko.org/).
+Om produktionsekonomi vid Aalto eller Prodeko ännu inte är bekanta för dig kan du läsa mer på [våra abisidor](/sv/) eller på [prodeko.org](http://prodeko.org/).
 
 Mentorskapet är en utmärkt kanal för att diskutera och få tips om till exempel fortsatta studier, att hitta sin yrkesidentitet och att känna igen sina styrkor. Du får en kontakt till högskolevärlden, vilket underlättar övergången till ett nytt skede i livet och hjälper dig bland annat med praktiska frågor kring studierna, såsom studentskrivningarna eller studieteknik.
 
