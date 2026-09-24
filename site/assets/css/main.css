@@ -245,6 +245,11 @@ img{display:block;max-width:100%}
 .link-list .desc{font-size:var(--size-sm);color:var(--text-muted)}
 .link-list .arrow{transition:transform var(--duration-fast) var(--ease-standard)}
 .link-list a:hover .arrow{transform:translateX(3px)}
+/* Inside the prose column the list is still a row of links, not a bulleted
+   paragraph: the generic list and link rules have to give way. */
+.prose .link-list{padding-left:0;list-style:none}
+.prose .link-list li{margin-bottom:0}
+.prose .link-list a{text-decoration:none}
 
 /* A paragraph holding nothing but a link to a document, marked up by
    page-shell.html. The alumni newsletter archive is 86 of them, and as plain
