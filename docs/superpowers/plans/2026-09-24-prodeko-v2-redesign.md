@@ -741,4 +741,4 @@ Files: `fi/guild/hallitus-ja-toimihenkilot/*` (+ en `board-and-officials/*`).
 - Phases 0–2: run as a sequence — each task one `agent()` call (opus), gated on the previous (chrome tasks share `main.css`/`header.html`).
 - Phase 3: `pipeline(tasks 16–20)` in parallel (disjoint files) with Task 21 after the barrier.
 - Phase 4: loop-until-dry — sweep agents produce findings, fix agents consume them, re-sweep; two consecutive clean rounds end the run.
-- Between phases: stop, report, let Risto review the commits before the next workflow run.
+- Phases run end-to-end without pauses; report at completion or on a genuine blocker.
