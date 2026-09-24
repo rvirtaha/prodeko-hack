@@ -1,0 +1,12 @@
+{{- /* The attributes a link off the site carries: it opens in a new tab, and
+     the page it opens has no handle on the one it came from. Internal links,
+     `mailto:` and `tel:` stay in the tab the reader is in.
+
+     Takes the address. Emits either nothing or ` target="_blank"
+     rel="noopener"`, leading space included, so it sits directly after the
+     href in the tag. Go's escaper refuses attributes it did not parse itself,
+     so every call runs through `safeHTMLAttr`.
+
+     Every template that writes an <a> from data or frontmatter calls this;
+     links written in markdown get it from _markup/render-link.html. */ -}}
+{{- if hasPrefix . "http" }} target="_blank" rel="noopener"{{ end -}}

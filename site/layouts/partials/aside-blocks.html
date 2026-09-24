@@ -36,13 +36,13 @@
         {{ $page.RenderString (dict "display" "block") (delimit $paragraphs "\n\n") }}
       {{ end }}
       {{ with .button }}
-        <a class="btn btn-primary" href="{{ .url | safeURL }}">{{ .label }}</a>
+        <a class="btn btn-primary" href="{{ .url | safeURL }}"{{ partial "link-target.html" .url | safeHTMLAttr }}>{{ .label }}</a>
       {{ end }}
       {{ with .links }}
         <ul class="link-list">
           {{ range . }}
             <li>
-              <a href="{{ .url | safeURL }}">
+              <a href="{{ .url | safeURL }}"{{ partial "link-target.html" .url | safeHTMLAttr }}>
                 <span class="label"><span class="name">{{ .label }}</span>{{ with .description }}<span class="desc">{{ . }}</span>{{ end }}</span>
                 <span class="arrow" aria-hidden="true">→</span>
               </a>

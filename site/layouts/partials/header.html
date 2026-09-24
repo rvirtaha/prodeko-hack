@@ -31,7 +31,7 @@
           {{ if strings.HasPrefix $.RelPermalink . }}{{ $current = true }}{{ end }}
         {{ end }}
         <li{{ if $current }} class="current"{{ end }}{{ with .menuKey }} data-mega="{{ . }}"{{ end }}>
-          <a href="{{ .url }}">{{ .title }}</a>
+          <a href="{{ .url }}"{{ partial "link-target.html" .url | safeHTMLAttr }}>{{ .title }}</a>
         </li>
       {{ end }}
       {{/* Not an entry in data/navigation.yaml: that file maps titles to
@@ -71,7 +71,7 @@
                      tree. Naming the address here would publish it. */}}
                 <span class="mega-link-disabled">{{ .label }}</span>
               {{ else if .url }}
-                <a href="{{ .url }}"><span>{{ .label }}</span><span aria-hidden="true">→</span></a>
+                <a href="{{ .url }}"{{ partial "link-target.html" .url | safeHTMLAttr }}><span>{{ .label }}</span><span aria-hidden="true">→</span></a>
               {{ else }}
                 <span class="mega-link-disabled">{{ .label }}</span>
               {{ end }}
@@ -162,7 +162,7 @@
                            it, so the row stays a label. */}}
                       <span class="m-members">{{ .label }}{{ if $isFi }} (jäsenille){{ else }} (members only){{ end }}</span>
                     {{ else }}
-                      <a href="{{ .url }}"{{ if eq $.RelPermalink .url }} aria-current="page"{{ end }}>{{ .label }}</a>
+                      <a href="{{ .url }}"{{ partial "link-target.html" .url | safeHTMLAttr }}{{ if eq $.RelPermalink .url }} aria-current="page"{{ end }}>{{ .label }}</a>
                     {{ end }}
                   </li>
                 {{ end }}
@@ -170,7 +170,7 @@
             </details>
           </li>
         {{ else }}
-          <li><a class="m-row" href="{{ .url }}">{{ .title }}</a></li>
+          <li><a class="m-row" href="{{ .url }}"{{ partial "link-target.html" .url | safeHTMLAttr }}>{{ .title }}</a></li>
         {{ end }}
       {{ end }}
     </ul>

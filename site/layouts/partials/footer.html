@@ -14,7 +14,7 @@
       <div>
         <div class="footer-title">{{ .linksTitle }}</div>
         <ul class="footer-links">
-          {{ range .links }}<li><a href="{{ .url }}">{{ .label }}</a></li>{{ end }}
+          {{ range .links }}<li><a href="{{ .url }}"{{ partial "link-target.html" .url | safeHTMLAttr }}>{{ .label }}</a></li>{{ end }}
         </ul>
       </div>
     {{ end }}
@@ -38,7 +38,7 @@
     <span>{{ hugo.Data.footer.legal }}</span>
     {{ with $links }}
       <ul>
-        {{ range .bottom }}<li><a href="{{ .url }}">{{ .label }}</a></li>{{ end }}
+        {{ range .bottom }}<li><a href="{{ .url }}"{{ partial "link-target.html" .url | safeHTMLAttr }}>{{ .label }}</a></li>{{ end }}
       </ul>
     {{ end }}
   </div>
