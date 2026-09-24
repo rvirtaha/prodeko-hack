@@ -12,6 +12,7 @@
  *
  * Usage:
  *
+ *   npm install playwright && npx playwright install chromium
  *   hugo -s site --environment development
  *   npx serve site/public-preview -l 1313     # or any static server
  *   node tools/audit-site.mjs http://localhost:1313 site/public-preview
