@@ -13,7 +13,14 @@
      between "the paragraph holds only this link" and "the paragraph holds
      exactly one link"; the second also matches a sentence with a link in it,
      which would tear the sentence apart. */}}
-{{ $body := replaceRE `<p>(<a href="[^"]*"[^>]*>[^<]*</a>)</p>` `<p class="doc-link">$1</p>` (string .body) | safeHTML }}
+{{ $body := replaceRE `<p>(<a href="[^"]*"[^>]*>[^<]*</a>)</p>` `<p class="doc-link">$1</p>` (string .body) }}
+
+{{/* A page opens on its lead: the paragraph that says what the page is for,
+     set in bold so a reader who came for one fact can see in one glance
+     whether this is the page that holds it. Only the paragraph the page
+     starts with — a page that opens on a heading, a list, a table or a row of
+     documents has no lead. */}}
+{{ $body = replaceRE `\A(\s*)<p>` `${1}<p class="lead">` $body 1 | safeHTML }}
 
 {{ $nav := partial "section-nav.html" $page }}
 {{ $blocks := partial "aside-blocks.html" $page }}
