@@ -14,36 +14,47 @@
 <a class="skip-link" href="#main">{{ if $isFi }}Siirry sisältöön{{ else }}Skip to content{{ end }}</a>
 <header class="site-header" id="site-header">
   <div class="container bar">
-    <a class="logo" href="{{ "/" | relLangURL }}">
-      {{ with resources.Get "images/brand/logo-text.svg" }}
-        <img src="{{ .RelPermalink }}" alt="{{ $.Site.Title }}">
+    <a class="home" href="{{ "/" | relLangURL }}">
+      {{ with resources.Get "images/brand/emblem-blue.svg" }}
+        <img src="{{ .RelPermalink }}" width="36" height="36" alt="{{ $.Site.Title }}">
       {{ end }}
     </a>
-    <nav class="desktop-nav" aria-label="{{ if $isFi }}Päävalikko{{ else }}Main{{ end }}">
-      <ul class="nav-list">
-        {{ range $navItems }}
-          <li{{ if strings.HasPrefix $.RelPermalink .url }} class="current"{{ end }}{{ with .menuKey }} data-mega="{{ . }}"{{ end }}>
-            <a href="{{ .url }}">{{ .title }}</a>
-          </li>
+    {{/* The bar's one stretching child, so its items sit centred between the
+         emblem and the side actions. */}}
+    <ul class="nav" aria-label="{{ if $isFi }}Päävalikko{{ else }}Main{{ end }}">
+      {{ range $navItems }}
+        {{/* owns lists the page prefixes an item lights for: Kilta carries
+             four sections of the site, Abeille carries the Swedish tree. An
+             item without owns lights for its own address alone. */}}
+        {{ $current := false }}
+        {{ range .owns | default (slice .url) }}
+          {{ if strings.HasPrefix $.RelPermalink . }}{{ $current = true }}{{ end }}
         {{ end }}
-      </ul>
+        <li{{ if $current }} class="current"{{ end }}{{ with .menuKey }} data-mega="{{ . }}"{{ end }}>
+          <a href="{{ .url }}">{{ .title }}</a>
+        </li>
+      {{ end }}
       {{/* Not an entry in data/navigation.yaml: that file maps titles to
            addresses and is editor-facing through Decap, where an entry with no
            address invites an editor to correct or delete it. It also opens on
            click rather than on hover, which is the one way it behaves unlike
            the items beside it — a search panel that appears as the mouse
-           sweeps across the bar is intolerable. */}}
-      <button type="button" class="nav-search-toggle" data-search-toggle
-              aria-expanded="false" aria-controls="search-panel">
-        {{ if $isFi }}Haku{{ else }}Search{{ end }}
-      </button>
-    </nav>
+           sweeps across the bar is intolerable. While the panel is down the
+           button wears the current-item styling, which the stylesheet draws
+           from aria-expanded. */}}
+      <li>
+        <button type="button" class="nav-search-toggle" data-search-toggle
+                aria-expanded="false" aria-controls="search-panel">
+          {{ if $isFi }}Haku{{ else }}Search{{ end }}
+        </button>
+      </li>
+    </ul>
     <div class="side">
       {{ partial "lang-switch.html" . }}
-      <a class="btn btn-secondary" href="{{ $memberHome }}">{{ $memberLabel }}</a>
+      <a class="btn btn-primary btn-sm" href="{{ $memberHome }}">{{ $memberLabel }}</a>
     </div>
     <button type="button" class="nav-toggle" aria-expanded="false" aria-controls="mobile-nav" aria-label="{{ if $isFi }}Valikko{{ else }}Menu{{ end }}">
-      <span class="nav-toggle-bars"></span>
+      <span></span>
     </button>
   </div>
 
