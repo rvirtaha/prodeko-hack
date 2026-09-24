@@ -16,13 +16,13 @@
   <link rel="stylesheet" href="{{ $css.RelPermalink }}" integrity="{{ $css.Data.Integrity }}" />
 {{ end }}
 
-{{/* The blue heroes are painted with a brand texture that lives in assets/
+{{/* The front-page hero is painted with a photograph that lives in assets/
      rather than static/. Nothing in a template asks for it by name, so without
      this its address is never resolved and Hugo never publishes it — the
-     stylesheet alone would leave a 404 behind every hero. Handing the resolved
+     stylesheet alone would leave a 404 behind the hero. Handing the resolved
      address to the stylesheet as a custom property fixes both halves at once. */}}
-{{ with resources.Get "images/brand/bg-texture-blue.png" }}
+{{ with resources.Get "images/pages/page-guild-crop.png" }}
   {{ with .Process "resize 1800x webp q68" }}
-    <style>:root{--bg-texture-blue:url("{{ .RelPermalink }}")}</style>
+    <style>:root{--photo-guild:url("{{ .RelPermalink }}")}</style>
   {{ end }}
 {{ end }}
