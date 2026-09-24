@@ -13,15 +13,8 @@
   --space-16:4rem;
   --space-20:5rem;
   --space-24:6rem;
-
-  /* Slide geometry, lifted from Prodeko 60 -kalvopohja (960x540pt master) */
-  --slide-w:1280px;
-  --slide-h:720px;
-  --slide-margin-x:4.4%;   /* 33 / 960 */
-  --slide-title-y:8.7%;    /* 47 / 540 */
-  --slide-footer-h:10%;    /* 54 / 540 */
-
   --gutter:var(--space-6);
-  --page-max:1200px;
-  --content-max:68ch;
+  --page-max:1070px; /* 750 + 32 + 240 + 2×24 padding */
+  --content-w:750px;
+  --aside-w:240px;
 }

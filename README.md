@@ -161,12 +161,13 @@ explains what is measured and why there is no banner.
 exists, and a page wider than a phone. The audit catches all three:
 
 ```
+npm install playwright && npx playwright install chromium
 hugo -s site --environment development
 python3 -m http.server 1313 --directory site/public-preview &
 node tools/audit-site.mjs http://localhost:1313 site/public-preview
 ```
 
-It needs `playwright`, and it runs in CI against the built site.
+The `playwright` install lands in `node_modules/`, which git ignores.
 [docs/content-audit.md](docs/content-audit.md) is what it found on the migrated
 content.
 

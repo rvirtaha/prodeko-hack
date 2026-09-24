@@ -1,1382 +1,380 @@
-/* Design tokens (fonts, colors, typography, spacing, radius, elevation,
+/* Prodeko.org v2 components.
+
+   Design tokens (fonts, colors, typography, spacing, radius, elevation,
    motion, base) are concatenated in front of this file by
    layouts/partials/head.html, rather than @import'd here — Hugo's asset
    pipeline doesn't follow CSS @import to know it needs to publish those
-   files too. */
-
-/* ===== Layout ===== */
-
-.container {
-  max-width: var(--page-max);
-  margin: 0 auto;
-  padding: 0 var(--space-8);
-}
-
-main {
-  flex: 1;
-}
-
-body {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  overflow-x: hidden;
-}
-
-img { display: block; max-width: 100%; }
-
-/* ===== Text utilities ===== */
-
-.kicker {
-  font-size: var(--size-2xs);
-  font-weight: var(--weight-semibold);
-  letter-spacing: var(--track-caps-wide);
-  text-transform: uppercase;
-}
-
-.section-title {
-  margin: 0 0 var(--space-8);
-  font-size: var(--size-xs);
-  font-weight: var(--weight-semibold);
-  letter-spacing: var(--track-caps-wide);
-  text-transform: uppercase;
-  color: var(--pd-blue);
-  border-bottom: 2px solid var(--pd-blue);
-  padding-bottom: var(--space-3);
-}
-
-.section-title-row {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: var(--space-6);
-  flex-wrap: wrap;
-  border-bottom: 2px solid var(--pd-blue);
-  padding-bottom: var(--space-3);
-  margin-bottom: var(--space-8);
-}
-.section-title-row .section-title { margin: 0; border: 0; padding: 0; }
-.section-title-row .sub { font-size: var(--size-sm); font-weight: var(--weight-light); color: var(--text-muted); }
-
-.rainbow-rule { height: 6px; background: var(--rainbow-gradient); border: 0; }
-
-/* ===== Buttons ===== */
-
-.btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: var(--space-2);
-  padding: 12px 22px;
-  font-size: var(--size-sm);
-  font-weight: var(--weight-semibold);
-  letter-spacing: var(--track-normal);
-  border-radius: var(--radius-ui);
-  border: 1px solid transparent;
-  cursor: pointer;
-  transition: var(--transition-ui);
-}
-.btn-primary { background: var(--pd-blue); color: var(--pd-white-1); }
-.btn-primary:hover { background: var(--pd-blue-hover); color: var(--pd-white-1); }
-.btn-secondary { background: transparent; color: var(--pd-blue); border-color: var(--border-subtle); }
-.btn-secondary:hover { border-color: var(--pd-blue); }
-.btn-inverse { background: var(--pd-white-1); color: var(--pd-blue); }
-.btn-inverse:hover { background: var(--pd-white-2); }
-.btn-outline-inverse { background: transparent; color: var(--pd-white-1); border-color: rgb(246 246 246 / 0.6); }
-.btn-outline-inverse:hover { border-color: var(--pd-white-1); }
-
-/* ===== Header ===== */
-
-.site-header {
-  position: sticky;
-  top: 0;
-  z-index: 40;
-  background: #fff;
-  border-bottom: 1px solid var(--border-subtle);
-}
-.site-header .bar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  /* The gap is a floor, not the spacing the reader sees: space-between spreads
-     the free width, so this only decides how tightly the row packs just before
-     it collapses to the toggle. min-height, not height, so a row that does wrap
-     grows the bar instead of spilling out of it. */
-  gap: var(--space-6);
-  min-height: 76px;
-}
-.site-header .logo { display: flex; align-items: center; flex-shrink: 0; border-bottom: none; }
-.site-header .logo img { height: 32px; width: auto; }
-.site-header .nav-list {
-  display: flex;
-  gap: var(--space-8);
-  flex: 1;
-  align-items: center;
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-.site-header .nav-list li { position: relative; }
-.site-header .nav-list a {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  font-size: var(--size-2xs);
-  font-weight: var(--weight-semibold);
-  letter-spacing: var(--track-caps);
-  text-transform: uppercase;
-  color: var(--pd-blue);
-  padding: 6px 0;
-  border-bottom: 2px solid transparent;
-}
-.site-header .nav-list a:hover,
-.site-header .nav-list li.current a {
-  border-bottom-color: var(--pd-blue);
-}
-
-.nav-toggle {
-  display: none;
-  align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 40px;
-  padding: 0;
-  background: none;
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-ui);
-  cursor: pointer;
-  flex-shrink: 0;
-}
-.nav-toggle-bars,
-.nav-toggle-bars::before,
-.nav-toggle-bars::after {
-  content: "";
-  display: block;
-  width: 18px;
-  height: 2px;
-  background: var(--pd-blue);
-}
-.nav-toggle-bars { position: relative; }
-.nav-toggle-bars::before { position: absolute; top: -6px; left: 0; }
-.nav-toggle-bars::after { position: absolute; top: 6px; left: 0; }
-
-/* ===== Mega menu (layouts/partials/header.html + assets/js/mega-menu.js) ===== */
-
-@keyframes pdFade { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
-
-.mega-panel {
-  display: none;
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 100%;
-  background: #fff;
-  border-bottom: 1px solid var(--border-subtle);
-  box-shadow: var(--shadow-md);
-  z-index: 30;
-}
-.mega-panel.is-open { display: block; animation: pdFade 180ms var(--ease-standard); }
-.mega-panel-rainbow { height: 4px; background: var(--rainbow-gradient); }
-.mega-panel-inner {
-  /* Keep .container's inline padding: the shorthand would zero it and pin
-     the outer columns to the screen edge on windows below --page-max. */
-  padding: var(--space-10) var(--space-8) 44px;
-  display: grid;
-  /* 170px lets five columns hold all the way down to the 1100px collapse,
-     where a 200px minimum wrapped the last column onto a row of its own. */
-  grid-template-columns: repeat(auto-fit,minmax(170px,1fr));
-  gap: var(--space-10);
-}
-.mega-col-title {
-  font-size: var(--size-2xs);
-  font-weight: var(--weight-semibold);
-  letter-spacing: var(--track-caps-wide);
-  text-transform: uppercase;
-  color: var(--text-muted);
-  padding-bottom: var(--space-3);
-  margin-bottom: var(--space-2);
-  border-bottom: 1px solid var(--border-subtle);
-}
-.mega-col a, .mega-col .mega-link-disabled {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: var(--space-4);
-  width: 100%;
-  padding: var(--space-2) 0;
-  font-size: var(--size-md);
-  font-weight: var(--weight-regular);
-  color: var(--pd-black);
-  border-bottom: none;
-}
-.mega-col a span:last-child { font-size: var(--size-xs); color: var(--pd-blue-light); }
-.mega-col a:hover { color: var(--pd-blue-light); }
-.mega-col .mega-link-disabled { color: var(--text-muted); }
-.site-header .side { display: flex; align-items: center; gap: var(--space-4); flex-shrink: 0; }
-.lang-switch {
-  display: flex;
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-ui);
-  overflow: hidden;
-  font-size: var(--size-3xs);
-  font-weight: var(--weight-semibold);
-  letter-spacing: var(--track-caps);
-}
-.lang-switch a {
-  padding: 7px 11px;
-  color: var(--pd-blue);
-  border-bottom: none;
-}
-.lang-switch a.current { background: var(--pd-blue); color: var(--pd-white-1); }
-
-/* ===== Search (layouts/partials/header.html + assets/js/search.js) =====
-
-   The panel is a mega panel in every respect but its trigger: same white
-   ground, same shadow, same rainbow strip, same entrance. A result is a title
-   and a two-line excerpt, which is what wants the full width. */
-
-/* The nav holds a list and, beside it, the search toggle. As a block it wrapped
-   the toggle onto a second line and stretched the bar; as a row the toggle
-   reads as one more item at the same gap. */
-.site-header .desktop-nav { display: flex; align-items: center; gap: var(--space-8); }
-
-.nav-search-toggle {
-  display: inline-flex;
-  align-items: center;
-  padding: 6px 0;
-  background: none;
-  border: 0;
-  border-bottom: 2px solid transparent;
-  font-family: inherit;
-  font-size: var(--size-2xs);
-  font-weight: var(--weight-semibold);
-  letter-spacing: var(--track-caps);
-  text-transform: uppercase;
-  color: var(--pd-blue);
-  cursor: pointer;
-  transition: var(--transition-ui);
-}
-.nav-search-toggle:hover,
-.nav-search-toggle[aria-expanded="true"] { border-bottom-color: var(--pd-blue); }
-
-.search-panel {
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 100%;
-  background: #fff;
-  border-bottom: 1px solid var(--border-subtle);
-  box-shadow: var(--shadow-md);
-  z-index: 35;
-  animation: pdFade 180ms var(--ease-standard);
-}
-.search-panel[hidden] { display: none; }
-.search-panel-inner { padding: var(--space-8) 0 var(--space-10); }
-
-.search-box input[type="search"] {
-  width: 100%;
-  padding: var(--space-4) var(--space-5);
-  font-family: inherit;
-  font-size: var(--size-lg);
-  font-weight: var(--weight-light);
-  color: var(--pd-black);
-  background: var(--surface-sunken);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-ui);
-}
-.search-box input[type="search"]::placeholder { color: var(--text-muted); }
-.search-box form { margin: 0; }
-
-.search-results:not(:empty) { margin-top: var(--space-5); }
-.search-results.is-expanded { max-height: 70vh; overflow-y: auto; }
-.search-result {
-  display: block;
-  padding: var(--space-3) var(--space-2);
-  border-bottom: 1px solid var(--border-subtle);
-  color: inherit;
-}
-.search-result:first-child { border-top: 1px solid var(--border-subtle); }
-/* The pointer and the arrow keys pick a row the same way, so they light it the
-   same way. The tint stays at 04 because the excerpt's <mark> is 08: a row
-   tinted that far up would swallow the matched words inside it. */
-.search-result:hover,
-.search-result.is-active { background: var(--pd-blue-tint-04); }
-.search-result-title {
-  display: block;
-  font-size: var(--size-md);
-  font-weight: var(--weight-semibold);
-  color: var(--pd-blue);
-}
-.search-result-excerpt {
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
-  overflow: hidden;
-  font-size: var(--size-sm);
-  font-weight: var(--weight-light);
-  line-height: var(--leading-normal);
-  color: var(--pd-black);
-}
-/* data() returns the excerpt with <mark> already around the matched words, so
-   the highlight is styled rather than built. The browser default is a yellow
-   that is not in this palette. */
-.search-results mark {
-  background: var(--pd-blue-tint-08);
-  color: var(--pd-blue);
-  font-weight: var(--weight-semibold);
-  border-radius: var(--radius-ui);
-  padding: 0 2px;
-}
-.search-more {
-  display: block;
-  width: 100%;
-  padding: var(--space-3) var(--space-2);
-  background: none;
-  border: 0;
-  font-family: inherit;
-  font-size: var(--size-sm);
-  font-weight: var(--weight-semibold);
-  color: var(--pd-blue-light);
-  text-align: left;
-  cursor: pointer;
-}
-.search-status {
-  margin: var(--space-3) 0 0;
-  font-size: var(--size-xs);
-  color: var(--text-muted);
-}
-.search-status:empty { margin: 0; }
-
-/* ===== Phone menu (layouts/partials/header.html, .mobile-nav) =====
-
-   The mega-panels are opened by hover, which touch never fires, so on a phone
-   the same links are repeated as a set of accordions. Hidden above the
-   breakpoint; the media query at the end of this section is what reveals it. */
-
-.mobile-nav { display: none; }
-.mobile-nav .container { padding-bottom: var(--space-6); }
-.m-group { border-bottom: 1px solid var(--border-subtle); }
-/* Child combinators throughout: a section's own summary, not the summaries of
-   the columns nested inside it. */
-.m-group > summary {
-  cursor: pointer;
-  list-style: none;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  min-height: 52px;
-  font-size: var(--size-xs);
-  font-weight: var(--weight-semibold);
-  letter-spacing: var(--track-caps);
-  text-transform: uppercase;
-  color: var(--pd-blue);
-}
-.m-group > summary::-webkit-details-marker { display: none; }
-.m-group > summary::after { content: "+"; font-size: var(--size-xl); font-weight: var(--weight-light); color: var(--pd-blue-light); }
-.m-group[open] > summary::after { content: "\2013"; }
-.m-group-body { padding: 0 0 var(--space-4); }
-.m-sub { border-top: 1px solid var(--border-subtle); }
-.m-sub > summary {
-  cursor: pointer;
-  list-style: none;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  min-height: 44px;
-  font-size: var(--size-3xs);
-  font-weight: var(--weight-semibold);
-  letter-spacing: var(--track-caps-wide);
-  text-transform: uppercase;
-  color: var(--text-muted);
-}
-.m-sub > summary::-webkit-details-marker { display: none; }
-.m-sub > summary::after { content: "+"; font-size: var(--size-lg); font-weight: var(--weight-light); color: var(--pd-blue-light); }
-.m-sub[open] > summary::after { content: "\2013"; }
-/* The rule the column's links hang off, so an open column reads as a branch of
-   the section above it rather than as more of the same list. */
-.m-sub-body { padding: 0 0 var(--space-3) var(--space-4); border-left: 2px solid var(--border-subtle); margin-left: var(--space-1); }
-/* Every anchor in the menu is a two-column row — except a button, which keeps
-   the button shape and all four of its borders. */
-.mobile-nav a:not(.btn),
-.m-link-disabled {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--space-4);
-  min-height: 44px;
-  font-size: var(--size-md);
-  font-weight: var(--weight-regular);
-  color: var(--pd-black);
-  border-bottom: none;
-}
-.mobile-nav a span:last-child { color: var(--pd-blue-light); font-size: var(--size-xs); }
-.m-link-disabled { color: var(--text-muted); }
-.m-overview { color: var(--pd-blue-light) !important; font-weight: var(--weight-semibold) !important; }
-.m-top {
-  border-bottom: 1px solid var(--border-subtle) !important;
-  min-height: 52px !important;
-  font-size: var(--size-xs) !important;
-  font-weight: var(--weight-semibold) !important;
-  letter-spacing: var(--track-caps);
-  text-transform: uppercase;
-  color: var(--pd-blue) !important;
-}
-/* Search on a phone: the first row of the menu, at the height of .m-top so it
-   reads as a top-level entry, with results inline beneath it. The generic
-   .mobile-nav a rule above makes every anchor a two-column menu row, which a
-   result is not, so the rows take their block layout back here. */
-.m-search { padding: var(--space-4) 0; border-bottom: 1px solid var(--border-subtle); }
-.m-search input[type="search"] { min-height: 44px; font-size: var(--size-md); }
-.mobile-nav .search-result {
-  display: block;
-  min-height: 0;
-  font-size: var(--size-sm);
-  color: inherit;
-}
-.mobile-nav .search-result span:last-child { color: inherit; font-size: inherit; }
-.mobile-nav .search-result-title { font-size: var(--size-md); color: var(--pd-blue); }
-
-.m-actions { display: flex; align-items: center; gap: var(--space-4); padding-top: var(--space-6); }
-.m-actions .lang-switch { flex-shrink: 0; }
-.m-actions .btn { flex: 1; }
-
-/* Once the bar is no longer wider than the page it has to hold, the nav items
-   move closer together rather than the row breaking. The English labels are the
-   long ones, so this range is what they set. */
-@media (max-width: 1200px) {
-  .site-header .desktop-nav { gap: var(--space-5); }
-  .site-header .nav-list { gap: var(--space-5); }
-}
-
-/* Below this width the logo, five nav items, language pill and login button no
-   longer fit on one line even packed, so everything but the logo collapses
-   behind the toggle and the phone menu above takes over. */
-@media (max-width: 1100px) {
-  .site-header .bar { min-height: 60px; gap: var(--space-4); flex-wrap: nowrap; }
-  .site-header .desktop-nav,
-  .site-header .side { display: none; }
-  .nav-toggle { display: flex; margin-left: auto; }
-  .mega-panel,
-  .search-panel { display: none !important; }
-  .site-header.nav-open .mobile-nav {
-    display: block;
-    max-height: calc(100dvh - 60px);
-    overflow-y: auto;
-    border-top: 1px solid var(--border-subtle);
-    animation: pdFade 160ms var(--ease-standard);
-  }
-}
-
-/* ===== Footer ===== */
-
-.site-footer { background: var(--pd-blue-dark); color: var(--pd-white-1); }
-.site-footer .cols {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-  gap: var(--space-10);
-  padding: var(--space-12) 0 var(--space-10);
-}
-.site-footer .brand img { height: 26px; margin-bottom: var(--space-5); }
-.site-footer .brand p { margin: 0; font-size: var(--size-sm); font-weight: var(--weight-light); line-height: var(--leading-loose); opacity: 0.85; }
-.site-footer .col-title {
-  font-size: var(--size-3xs);
-  font-weight: var(--weight-semibold);
-  letter-spacing: var(--track-caps);
-  text-transform: uppercase;
-  opacity: 0.7;
-  margin-bottom: var(--space-4);
-}
-.site-footer .links { display: flex; flex-direction: column; gap: var(--space-2); list-style: none; margin: 0; padding: 0; }
-.site-footer .links a { color: var(--pd-white-1); font-size: var(--size-sm); font-weight: var(--weight-light); opacity: 0.9; border-bottom: none; }
-.site-footer .network { padding-block: var(--space-2) var(--space-10); }
-.site-footer .network-logos { display: flex; flex-wrap: wrap; gap: var(--space-8) 44px; align-items: center; margin-top: var(--space-6); }
-.site-footer .network-logos img { height: 22px; width: auto; filter: brightness(0) invert(1); opacity: 0.9; }
-.site-footer .bottom {
-  border-top: 1px solid rgb(246 246 246 / 0.15);
-  padding-block: var(--space-5) var(--space-8);
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  gap: var(--space-2) var(--space-6);
-  flex-wrap: wrap;
-  font-size: var(--size-2xs);
-  font-weight: var(--weight-light);
-  opacity: 0.7;
-}
-.site-footer .bottom-links { display: flex; gap: var(--space-6); flex-wrap: wrap; }
-.site-footer .bottom-links a { color: var(--pd-white-1); border-bottom: 1px solid rgb(246 246 246 / 0.3); }
-
-/* ===== Hero: home (blue ground) ===== */
-
-.hero-home {
-  position: relative;
-  overflow: hidden;
-  background: var(--pd-blue) var(--bg-texture-blue) center/cover;
-  color: var(--pd-white-1);
-}
-.hero-home::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: var(--vignette-calm);
-}
-/* The stripe is a corner wedge: it enters the left edge and leaves the top
-   edge, and only that diagonal is ever seen. Its offsets are absolute rather
-   than proportional so the wedge keeps the same size — and stays clear of the
-   kicker — whatever the hero grows to. */
-.hero-home .stripe {
-  position: absolute;
-  left: -110px;
-  top: 310px;
-  width: 820px;
-  height: 36px;
-  transform: rotate(-45deg);
-  transform-origin: left center;
-}
-.hero-home .emblem {
-  position: absolute;
-  right: -120px;
-  top: -140px;
-  width: 560px;
-  opacity: 0.08;
-}
-.hero-home .inner { position: relative; padding-block: 88px 104px; }
-.hero-home h1 {
-  margin: 0 0 var(--space-6);
-  max-width: 16ch;
-  font-size: clamp(38px,4.8vw,64px);
-  font-weight: var(--weight-bold);
-  line-height: 1.05;
-  letter-spacing: var(--track-display);
-  text-transform: uppercase;
-  color: var(--pd-white-1);
-  text-shadow: var(--shadow-heading);
-}
-.hero-home .kicker { opacity: 0.85; margin-bottom: var(--space-5); display: block; }
-.hero-home .inner > p { max-width: 52ch; font-size: var(--size-lg); font-weight: var(--weight-light); line-height: var(--leading-normal); }
-.hero-home .ctas { display: flex; gap: var(--space-3); flex-wrap: wrap; }
-
-/* ===== Audiences (home) ===== */
-
-.audiences { display: grid; grid-template-columns: repeat(auto-fit,minmax(240px,1fr)); gap: var(--space-6); padding: 88px 0 40px; }
-.audience-card {
-  display: flex;
-  flex-direction: column;
-  background: #fff;
-  border: 1px solid var(--border-subtle);
-  box-shadow: var(--shadow-sm);
-  border-radius: var(--radius-ui);
-  overflow: hidden;
-  transition: var(--transition-ui);
-}
-.audience-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
-.audience-card .bar { height: 6px; }
-.audience-card .body { padding: var(--space-8) var(--space-8) var(--space-8); display: flex; flex-direction: column; gap: var(--space-3); flex: 1; }
-.audience-card .kicker { color: var(--text-muted); }
-.audience-card .title { font-size: var(--size-xl); font-weight: var(--weight-semibold); color: var(--pd-blue); line-height: 1.15; margin: 0; }
-.audience-card p { margin: 0; font-size: var(--size-sm); font-weight: var(--weight-light); line-height: var(--leading-loose); flex: 1; }
-.audience-card .link { font-size: var(--size-2xs); font-weight: var(--weight-semibold); letter-spacing: var(--track-caps); text-transform: uppercase; color: var(--pd-blue-light); margin-top: var(--space-2); }
-
-/* ===== Announcement card ===== */
-
-.announcement-wrap { margin-top: -56px; position: relative; z-index: 1; max-width: 28rem; }
-.announcement {
-  position: relative;
-  background: #fff;
-  color: var(--text-body);
-  border-radius: var(--radius-ui);
-  box-shadow: var(--shadow-lg);
-  overflow: hidden;
-  transition: var(--transition-ui);
-}
-.announcement .rainbow-rule { height: 6px; }
-.announcement .body { padding: var(--space-6) var(--space-8) var(--space-8); }
-.announcement .kicker { color: var(--text-muted); margin-bottom: var(--space-3); display: block; }
-.announcement .title { font-size: var(--size-xl); font-weight: var(--weight-semibold); color: var(--pd-blue); line-height: 1.2; margin-bottom: var(--space-3); }
-.announcement p { margin: 0 0 var(--space-4); font-size: var(--size-sm); font-weight: var(--weight-light); line-height: var(--leading-loose); }
-.announcement .link { font-size: var(--size-2xs); font-weight: var(--weight-semibold); letter-spacing: var(--track-caps); text-transform: uppercase; color: var(--pd-blue-light); border-bottom: none; }
-/* The card is one announcement, so the whole of it is the target rather than
-   the caps line at the foot of it. The overlay is on the anchor, so a card
-   whose announcement carries no url stays inert. */
-.announcement a.link::after { content: ""; position: absolute; inset: 0; }
-.announcement:has(a.link):hover { transform: translateY(-2px); }
-.announcement a.link:hover { color: var(--pd-blue); }
-
-/* ===== Values strip (home) ===== */
-
-.values-section { padding: 64px 0 88px; }
-.values-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(200px,1fr)); gap: var(--space-6); }
-.values-grid .value { margin: 0; display: flex; flex-direction: column; gap: var(--space-3); }
-/* One overalls colour per value — five values, five stripes, in rainbow order.
-   The rule carries the colour at full strength; the name is darkened along its
-   own hue where it has to, because raw orange and yellow land at 2.5:1 and
-   1.4:1 on the page background, under the 3:1 floor for large text. */
-.values-grid .value:nth-child(5n+1) { --value-stripe: var(--pd-rainbow-red);    --value-ink: var(--pd-rainbow-red); }
-.values-grid .value:nth-child(5n+2) { --value-stripe: var(--pd-rainbow-orange); --value-ink: oklch(from var(--pd-rainbow-orange) calc(l - 0.1) c h); }
-.values-grid .value:nth-child(5n+3) { --value-stripe: var(--pd-rainbow-yellow); --value-ink: oklch(from var(--pd-rainbow-yellow) calc(l - 0.25) c h); }
-.values-grid .value:nth-child(5n+4) { --value-stripe: var(--pd-rainbow-green);  --value-ink: var(--pd-rainbow-green); }
-.values-grid .value:nth-child(5n+5) { --value-stripe: var(--pd-rainbow-blue);   --value-ink: var(--pd-rainbow-blue); }
-.values-grid .value-rule { height: 6px; background: var(--value-stripe); }
-.values-grid .value-name {
-  font-size: clamp(22px,2.1vw,30px);
-  font-weight: var(--weight-bold);
-  letter-spacing: var(--track-tight);
-  line-height: var(--leading-tight);
-  color: var(--value-ink);
-  text-wrap: balance;
-}
-.values-grid .value p {
-  margin: 0;
-  font-size: var(--size-sm);
-  font-weight: var(--weight-light);
-  line-height: var(--leading-loose);
-  color: var(--text-body);
-}
-
-/* ===== Photo band (home) ===== */
-
-.photo-band {
-  position: relative;
-  height: 420px;
-  overflow: hidden;
-  background: var(--pd-blue-dark);
-}
-.photo-band img { width: 100%; height: 100%; object-fit: cover; }
-/* The caption is white type over an uncontrolled photograph, so the scrim
-   has to hold on its brightest part, not its average one. The radial layer
-   sits behind the centred caption and carries most of the contrast, leaving
-   the edges of the photograph readable. */
-.photo-band::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background:
-    radial-gradient(ellipse 62% 88% at 50% 50%, rgb(0 27 54 / 0.62) 0%, rgb(0 27 54 / 0.26) 62%, rgb(0 27 54 / 0) 100%),
-    linear-gradient(180deg, rgb(0 27 54 / 0.34) 0%, rgb(0 27 54 / 0.46) 55%, rgb(0 27 54 / 0.6) 100%);
-}
-.photo-band .caption {
-  position: absolute;
-  inset: 0;
-  /* The scrim is a ::after, so it is the last thing painted in this box and
-     would otherwise lie over the type it exists to set off. */
-  z-index: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: var(--space-8);
-  text-align: center;
-}
-.photo-band .caption-title {
-  font-size: clamp(26px,3.4vw,44px);
-  font-weight: var(--weight-bold);
-  letter-spacing: var(--track-display);
-  text-transform: uppercase;
-  color: var(--pd-white-1);
-  text-shadow: var(--shadow-heading);
-  max-width: 22ch;
-  line-height: 1.15;
-  margin: 0 auto;
-  /* Centred over a photograph, so the shape of the block is the shape of the
-     caption: the measure alone leaves the last line holding the year on its
-     own, where balance spreads the three lines evenly. */
-  text-wrap: balance;
-}
-.photo-band .caption-sub { margin-top: var(--space-4); font-size: var(--size-md); font-weight: var(--weight-regular); color: var(--pd-white-1); text-shadow: var(--shadow-heading); }
-
-/* ===== Partners ===== */
-
-.partners-section { background: #fff; border-top: 1px solid var(--border-subtle); padding: 64px 0 72px; }
-.partners-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(150px,1fr)); gap: var(--space-4); }
-.partner-tile {
-  min-height: 96px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: var(--space-4);
-  border-radius: var(--radius-ui);
-  border-bottom: none;
-  transition: var(--transition-ui);
-}
-.partner-tile:hover { background: var(--surface-sunken); }
-/* The width and height attributes come from the file's own pixel size, halved;
-   these only stop a narrow column from overflowing. */
-.partner-tile img { max-width: 100%; height: auto; }
-
-/* ===== Hub page hero: split (guild) ===== */
-
-.hero-split {
-  position: relative;
-  overflow: hidden;
-  background: var(--pd-blue) var(--bg-texture-blue) center/cover;
-  color: var(--pd-white-1);
-  display: grid;
-  grid-template-columns: minmax(0,1fr) minmax(0,1fr);
-}
-/* The text column is half the section and the section is full-bleed, so 100%
-   here is half the viewport: the start padding resolves to the .container
-   content edge, which is where the page below begins. */
-.hero-split .text { position: relative; padding: 88px var(--space-10) 80px max(var(--space-8), calc(100% - var(--page-max) / 2 + var(--space-8))); display: flex; flex-direction: column; justify-content: center; }
-.hero-split .image { position: relative; min-height: 420px; }
-.hero-split .image img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-.hero-split .image::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, var(--pd-blue) 0%, rgb(0 46 125 / 0) 28%); }
-/* The longest word here is TUOTANTOTALOUDEN, and the text column is half the
-   viewport inset to the page measure, so its content stops at 528px however
-   wide the window is: past 37px that one word is sheared off. */
-.hero-split h1 { margin: 0 0 var(--space-5); font-size: clamp(24px,3vw,37px); hyphens: auto; font-weight: var(--weight-bold); letter-spacing: var(--track-display); text-transform: uppercase; line-height: 1.05; color: var(--pd-white-1); text-shadow: var(--shadow-heading); }
-.hero-split .kicker { opacity: 0.85; margin-bottom: var(--space-4); display: block; }
-.hero-split p { margin: 0; max-width: 52ch; font-size: var(--size-md); font-weight: var(--weight-light); line-height: var(--leading-normal); }
-.hero-split .rainbow-rule { position: absolute; left: 0; right: 0; bottom: 0; }
-/* 900 rather than 780: below this the text column is under 450px, which is
-   too narrow to set a display heading beside a photograph. */
-/* Once the text column spans the section, 100% is the whole viewport and the
-   calc above would run away, so the single-column form takes the plain inset. */
-@media (max-width: 900px) { .hero-split { grid-template-columns: minmax(0, 1fr); } .hero-split .text { padding-inline: var(--space-8); } .hero-split .image { min-height: 240px; } }
-
-/* ===== Hub page hero: full-bleed photo (prospective / corporate) ===== */
-
-.hero-photo { position: relative; overflow: hidden; color: var(--pd-white-1); }
-.hero-photo img.bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-.hero-photo .inner { position: relative; z-index: 2; padding-block: 96px 88px; }
-.hero-photo h1 { margin: 0 0 var(--space-5); font-weight: var(--weight-bold); letter-spacing: var(--track-display); text-transform: uppercase; line-height: 1.05; color: var(--pd-white-1); text-shadow: var(--shadow-heading); }
-.hero-photo .kicker { opacity: 0.9; margin-bottom: var(--space-4); display: block; }
-.hero-photo p { margin: 0; max-width: 60ch; font-size: var(--size-lg); font-weight: var(--weight-light); line-height: var(--leading-normal); text-shadow: var(--shadow-heading); }
-
-.hero-prospective { min-height: 560px; display: flex; align-items: flex-end; background: var(--pd-blue-dark); }
-.hero-prospective::before { content: ""; position: absolute; inset: 0; z-index: 1; background: linear-gradient(180deg, rgb(0 40 81 / 0.05) 0%, rgb(0 40 81 / 0.2) 35%, rgb(0 40 81 / 0.88) 62%, rgb(0 40 81 / 0.96) 100%); }
-/* The subject stands left of centre and high in the frame, and the source
-   carries its own torn blue band across the bottom third. Centred, the crop
-   took the band and cut the face off above it; anchored high and left it
-   holds the face over the lit part of the photograph and leaves the band out
-   of frame at every width wide enough to crop vertically at all. */
-.hero-prospective img.bg { object-position: 30% 12%; }
-/* A flex item takes its width from its content, so .container here stopped at
-   the heading's width and centred that, leaving the hero text inset further
-   than the page content below it. */
-.hero-prospective .inner { width: 100%; }
-.hero-prospective h1 { font-size: clamp(40px,6vw,84px); line-height: 1; }
-
-/* The torn "skräbä" edge from the brand book: a full-bleed band never ends
-   in a straight line where it meets the page. The strip is transparent above
-   the tear, so it has to be squashed rather than cropped — `cover` at this
-   height keeps only the solid blue under the tear and draws a flat bar. */
-.skraba-bottom {
-  position: absolute;
-  z-index: 2;
-  left: 0;
-  right: 0;
-  bottom: -1px;
-  width: 100%;
-  height: 56px;
-  object-fit: fill;
-}
-
-.hero-corporate { background: var(--pd-blue-dark); }
-.hero-corporate::before { content: ""; position: absolute; inset: 0; z-index: 1; background: linear-gradient(90deg, rgb(0 40 81 / 0.9) 0%, rgb(0 40 81 / 0.72) 55%, rgb(0 40 81 / 0.55) 100%); }
-.hero-corporate::after { content: ""; position: absolute; inset: 0; z-index: 1; background: var(--vignette-calm); }
-.hero-corporate h1 { font-size: clamp(36px,4.6vw,60px); }
-.hero-corporate .inner { display: grid; grid-template-columns: minmax(0,1.3fr) minmax(240px,0.7fr); gap: var(--space-10); align-items: end; }
-.hero-corporate .stats { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-5); position: relative; }
-@media (max-width: 780px) { .hero-corporate .inner { grid-template-columns: 1fr; } }
-
-/* ===== Hero: alumni (image band + overlap card) ===== */
-
-.hero-alumni-band { position: relative; height: 460px; overflow: hidden; background: var(--pd-white-1); }
-.hero-alumni-band img { width: 100%; height: 100%; object-fit: cover; }
-.hero-alumni-band::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgb(0 40 81 / 0.1) 0%, rgb(0 40 81 / 0.35) 50%, rgb(0 40 81 / 0.9) 100%); }
-.hero-alumni-card-wrap { margin: -140px 0 0; position: relative; }
-.hero-alumni-card {
-  background: var(--pd-blue);
-  color: var(--pd-white-1);
-  padding: var(--space-10) var(--space-10) var(--space-10);
-  max-width: 760px;
-  box-shadow: var(--shadow-lg);
-}
-.hero-alumni-card .kicker { opacity: 0.85; margin-bottom: var(--space-4); display: block; }
-.hero-alumni-card h1 { margin: 0 0 var(--space-4); font-size: clamp(32px,4vw,52px); font-weight: var(--weight-bold); letter-spacing: var(--track-display); text-transform: uppercase; line-height: 1.05; color: var(--pd-white-1); }
-.hero-alumni-card p { margin: 0; font-size: var(--size-lg); font-weight: var(--weight-light); line-height: var(--leading-normal); }
-.hero-alumni-card .rainbow-rule { margin: var(--space-8) calc(-1 * var(--space-10)) calc(-1 * var(--space-10)); }
-
-/* ===== Stats row ===== */
-
-.stats-row { display: grid; grid-template-columns: repeat(auto-fit,minmax(180px,1fr)); gap: var(--space-6); padding: 56px 0 24px; }
-.stat { border-top: 2px solid var(--pd-blue); padding-top: var(--space-4); }
-.stat .value { font-size: var(--size-5xl); font-weight: var(--weight-bold); color: var(--pd-blue); line-height: 1; font-variant-numeric: tabular-nums; }
-.stat .label { margin-top: var(--space-3); font-size: var(--size-2xs); font-weight: var(--weight-semibold); letter-spacing: var(--track-caps); text-transform: uppercase; color: var(--text-muted); }
-.stat.on-dark { border-top-color: rgb(246 246 246 / 0.6); }
-.stat.on-dark .value { color: inherit; font-size: var(--size-4xl); }
-.stat.on-dark .label { color: inherit; opacity: 0.85; }
-
-/* ===== Hub body layout: main + sidebar ===== */
-
-.hub-body { padding: 56px 0 80px; display: grid; grid-template-columns: minmax(0,1fr) 320px; gap: var(--space-16); align-items: start; }
-@media (max-width: 900px) { .hub-body { grid-template-columns: 1fr; } }
-.hub-sections { display: flex; flex-direction: column; gap: 56px; }
-.item-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(220px,1fr)); gap: var(--space-3); }
-.item-card { background: #fff; border: 1px solid var(--border-subtle); border-radius: var(--radius-ui); padding: var(--space-4) var(--space-5); display: flex; flex-direction: column; gap: var(--space-1); }
-.item-card .name { font-size: var(--size-md); font-weight: var(--weight-semibold); color: var(--pd-blue); }
-.item-card .name a { color: inherit; border-bottom: 1px solid rgb(0 46 125 / 0.25); }
-.item-card .name a:hover { border-bottom-color: currentColor; }
-.item-card .desc { font-size: var(--size-xs); font-weight: var(--weight-light); color: var(--text-body); line-height: var(--leading-normal); }
-
-.sidebar { display: flex; flex-direction: column; gap: var(--space-8); }
-.sidebar-card { background: #fff; border: 1px solid var(--border-subtle); border-radius: var(--radius-ui); overflow: hidden; }
-.sidebar-card .body { padding: var(--space-6); }
-.sidebar-card .kicker { color: var(--text-muted); margin-bottom: var(--space-3); display: block; }
-.sidebar-card p { margin: 0; font-size: var(--size-sm); font-weight: var(--weight-light); line-height: var(--leading-loose); }
-.sidebar-list-title { font-size: var(--size-2xs); font-weight: var(--weight-semibold); letter-spacing: var(--track-caps); text-transform: uppercase; color: var(--text-muted); margin-bottom: var(--space-3); }
-.sidebar-list { display: flex; flex-direction: column; list-style: none; margin: 0; padding: 0; }
-.sidebar-list a { font-size: var(--size-md); font-weight: var(--weight-regular); color: var(--pd-blue-light); display: flex; align-items: center; justify-content: space-between; gap: var(--space-4); min-height: 44px; border-bottom: none; }
-.sidebar-contact { border-top: 1px solid var(--border-subtle); padding-top: var(--space-6); }
-.sidebar-contact p { margin: 0; font-size: var(--size-sm); font-weight: var(--weight-light); line-height: var(--leading-loose); }
-.sidebar-highlight {
-  background: var(--pd-blue);
-  color: var(--pd-white-1);
-  border-radius: var(--radius-ui);
-  padding: var(--space-6) var(--space-6) var(--space-8);
-  position: relative;
-  overflow: hidden;
-}
-.sidebar-highlight .kicker { opacity: 0.85; margin-bottom: var(--space-4); display: block; }
-.sidebar-highlight .title { font-size: var(--size-xl); font-weight: var(--weight-semibold); line-height: 1.2; margin-bottom: var(--space-3); }
-.sidebar-highlight p { margin: 0 0 var(--space-5); font-size: var(--size-sm); font-weight: var(--weight-light); line-height: var(--leading-loose); }
-.sidebar-highlight a { color: var(--pd-white-1); font-size: var(--size-sm); font-weight: var(--weight-semibold); border-bottom: 1px solid currentColor; }
-
-/* ===== Apply steps ===== */
-
-.steps { display: flex; flex-direction: column; }
-.step { display: grid; grid-template-columns: 36px minmax(0,1fr); gap: var(--space-5); padding: var(--space-4) 0; border-bottom: 1px solid var(--border-subtle); }
-.step .n {
-  width: 36px; height: 36px; border-radius: 50%;
-  background: var(--pd-blue); color: #fff;
-  display: flex; align-items: center; justify-content: center;
-  font-size: var(--size-sm); font-weight: var(--weight-bold);
-}
-.step .title { font-size: var(--size-md); font-weight: var(--weight-semibold); color: var(--pd-blue); margin-bottom: var(--space-1); }
-.step .body { font-size: var(--size-sm); font-weight: var(--weight-light); line-height: var(--leading-loose); }
-
-/* ===== Life / offer cards ===== */
-
-.card-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(240px,1fr)); gap: var(--space-6); }
-.info-card { background: #fff; border: 1px solid var(--border-subtle); border-radius: var(--radius-ui); overflow: hidden; }
-.info-card .bar { height: 6px; background: var(--pd-blue); }
-.info-card .body { padding: var(--space-6) var(--space-6) var(--space-6); }
-.info-card .title { font-size: var(--size-lg); font-weight: var(--weight-semibold); color: var(--pd-blue); margin-bottom: var(--space-2); }
-.info-card .title a { color: inherit; border-bottom: 1px solid rgb(0 46 125 / 0.25); }
-.info-card .title a:hover { border-bottom-color: currentColor; }
-.info-card p { margin: 0; font-size: var(--size-sm); font-weight: var(--weight-light); line-height: var(--leading-loose); }
-
-/* ===== FAQ ===== */
-
-.faq-item { border-bottom: 1px solid var(--border-subtle); }
-.faq-item summary {
-  cursor: pointer;
-  list-style: none;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: var(--space-5);
-  padding: var(--space-5) 0;
-  font-size: var(--size-lg);
-  font-weight: var(--weight-medium);
-  color: var(--pd-blue);
-}
-.faq-item summary::-webkit-details-marker { display: none; }
-.faq-item summary::after { content: "+"; font-size: var(--size-xl); font-weight: var(--weight-light); color: var(--pd-blue-light); }
-.faq-item[open] summary::after { content: "\2013"; }
-.faq-item .answer { margin: 0; padding: 0 0 var(--space-5); max-width: 68ch; font-size: var(--size-sm); font-weight: var(--weight-light); line-height: var(--leading-normal); }
-
-/* ===== Reused from the content-model pass (people grid, archives, embeds) ===== */
-
-.people-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr)); gap: var(--space-4); list-style: none; margin: var(--space-4) 0; padding: 0; }
-/* The leading and the bottom margin used to reach these cards through
-   `.prose li`, which no longer applies to a list that carries a class. They
-   are stated here so the card keeps the size it has on the board pages: the
-   margin sits under each card and widens the vertical gap between grid rows
-   past the grid's own 16px, which is how the grid has always looked. */
-.person {
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-ui);
-  padding: var(--space-3);
-  margin-bottom: var(--space-2);
-  line-height: var(--leading-loose);
-}
-.person-name { display: block; font-weight: var(--weight-semibold); }
-.person-role { display: block; color: var(--text-muted); }
-.archive-group { margin: var(--space-10) 0; }
-/* Embedded Prodeko services (layouts/partials/embed.html). The card carries
-   the page on its own where the service refuses to be framed. */
-.embed { margin: var(--space-8) 0; border: 1px solid var(--border-subtle); border-radius: var(--radius-ui); overflow: hidden; background: #fff; }
-.embed-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--space-6);
-  flex-wrap: wrap;
-  padding: var(--space-5) var(--space-6);
-  border-bottom: 1px solid var(--border-subtle);
-}
-.embed-head .kicker { color: var(--text-muted); display: block; margin-bottom: var(--space-1); }
-.embed-title { font-size: var(--size-lg); font-weight: var(--weight-semibold); color: var(--pd-blue); }
-.embed-note { margin: var(--space-2) 0 0; font-size: var(--size-sm); font-weight: var(--weight-light); color: var(--text-muted); }
-.embed-frame { position: relative; background: var(--surface-page); }
-.embed-fallback {
-  position: absolute;
-  inset: 0;
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: var(--space-2);
-  padding: var(--space-8);
-  text-align: center;
-  font-size: var(--size-sm);
-  font-weight: var(--weight-light);
-  color: var(--text-muted);
-}
-.embed-fallback a { overflow-wrap: anywhere; }
-.embed-frame iframe { position: relative; width: 100%; height: 100%; min-height: inherit; border: 0; display: block; }
-
-/* ===== Plain content pages (layouts/partials/page-shell.html) =====
-
-   Every text-shaped page — a migrated page, a section index, a people grid, a
-   year archive — is rendered inside this frame, so they share one measure, one
-   heading scale and one breadcrumb. */
-
-.page-head { background: #fff; border-bottom: 1px solid var(--border-subtle); position: relative; }
-.page-head .container { padding-top: var(--space-8); padding-bottom: var(--space-8); }
-.page-head h1 {
-  margin: var(--space-4) 0 0;
-  max-width: 24ch;
-  font-size: clamp(30px, 4vw, 46px);
-  font-weight: var(--weight-bold);
-  letter-spacing: var(--track-display);
-  text-transform: uppercase;
-  line-height: 1.08;
-  color: var(--pd-blue);
-}
-.page-head .page-lead {
-  margin: var(--space-4) 0 0;
-  max-width: 60ch;
-  font-size: var(--size-lg);
-  font-weight: var(--weight-light);
-  line-height: var(--leading-normal);
-  color: var(--text-muted);
-}
-.page-head .rainbow-rule { position: absolute; left: 0; right: 0; bottom: 0; height: 4px; }
-
-.breadcrumbs ol {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: var(--space-1) var(--space-2);
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  font-size: var(--size-2xs);
-  font-weight: var(--weight-semibold);
-  letter-spacing: var(--track-caps);
-  text-transform: uppercase;
-  color: var(--text-muted);
-}
-.breadcrumbs li + li::before { content: "/"; margin-right: var(--space-2); color: var(--border-subtle); }
-.breadcrumbs a { color: var(--text-muted); border-bottom: none; }
-.breadcrumbs a:hover { color: var(--pd-blue-light); }
-.breadcrumbs [aria-current] { color: var(--pd-blue); }
-
-.page-body {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) 260px;
-  gap: var(--space-16);
-  align-items: start;
-  padding: var(--space-12) var(--space-8) var(--space-20);
-}
-.page-body-wide { grid-template-columns: minmax(0, 1fr); }
-.page-aside { position: sticky; top: 96px; display: flex; flex-direction: column; gap: var(--space-6); }
-.section-nav .sidebar-list a { font-size: var(--size-sm); min-height: 44px; align-items: center; padding: var(--space-2) 0; }
-.section-nav .sidebar-list a.current { color: var(--pd-blue); font-weight: var(--weight-semibold); }
-.source-note { margin: 0; font-size: var(--size-3xs); color: var(--text-muted); line-height: var(--leading-loose); }
-.source-note a { color: var(--text-muted); }
-
-/* ===== Prose =====
-
-   The migrated pages came out of the old site with their subheadings at h5 and
-   h6 regardless of depth, so the scale here deliberately does not fall away to
-   nothing at the bottom: a h6 still has to read as a heading. */
-
-/* The measure is applied to the text, not to the column. A card grid, a table
-   or an embed inside a page should use the width the page has; only running
-   prose needs to stop at a readable line length. */
-.prose > p,
-.prose > ul:not([class]),
-.prose > ol:not([class]),
-.prose > blockquote,
-.prose > h2,
-.prose > h3,
-.prose > h4,
-.prose > h5,
-.prose > h6 { max-width: var(--content-max); }
-.prose > :first-child { margin-top: 0; }
-.prose > :last-child { margin-bottom: 0; }
-.prose p,
-.prose :is(ul, ol):not([class]) > li { font-size: var(--size-md); font-weight: var(--weight-light); line-height: var(--leading-loose); }
-.prose h2 {
-  margin: var(--space-12) 0 var(--space-4);
-  font-size: var(--size-2xl);
-  font-weight: var(--weight-semibold);
-  color: var(--pd-blue);
-  line-height: 1.15;
-}
-.prose h3 { margin: var(--space-10) 0 var(--space-3); font-size: var(--size-xl); font-weight: var(--weight-semibold); color: var(--pd-blue); }
-.prose h4,
-.prose h5,
-.prose h6 {
-  margin: var(--space-8) 0 var(--space-2);
-  font-size: var(--size-lg);
-  font-weight: var(--weight-semibold);
-  color: var(--pd-blue);
-  letter-spacing: var(--track-normal);
-  text-transform: none;
-}
-/* `:not([class])` rather than an exclusion list: a list that carries a class
-   is a component with styling of its own, and every one added since had to be
-   named here to keep prose indents and bullets off it. The `> li` rules need
-   the same guard — `.prose li` on its own still reaches into those lists and
-   overrides their size and leading. */
-.prose ul:not([class]), .prose ol:not([class]) { margin: 0 0 var(--space-4); padding-left: var(--space-6); }
-.prose :is(ul, ol):not([class]) > li { margin-bottom: var(--space-2); }
-.prose :is(ul, ol):not([class]) > li::marker { color: var(--pd-blue-light); }
-/* :not(.btn) because `.prose a` outweighs `.btn-primary`, and without it a
-   button inside page content took the link colour on its own blue ground —
-   0 53 160 on 0 46 125, which is a contrast ratio of 1.6. */
-.prose a:not(.btn) { color: var(--text-link); border-bottom: 1px solid rgb(0 46 125 / 0.25); }
-.prose a:not(.btn):hover { border-bottom-color: currentColor; }
-.prose blockquote {
-  margin: var(--space-8) 0;
-  padding: var(--space-2) 0 var(--space-2) var(--space-6);
-  border-left: 3px solid var(--pd-blue);
-  color: var(--text-muted);
-}
-.prose hr { border: 0; border-top: 1px solid var(--border-subtle); margin: var(--space-12) 0; }
-.prose img { margin: 0; border-radius: var(--radius-ui); }
-.content-image { margin: var(--space-8) 0; max-width: var(--content-max); }
-.content-image a { border-bottom: none; display: block; }
-.content-image figcaption {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: var(--space-4);
-  flex-wrap: wrap;
-  margin-top: var(--space-2);
-  font-size: var(--size-xs);
-  font-weight: var(--weight-light);
-  color: var(--text-muted);
-}
-.content-image figcaption a { display: inline; color: var(--text-link); white-space: nowrap; }
-.prose table { width: 100%; border-collapse: collapse; margin: var(--space-6) 0; font-size: var(--size-sm); }
-.prose th, .prose td { text-align: left; padding: var(--space-3); border-bottom: 1px solid var(--border-subtle); }
-.prose th { font-weight: var(--weight-semibold); color: var(--pd-blue); }
-.prose code {
-  font-size: 0.9em;
-  background: var(--pd-white-2, #f1f1f1);
-  padding: 0.1em 0.35em;
-  border-radius: 4px;
-}
-.prose pre { overflow-x: auto; padding: var(--space-4); background: var(--pd-white-2, #f1f1f1); border-radius: var(--radius-ui); }
-.prose pre code { background: none; padding: 0; }
-
+   files too.
+
+   The vocabulary below is the design system's
+   (.claude/skills/prodeko-design-system/components/prodeko.css); the classes
+   this site adds on top of it sit in the section each one belongs to, marked
+   with the template or partial that emits them.
+
+   House rules the whole file obeys: white ground, Raleway only, radius 0, no
+   cards, no shadows outside the mega and search panels, colour transitions of
+   140ms and no other motion. */
+
+.container{max-width:var(--page-max);margin:0 auto;padding:0 var(--space-6)}
+
+/* The footer sits at the bottom of a short page rather than halfway up it.
+   Neither html nor body may hide horizontal overflow: that turns off
+   position:sticky for everything inside, and both the header and the page
+   aside are sticky. */
+body{min-height:100vh;display:flex;flex-direction:column}
+main{flex:1}
+img{display:block;max-width:100%}
+
+.rainbow-rule{height:6px;background:var(--rainbow-gradient);border:0}
+
+/* Button */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:40px;padding:10px 18px;font-family:var(--font-core);font-size:var(--size-sm);font-weight:var(--weight-semibold);line-height:1;text-transform:uppercase;letter-spacing:0.04em;white-space:nowrap;border:1px solid transparent;border-radius:var(--radius-ui);cursor:pointer;text-decoration:none;transition:var(--transition-ui)}
+.btn:hover{text-decoration:none}
+.btn-primary{background:var(--pd-blue-dark);color:#fff}
+.btn-primary:hover{background:var(--pd-blue);color:#fff}
+.btn-secondary{background:transparent;color:var(--pd-blue-dark);border-color:var(--pd-blue-dark)}
+.btn-secondary:hover{background:var(--surface-sunken);color:var(--pd-blue-dark)}
+.btn-inverse{background:#fff;color:var(--pd-blue-dark)}
+.btn-inverse:hover{background:var(--pd-white-2);color:var(--pd-blue-dark)}
+.btn-sm{min-height:34px;padding:8px 14px;font-size:var(--size-xs)}
+.btn-block{display:flex;width:100%;min-height:48px;justify-content:center}
+
+/* Language switch */
+/* The language being read is the one underlined, and lang-switch.html marks
+   it with aria-current, so the state is in the markup rather than in the
+   colour alone. The slash between the two is a separator for the eye and is
+   hidden from a screen reader. */
+.lang-switch{display:flex;align-items:center;gap:4px;font-size:15px;font-weight:var(--weight-semibold);color:var(--pd-blue)}
+.lang-switch a{color:var(--pd-blue)}
+.lang-switch a[aria-current]{text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:2px}
+
+/* Header */
+.site-header{position:sticky;top:0;z-index:50;background:#fff;border-bottom:1px solid var(--border-subtle)}
+.site-header .bar{display:flex;align-items:center;gap:var(--space-6);height:64px;padding:0 var(--space-5)}
+.site-header .home{display:flex}
+.site-header .nav{flex:1;display:flex;justify-content:center;margin:0;padding:0;list-style:none}
+.site-header .nav>li>a{display:flex;align-items:center;height:64px;padding:0 12px;font-size:17px;font-weight:var(--weight-regular);color:var(--pd-black)}
+.site-header .nav>li>a:hover{color:var(--pd-blue);text-decoration:none}
+.site-header .nav>li.current>a{color:var(--pd-blue);box-shadow:inset 0 -2px 0 var(--pd-blue-dark)}
+/* While the pointer is inside an open mega panel it has left the nav item, so
+   hover alone would drop the item back to black under an open menu. */
+.site-header .nav>li.is-open>a{color:var(--pd-blue)}
+.site-header .side{display:flex;align-items:center;gap:var(--space-5)}
+
+/* The search trigger reads as one more nav item, so it is shaped like one.
+   Its open state is the current-item styling: while the panel is down, search
+   is where the reader is. */
+.nav-search-toggle{display:flex;align-items:center;height:64px;padding:0 12px;background:none;border:0;font-family:var(--font-core);font-size:17px;font-weight:var(--weight-regular);color:var(--pd-black);cursor:pointer;transition:var(--transition-ui)}
+.nav-search-toggle:hover{color:var(--pd-blue)}
+.nav-search-toggle[aria-expanded="true"]{color:var(--pd-blue);box-shadow:inset 0 -2px 0 var(--pd-blue-dark)}
+
+/* Mega menu. Closed is display:none rather than a transform or an opacity,
+   so a closed panel is out of the accessibility tree and out of the tab
+   order, and so opening one is instant. */
+.mega-panel{display:none;position:absolute;left:0;right:0;top:100%;background:#fff;border-bottom:1px solid var(--border-subtle);box-shadow:var(--shadow-md);z-index:30}
+.mega-panel.is-open{display:block}
+.mega-panel.is-static{position:relative;top:auto}
+.mega-panel-rainbow{height:4px;background:var(--rainbow-gradient)}
+.mega-panel-inner{padding-top:var(--space-10);padding-bottom:44px;display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:var(--space-10)}
+.mega-col-title{font-size:var(--size-2xs);font-weight:var(--weight-semibold);letter-spacing:var(--track-caps-wide);text-transform:uppercase;color:var(--text-muted);padding-bottom:var(--space-3);margin-bottom:var(--space-2);border-bottom:1px solid var(--border-subtle)}
+.mega-col a,.mega-col .mega-link-disabled{display:flex;justify-content:space-between;align-items:center;gap:var(--space-4);padding:var(--space-2) 0;font-size:var(--size-md);color:var(--pd-black)}
+.mega-col a span:last-child{font-size:var(--size-xs);color:var(--pd-blue-light)}
+.mega-col a:hover{color:var(--pd-blue-light);text-decoration:none}
+.mega-col .mega-link-disabled{color:var(--text-muted)}
+
+.nav-toggle{display:none;width:40px;height:40px;align-items:center;justify-content:center;background:none;border:0;cursor:pointer;margin-left:auto}
+.nav-toggle span,.nav-toggle span::before,.nav-toggle span::after{display:block;width:20px;height:2px;background:var(--pd-blue-dark);position:relative}
+.nav-toggle span::before,.nav-toggle span::after{content:"";position:absolute;left:0}
+.nav-toggle span::before{top:-6px}.nav-toggle span::after{top:6px}
+.nav-toggle[aria-expanded="true"] span{background:transparent}
+.nav-toggle[aria-expanded="true"] span::before{top:0;transform:rotate(45deg)}
+.nav-toggle[aria-expanded="true"] span::after{top:0;transform:rotate(-45deg)}
+
+/* Phone menu. The mega panels open on hover, which touch never fires, so the
+   same sections are repeated here as one accordion group. */
+.mobile-nav{display:none;position:fixed;top:65px;left:0;right:0;bottom:0;z-index:40;flex-direction:column;background:#fff;border-top:1px solid var(--border-subtle);overflow-y:auto;overscroll-behavior:contain;padding:16px 20px 32px}
+.site-header.nav-open .mobile-nav{display:flex}
+.m-list{list-style:none;margin:8px 0 0;padding:0}
+.m-row{display:flex;align-items:center;justify-content:space-between;gap:16px;width:100%;min-height:56px;padding:0;background:none;border:0;font-family:var(--font-core);font-size:24px;font-weight:var(--weight-extrabold);line-height:1.15;text-transform:uppercase;text-align:left;color:var(--pd-black);cursor:pointer}
+.m-row:hover{color:var(--pd-black);text-decoration:none}
+.m-marker{font-size:26px;font-weight:var(--weight-regular);line-height:1;width:24px;text-align:center}
+/* The marker is the group's own open state, so it is drawn from it. The span
+   the summary carries is empty; writing a glyph into it would double this. */
+.m-group>summary{list-style:none}
+.m-group>summary::-webkit-details-marker{display:none}
+.m-group>summary .m-marker::before{content:"+"}
+.m-group[open]>summary .m-marker::before{content:"\2013"}
+.m-sub{list-style:none;margin:0 0 8px;padding:0 0 0 16px}
+.m-sub a,.m-sub .m-members{display:block;padding:12px 0;border-bottom:1px solid var(--border-subtle);font-size:17px;font-weight:var(--weight-regular);line-height:1.35;color:var(--pd-blue-light)}
+.m-sub li:last-child a,.m-sub li:last-child .m-members{border-bottom:0}
+.m-sub a[aria-current]{font-weight:var(--weight-bold);color:var(--pd-blue-dark)}
+.m-sub .m-members{color:var(--text-muted)}
+.m-bottom{margin-top:auto;padding-top:32px;display:flex;flex-direction:column;align-items:center;gap:20px}
+.m-bottom .lang-switch{font-size:20px;font-weight:var(--weight-bold)}
+@media (max-width:1000px){.site-header .nav,.site-header .side,.nav-search-toggle{display:none}.nav-toggle{display:flex}.mega-panel,.search-panel{display:none}}
+
+/* Footer */
+.site-footer{background:var(--surface-page-alt);font-size:var(--size-sm)}
+.footer-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.3fr) minmax(0,1.3fr);gap:var(--space-10);padding-top:var(--space-12);padding-bottom:var(--space-10)}
+.site-footer address{font-style:normal;margin-top:var(--space-5);line-height:var(--leading-loose)}
+.footer-title{font-size:var(--size-2xs);font-weight:var(--weight-bold);text-transform:uppercase;letter-spacing:0.08em;color:var(--pd-black);margin-bottom:var(--space-3)}
+.footer-links{list-style:none;margin:0;padding:0;columns:2;column-gap:var(--space-6)}
+.footer-links li{margin-bottom:6px;break-inside:avoid}
+.footer-partners{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--space-5) var(--space-6);align-items:center}
+.footer-partners img{max-width:100%;max-height:28px;object-fit:contain}
+.footer-bottom{display:flex;justify-content:space-between;flex-wrap:wrap;gap:var(--space-4);padding-top:var(--space-4);padding-bottom:var(--space-6);border-top:1px solid var(--border-subtle);color:var(--text-muted);font-size:var(--size-xs)}
+/* The small-print row wraps: five links and a copyright line are wider than a
+   phone, and an unwrapped row scrolls the whole document sideways. */
+.footer-bottom ul{display:flex;flex-wrap:wrap;gap:var(--space-2) var(--space-5);list-style:none;margin:0;padding:0}
+@media (max-width:800px){.footer-grid{grid-template-columns:1fr}}
+
+/* Page grid */
+.page-layout{display:grid;grid-template-columns:minmax(0,var(--content-w)) var(--aside-w);gap:var(--space-8);justify-content:center;align-items:start;max-width:var(--page-max);margin:0 auto;padding:var(--space-8) var(--space-6) var(--space-24)}
+.page-layout.no-aside{grid-template-columns:minmax(0,var(--content-w))}
+.page-aside{position:sticky;top:88px;display:flex;flex-direction:column;gap:var(--space-8)}
+@media (max-width:900px){.page-layout{grid-template-columns:minmax(0,1fr)}.page-aside{position:static}}
+
+/* Breadcrumbs + title */
+.breadcrumbs ol{display:flex;flex-wrap:wrap;gap:8px;list-style:none;margin:0 0 var(--space-8);padding:0;font-size:var(--size-sm)}
+.breadcrumbs li+li::before{content:"/";margin-right:8px;color:var(--text-muted)}
+.breadcrumbs [aria-current]{color:var(--pd-black)}
+.page-title h1{font-size:var(--size-2xl);font-weight:var(--weight-extrabold);text-transform:uppercase;letter-spacing:0.01em;color:var(--pd-black);line-height:var(--leading-tight);margin:0 0 var(--space-6)}
+
+/* Section nav — plain list, no box */
+.section-nav-title{font-size:var(--size-xs);font-weight:var(--weight-bold);text-transform:uppercase;letter-spacing:0.06em;color:var(--pd-black);margin-bottom:var(--space-3)}
+.section-nav ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px}
+.section-nav a{display:block;color:var(--pd-black);font-size:15px;line-height:1.4}
+.section-nav a:hover{color:var(--pd-blue)}
+.section-nav a[aria-current]{color:var(--pd-blue-dark);font-weight:var(--weight-bold)}
+.section-nav .m-members{display:block;font-size:15px;line-height:1.4;color:var(--text-muted)}
+
+/* Aside block */
+.aside-block h2{font-size:var(--size-xs);font-weight:var(--weight-bold);text-transform:uppercase;letter-spacing:0.06em;color:var(--pd-black);margin:0 0 var(--space-2)}
+.aside-body{font-size:var(--size-sm);line-height:var(--leading-loose)}
+.aside-body p{margin:0 0 var(--space-3)}
+.aside-body .btn{margin-top:var(--space-2)}
+.aside-body .link-list{margin:0}
+.aside-body .link-list a{padding:10px 0;align-items:flex-start}
+.aside-body .link-list .name{font-size:var(--size-sm);line-height:1.4}
+.aside-body .link-list .desc{font-size:var(--size-xs);line-height:1.4}
+.aside-body .link-list .arrow{font-size:var(--size-xs);line-height:1.6}
+
+/* Prose */
+.prose{max-width:var(--content-w);font-size:var(--size-md);line-height:var(--leading-loose)}
+.prose>:first-child{margin-top:0}
+.prose p{margin:0 0 var(--space-4)}
+.prose .lead{font-weight:var(--weight-bold);color:var(--pd-black)}
+.prose h2{font-size:var(--size-2xl);font-weight:var(--weight-regular);color:var(--pd-blue);line-height:1.2;margin:var(--space-12) 0 var(--space-3)}
+.prose h3{font-size:var(--size-md);font-weight:var(--weight-bold);color:var(--pd-black);margin:var(--space-6) 0 var(--space-1)}
+.prose h3+p{margin-top:0}
+/* Migrated pages go four and five headings deep — a role and its sub-role,
+   for instance. Below h3 the scale has nowhere to go but weight and colour. */
+.prose h4,.prose h5,.prose h6{font-size:15px;font-weight:var(--weight-bold);color:var(--pd-blue-dark);margin:var(--space-5) 0 var(--space-1)}
+.prose a{text-decoration:underline;text-underline-offset:2px}
+.prose ul,.prose ol{margin:0 0 var(--space-4);padding-left:1.4em}
+.prose li{margin-bottom:6px}
+.prose blockquote{margin:var(--space-6) 0;padding-left:var(--space-5);border-left:3px solid var(--pd-blue);color:var(--pd-blue-dark)}
+.prose table{width:100%;border-collapse:collapse;margin:0 0 var(--space-6);font-size:15px}
+.prose th{text-align:left;font-weight:var(--weight-bold);padding:8px 16px 8px 0;border-bottom:2px solid var(--pd-blue-dark)}
+.prose td{padding:10px 16px 10px 0;border-bottom:1px solid var(--border-subtle);vertical-align:top}
+.prose img{max-width:100%}
+.prose hr{border:0;border-top:1px solid var(--border-subtle);margin:var(--space-12) 0}
+.prose code{font-size:0.9em;background:var(--surface-sunken);padding:0.1em 0.35em}
+.prose pre{overflow-x:auto;padding:var(--space-4);background:var(--surface-sunken)}
+.prose pre code{background:none;padding:0}
 /* A scraped page can carry a bare URL as its own link text, and Finnish
    builds compounds like PURKAUTUMISPÄÄTÖKSEN that are wider than a phone on
    their own. `anywhere` rather than `break-word` because it also lowers the
    element's min-content width, which is what a grid track measures. */
-.prose a, .prose li, .prose p, .prose td { overflow-wrap: anywhere; }
-.page-head h1,
-.prose h1, .prose h2, .prose h3, .prose h4, .prose h5, .prose h6 {
-  overflow-wrap: anywhere;
-  hyphens: auto;
-}
+.prose a,.prose li,.prose p,.prose td,.prose h1,.prose h2,.prose h3,.prose h4{overflow-wrap:anywhere}
+.page-title h1{overflow-wrap:anywhere;hyphens:auto}
 
-/* A list of documents, marked up in page-shell.html: a paragraph holding
-   nothing but a link. The alumni newsletter archive is 86 of them, and as
-   plain paragraphs they were 20px tall with nothing between them, which is
-   neither readable nor tappable. */
-.prose .doc-link { margin: 0; max-width: var(--content-max); }
-.prose .doc-link > a {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--space-4);
-  min-height: 44px;
-  padding: var(--space-2) 0;
-  border-bottom: 1px solid var(--border-subtle);
-  overflow-wrap: anywhere;
-}
-.prose .doc-link > a::after {
-  content: "\2193";
-  flex-shrink: 0;
-  color: var(--pd-blue-light);
-  font-size: var(--size-sm);
-}
-.prose .doc-link + p:not(.doc-link) { margin-top: var(--space-8); }
+/* Figure */
+.figure{margin:0 0 var(--space-10)}
+.figure img{display:block;width:100%;object-fit:cover}
+.figure figcaption{margin-top:var(--space-2);font-size:var(--size-xs);color:var(--text-muted)}
 
-/* ===== Section index cards (layouts/section.html) ===== */
+/* An image written into the body of a page (_markup/render-image.html). It
+   links to its own full size, because a few of the migrated images are
+   documents — the orientation week timetable is the whole of its page, and at
+   column width every event label in it is a smudge. */
+.content-image{margin:0 0 var(--space-10)}
+.content-image a{display:block}
+.content-image img{width:100%}
+.content-image figcaption{display:flex;align-items:baseline;justify-content:space-between;gap:var(--space-4);flex-wrap:wrap;margin-top:var(--space-2);font-size:var(--size-xs);color:var(--text-muted)}
+.content-image figcaption a{display:inline;white-space:nowrap}
 
-.index-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: var(--space-4); margin-top: var(--space-8); }
-.index-card {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  grid-template-rows: auto auto;
-  column-gap: var(--space-4);
-  padding: var(--space-5) var(--space-6);
-  background: #fff;
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-ui);
-  border-bottom: 1px solid var(--border-subtle);
-  transition: var(--transition-ui);
-}
-.index-card:hover { border-color: var(--pd-blue); box-shadow: var(--shadow-sm); }
-.index-card .name { font-size: var(--size-lg); font-weight: var(--weight-semibold); color: var(--pd-blue); line-height: 1.2; }
-.index-card .desc { grid-column: 1; font-size: var(--size-sm); font-weight: var(--weight-light); color: var(--text-body); line-height: var(--leading-normal); margin-top: var(--space-2); }
-.index-card .go { grid-row: 1; grid-column: 2; color: var(--pd-blue-light); }
+/* FAQ */
+.faq-item{border-bottom:1px solid var(--border-subtle)}
+.faq-item:first-of-type{border-top:1px solid var(--border-subtle)}
+.faq-item summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;gap:var(--space-4);padding:14px 0;font-weight:var(--weight-semibold);color:var(--pd-black)}
+.faq-item summary::-webkit-details-marker{display:none}
+.faq-item summary::after{content:"+";font-weight:var(--weight-regular);color:var(--pd-blue)}
+.faq-item[open] summary::after{content:"\2013"}
+.faq-item .answer{padding:0 0 var(--space-4);font-size:15px}
 
-/* ===== Archive jump list (layouts/archive.html) ===== */
+/* Definition list */
+.def-list{margin:0 0 var(--space-6);border-top:1px solid var(--border-subtle);font-size:15px;line-height:var(--leading-normal)}
+.def-list .row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2fr);gap:var(--space-6);padding:12px 0;border-bottom:1px solid var(--border-subtle)}
+.def-list dt{font-weight:var(--weight-bold);color:var(--pd-black)}
+.def-list dd{margin:0}
 
-/* Sixty years of chips wrapped as a flex row left every line its own ragged
-   set of widths; equal tracks put them in columns. */
-.archive-jump {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(3.75rem, 1fr));
-  gap: var(--space-2);
-  margin: var(--space-8) 0 var(--space-4);
-  padding-bottom: var(--space-6);
-  border-bottom: 1px solid var(--border-subtle);
-}
-.archive-jump a {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 44px;
-  padding: 6px 14px;
-  font-size: var(--size-2xs);
-  font-weight: var(--weight-semibold);
-  color: var(--pd-blue);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-ui);
-  font-variant-numeric: tabular-nums;
-}
-.archive-jump a:hover { border-color: var(--pd-blue); }
-.archive-group { margin: var(--space-12) 0; scroll-margin-top: 90px; }
-.archive-group h2 { font-size: var(--size-xl); color: var(--pd-blue); border-bottom: 2px solid var(--pd-blue); padding-bottom: var(--space-2); }
-
-/* ===== Grouped archive rows (layouts/partials/name-rows.html) =====
-
-   One row per year or per TIMES team: the shared value in a label column, the
-   names running as text beside it. A card per person put a box around every
-   name and repeated the year in each one, which turned seventeen honorary
-   members into seventeen boxes saying 1986. Rules between the rows carry the
-   grouping instead of borders around the names.
-
-   The grid is on the <dl> rather than on each pair, so the label column keeps
-   one width down the whole list. */
-.name-rows {
-  display: grid;
-  grid-template-columns: 12rem minmax(0, 1fr);
-  margin: var(--space-4) 0;
-  border-bottom: 1px solid var(--border-subtle);
-}
-.name-rows dt,
-.name-rows dd {
-  margin: 0;
-  padding: var(--space-3) 0;
-  border-top: 1px solid var(--border-subtle);
-  font-size: var(--size-sm);
-  line-height: var(--leading-normal);
-}
-.name-rows dt {
-  /* The gutter is the label's padding rather than a column-gap on the grid:
-     the rule is drawn per cell, so a gap between the columns would break it
-     into two segments with a hole where the gutter is. */
-  padding-right: var(--space-6);
-  font-weight: var(--weight-semibold);
-  color: var(--pd-blue);
-  font-variant-numeric: tabular-nums;
-}
-.name-list { margin: 0; padding: 0; list-style: none; }
-.name-list li { display: inline; font-weight: var(--weight-light); }
+/* The same rows for data where many people share one label — an award year,
+   a team (partials/name-rows.html). The grid is on the <dl> so the label
+   column keeps one width down the list, and the gutter is the label's own
+   padding rather than a column-gap: the rule under a row is drawn per cell,
+   and a gap would break it into two segments with a hole between them. */
+.name-rows{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2fr);margin:0 0 var(--space-6);border-top:1px solid var(--border-subtle);font-size:15px;line-height:var(--leading-normal)}
+.name-rows dt,.name-rows dd{margin:0;padding:12px 0;border-bottom:1px solid var(--border-subtle)}
+.name-rows dt{padding-right:var(--space-6);font-weight:var(--weight-bold);color:var(--pd-black);font-variant-numeric:tabular-nums}
+.name-list{margin:0;padding:0;list-style:none}
+.name-list li{display:inline;margin:0}
 /* The separator is generated rather than typed so a name never ends a line
    with a dangling dot, and so copying the list out gives plain names. */
-.name-list li:not(:last-child)::after {
-  content: "\00b7";
-  margin: 0 var(--space-2);
-  color: var(--pd-blue-light);
-}
+.name-list li:not(:last-child)::after{content:"\00b7";margin:0 var(--space-2);color:var(--text-muted)}
 
-.skip-link {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  overflow: hidden;
-  clip-path: inset(50%);
-  white-space: nowrap;
-  z-index: 100;
-  padding: var(--space-3) var(--space-5);
-  background: var(--pd-blue);
-  color: var(--pd-white-1);
-  border-bottom: none;
-}
-.skip-link:focus {
-  width: auto;
-  height: auto;
-  clip-path: none;
-  left: 0;
-  top: 0;
-}
+@media (max-width:600px){.def-list .row{grid-template-columns:1fr;gap:2px}.name-rows{grid-template-columns:1fr}.name-rows dt{padding-right:0;padding-bottom:2px;border-bottom:0}.name-rows dd{padding-top:0}}
 
-@media (max-width: 900px) {
-    /* minmax(0, 1fr) rather than 1fr: a track sized 1fr still takes its minimum
-     from the content, so one long word or a wide table would push the whole
-     column past the viewport. */
-  .page-body { grid-template-columns: minmax(0, 1fr); gap: var(--space-10); }
-  .page-aside { position: static; border-top: 1px solid var(--border-subtle); padding-top: var(--space-6); }
-}
+/* Link list */
+.link-list{list-style:none;margin:0 0 var(--space-6);padding:0;border-top:1px solid var(--border-subtle)}
+.link-list a{display:flex;justify-content:space-between;align-items:center;gap:var(--space-4);padding:13px 0;border-bottom:1px solid var(--border-subtle);color:var(--pd-blue)}
+.link-list a:hover{color:var(--pd-blue-dark);text-decoration:none}
+.link-list a:hover .name{text-decoration:underline}
+.link-list .label{display:flex;flex-direction:column;gap:2px;min-width:0;overflow-wrap:anywhere}
+.link-list .name{font-weight:var(--weight-semibold)}
+.link-list .desc{font-size:var(--size-sm);color:var(--text-muted)}
+.link-list .arrow{transition:transform var(--duration-fast) var(--ease-standard)}
+.link-list a:hover .arrow{transform:translateX(3px)}
+/* Inside the prose column the list is still a row of links, not a bulleted
+   paragraph: the generic list and link rules have to give way. */
+.prose .link-list{padding-left:0;list-style:none}
+.prose .link-list li{margin-bottom:0}
+.prose .link-list a{text-decoration:none}
 
-/* ===== Phone and small-tablet layout =====
+/* A paragraph holding nothing but a link to a document, marked up by
+   page-shell.html. The alumni newsletter archive is 86 of them, and as plain
+   paragraphs they are 20px tall with nothing between them — neither readable
+   nor tappable. The row is the link-list row with a download arrow. */
+.prose .doc-link{margin:0;max-width:var(--content-w)}
+.prose .doc-link>a{display:flex;justify-content:space-between;align-items:center;gap:var(--space-4);min-height:44px;padding:13px 0;border-bottom:1px solid var(--border-subtle);color:var(--pd-blue);text-decoration:none;overflow-wrap:anywhere}
+.prose .doc-link>a:hover{color:var(--pd-blue-dark);text-decoration:underline}
+.prose .doc-link>a::after{content:"\2193";flex-shrink:0;color:var(--pd-blue-light);font-size:var(--size-xs)}
+.prose .doc-link+p:not(.doc-link){margin-top:var(--space-8)}
 
-   The grids above all collapse on their own through auto-fit; what does not
-   is vertical rhythm. Section padding and hero heights tuned for a 1440px
-   window cost a phone reader most of a screen before any content appears, so
-   they are scaled back here rather than carried down. */
+/* Archive jump */
+/* Sixty years of anchors: a wrapping row of the years themselves, in either
+   the bare-anchor or the list shape the archive layout emits. */
+.archive-jump{display:flex;flex-wrap:wrap;gap:6px 18px;margin:0 0 var(--space-8);font-weight:var(--weight-semibold);font-variant-numeric:tabular-nums}
+.archive-jump ul{display:flex;flex-wrap:wrap;gap:6px 18px;list-style:none;margin:0;padding:0}
+.archive-group{margin:0 0 var(--space-10)}
+/* The header is sticky and 64px tall, so an anchor landing at the top of the
+   viewport lands underneath it. */
+.archive-group h2{scroll-margin-top:88px}
 
-@media (max-width: 720px) {
-  .container { padding: 0 var(--space-6); }
+/* People grid (partials/people-grid.html) — a square portrait, a name, an
+   office. No box: the photographs carry the grid. */
+.people-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:var(--space-6);list-style:none;margin:0 0 var(--space-8);padding:0}
+.person{display:flex;flex-direction:column;gap:2px;margin:0}
+.person img{width:100%;aspect-ratio:1;object-fit:cover;margin-bottom:var(--space-2)}
+.person-name{font-size:15px;font-weight:var(--weight-bold);line-height:1.3;color:var(--pd-black)}
+.person-role{font-size:14px;line-height:1.35;color:var(--text-muted)}
 
-  /* The label column costs more than it gives on a phone: at 390px it left the
-     names about half the width and broke them into a narrow ragged column. The
-     label keeps the rule above it; the names it now sits on top of do not. */
-  .name-rows { grid-template-columns: minmax(0, 1fr); }
-  .name-rows dd { border-top: 0; padding-top: 0; }
+/* Partner logos */
+.partner-logos{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:var(--space-8) var(--space-10);align-items:center;list-style:none;margin:var(--space-6) 0;padding:0}
+.partner-logos img{display:block;max-width:100%;max-height:44px;object-fit:contain}
+/* Both walls are lists, and inside the prose column the generic list rules
+   would indent them past the text beside them and add a row of air under
+   every cell. The grid is the layout; the list rules give way, as they do for
+   .link-list. On a phone the indent also costs the portrait grid its second
+   column: 342px of page less 22px of bullet indent is under the 324px two
+   150px tracks and their gutter need. */
+.prose .people-grid,.prose .partner-logos{padding-left:0}
+.prose .people-grid>li,.prose .partner-logos>li{margin-bottom:0}
 
-  .hero-home .inner { padding-block: 76px 52px; }
-  .hero-home h1 { font-size: clamp(30px, 9vw, 44px); max-width: none; }
-  .hero-home .inner > p { font-size: var(--size-md); }
-  .hero-home .emblem { width: 340px; right: -90px; top: -80px; }
-  .hero-home .stripe { left: -48px; top: 120px; width: 400px; height: 28px; }
-  .hero-home .ctas .btn { flex: 1 1 auto; }
+/* Embed — the card an existing Prodeko service is linked from
+   (partials/embed.html). Most of those services refuse to be framed by this
+   origin, so the card carries the page on its own and the frame is opt-in. */
+.embed{margin:var(--space-6) 0;border:1px solid var(--border-subtle)}
+.embed-head{display:flex;justify-content:space-between;align-items:center;gap:var(--space-4);flex-wrap:wrap;padding:var(--space-4) var(--space-5);border-bottom:1px solid var(--border-subtle)}
+.embed-head .kicker{display:block;margin-bottom:var(--space-1);color:var(--text-muted)}
+.embed-title{font-size:var(--size-md);font-weight:var(--weight-bold);color:var(--pd-black)}
+.embed-note{margin:2px 0 0;font-size:var(--size-sm);color:var(--text-muted)}
+.embed-frame{position:relative;background:var(--surface-sunken)}
+.embed-frame iframe{position:relative;display:block;width:100%;height:100%;min-height:inherit;border:0}
+/* Behind the frame rather than beside it: where the service does paint, the
+   iframe covers this; where it does not, this is what the reader is left. */
+.embed-fallback{position:absolute;inset:0;margin:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:var(--space-2);padding:var(--space-8);text-align:center;font-size:var(--size-sm);color:var(--text-muted)}
+.embed-fallback a{overflow-wrap:anywhere}
 
-  .hero-split .text { padding: 48px var(--space-6) 44px; }
-  .hero-split h1 { font-size: clamp(24px, 7.4vw, 34px); }
-  .hero-split .image { min-height: 200px; }
+/* Caps label above a title, in the embed card and in content */
+.kicker{font-size:var(--size-2xs);font-weight:var(--weight-semibold);letter-spacing:var(--track-caps-wide);text-transform:uppercase}
 
-  .hero-photo .inner { padding-block: 56px 48px; }
-  .hero-photo p { font-size: var(--size-md); }
-  .hero-prospective { min-height: 420px; }
+/* Home hero — the only place text sits on a photo */
+.home-hero{position:relative;display:flex;align-items:flex-end;min-height:clamp(200px,22vw,260px);background:var(--photo-guild) center 62%/cover no-repeat}
+.home-hero::before{content:"";position:absolute;inset:0;background:linear-gradient(to bottom,rgb(0 10 20 / 0) 20%,rgb(0 10 20 / 0.8) 100%)}
+.home-hero.has-links{min-height:clamp(300px,35vw,400px)}
+.home-hero.has-links::before{background:linear-gradient(to bottom,rgb(0 10 20 / 0) 25%,rgb(0 10 20 / 0.8) 100%)}
+.home-hero-content{position:relative;width:calc(var(--content-w) + var(--space-8) + var(--aside-w));max-width:calc(100% - 2 * var(--space-6));margin:0 auto;padding:var(--space-8) 0 var(--space-6)}
+.home-hero h1{font-size:clamp(26px,6vw,var(--size-3xl));font-weight:var(--weight-extrabold);text-transform:uppercase;letter-spacing:0.01em;line-height:var(--leading-tight);color:#fff;text-wrap:balance;max-width:var(--content-w);margin:0}
+.home-hero.has-links h1{margin-bottom:var(--space-6)}
+.audience-links{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:var(--space-4) var(--space-6);list-style:none;margin:0;padding:0}
+.audience-links a{display:flex;justify-content:space-between;padding:14px 0 0;border-top:2px solid #fff;font-size:var(--size-sm);font-weight:var(--weight-bold);text-transform:uppercase;letter-spacing:0.04em;color:#fff}
+.audience-links a:hover{color:#fff;text-decoration:underline}
 
-  .hero-alumni-band { height: 260px; }
-  .hero-alumni-card-wrap { margin-top: -72px; }
-  .hero-alumni-card { padding: var(--space-6); }
-  .hero-alumni-card p { font-size: var(--size-md); }
-  .hero-alumni-card .rainbow-rule { margin: var(--space-6) calc(-1 * var(--space-6)) calc(-1 * var(--space-6)); }
+/* Search */
+.search-panel{position:absolute;left:0;right:0;top:100%;z-index:30;background:#fff;border-bottom:1px solid var(--border-subtle);box-shadow:var(--shadow-md);max-height:calc(100vh - 160px);overflow-y:auto}
+.search-panel[hidden]{display:none}
+.search-panel.is-static{position:relative;top:auto;max-height:none}
+.search-panel-inner{width:calc(var(--content-w) + var(--space-8) + var(--aside-w));max-width:calc(100% - 2 * var(--space-6));margin:0 auto;padding:32px 0 40px}
+.search-panel-inner form{margin:0}
+.search-input{display:block;width:100%;margin:0;border-radius:0;font-family:var(--font-core);color:var(--pd-black);-webkit-appearance:none;appearance:none}
+.search-input::-webkit-search-cancel-button{-webkit-appearance:none}
+.is-filled .search-input{height:52px;padding:0 16px;font-size:18px;background:var(--surface-sunken);border:1px solid var(--border-subtle)}
+.is-filled .search-input::placeholder{color:var(--text-muted)}
+.is-filled .search-input:focus{outline:2px solid var(--pd-blue-dark);outline-offset:0;border-color:var(--pd-blue-dark)}
+.is-row .search-input{height:56px;padding:0;font-size:20px;font-weight:var(--weight-regular);background:transparent;border:0;border-bottom:2px solid var(--pd-blue-dark)}
+.is-row .search-input::placeholder{font-size:24px;font-weight:var(--weight-extrabold);text-transform:uppercase;color:var(--pd-black);opacity:1}
+.is-row .search-input:focus{outline:none;border-bottom-color:var(--pd-blue-light)}
+.search-meta{display:flex;justify-content:space-between;align-items:baseline;gap:16px;margin:16px 0 4px}
+/* The row has nothing to show until there is a query, and search.js hides it
+   with the attribute; the display above would otherwise keep it on screen. */
+.search-meta[hidden]{display:none}
+.search-count{margin:0;font-size:13px;color:var(--text-muted)}
+.search-clear{padding:0;background:none;border:0;font-family:var(--font-core);font-size:13px;color:var(--text-link);cursor:pointer}
+.search-clear:hover{color:var(--text-link-hover);text-decoration:underline}
+/* search.js writes the rows into this container as anchors, so they take
+   their block layout here rather than from a list. */
+.search-results:not(:empty){margin-top:20px;border-top:1px solid var(--border-subtle)}
+.search-results.is-expanded{max-height:60vh;overflow-y:auto}
+.search-result{display:block;padding:14px 0;color:inherit}
+.search-result+.search-result{border-top:1px solid var(--border-subtle)}
+/* The pointer and the arrow keys pick a row the same way, so they light it
+   the same way. The tint stays at 04 because the excerpt's <mark> is 08: a
+   row tinted that far up would swallow the matched words inside it. */
+.search-result:hover,.search-result.is-active{background:var(--pd-blue-tint-04);text-decoration:none}
+.search-result-title{display:inline-block;margin-bottom:4px;font-size:16px;font-weight:var(--weight-bold);line-height:1.35;color:var(--pd-blue-dark)}
+.search-result:hover .search-result-title{text-decoration:underline}
+.search-result-excerpt{display:block;margin:0;font-size:15px;line-height:1.55;color:var(--pd-black)}
+.search-result mark{background:var(--pd-blue-tint-08);color:var(--pd-blue-dark);font-weight:var(--weight-bold);padding:0 2px}
+/* The button that lifts the six-row cap, beside the listbox rather than in
+   it: a listbox holds options and nothing else. */
+.search-more{display:block;width:100%;padding:12px 0;background:none;border:0;border-top:1px solid var(--border-subtle);font-family:var(--font-core);font-size:var(--size-sm);font-weight:var(--weight-semibold);color:var(--pd-blue-light);text-align:left;cursor:pointer}
+.search-status{margin:12px 0 0;font-size:13px;color:var(--text-muted)}
+.search-status:empty{margin:0}
 
-  /* The card is full width here, so lifting it over the hero edge reads as the
-     hero stopping short rather than as an overlap — and any lift at all puts
-     the card on top of the buttons above it. It sits below the hero instead. */
-  .announcement-wrap { max-width: none; margin-top: var(--space-8); }
-  .audiences { padding: 48px 0 24px; }
-  .values-section { padding: 40px 0 48px; }
-  .photo-band { height: 280px; }
-  .partners-section { padding: 40px 0 48px; }
-  .partner-tile { min-height: 72px; }
-  .stats-row { padding: 32px 0 16px; }
-  .hub-body { padding: 40px 0 56px; }
-  .hub-sections { gap: 40px; }
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 
-  .page-head .container { padding-top: var(--space-6); padding-bottom: var(--space-6); }
-  .page-head h1 { max-width: none; }
-  .page-head .page-lead { font-size: var(--size-md); }
-  .page-body { padding: var(--space-8) var(--space-6) var(--space-12); }
-  .prose h2 { margin-top: var(--space-10); font-size: var(--size-xl); }
-  .prose h3 { margin-top: var(--space-8); font-size: var(--size-lg); }
-  /* h3 steps down to the size h4 already is, so without this a role and its
-     sub-role render identically on a phone. */
-  .prose h4, .prose h5, .prose h6 { margin-top: var(--space-6); font-size: var(--size-md); }
+.skip-link{position:absolute;left:-9999px}
+.skip-link:focus{left:16px;top:16px;z-index:100;background:#fff;padding:8px 12px}
 
-  /* A migrated page can hold a table wider than any phone. Letting the table
-     scroll on its own keeps the rest of the page at the viewport width. */
-  .prose table { display: block; overflow-x: auto; }
-  .prose code { overflow-wrap: anywhere; }
-  /* The inline min-height on .embed-frame carries the service's preferred
-     height, which is a desktop number; capping the frame here keeps a phone
-     from scrolling past several screens of a service that may not even paint. */
-  .embed-frame { min-height: 26rem !important; height: 26rem; }
-  .embed-head { flex-direction: column; align-items: stretch; }
-  .embed-head .btn { width: 100%; }
-}
-
-/* ===== Hub page sections (guild / prospective / corporate / alumni) =====
-
-   These were inline styles on the section elements, which no media query can
-   reach; the two-column split in particular gave a phone two 160px columns
-   side by side. */
-
-.two-col { padding: 72px 0 24px; display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap: 64px; align-items: start; }
-.hub-section { padding: 56px 0 24px; }
-.hub-body { padding-top: 56px; }
-.hero-stats-row { margin-top: var(--space-6); }
-.audience-card .bar { background: var(--pd-blue); }
-.section-title-row .sub-link { border-bottom: none; color: var(--pd-blue-light); }
-
-.contact-person { display: flex; gap: var(--space-4); align-items: center; margin-bottom: var(--space-4); }
-.contact-person .avatar {
-  width: 56px; height: 56px; flex-shrink: 0;
-  border-radius: 50%;
-  background: var(--pd-blue-tint-16);
-  display: flex; align-items: center; justify-content: center;
-  font-size: var(--size-sm); font-weight: 700; color: var(--pd-blue);
-}
-.contact-name { font-size: var(--size-lg); font-weight: 600; color: var(--pd-blue); }
-.contact-role { font-size: var(--size-xs); color: var(--text-muted); }
-
-@media (max-width: 900px) {
-  /* minmax(0, 1fr) rather than 1fr, for the same reason as .page-body: a 1fr
-     track still takes its minimum from its content. */
-  .hub-body { grid-template-columns: minmax(0, 1fr); }
-}
-
-@media (max-width: 720px) {
-  .two-col { grid-template-columns: minmax(0, 1fr); gap: 40px; padding: 40px 0 16px; }
-  .hub-section { padding: 40px 0 16px; }
-  .hub-body { padding-top: 40px; }
-}
-
-/* The footer carries four link groups plus the partner strip, which on a phone
-   is about 1500px — three screens of it under every page. Collapsing the
-   groups leaves the brand line, four closed rows and the legal line. */
-@media (max-width: 720px) {
-  .site-footer .cols { display: block; padding: var(--space-8) 0 var(--space-4); }
-  .site-footer .footer-group { border-top: 1px solid rgb(246 246 246 / 0.15); }
-  .site-footer .footer-group summary {
-    display: flex;
-    /* the marker is suppressed for every width below, not only here */
-    align-items: center;
-    justify-content: space-between;
-    min-height: 52px;
-    cursor: pointer;
-    list-style: none;
-  }
-  .site-footer .footer-group summary::-webkit-details-marker { display: none; }
-  .site-footer .footer-group summary::after { content: "+"; font-size: var(--size-lg); opacity: 0.7; }
-  .site-footer .footer-group[open] summary::after { content: "\2013"; }
-  .site-footer .footer-group .col-title { margin: 0; }
-  .site-footer .links { padding-bottom: var(--space-4); }
-}
-
-.site-footer .footer-group summary { list-style: none; }
-.site-footer .footer-group summary::-webkit-details-marker { display: none; }
-
-@media (max-width: 720px) {
-  .site-footer .links a { display: flex; align-items: center; min-height: 40px; }
-  .site-footer .brand { margin-bottom: var(--space-6); }
-  .site-footer .network-logos { gap: var(--space-5) var(--space-8); }
-  .site-footer .network-logos img { height: 18px; }
+/* A migrated page can hold a table wider than any phone, and a service's
+   preferred frame height is a desktop number. Letting the table scroll on its
+   own keeps the rest of the page at the viewport width; capping the frame
+   keeps a phone from scrolling past several screens of a service that may not
+   paint at all. */
+@media (max-width:600px){
+  .prose table{display:block;overflow-x:auto}
+  .embed-head{flex-direction:column;align-items:stretch}
+  .embed-head .btn{width:100%}
+  .embed-frame{min-height:26rem !important;height:26rem}
 }

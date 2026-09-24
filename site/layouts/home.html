@@ -1,99 +1,46 @@
 {{ define "main" }}
 
-<section class="hero-home">
-  {{ with resources.Get "images/brand/rainbow-stripe.png" }}
-    <img class="stripe" src="{{ .RelPermalink }}" alt="">
-  {{ end }}
-  {{ with resources.Get "images/brand/prodeko-emblem-white.png" }}
-    <img class="emblem" src="{{ .RelPermalink }}" alt="">
-  {{ end }}
-  <div class="container inner">
-    {{ with .Params.heroKicker }}<span class="kicker">{{ . }}</span>{{ end }}
+{{/* The front page opens on the one photo it is allowed, with the welcome over
+     it, and then falls into the same two-column frame as every other page: the
+     guild's own words at a readable measure, and beside them what is happening
+     this week and how to join. */}}
+<section class="home-hero">
+  <div class="home-hero-content">
     <h1>{{ .Params.heroTitle }}</h1>
-    {{ .Content }}
-    <div class="ctas">
-      {{ with .Params.ctaJoin }}<a class="btn btn-inverse" href="{{ $.Params.ctaJoinUrl }}">{{ . }}</a>{{ end }}
-      {{ with .Params.ctaCompanies }}<a class="btn btn-outline-inverse" href="{{ $.Params.ctaCompaniesUrl }}">{{ . }}</a>{{ end }}
-    </div>
   </div>
 </section>
 
-<div class="container">
-  {{ with .Params.announcement }}
-    <div class="announcement-wrap">
-      <div class="announcement">
-        <div class="rainbow-rule"></div>
-        <div class="body">
-          {{ with .kicker }}<span class="kicker">{{ . }}</span>{{ end }}
-          {{ with .title }}<div class="title">{{ . }}</div>{{ end }}
-          {{ with .body }}<p>{{ . }}</p>{{ end }}
-          {{/* The link carries the whole card as its target (see .announcement
-               .link::after), so an announcement without a url renders as plain
-               text rather than as a card that looks clickable and is not. */}}
-          {{ if and .url .linkText }}
-            <a class="link" href="{{ .url }}">{{ .linkText }} →</a>
-          {{ else }}
-            {{ with .linkText }}<span class="link">{{ . }} →</span>{{ end }}
-          {{ end }}
+<div class="page-layout">
+  <div class="page-main">
+    <div class="prose">
+      {{ .Content }}
+    </div>
+  </div>
+
+  <aside class="page-aside">
+    {{/* The one note on the site that is edited in a data file rather than in a
+         page: three links that change whenever the guild has something new to
+         say. Below it the page's own `aside` frontmatter. */}}
+    {{ with index hugo.Data.news .Language.Lang }}
+      <section class="aside-block">
+        <h2>{{ .title }}</h2>
+        <div class="aside-body">
+          <ul class="link-list">
+            {{ range .items }}
+              <li>
+                <a href="{{ .url | safeURL }}"{{ partial "link-target.html" .url | safeHTMLAttr }}>
+                  <span class="label"><span class="name">{{ .label }}</span>{{ with .description }}<span class="desc">{{ . }}</span>{{ end }}</span>
+                  <span class="arrow" aria-hidden="true">→</span>
+                </a>
+              </li>
+            {{ end }}
+          </ul>
         </div>
-      </div>
-    </div>
-  {{ end }}
-
-  {{ with .Params.audiences }}
-    <div class="audiences">
-      {{ range . }}
-        <a class="audience-card" href="{{ .url }}">
-          <div class="bar"></div>
-          <div class="body">
-            {{ with .kicker }}<span class="kicker">{{ . }}</span>{{ end }}
-            <div class="title">{{ .title }}</div>
-            <p>{{ .body }}</p>
-            {{ with .linkText }}<span class="link">{{ . }} →</span>{{ end }}
-          </div>
-        </a>
-      {{ end }}
-    </div>
-  {{ end }}
-
-  <section class="values-section">
-    <div class="section-title-row">
-      <h2 class="section-title">{{ .Params.valuesTitle }}</h2>
-      <span class="sub">{{ .Params.valuesSub }}</span>
-    </div>
-    {{ with .Params.values }}
-      <div class="values-grid">
-        {{ range . }}
-          <div class="value">
-            <div class="value-rule"></div>
-            <div class="value-name">{{ .name }}</div>
-            {{ with .blurb }}<p>{{ . }}</p>{{ end }}
-          </div>
-        {{ end }}
-      </div>
+      </section>
     {{ end }}
-  </section>
+
+    {{ partial "aside-blocks.html" . }}
+  </aside>
 </div>
-
-<section class="photo-band">
-  {{ $photo := resources.Get "images/pages/page-guild.png" }}
-    {{ with $photo }}{{ with .Crop "850x690 TopLeft webp q74" }}<img src="{{ .RelPermalink }}" alt="" loading="lazy">{{ end }}{{ end }}
-  <div class="caption">
-    <div>
-      <div class="caption-title">{{ .Params.bandTitle }}</div>
-      <div class="caption-sub">{{ .Params.bandSub }}</div>
-    </div>
-  </div>
-</section>
-
-<section class="partners-section">
-  <div class="container">
-    <div class="section-title-row">
-      <h2 class="section-title">{{ .Params.partnersTitle }}</h2>
-      {{ with .Params.partnersLinkUrl }}<a class="sub sub-link" href="{{ . }}">{{ $.Params.partnersLinkText }} →</a>{{ end }}
-    </div>
-    {{ partial "partner-grid.html" . }}
-  </div>
-</section>
 
 {{ end }}

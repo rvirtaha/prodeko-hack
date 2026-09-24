@@ -11,6 +11,9 @@ reviewed: 2026-09-18
 owner: hallitus
 aliases:
   - /guild/board/hallitus/
+aside:
+  - title: Ota yhteyttä
+    text: "[hallitus@prodeko.org](mailto:hallitus@prodeko.org)"
 ---
 
 Killan hallitus vastaa toiminnan johtamisesta lukuvuoden ajan.

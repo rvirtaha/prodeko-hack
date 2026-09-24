@@ -11,6 +11,9 @@ reviewed: 2026-09-18
 owner: hallitus
 aliases:
   - /guild/toimarit/toimihenkilot/
+aside:
+  - title: Ota yhteyttä
+    text: "[hallitus@prodeko.org](mailto:hallitus@prodeko.org)"
 ---
 
 Killan toimihenkilöt vastaavat käytännön tekemisestä hallituksen rinnalla.

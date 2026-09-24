@@ -7,6 +7,7 @@ and what is deliberately still open.
 Run the audit yourself:
 
 ```bash
+npm install playwright && npx playwright install chromium
 hugo -s site --environment development
 python3 -m http.server 1313 --directory site/public-preview &
 node tools/audit-site.mjs http://localhost:1313 site/public-preview

@@ -1,5 +1,6 @@
-{{/* The frame every text-shaped page sits in: breadcrumb, title band, a prose
-     column held to a readable measure, and the rest of the section beside it.
+{{/* The frame every text-shaped page sits in: a breadcrumb and a title, one
+     photo at most, a prose column held to a readable measure, and the
+     section's own navigation and notes in the column beside it.
 
      Takes {page, body}. Body is already-rendered HTML rather than the page's
      own .Content, so the people and archive layouts can pass their generated
@@ -12,25 +13,59 @@
      between "the paragraph holds only this link" and "the paragraph holds
      exactly one link"; the second also matches a sentence with a link in it,
      which would tear the sentence apart. */}}
-{{ $body := replaceRE `<p>(<a href="[^"]*"[^>]*>[^<]*</a>)</p>` `<p class="doc-link">$1</p>` (string .body) | safeHTML }}
+{{ $body := replaceRE `<p>(<a href="[^"]*"[^>]*>[^<]*</a>)</p>` `<p class="doc-link">$1</p>` (string .body) }}
+
+{{/* A page opens on its lead: the paragraph that says what the page is for,
+     set in bold so a reader who came for one fact can see in one glance
+     whether this is the page that holds it. Only the paragraph the page
+     starts with — a page that opens on a heading, a list, a table or a row of
+     documents has no lead.
+
+     A markdown image sits in a paragraph of its own, and the figure the image
+     hook writes carries no sentence, so such a paragraph is passed over: the
+     lead of a page that opens on a picture is the text under the picture, and
+     a page whose picture is followed by a heading has no lead at all. */}}
+{{ $pictures := "" }}
+{{ with findRE `(?s)\A\s*(?:<p>\s*<figure class="content-image">.*?</figure>\s*</p>\s*)+` $body 1 }}
+  {{ $pictures = index . 0 }}
+{{ end }}
+{{ $text := strings.TrimPrefix $pictures $body }}
+{{ $body = printf "%s%s" $pictures (replaceRE `\A(\s*)<p>` `${1}<p class="lead">` $text 1) | safeHTML }}
+
 {{ $nav := partial "section-nav.html" $page }}
-{{ $hasNav := ne (trim (string $nav) " \n\t") "" }}
-<article class="page">
-  <div class="page-head">
-    <div class="container">
+{{ $blocks := partial "aside-blocks.html" $page }}
+{{ $hasAside := or (ne (trim (string $nav) " \n\t") "") (ne (trim (string $blocks) " \n\t") "") }}
+
+{{/* The grid keeps the 240px sidebar track even when it is empty, so a page
+     with neither a section nor notes is given the single-column shape rather
+     than a column of air. */}}
+<div class="page-layout{{ if not $hasAside }} no-aside{{ end }}">
+  <div class="page-main">
+    <header class="page-title">
       {{ partial "breadcrumbs.html" $page }}
       <h1>{{ $page.Title }}</h1>
-      {{ with $page.Description }}<p class="page-lead">{{ . }}</p>{{ end }}
-    </div>
-    <div class="rainbow-rule"></div>
-  </div>
+    </header>
 
-  <div class="container page-body{{ if not $hasNav }} page-body-wide{{ end }}">
+    {{ with $page.Params.photo }}
+      {{ $img := resources.Get .src }}
+      {{ if $img }}
+        {{ $img = $img.Resize "1500x q80" }}
+        <figure class="figure">
+          <img src="{{ $img.RelPermalink }}" alt="{{ .alt }}" />
+          {{ with .caption }}<figcaption>{{ . }}</figcaption>{{ end }}
+        </figure>
+      {{ else }}
+        {{/* A page names its photo by asset path, and a typo in that path is
+             silent: the figure simply disappears. Stopping the build is the
+             only way the mistake is ever seen. */}}
+        {{ errorf "photo %q not found on %s" .src $page.RelPermalink }}
+      {{ end }}
+    {{ end }}
+
     <div class="prose">
       {{ $body }}
     </div>
-    {{/* Omitted rather than left empty: on a phone the aside sits below the
-         text, and an empty one draws its separating rule under nothing. */}}
-    {{ if $hasNav }}<aside class="page-aside">{{ $nav }}</aside>{{ end }}
   </div>
-</article>
+
+  {{ if $hasAside }}<aside class="page-aside">{{ $nav }}{{ $blocks }}</aside>{{ end }}
+</div>

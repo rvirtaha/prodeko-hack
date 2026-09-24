@@ -1,5 +1,5 @@
 :root{
-  /* Motion is modest: short fades and small translations. No bounce, no overshoot. */
+  /* Modest: short fades and small translations. No bounce, no overshoot. */
   --ease-standard:cubic-bezier(0.2,0,0.2,1); /* @kind other */
   --ease-out:cubic-bezier(0,0,0.2,1); /* @kind other */
   --ease-in:cubic-bezier(0.4,0,1,1); /* @kind other */

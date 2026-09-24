@@ -1,0 +1,55 @@
+{{/* The notes a page carries beside its text: an address, a contact, a call to
+     action, a short list of links. Each block is a `title` plus one of three
+     shapes — `text`, `text` with a `button`, or `links`:
+
+       aside:
+         - title: Kiltahuone
+           text: |
+             TUAS-talo, Maarintie 8, 02150 Espoo.
+         - title: Jäsenyys
+           text: Jäsenyys maksaa 8 € lukuvuodessa.
+           button: { label: Hae jäseneksi, url: "https://…" }
+         - title: Ajankohtaista
+           links:
+             - { label: …, url: …, description: … }
+
+     Takes the page. */}}
+{{ $page := . }}
+{{ range $page.Params.aside }}
+  <section class="aside-block">
+    {{ with .title }}<h2>{{ . }}</h2>{{ end }}
+    <div class="aside-body">
+      {{ with .text }}
+        {{/* An address and a contact are written one item per line, and a
+             single newline is nothing to markdown. Every line of a paragraph
+             therefore ends in a break, except in a paragraph that is a list,
+             where the newlines are the list's own structure. Paragraphs are
+             separated by a blank line, as in any markdown. */}}
+        {{ $paragraphs := slice }}
+        {{ range split (chomp .) "\n\n" }}
+          {{ $paragraph := . }}
+          {{ if not (findRE `(?m)^[ \t]*([-*+]|[0-9]+\.)[ \t]` $paragraph 1) }}
+            {{ $paragraph = replace $paragraph "\n" "<br>\n" }}
+          {{ end }}
+          {{ $paragraphs = $paragraphs | append $paragraph }}
+        {{ end }}
+        {{ $page.RenderString (dict "display" "block") (delimit $paragraphs "\n\n") }}
+      {{ end }}
+      {{ with .button }}
+        <a class="btn btn-primary" href="{{ .url | safeURL }}"{{ partial "link-target.html" .url | safeHTMLAttr }}>{{ .label }}</a>
+      {{ end }}
+      {{ with .links }}
+        <ul class="link-list">
+          {{ range . }}
+            <li>
+              <a href="{{ .url | safeURL }}"{{ partial "link-target.html" .url | safeHTMLAttr }}>
+                <span class="label"><span class="name">{{ .label }}</span>{{ with .description }}<span class="desc">{{ . }}</span>{{ end }}</span>
+                <span class="arrow" aria-hidden="true">→</span>
+              </a>
+            </li>
+          {{ end }}
+        </ul>
+      {{ end }}
+    </div>
+  </section>
+{{ end }}

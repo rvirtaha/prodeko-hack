@@ -13,37 +13,55 @@
 {{ $memberLabel := cond site.Params.members (cond $isFi "Jäsensivut" "Member pages") (cond $isFi "Kirjaudu" "Log in") }}
 <a class="skip-link" href="#main">{{ if $isFi }}Siirry sisältöön{{ else }}Skip to content{{ end }}</a>
 <header class="site-header" id="site-header">
-  <div class="container bar">
-    <a class="logo" href="{{ "/" | relLangURL }}">
-      {{ with resources.Get "images/brand/logo-text.svg" }}
-        <img src="{{ .RelPermalink }}" alt="{{ $.Site.Title }}">
+  {{/* The bar runs the full width of the window — the emblem sits at one edge
+       and the member button at the other — while the panels that drop out of
+       it hold their contents to the page measure. */}}
+  <div class="bar">
+    <a class="home" href="{{ "/" | relLangURL }}">
+      {{ with resources.Get "images/brand/emblem-blue.svg" }}
+        <img src="{{ .RelPermalink }}" width="36" height="36" alt="{{ $.Site.Title }}">
       {{ end }}
     </a>
-    <nav class="desktop-nav" aria-label="{{ if $isFi }}Päävalikko{{ else }}Main{{ end }}">
-      <ul class="nav-list">
-        {{ range $navItems }}
-          <li{{ if strings.HasPrefix $.RelPermalink .url }} class="current"{{ end }}{{ with .menuKey }} data-mega="{{ . }}"{{ end }}>
-            <a href="{{ .url }}">{{ .title }}</a>
-          </li>
+    {{/* The bar's one stretching child, so its items sit centred between the
+         emblem and the side actions. */}}
+    <ul class="nav" aria-label="{{ if $isFi }}Päävalikko{{ else }}Main{{ end }}">
+      {{ range $navItems }}
+        {{/* owns lists the page prefixes an item lights for: Kilta carries
+             four sections of the site, Abeille carries the Swedish tree. An
+             item without owns lights for its own address alone. */}}
+        {{ $current := false }}
+        {{ range .owns | default (slice .url) }}
+          {{ if strings.HasPrefix $.RelPermalink . }}{{ $current = true }}{{ end }}
         {{ end }}
-      </ul>
+        {{/* The item the reader is under is underlined, and the anchor says so
+             in the markup as well: "page" where the address is the page
+             itself, "true" where the item carries a section the page sits
+             inside. */}}
+        <li{{ if $current }} class="current"{{ end }}{{ with .menuKey }} data-mega="{{ . }}"{{ end }}>
+          <a href="{{ .url }}"{{ partial "link-target.html" .url | safeHTMLAttr }}{{ if $current }} aria-current="{{ if eq $.RelPermalink .url }}page{{ else }}true{{ end }}"{{ end }}>{{ .title }}</a>
+        </li>
+      {{ end }}
       {{/* Not an entry in data/navigation.yaml: that file maps titles to
            addresses and is editor-facing through Decap, where an entry with no
            address invites an editor to correct or delete it. It also opens on
            click rather than on hover, which is the one way it behaves unlike
            the items beside it — a search panel that appears as the mouse
-           sweeps across the bar is intolerable. */}}
-      <button type="button" class="nav-search-toggle" data-search-toggle
-              aria-expanded="false" aria-controls="search-panel">
-        {{ if $isFi }}Haku{{ else }}Search{{ end }}
-      </button>
-    </nav>
+           sweeps across the bar is intolerable. While the panel is down the
+           button wears the current-item styling, which the stylesheet draws
+           from aria-expanded. */}}
+      <li>
+        <button type="button" class="nav-search-toggle" data-search-toggle
+                aria-expanded="false" aria-controls="search-panel">
+          {{ if $isFi }}Haku{{ else }}Search{{ end }}
+        </button>
+      </li>
+    </ul>
     <div class="side">
       {{ partial "lang-switch.html" . }}
-      <a class="btn btn-secondary" href="{{ $memberHome }}">{{ $memberLabel }}</a>
+      <a class="btn btn-primary btn-sm" href="{{ $memberHome }}">{{ $memberLabel }}</a>
     </div>
     <button type="button" class="nav-toggle" aria-expanded="false" aria-controls="mobile-nav" aria-label="{{ if $isFi }}Valikko{{ else }}Menu{{ end }}">
-      <span class="nav-toggle-bars"></span>
+      <span></span>
     </button>
   </div>
 
@@ -60,7 +78,7 @@
                      tree. Naming the address here would publish it. */}}
                 <span class="mega-link-disabled">{{ .label }}</span>
               {{ else if .url }}
-                <a href="{{ .url }}"><span>{{ .label }}</span><span aria-hidden="true">→</span></a>
+                <a href="{{ .url }}"{{ partial "link-target.html" .url | safeHTMLAttr }}><span>{{ .label }}</span><span aria-hidden="true">→</span></a>
               {{ else }}
                 <span class="mega-link-disabled">{{ .label }}</span>
               {{ end }}
@@ -82,14 +100,14 @@
        tree's. */}}
   <div class="search-panel" id="search-panel" hidden>
     <div class="mega-panel-rainbow"></div>
-    <div class="container search-panel-inner search-box">
+    <div class="container search-panel-inner search-box is-filled">
       <form role="search" onsubmit="return false">
-        <input type="search" data-search role="combobox" autocomplete="off"
+        <input type="search" class="search-input" data-search role="combobox" autocomplete="off"
                aria-expanded="false" aria-controls="search-results"
                aria-autocomplete="list"
                {{ if and site.Params.memberTree (not .IsHome) }}data-search-members="{{ .FirstSection.RelPermalink }}pagefind"{{ end }}
-               placeholder="{{ if $isFi }}Hae sivustolta{{ else }}Search the site{{ end }}"
-               aria-label="{{ if $isFi }}Hae sivustolta{{ else }}Search the site{{ end }}">
+               placeholder="{{ if $isFi }}Hae sivuja{{ else }}Search pages{{ end }}"
+               aria-label="{{ if $isFi }}Hae sivuja{{ else }}Search pages{{ end }}">
       </form>
       <div class="search-results" id="search-results" role="listbox"
            aria-label="{{ if $isFi }}Hakutulokset{{ else }}Search results{{ end }}"></div>
@@ -102,70 +120,70 @@
     </div>
   </div>
 
-  {{/* The phone menu. The mega-panels above are a hover affordance that touch
-       never triggers, so every link in them is repeated here as an accordion.
-       Without this the roughly thirty pages that only the mega-menu reaches
-       would have no address a phone can get to. */}}
+  {{/* The phone menu. The mega panels open on hover, which touch never fires,
+       so the bar's items are repeated here. A group carries the section hubs
+       named in navigation.yaml's mobileChildren and stops there: the deeper
+       pages of a section are reached from the hub's own SectionNav, which
+       keeps this menu one screen tall instead of a hundred-link scroll.
+       .mobile-nav is itself the scrolling column, so its children sit directly
+       under it — .m-bottom's auto top margin needs this element as its flex
+       parent to fall to the foot of the panel. */}}
   <nav class="mobile-nav" id="mobile-nav" aria-label="{{ if $isFi }}Valikko{{ else }}Menu{{ end }}">
-    <div class="container">
-      {{/* First child of the menu, so opening it puts search under the reader's
-           thumb. The results render inline beneath the input rather than in an
-           overlay, because this container is already scrolling inside a
-           max-height and an overlay inside it has nowhere to go. */}}
-      <div class="m-search search-box">
-        <form role="search" onsubmit="return false">
-          <input type="search" data-search role="combobox" autocomplete="off"
-                 aria-expanded="false" aria-controls="m-search-results"
-                 aria-autocomplete="list"
-                 {{ if and site.Params.memberTree (not .IsHome) }}data-search-members="{{ .FirstSection.RelPermalink }}pagefind"{{ end }}
-                 placeholder="{{ if $isFi }}Hae sivustolta{{ else }}Search the site{{ end }}"
-                 aria-label="{{ if $isFi }}Hae sivustolta{{ else }}Search the site{{ end }}">
-        </form>
-        <div class="search-results" id="m-search-results" role="listbox"
-             aria-label="{{ if $isFi }}Hakutulokset{{ else }}Search results{{ end }}"></div>
-        <div class="search-footer"></div>
-        <p class="search-status" aria-live="polite"></p>
-      </div>
+    {{/* First child of the menu, so opening it puts search under the reader's
+         thumb. The results render inline beneath the input rather than in an
+         overlay, because this container is already scrolling inside a
+         max-height and an overlay inside it has nowhere to go. The field is the
+         row variant: a rule under a caps placeholder, which reads as one more
+         menu row until it is typed into. The count sits above the results here,
+         in the row search.js builds, so the status line is left to the screen
+         reader alone. */}}
+    <div class="search-box is-row">
+      <form role="search" onsubmit="return false">
+        <input type="search" class="search-input" data-search role="combobox" autocomplete="off"
+               aria-expanded="false" aria-controls="m-search-results"
+               aria-autocomplete="list"
+               {{ if and site.Params.memberTree (not .IsHome) }}data-search-members="{{ .FirstSection.RelPermalink }}pagefind"{{ end }}
+               placeholder="{{ if $isFi }}HAKU{{ else }}SEARCH{{ end }}"
+               aria-label="{{ if $isFi }}Hae sivuja{{ else }}Search pages{{ end }}">
+      </form>
+      <div class="search-results" id="m-search-results" role="listbox"
+           aria-label="{{ if $isFi }}Hakutulokset{{ else }}Search results{{ end }}"></div>
+      <div class="search-footer"></div>
+      <p class="search-status sr-only" aria-live="polite"></p>
+    </div>
+    <ul class="m-list">
+      <li><a class="m-row" href="{{ "/" | relLangURL }}">{{ if $isFi }}Etusivu{{ else }}Home{{ end }}</a></li>
       {{ range $navItems }}
-        {{ $columns := "" }}
-        {{ with .menuKey }}{{ $columns = index $megamenu . }}{{ end }}
-        {{ if $columns }}
-          <details class="m-group"{{ if strings.HasPrefix $.RelPermalink .url }} open{{ end }}>
-            <summary>{{ .title }}</summary>
-            <div class="m-group-body">
-              <a class="m-overview" href="{{ .url }}">
-                <span>{{ if $isFi }}Osion etusivu{{ else }}Section home{{ end }}</span><span aria-hidden="true">→</span>
-              </a>
-              {{/* A column of the mega-menu is an accordion of its own: a
-                   section carries up to four of them and some thirty links,
-                   which as one list is a scroll long enough that the menu's
-                   other sections fall off the screen. */}}
-              {{ range $columns }}
-                <details class="m-sub">
-                  <summary>{{ .title }}</summary>
-                  <div class="m-sub-body">
-                    {{ range .links }}
-                      {{ if and .members (not site.Params.members) }}
-                        <span class="m-link-disabled">{{ .label }}</span>
-                      {{ else if .url }}
-                        <a href="{{ .url }}"><span>{{ .label }}</span><span aria-hidden="true">→</span></a>
-                      {{ else }}
-                        <span class="m-link-disabled">{{ .label }}</span>
-                      {{ end }}
+        {{ if .mobileChildren }}
+          {{/* The shared name makes the browser close the other groups as this
+               one opens, so the menu never grows past a screen. */}}
+          <li>
+            <details class="m-group" name="m-group">
+              <summary class="m-row">{{ .title }}<span class="m-marker" aria-hidden="true"></span></summary>
+              <ul class="m-sub">
+                {{ range .mobileChildren }}
+                  <li>
+                    {{ if and .members (not site.Params.members) }}
+                      {{/* A row into the member tree, in a build that has no
+                           member tree. Naming the address here would publish
+                           it, so the row stays a label. */}}
+                      <span class="m-members">{{ .label }}{{ if $isFi }} (jäsenille){{ else }} (members only){{ end }}</span>
+                    {{ else }}
+                      <a href="{{ .url }}"{{ partial "link-target.html" .url | safeHTMLAttr }}{{ if eq $.RelPermalink .url }} aria-current="page"{{ end }}>{{ .label }}</a>
                     {{ end }}
-                  </div>
-                </details>
-              {{ end }}
-            </div>
-          </details>
+                  </li>
+                {{ end }}
+              </ul>
+            </details>
+          </li>
         {{ else }}
-          <a class="m-top" href="{{ .url }}"><span>{{ .title }}</span><span aria-hidden="true">→</span></a>
+          <li><a class="m-row" href="{{ .url }}"{{ partial "link-target.html" .url | safeHTMLAttr }}>{{ .title }}</a></li>
         {{ end }}
       {{ end }}
-      <div class="m-actions">
-        {{ partial "lang-switch.html" . }}
-        <a class="btn btn-secondary" href="{{ $memberHome }}">{{ $memberLabel }}</a>
-      </div>
+    </ul>
+    <div class="m-bottom">
+      {{ partial "lang-switch.html" . }}
+      <a class="btn btn-primary btn-block" href="{{ $memberHome }}">{{ $memberLabel }}</a>
     </div>
   </nav>
 </header>

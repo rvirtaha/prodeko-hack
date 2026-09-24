@@ -40,24 +40,6 @@ fi:
           url: /fi/guild/hallitus-ja-toimihenkilot/toimihenkilot/
         - label: Toimarien toiminta
           url: /fi/guild/hallitus-ja-toimihenkilot/toimarien-toiminta/
-    - title: Fukseille
-      links:
-        - label: Tervetuloa tutalle!
-          url: /fi/new-students/welcome-to-prodeko/
-        - label: Fuksiopas 2026
-          url: /fi/new-students/fuksiopas/
-        - label: Orientaatioviikko 2026
-          url: /fi/new-students/orientaatio/
-        - label: Opiskelijaelämän ABC
-          url: /fi/new-students/studentlife/
-        - label: Ensimmäisen vuoden opinnot
-          url: /fi/new-students/ensimmaisen-vuoden-opinnot/
-        - label: Asuminen ja eläminen
-          url: /fi/new-students/asuminen-ja-elaminen/
-        - label: Fuksipisteet
-          url: /fi/new-students/fuksipisteet/
-        - label: Kaikki fukseille
-          url: /fi/new-students/
     - title: Opinnot
       links:
         - label: Keneen otan yhteyttä
@@ -159,6 +141,27 @@ fi:
         # The seminar is organised anew each spring and lives on its own site.
         - label: Prodeko-seminaari
           url: https://seminar.prodeko.org
+  # Fukseille is a bar item of its own, so its single column is a menu of its
+  # own too: a fuksi arrives looking for these pages and nothing else.
+  fuksit:
+    - title: Fukseille
+      links:
+        - label: Tervetuloa tutalle!
+          url: /fi/new-students/welcome-to-prodeko/
+        - label: Fuksiopas 2026
+          url: /fi/new-students/fuksiopas/
+        - label: Orientaatioviikko 2026
+          url: /fi/new-students/orientaatio/
+        - label: Opiskelijaelämän ABC
+          url: /fi/new-students/studentlife/
+        - label: Ensimmäisen vuoden opinnot
+          url: /fi/new-students/ensimmaisen-vuoden-opinnot/
+        - label: Asuminen ja eläminen
+          url: /fi/new-students/asuminen-ja-elaminen/
+        - label: Fuksipisteet
+          url: /fi/new-students/fuksipisteet/
+        - label: Kaikki fukseille
+          url: /fi/new-students/
 
 en:
   guild:
@@ -193,22 +196,6 @@ en:
           url: /en/guild/board-and-officials/officials/
         - label: What the officials do
           url: /en/guild/board-and-officials/what-the-officials-do/
-    - title: New students
-      links:
-        - label: Welcome to IEM
-          url: /en/new-students/welcome-to-prodeko/
-        - label: Survival Guide
-          url: /en/new-students/survival-guide/
-        - label: Student life ABC
-          url: /en/new-students/studentlife/
-        - label: First-year studies
-          url: /en/new-students/first-year-studies/
-        - label: Housing and living
-          url: /en/new-students/living/
-        - label: Fuksi points
-          url: /en/new-students/freshmen-points/
-        - label: All new-student pages
-          url: /en/new-students/
     - title: Studies
       links:
         - label: Who to contact
@@ -312,3 +299,22 @@ en:
         # The seminar is organised anew each spring and lives on its own site.
         - label: Prodeko Seminar
           url: https://seminar.prodeko.org
+  # New students is a bar item of its own, so its single column is a menu of
+  # its own too: a new student arrives looking for these pages and nothing else.
+  fuksit:
+    - title: New students
+      links:
+        - label: Welcome to IEM
+          url: /en/new-students/welcome-to-prodeko/
+        - label: Survival Guide
+          url: /en/new-students/survival-guide/
+        - label: Student life ABC
+          url: /en/new-students/studentlife/
+        - label: First-year studies
+          url: /en/new-students/first-year-studies/
+        - label: Housing and living
+          url: /en/new-students/living/
+        - label: Fuksi points
+          url: /en/new-students/freshmen-points/
+        - label: All new-student pages
+          url: /en/new-students/

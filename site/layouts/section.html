@@ -1,13 +1,18 @@
+{{/* A section index without a `layout` param is an ordinary page: its own
+     words in the frame, and below them its children as a link list. The list
+     is the design system's LinkList, the same row the asides and the mega
+     panel use, so a section hub carries no component of its own. */}}
 {{ define "main" }}
-  {{ $cards := slice }}
+  {{ $rows := slice }}
   {{ range .Pages }}
-    {{ $summary := "" }}
-    {{ with .Description }}{{ $summary = . }}{{ else }}{{ $summary = .Summary | plainify | truncate 140 }}{{ end }}
-    {{ $cards = $cards | append (printf `<a class="index-card" href="%s"><span class="name">%s</span><span class="desc">%s</span><span class="go" aria-hidden="true">→</span></a>` .RelPermalink .Title $summary) }}
+    {{ $desc := "" }}
+    {{ with .Description }}{{ $desc = . }}{{ else }}{{ $desc = .Summary | plainify | truncate 140 }}{{ end }}
+    {{ $label := printf `<span class="label"><span class="name">%s</span>%s</span>` .Title (cond (eq $desc "") "" (printf `<span class="desc">%s</span>` $desc)) }}
+    {{ $rows = $rows | append (printf `<li><a href="%s">%s<span class="arrow" aria-hidden="true">→</span></a></li>` .RelPermalink $label) }}
   {{ end }}
   {{ $body := slice (string .Content) }}
-  {{ if $cards }}
-    {{ $body = $body | append (printf `<div class="index-grid">%s</div>` (delimit $cards "")) }}
+  {{ if $rows }}
+    {{ $body = $body | append (printf `<ul class="link-list">%s</ul>` (delimit $rows "")) }}
   {{ end }}
   {{ partial "page-shell.html" (dict "page" . "body" (delimit $body "" | safeHTML)) }}
 {{ end }}

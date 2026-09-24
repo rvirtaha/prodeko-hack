@@ -10,7 +10,7 @@ Arveluttaako jokin esimerkiksi YO-kirjoituksiin tai korkeakouluopiskeluun liitty
 
 Aalto-yliopiston tuotantotalouden kilta Prodekon mentoroinnissa sinulla on ainutlaatuinen mahdollisuus jakaa ajatuksia tekniikan alan opiskelijan kanssa liittyen opiskeluun ja tulevaisuuteen.
 
-Jos Aallon tuotantotalous tai Prodeko eivät ole vielä tuttuja, käy kurkkaamassa lisätietoa [abisivuiltamme](/fi/abit/) tai osoitteesta [prodeko.org](http://prodeko.org/).
+Jos Aallon tuotantotalous tai Prodeko eivät ole vielä tuttuja, käy kurkkaamassa lisätietoa [abisivuiltamme](/fi/abit/) tai osoitteesta [prodeko.org](/fi/).
 
 Mentorointi on oiva väylä keskustella ja saada vinkkejä esimerkiksi jatko-opiskeluun, ammatillisen identiteetin etsimiseen ja vahvuuksien tunnistamiseen liittyen. Saat kontaktin korkeakoulumaailmaan, mikä helpottaa siirtymää uuteen elämänvaiheeseen ja auttaa sinua mm. opiskeluun liittyvissä käytännön asioissa, kuten yo-kirjoituksissa tai opiskelutekniikoissa.
 

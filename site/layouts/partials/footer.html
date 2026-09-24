@@ -1,56 +1,45 @@
-{{ $isFi := eq .Language.Lang "fi" }}
-{{ $columns := index hugo.Data.footer .Language.Lang }}
-{{ $privacy := cond $isFi "/fi/tietosuoja/" "/en/privacy-policy/" }}
+{{ $links := index hugo.Data.footer .Language.Lang }}
 <footer class="site-footer">
   <div class="rainbow-rule"></div>
-  <div class="container">
-    <div class="cols">
-      <div class="brand">
-        {{ with resources.Get "images/brand/logo-text-white.svg" }}
-          <img src="{{ .RelPermalink }}" alt="{{ $.Site.Title }}">
-        {{ end }}
-        <p>
-          {{ if $isFi }}
-            Tuotantotalouden kilta Prodeko ry. Aalto-yliopiston ylioppilaskunnan yhteydessä toimiva tuotantotalouden opiskelijoiden ainejärjestö. Perustettu 1966.
-          {{ else }}
-            The guild for Industrial Engineering and Management at Aalto University. Founded 1966.
-          {{ end }}
-        </p>
+  <div class="container footer-grid">
+    <div>
+      {{ with resources.Get "images/brand/logo-text.svg" }}
+        <img src="{{ .RelPermalink }}" width="101" height="28" alt="{{ $.Site.Title }}">
+      {{ end }}
+      {{/* The guild's postal address. Outside the asides of the pages that own
+           them, the contact details appear here and nowhere else. */}}
+      <address>{{ delimit hugo.Data.footer.address "<br>" | safeHTML }}</address>
+    </div>
+    {{ with $links }}
+      <div>
+        <div class="footer-title">{{ .linksTitle }}</div>
+        <ul class="footer-links">
+          {{ range .links }}<li><a href="{{ .url }}"{{ partial "link-target.html" .url | safeHTMLAttr }}>{{ .label }}</a></li>{{ end }}
+        </ul>
       </div>
-      {{/* <details> rather than <div>: on a phone these four groups are about
-           1500px of link under every page, so the stylesheet collapses them.
-           Open by default, so a desktop reader and anything without CSS sees
-           the whole footer. */}}
-      {{ range $columns }}
-        <details class="footer-group" open>
-          <summary><div class="col-title">{{ .title }}</div></summary>
-          <ul class="links">
-            {{ range .links }}<li><a href="{{ .url }}">{{ .label }}</a></li>{{ end }}
-          </ul>
-        </details>
-      {{ end }}
-    </div>
-  </div>
-  <div class="container network">
-    <div class="col-title">Prodeko Network</div>
-    <div class="network-logos">
-      {{ range hugo.Data.partners }}
-        {{ $partner := . }}
-        {{ with resources.Get $partner.logo }}
-          <img src="{{ .RelPermalink }}" alt="{{ $partner.name }}">
+    {{ end }}
+    <div>
+      <div class="footer-title">Prodeko Network</div>
+      <div class="footer-partners">
+        {{ range hugo.Data.partners }}
+          {{ $partner := . }}
+          {{ with resources.Get $partner.logo }}
+            <img src="{{ .RelPermalink }}" alt="{{ $partner.name }}">
+          {{ end }}
         {{ end }}
-      {{ end }}
+      </div>
     </div>
   </div>
-  <div class="container bottom">
-    <span>Tuotantotalouden kilta Prodeko ry · PL 15500, 00076 Aalto · TUAS-talo, Maarintie 8, 02150 Espoo</span>
-    <span class="bottom-links">
-      <a href="{{ $privacy }}">{{ if $isFi }}Tietosuojaseloste{{ else }}Privacy notice{{ end }}</a>
-      {{/* The editing interface. It belongs to the handful of people who write
-           the site rather than to anyone reading it, so it sits here among the
-           small print instead of in the header. */}}
-      <a href="/admin/">{{ if $isFi }}Ylläpito{{ else }}Admin{{ end }}</a>
-      <span>1966 – 2026</span>
-    </span>
+  {{/* The small print: the copyright line, the privacy notice, the editing
+       interface, and the guild's social accounts. The admin address belongs to
+       the handful of people who write the site rather than to anyone reading
+       it, which is why data/footer.yaml carries it down here. */}}
+  <div class="container footer-bottom">
+    <span>{{ hugo.Data.footer.legal }}</span>
+    {{ with $links }}
+      <ul>
+        {{ range .bottom }}<li><a href="{{ .url }}"{{ partial "link-target.html" .url | safeHTMLAttr }}>{{ .label }}</a></li>{{ end }}
+      </ul>
+    {{ end }}
   </div>
 </footer>

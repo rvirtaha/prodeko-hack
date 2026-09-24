@@ -11,6 +11,9 @@ reviewed: 2026-09-18
 owner: hallitus
 aliases:
   - /guild/guild-officials/guild-officials/
+aside:
+  - title: Contact
+    text: "[hallitus@prodeko.org](mailto:hallitus@prodeko.org)"
 ---
 
 The guild's officials handle the day-to-day work alongside the board.

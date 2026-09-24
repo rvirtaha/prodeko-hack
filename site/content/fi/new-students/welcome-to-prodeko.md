@@ -3,9 +3,17 @@ title: Tervetuloa tutalle!
 translationKey: new-students-welcome-to-prodeko
 sourceURL: https://prodeko.org/fi/new-students/welcome-to-prodeko/
 description: Fuksikapteenin tervehdys uusille tutalaisille sekä ohjeet ennen opintojen alkua, orientaatioviikosta ja killan tiedotuskanavista.
+photo:
+  src: images/pages/page-prospective-crop.png
+  alt: Teekkari teekkarilakissa ja haalareissa peukku pystyssä
+aside:
+  - title: Fuksikapteeni
+    text: |
+      Elina Lauri
+      [fuksikapteeni@prodeko.org](mailto:fuksikapteeni@prodeko.org)
+      [040 659 2055](tel:+358406592055)
+      Telegram @fuksikapteeni
 ---
-
-![](https://static.prodeko.org/media/filer_public_thumbnails/public/2020/07/07/sciski2018.jpg__3232x2424_q85_subsampling-2.jpg)
 
 **...JA TERVETULOA MEIDÄN NETTISIVUILLE!**
 

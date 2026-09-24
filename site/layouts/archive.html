@@ -3,14 +3,15 @@
 
        layout: archive
        dataset: boards   # a top-level key under site/data
-       peopleDisplay: rows   # optional; "cards" (the default) or "rows"
+       peopleDisplay: rows   # optional
 
-     peopleDisplay picks the partial each group's members are drawn with.
-     "cards" gives one card per person, for a board or a set of officials:
-     distinct offices, one name in each. "rows" gathers the names under
-     their shared role, for data where many people have the same one, such
-     as the award years in honours.yaml. The choice lives here rather than
-     inside the partials so neither has to know which dataset it is drawing.
+     peopleDisplay picks how each group's members are drawn. The default is a
+     definition list, one row per office: distinct titles with one name in
+     each, as in a board or a set of officials. "rows" gathers the names
+     under their shared role, for data where many people have the same one,
+     such as the award years in honours.yaml. The choice lives here rather
+     than inside name-rows.html so that partial does not have to know which
+     dataset it is drawing.
 
      The dataset is a map from an arbitrary key (a year, a slug) to a group
      of {heading, sortKey, members}. data/boards and data/officials get one
@@ -26,7 +27,8 @@
     {{ $groups = $groups | append . }}
   {{ end }}
   {{ $sorted := sort $groups "sortKey" "desc" }}
-  {{ $display := .Params.peopleDisplay | default "cards" }}
+  {{ $display := .Params.peopleDisplay }}
+  {{ $isFi := eq .Language.Lang "fi" }}
 
   {{ $body := slice (string .Content) }}
 
@@ -45,9 +47,21 @@
     {{ if eq $display "rows" }}
       {{ $members = partial "name-rows.html" .members }}
     {{ else }}
-      {{ $members = partial "people-grid.html" .members }}
+      {{/* The archive is read down a column of years, so each year is a list
+           of office and name rather than a grid of faces: the pictures do
+           not exist for most of these decades, and the offices are what one
+           reads an old board for. */}}
+      {{ $rows := slice }}
+      {{ range .members }}
+        {{ $role := .role }}
+        {{ if and (not $isFi) .roleEn }}{{ $role = .roleEn }}{{ end }}
+        {{ $rows = $rows | append (printf `<div class="row"><dt>%s</dt><dd>%s</dd></div>` (htmlEscape $role) (htmlEscape .name)) }}
+      {{ end }}
+      {{ $members = printf `<dl class="def-list">%s</dl>` (delimit $rows "") }}
     {{ end }}
-    {{ $body = $body | append (printf `<section class="archive-group" id="%s"><h2>%s</h2>%s</section>` (.heading | urlize) .heading $members) }}
+    {{/* The id sits on the heading, which is what the jump list aims at and
+         what the scroll offset under the sticky header is set on. */}}
+    {{ $body = $body | append (printf `<section class="archive-group"><h2 id="%s">%s</h2>%s</section>` (.heading | urlize) .heading $members) }}
   {{ end }}
 
   {{ partial "page-shell.html" (dict "page" . "body" (delimit $body "" | safeHTML)) }}

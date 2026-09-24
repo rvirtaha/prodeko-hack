@@ -11,6 +11,9 @@ reviewed: 2026-09-18
 owner: hallitus
 aliases:
   - /guild/board/board/
+aside:
+  - title: Contact
+    text: "[hallitus@prodeko.org](mailto:hallitus@prodeko.org)"
 ---
 
 The guild's board leads its operations for the academic year.

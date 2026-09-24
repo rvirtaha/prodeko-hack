@@ -5,8 +5,6 @@ sourceURL: https://prodeko.org/en/estiem-lg-helsinki/what-estiem/
 description: An introduction to ESTIEM, the European network of Industrial Engineering and Management students, and the reasons to attend its events.
 ---
 
-Council Meeting Warsaw, autumn 2018
-
 ## What is ESTIEM?
 
 ESTIEM (European Students of Industrial Engineering and Management) is a 1990 founded organization and network of the European students of Industrial Engineering and Management. ESTIEM consists of 29 countries and 75 Local Groups which organize not only local events but also European-wide events. They also represent the organization in their own Universities. The goal of ESTIEM is to create and maintain relations and network between European IEM students and remind us that our student community reaches outside of Finland. Therefore Prodeko is part of a wider international community in which it represents Local Group Helsinki.

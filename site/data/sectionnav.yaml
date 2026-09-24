@@ -1,0 +1,208 @@
+# The sidebar list of sibling pages, read by layouts/partials/section-nav.html.
+# One ordered list per language; each entry is a section with a title, the
+# page prefixes it covers, and its links.
+#
+# match lists the URL prefixes that open the section. The first entry whose
+# prefix matches the page's path wins, so a subsection comes before the
+# section that contains it: /fi/guild/hallitus-ja-toimihenkilot/ is listed
+# above /fi/guild/.
+#
+# A page whose path matches nothing has no sidebar and reads full width.
+#
+# An item marked members: true names a page of the gated member tree, which
+# the template prints as plain text in a build that carries no such tree.
+#
+# The Swedish pages live in the fi tree with /sv/ URLs of their own, so their
+# section sits among the Finnish ones.
+fi:
+  - title: Hallitus ja toimarit
+    match: [/fi/guild/hallitus-ja-toimihenkilot/]
+    items:
+      - { label: Hallitus ja toimihenkilöt, url: /fi/guild/hallitus-ja-toimihenkilot/ }
+      - { label: Hallitus 2026, url: /fi/guild/hallitus-ja-toimihenkilot/hallitus/ }
+      - { label: Hallituksen toiminta, url: /fi/guild/hallitus-ja-toimihenkilot/hallituksen-toiminta/ }
+      - { label: Edelliset hallitukset, url: /fi/guild/hallitus-ja-toimihenkilot/edelliset-hallitukset/ }
+      - { label: Toimihenkilöt 2026, url: /fi/guild/hallitus-ja-toimihenkilot/toimihenkilot/ }
+      - { label: Toimarien toiminta, url: /fi/guild/hallitus-ja-toimihenkilot/toimarien-toiminta/ }
+  - title: Kilta
+    match: [/fi/guild/]
+    items:
+      - { label: Kilta, url: /fi/guild/ }
+      - { label: Arvot, url: /fi/guild/arvot/ }
+      - { label: Häirintäyhdyshenkilöt, url: /fi/guild/hairintayhdyshenkilot/ }
+      - { label: Säännöt ja asetukset, url: /fi/guild/guild-rules/ }
+      - { label: Kunnianosoitukset, url: /fi/guild/kunnianosoitukset/ }
+      - { label: Jäseneksi, url: /fi/guild/jaseneksi/ }
+      - { label: Hallitus ja toimihenkilöt, url: /fi/guild/hallitus-ja-toimihenkilot/ }
+      - { label: Fukseille, url: /fi/new-students/ }
+      - { label: Opinnot, url: /fi/opinnot/ }
+      - { label: Palvelut, url: /fi/palvelut/ }
+  - title: Fukseille
+    match: [/fi/new-students/]
+    items:
+      - { label: Fukseille, url: /fi/new-students/ }
+      - { label: Tervetuloa tutalle!, url: /fi/new-students/welcome-to-prodeko/ }
+      - { label: Fuksiopas 2026, url: /fi/new-students/fuksiopas/ }
+      - { label: Orientaatioviikko 2026, url: /fi/new-students/orientaatio/ }
+      - { label: Opiskelijaelämän ABC, url: /fi/new-students/studentlife/ }
+      - { label: Ensimmäisen vuoden opinnot, url: /fi/new-students/ensimmaisen-vuoden-opinnot/ }
+      - { label: Asuminen ja eläminen, url: /fi/new-students/asuminen-ja-elaminen/ }
+      - { label: Fuksipisteet, url: /fi/new-students/fuksipisteet/ }
+  - title: Opinnot
+    match: [/fi/opinnot/]
+    items:
+      - { label: Opinnot, url: /fi/opinnot/ }
+      - { label: Keneen otan yhteyttä, url: /fi/opinnot/keneen-otan-yhteytta/ }
+      - { label: Usein kysyttyä opinnoista, url: /fi/opinnot/usein-kysyttya-opinnoista/ }
+      - { label: Kokouskuulumisia, url: /fi/opinnot/kokouskuulumisia/ }
+      - { label: Tohtoriopinnoista, url: /fi/opinnot/tohtoriopinnoista/ }
+      - { label: Tärkeitä linkkejä, url: /fi/opinnot/tarkeita-linkkeja/ }
+  - title: Palvelut
+    match: [/fi/palvelut/]
+    items:
+      - { label: Palvelut, url: /fi/palvelut/ }
+      - { label: "Aallon ja AYY:n palvelut", url: /fi/palvelut/aallon-ja-ayyn-palveluita-2/ }
+      - { label: Prodeko-rahasto, url: /fi/palvelut/prodeko-fund/ }
+      - { label: ESTIEM LG Helsinki, url: /fi/estiem-lg-helsinki/ }
+      - { label: Kokouspöytäkirjat, url: /fi/jasenille/poytakirjat/, members: true }
+  - title: Abeille
+    match: [/fi/abit/]
+    items:
+      - { label: Moikka abi!, url: /fi/abit/ }
+      - { label: Abimentorointi, url: /fi/abit/abimentorointi/ }
+      - { label: Opiskelijoiden polkuja tutalle, url: /fi/abit/opiskelijoiden-polkuja-tutalle/ }
+      - { label: Menestyneet tutalaiset, url: /fi/abit/menestyneet-tutalaiset/ }
+      - { label: Opinnot, url: /fi/opinnot/ }
+      - { label: Tärkeitä linkkejä, url: /fi/opinnot/tarkeita-linkkeja/ }
+  - title: Yrityksille
+    match: [/fi/yrityssuhteet/]
+    items:
+      - { label: Yrityssuhteet, url: /fi/yrityssuhteet/ }
+      - { label: Tietoa yrityksille, url: /fi/yrityssuhteet/yrityksille/ }
+      - { label: Yritysvierailut, url: /fi/yrityssuhteet/yritysvierailut/ }
+      - { label: Rekrytointi, url: /fi/yrityssuhteet/rekrytointi/ }
+      - { label: Prodeko Network, url: /fi/yrityssuhteet/prodeko-network/ }
+      - { label: aTalent, url: /fi/yrityssuhteet/atalent/ }
+      - { label: Laskutustiedot, url: /fi/yrityssuhteet/laskutustiedot/ }
+  - title: Alumni
+    match: [/fi/alumni/]
+    items:
+      - { label: Alumni, url: /fi/alumni/ }
+      - { label: Tietoa alumnista, url: /fi/alumni/tietoa-alumnista/ }
+      - { label: Alumnitiedotteet, url: /fi/alumni/tietoa-alumnista/alumnitiedotteet/ }
+      - { label: Alumnin hallitukset, url: /fi/alumni/tietoa-alumnista/alumnin-hallitukset/ }
+      - { label: Alumnin säännöt, url: /fi/alumni/tietoa-alumnista/alumnin-saannot/ }
+      - { label: Neuvottelukunta, url: /fi/alumni/neuvottelukunta/ }
+      - { label: Lifelong Learning, url: /fi/alumni/lifelong-learning/ }
+      - { label: Prodeko Ventures, url: /fi/alumni/prodeko-ventures/ }
+  - title: ESTIEM LG Helsinki
+    match: [/fi/estiem-lg-helsinki/]
+    items:
+      - { label: ESTIEM LG Helsinki, url: /fi/estiem-lg-helsinki/ }
+      - { label: "Mikä on ESTIEM?", url: /fi/estiem-lg-helsinki/mika-estiem/ }
+      - { label: ESTIEM-tapahtumat, url: /fi/estiem-lg-helsinki/estiem-events/ }
+      - { label: Tapahtumat Helsingissä, url: /fi/estiem-lg-helsinki/tapahtumat-helsingissa/ }
+      - { label: Haku tapahtumiin, url: /fi/estiem-lg-helsinki/haku-tapahtumiin/ }
+      - { label: Kokemuksia ja matkakertomuksia, url: /fi/estiem-lg-helsinki/kokemuksia/ }
+  - title: Abiturienter
+    match: [/sv/]
+    items:
+      - { label: Abiturienter, url: /sv/ }
+      - { label: Studerandenas vägar, url: /sv/studerandenas-vagar/ }
+      - { label: Abimentorskap 2026, url: /sv/mentorskap/ }
+      - { label: Framgångsrika produktionsekonomer, url: /sv/framgangsrika-produktionsekonomer/ }
+  - title: Jäsenille
+    match: [/fi/jasenille/]
+    items:
+      - { label: Jäsenille, url: /fi/jasenille/ }
+      - { label: Kokouspöytäkirjat, url: /fi/jasenille/poytakirjat/ }
+en:
+  - title: Board and officials
+    match: [/en/guild/board-and-officials/]
+    items:
+      - { label: Board and officials, url: /en/guild/board-and-officials/ }
+      - { label: Board 2026, url: /en/guild/board-and-officials/board/ }
+      - { label: What the board does, url: /en/guild/board-and-officials/what-the-board-does/ }
+      - { label: Previous boards, url: /en/guild/board-and-officials/previous-boards/ }
+      - { label: Officials 2026, url: /en/guild/board-and-officials/officials/ }
+      - { label: What the officials do, url: /en/guild/board-and-officials/what-the-officials-do/ }
+  - title: Guild
+    match: [/en/guild/]
+    items:
+      - { label: Guild, url: /en/guild/ }
+      - { label: Values, url: /en/guild/values/ }
+      - { label: Harassment contact persons, url: /en/guild/harassment-contact-persons/ }
+      - { label: Rules and regulations, url: /en/guild/rules/ }
+      - { label: Honours, url: /en/guild/honour/ }
+      - { label: Joining the guild, url: /en/guild/joining-guild/ }
+      - { label: Board and officials, url: /en/guild/board-and-officials/ }
+      - { label: New students, url: /en/new-students/ }
+      - { label: Studies, url: /en/studies/ }
+      - { label: Services, url: /en/services/ }
+  - title: New students
+    match: [/en/new-students/]
+    items:
+      - { label: New students, url: /en/new-students/ }
+      - { label: Welcome to IEM, url: /en/new-students/welcome-to-prodeko/ }
+      - { label: Survival Guide, url: /en/new-students/survival-guide/ }
+      - { label: Student life ABC, url: /en/new-students/studentlife/ }
+      - { label: First-year studies, url: /en/new-students/first-year-studies/ }
+      - { label: Housing and living, url: /en/new-students/living/ }
+      - { label: Fuksi points, url: /en/new-students/freshmen-points/ }
+  - title: Studies
+    match: [/en/studies/]
+    items:
+      - { label: Studies, url: /en/studies/ }
+      - { label: Who to contact, url: /en/studies/who-to-contact/ }
+      - { label: Studies FAQ, url: /en/studies/studies-faq/ }
+      - { label: Meeting news, url: /en/studies/meeting-news/ }
+      - { label: Doctoral studies, url: /en/studies/doctoral-studies/ }
+      - { label: Important links, url: /en/studies/important-links/ }
+  - title: Services
+    match: [/en/services/]
+    items:
+      - { label: Services, url: /en/services/ }
+      - { label: Aalto and AYY services, url: /en/services/aalto-and-ayy-services-3/ }
+      - { label: Prodeko Fund, url: /en/services/prodeko-fund/ }
+      - { label: ESTIEM LG Helsinki, url: /en/estiem-lg-helsinki/ }
+      - { label: Meeting minutes, url: /en/members/minutes/, members: true }
+  - title: Prospective students
+    match: [/en/prospective-students/]
+    items:
+      - { label: "Hello, applicant", url: /en/prospective-students/ }
+      - { label: Studies, url: /en/studies/ }
+      - { label: Important links, url: /en/studies/important-links/ }
+  - title: For companies
+    match: [/en/yrityssuhteet/]
+    items:
+      - { label: Corporate relations, url: /en/yrityssuhteet/ }
+      - { label: About corporate relations, url: /en/yrityssuhteet/about/ }
+      - { label: Company visits, url: /en/yrityssuhteet/excursions/ }
+      - { label: Recruitment, url: /en/yrityssuhteet/recruiting/ }
+      - { label: Prodeko Network, url: /en/yrityssuhteet/prodeko-network/ }
+      - { label: aTalent, url: /en/yrityssuhteet/atalent/ }
+      - { label: Billing information, url: /en/yrityssuhteet/billing/ }
+  - title: Alumni
+    match: [/en/alumni/]
+    items:
+      - { label: Alumni, url: /en/alumni/ }
+      - { label: About the alumni, url: /en/alumni/about-alumni/ }
+      - { label: Alumni boards, url: /en/alumni/about-alumni/previous-alumni-boards/ }
+      - { label: Alumni rules, url: /en/alumni/about-alumni/rules-prodeko-alumni/ }
+      - { label: Advisory board, url: /en/alumni/honorary-advisory-council/ }
+      - { label: Lifelong Learning, url: /en/alumni/lifelong-learning/ }
+      - { label: Prodeko Ventures, url: /en/alumni/prodeko-ventures/ }
+  - title: ESTIEM LG Helsinki
+    match: [/en/estiem-lg-helsinki/]
+    items:
+      - { label: ESTIEM LG Helsinki, url: /en/estiem-lg-helsinki/ }
+      - { label: "What is ESTIEM?", url: /en/estiem-lg-helsinki/what-estiem/ }
+      - { label: ESTIEM events, url: /en/estiem-lg-helsinki/estiem-events/ }
+      - { label: Events in Helsinki, url: /en/estiem-lg-helsinki/events-helsinki/ }
+      - { label: Applying to events, url: /en/estiem-lg-helsinki/applying-events/ }
+      - { label: Experiences, url: /en/estiem-lg-helsinki/experiences/ }
+  - title: Members
+    match: [/en/members/]
+    items:
+      - { label: Members, url: /en/members/ }
+      - { label: Meeting minutes, url: /en/members/minutes/ }
