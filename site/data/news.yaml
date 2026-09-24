@@ -1,0 +1,19 @@
+# The front page's short list of what is happening right now, one block per
+# language. Each item is {label, url, description}: the label is the thing,
+# the description is the one line a reader needs to decide whether to click.
+#
+# This is the one part of the site that goes stale on its own, so it is kept
+# here rather than in a page's body — three entries, edited whenever the
+# guild has something new to say.
+fi:
+  title: Ajankohtaista
+  items:
+    - { label: Prodeko hack 2026, url: "https://ilmo.prodeko.org", description: Ilmoittautuminen Ilmokilkessä }
+    - { label: Tervetuloa tutalle!, url: /fi/new-students/welcome-to-prodeko/, description: Fuksikapteenin tervehdys }
+    - { label: Orientaatioviikko 2026, url: /fi/new-students/orientaatio/, description: Aikataulu on julkaistu }
+en:
+  title: News
+  items:
+    - { label: Prodeko hack 2026, url: "https://ilmo.prodeko.org", description: Sign up in Ilmokilke }
+    - { label: Welcome to IEM, url: /en/new-students/welcome-to-prodeko/, description: "The fuksi captain's greeting" }
+    - { label: New students, url: /en/new-students/, description: Autumn 2026 dates }

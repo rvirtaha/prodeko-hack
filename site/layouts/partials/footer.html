@@ -1,5 +1,5 @@
 {{ $isFi := eq .Language.Lang "fi" }}
-{{ $columns := index hugo.Data.footer .Language.Lang }}
+{{ $links := index hugo.Data.footer .Language.Lang }}
 {{ $privacy := cond $isFi "/fi/tietosuoja/" "/en/privacy-policy/" }}
 <footer class="site-footer">
   <div class="rainbow-rule"></div>
@@ -17,13 +17,13 @@
           {{ end }}
         </p>
       </div>
-      {{/* <details> rather than <div>: on a phone these four groups are about
-           1500px of link under every page, so the stylesheet collapses them.
-           Open by default, so a desktop reader and anything without CSS sees
-           the whole footer. */}}
-      {{ range $columns }}
+      {{/* <details> rather than <div>: on a phone the column is a screenful of
+           link under every page, so the stylesheet collapses it. Open by
+           default, so a desktop reader and anything without CSS sees the whole
+           footer. */}}
+      {{ with $links }}
         <details class="footer-group" open>
-          <summary><div class="col-title">{{ .title }}</div></summary>
+          <summary><div class="col-title">{{ .linksTitle }}</div></summary>
           <ul class="links">
             {{ range .links }}<li><a href="{{ .url }}">{{ .label }}</a></li>{{ end }}
           </ul>
