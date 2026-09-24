@@ -42,7 +42,7 @@
         {{ end }}
         <span class="person-name">{{ .name }}</span>
         {{ with $role }}<span class="person-role">{{ . }}</span>{{ end }}
-        {{ with .instagram }}<a class="person-instagram" href="https://instagram.com/{{ strings.TrimPrefix "@" . }}">{{ . }}</a>{{ end }}
+        {{ with .telegram }}<a class="person-telegram" href="https://t.me/{{ strings.TrimPrefix "@" . }}">{{ . }}</a>{{ end }}
         {{ with .email }}<a class="person-email" href="mailto:{{ . }}">{{ . }}</a>{{ end }}
       </li>
     {{ end }}
