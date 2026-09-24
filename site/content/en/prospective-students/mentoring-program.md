@@ -10,7 +10,7 @@ Wondering about something related to the matriculation exams or starting univers
 
 Aalto University's Industrial Engineering and Management guild, Prodeko, offers you a unique opportunity to talk with a student in a technical field about studying and your future.
 
-If Industrial Engineering and Management at Aalto, or Prodeko, are not yet familiar to you, take a look at [our prospective-student pages](/en/prospective-students/) or [prodeko.org](http://prodeko.org/).
+If Industrial Engineering and Management at Aalto, or Prodeko, are not yet familiar to you, take a look at [our prospective-student pages](/en/prospective-students/) or [prodeko.org](/en/).
 
 Mentoring is a great way to talk things through and get tips on, for example, further studies, finding your professional identity and recognising your strengths. You get a contact in the world of higher education, which eases the transition into a new stage of life and helps you with practical things such as the matriculation exams or study techniques.
 
