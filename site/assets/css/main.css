@@ -282,6 +282,14 @@ img{display:block;max-width:100%}
 /* Partner logos */
 .partner-logos{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:var(--space-8) var(--space-10);align-items:center;list-style:none;margin:var(--space-6) 0;padding:0}
 .partner-logos img{display:block;max-width:100%;max-height:44px;object-fit:contain}
+/* Both walls are lists, and inside the prose column the generic list rules
+   would indent them past the text beside them and add a row of air under
+   every cell. The grid is the layout; the list rules give way, as they do for
+   .link-list. On a phone the indent also costs the portrait grid its second
+   column: 342px of page less 22px of bullet indent is under the 324px two
+   150px tracks and their gutter need. */
+.prose .people-grid,.prose .partner-logos{padding-left:0}
+.prose .people-grid>li,.prose .partner-logos>li{margin-bottom:0}
 
 /* Embed — the card an existing Prodeko service is linked from
    (partials/embed.html). Most of those services refuse to be framed by this
