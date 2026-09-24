@@ -21,7 +21,7 @@
      this its address is never resolved and Hugo never publishes it — the
      stylesheet alone would leave a 404 behind the hero. Handing the resolved
      address to the stylesheet as a custom property fixes both halves at once. */}}
-{{ with resources.Get "images/pages/page-guild-crop.png" }}
+{{ with resources.Get "images/pages/home-hero.jpg" }}
   {{ with .Process "resize 1800x webp q68" }}
     <style>:root{--photo-guild:url("{{ .RelPermalink }}")}</style>
   {{ end }}

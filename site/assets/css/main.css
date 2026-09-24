@@ -310,7 +310,7 @@ img{display:block;max-width:100%}
 .kicker{font-size:var(--size-2xs);font-weight:var(--weight-semibold);letter-spacing:var(--track-caps-wide);text-transform:uppercase}
 
 /* Home hero — the only place text sits on a photo */
-.home-hero{position:relative;display:flex;align-items:flex-end;min-height:clamp(200px,22vw,260px);background:var(--photo-guild) center 35%/cover no-repeat}
+.home-hero{position:relative;display:flex;align-items:flex-end;min-height:clamp(200px,22vw,260px);background:var(--photo-guild) center 62%/cover no-repeat}
 .home-hero::before{content:"";position:absolute;inset:0;background:linear-gradient(to bottom,rgb(0 10 20 / 0) 20%,rgb(0 10 20 / 0.8) 100%)}
 .home-hero.has-links{min-height:clamp(300px,35vw,400px)}
 .home-hero.has-links::before{background:linear-gradient(to bottom,rgb(0 10 20 / 0) 25%,rgb(0 10 20 / 0.8) 100%)}
