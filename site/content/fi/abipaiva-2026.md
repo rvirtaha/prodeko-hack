@@ -18,7 +18,7 @@ Tämän jälkeen on vuorossa ohjattu kierros valitsemasi killan (Prodeko tai Ath
 
 ## Abisitsit
 
-![Abisitsien pöytiä sinisessä valaistuksessa ja valosarjojen alla](/uploads/abisitsit-2025-1.jpg) ![Gongi ja Athene x Prodeko ABIsitsit 2025 -laulukirja pöydällä](/uploads/abisitsit-2025-2.jpg)
+![](/uploads/abisitsit-2025-1.jpg) ![](/uploads/abisitsit-2025-2.jpg)
 
 Tähän päättyy päivän kaikilla avoin ohjelma, mutta ei syytä huoleen, sillä järjestämme täysi-ikäisille osallistujille abisitsit abipäivän jatkoksi! Sitsit eli akateemiset pöytäjuhlat ovat opiskelijakulttuurin ydintä, joissa pääset tutustumaan opiskelijaelämään sekä viettämään iltaa tutalaisten, infolaisten ja tepsyjen kanssa. Lisätietoa sitseistä löydät ilmoittautumislomakkeesta.
 
