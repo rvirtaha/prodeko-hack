@@ -33,8 +33,12 @@
         {{ range .owns | default (slice .url) }}
           {{ if strings.HasPrefix $.RelPermalink . }}{{ $current = true }}{{ end }}
         {{ end }}
+        {{/* The item the reader is under is underlined, and the anchor says so
+             in the markup as well: "page" where the address is the page
+             itself, "true" where the item carries a section the page sits
+             inside. */}}
         <li{{ if $current }} class="current"{{ end }}{{ with .menuKey }} data-mega="{{ . }}"{{ end }}>
-          <a href="{{ .url }}"{{ partial "link-target.html" .url | safeHTMLAttr }}>{{ .title }}</a>
+          <a href="{{ .url }}"{{ partial "link-target.html" .url | safeHTMLAttr }}{{ if $current }} aria-current="{{ if eq $.RelPermalink .url }}page{{ else }}true{{ end }}"{{ end }}>{{ .title }}</a>
         </li>
       {{ end }}
       {{/* Not an entry in data/navigation.yaml: that file maps titles to

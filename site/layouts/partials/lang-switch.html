@@ -2,16 +2,23 @@
      switch lands on it; where it does not — a good part of the site, since the
      migrated content is uneven — it falls back to that language's front page
      rather than disappearing, which would otherwise leave a reader with no way
-     across at all. */}}
+     across at all.
+
+     The language being read carries aria-current="true" rather than "page":
+     both anchors are live links, and the one that is current is a language,
+     not an address — on a page with no translation it does not even lead to
+     the page the reader is on. The slash between them is the separator a
+     sighted reader needs and a screen reader does not. */}}
 {{ $current := . }}
 <div class="lang-switch">
-  {{ range hugo.Sites }}
-    {{ $lang := .Language.Lang }}
-    {{ $target := .Home }}
+  {{ range $i, $site := hugo.Sites }}
+    {{ $lang := $site.Language.Lang }}
+    {{ $target := $site.Home }}
     {{ range $current.AllTranslations }}
       {{ if eq .Language.Lang $lang }}{{ $target = . }}{{ end }}
     {{ end }}
-    <a class="{{ if eq $lang $current.Language.Lang }}current{{ end }}"
+    {{ if $i }}<span aria-hidden="true">/</span>{{ end }}
+    <a{{ if eq $lang $current.Language.Lang }} aria-current="true"{{ end }}
        href="{{ $target.RelPermalink }}" hreflang="{{ $lang }}"
        lang="{{ $lang }}">{{ $lang | upper }}</a>
   {{ end }}

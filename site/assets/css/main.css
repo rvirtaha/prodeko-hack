@@ -40,13 +40,13 @@ img{display:block;max-width:100%}
 .btn-block{display:flex;width:100%;min-height:48px;justify-content:center}
 
 /* Language switch */
-/* lang-switch.html marks the current language with a class rather than with
-   aria-current, because both anchors are always live links: one of them is
-   the page you are on, which is a state the class carries and the attribute
-   would overstate. */
+/* The language being read is the one underlined, and lang-switch.html marks
+   it with aria-current, so the state is in the markup rather than in the
+   colour alone. The slash between the two is a separator for the eye and is
+   hidden from a screen reader. */
 .lang-switch{display:flex;align-items:center;gap:4px;font-size:15px;font-weight:var(--weight-semibold);color:var(--pd-blue)}
 .lang-switch a{color:var(--pd-blue)}
-.lang-switch a.current,.lang-switch a[aria-current]{text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:2px}
+.lang-switch a[aria-current]{text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:2px}
 
 /* Header */
 .site-header{position:sticky;top:0;z-index:50;background:#fff;border-bottom:1px solid var(--border-subtle)}
