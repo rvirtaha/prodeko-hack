@@ -93,14 +93,14 @@
        tree's. */}}
   <div class="search-panel" id="search-panel" hidden>
     <div class="mega-panel-rainbow"></div>
-    <div class="container search-panel-inner search-box">
+    <div class="container search-panel-inner search-box is-filled">
       <form role="search" onsubmit="return false">
-        <input type="search" data-search role="combobox" autocomplete="off"
+        <input type="search" class="search-input" data-search role="combobox" autocomplete="off"
                aria-expanded="false" aria-controls="search-results"
                aria-autocomplete="list"
                {{ if and site.Params.memberTree (not .IsHome) }}data-search-members="{{ .FirstSection.RelPermalink }}pagefind"{{ end }}
-               placeholder="{{ if $isFi }}Hae sivustolta{{ else }}Search the site{{ end }}"
-               aria-label="{{ if $isFi }}Hae sivustolta{{ else }}Search the site{{ end }}">
+               placeholder="{{ if $isFi }}Hae sivuja{{ else }}Search pages{{ end }}"
+               aria-label="{{ if $isFi }}Hae sivuja{{ else }}Search pages{{ end }}">
       </form>
       <div class="search-results" id="search-results" role="listbox"
            aria-label="{{ if $isFi }}Hakutulokset{{ else }}Search results{{ end }}"></div>
@@ -125,20 +125,24 @@
     {{/* First child of the menu, so opening it puts search under the reader's
          thumb. The results render inline beneath the input rather than in an
          overlay, because this container is already scrolling inside a
-         max-height and an overlay inside it has nowhere to go. */}}
-    <div class="m-search search-box">
+         max-height and an overlay inside it has nowhere to go. The field is the
+         row variant: a rule under a caps placeholder, which reads as one more
+         menu row until it is typed into. The count sits above the results here,
+         in the row search.js builds, so the status line is left to the screen
+         reader alone. */}}
+    <div class="search-box is-row">
       <form role="search" onsubmit="return false">
-        <input type="search" data-search role="combobox" autocomplete="off"
+        <input type="search" class="search-input" data-search role="combobox" autocomplete="off"
                aria-expanded="false" aria-controls="m-search-results"
                aria-autocomplete="list"
                {{ if and site.Params.memberTree (not .IsHome) }}data-search-members="{{ .FirstSection.RelPermalink }}pagefind"{{ end }}
-               placeholder="{{ if $isFi }}Hae sivustolta{{ else }}Search the site{{ end }}"
-               aria-label="{{ if $isFi }}Hae sivustolta{{ else }}Search the site{{ end }}">
+               placeholder="{{ if $isFi }}HAKU{{ else }}SEARCH{{ end }}"
+               aria-label="{{ if $isFi }}Hae sivuja{{ else }}Search pages{{ end }}">
       </form>
       <div class="search-results" id="m-search-results" role="listbox"
            aria-label="{{ if $isFi }}Hakutulokset{{ else }}Search results{{ end }}"></div>
       <div class="search-footer"></div>
-      <p class="search-status" aria-live="polite"></p>
+      <p class="search-status sr-only" aria-live="polite"></p>
     </div>
     <ul class="m-list">
       <li><a class="m-row" href="{{ "/" | relLangURL }}">{{ if $isFi }}Etusivu{{ else }}Home{{ end }}</a></li>

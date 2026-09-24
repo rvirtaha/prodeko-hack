@@ -28,7 +28,8 @@
     },
     all: function (n) {
       return fi ? "Näytä kaikki " + n + " tulosta" : "Show all " + n + " results";
-    }
+    },
+    clear: fi ? "Tyhjennä" : "Clear"
   };
 
   // Imported on first open rather than on page load, so a reader who never
@@ -130,9 +131,16 @@
     panel.querySelector("[data-search]").focus();
   }
 
+  // A panel that opens holding the last query opens showing results for a
+  // question the reader has stopped asking, so closing empties the field. The
+  // input event is the box's own way of hearing about a change to the field,
+  // so emptying it here needs no handle on the state the box keeps.
   function closePanel(keepFocus) {
     panel.hidden = true;
     toggle.setAttribute("aria-expanded", "false");
+    var field = panel.querySelector("[data-search]");
+    field.value = "";
+    field.dispatchEvent(new Event("input"));
     if (!keepFocus) toggle.focus();
   }
 
@@ -160,9 +168,44 @@
     var timer = null;
     var announce = null;
 
+    // The phone field carries its count above the results, beside a button
+    // that empties the field: the menu scrolls, and a count under a long list
+    // of rows is off the screen by the time it is written. The row is built
+    // here rather than in the template because it has nothing to say until
+    // there is a query, and the same script already owns what it would say.
+    var meta = null;
+    var count = null;
+    if (box.classList.contains("is-row")) {
+      meta = document.createElement("div");
+      meta.className = "search-meta";
+      meta.hidden = true;
+      count = document.createElement("p");
+      count.className = "search-count";
+      var reset = document.createElement("button");
+      reset.type = "button";
+      reset.className = "search-clear";
+      reset.textContent = t.clear;
+      reset.addEventListener("click", function () {
+        input.value = "";
+        query = "";
+        clearTimeout(timer);
+        clear();
+        input.focus();
+      });
+      meta.appendChild(count);
+      meta.appendChild(reset);
+      box.insertBefore(meta, list);
+    }
+
     // The count chatters through a word if every repaint announces itself, so
-    // it waits 300ms; anything else is a one-off and is said at once.
+    // it waits 300ms; anything else is a one-off and is said at once. The
+    // visible line is written without the wait: it is read, not heard, and a
+    // line that lags the rows under it reads as the wrong count.
     function say(text, soon) {
+      if (count) {
+        count.textContent = text;
+        meta.hidden = !text;
+      }
       clearTimeout(announce);
       if (soon) { status.textContent = text; return; }
       announce = setTimeout(function () { status.textContent = text; }, 300);

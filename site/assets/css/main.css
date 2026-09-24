@@ -321,6 +321,9 @@ img{display:block;max-width:100%}
 .is-row .search-input::placeholder{font-size:24px;font-weight:var(--weight-extrabold);text-transform:uppercase;color:var(--pd-black);opacity:1}
 .is-row .search-input:focus{outline:none;border-bottom-color:var(--pd-blue-light)}
 .search-meta{display:flex;justify-content:space-between;align-items:baseline;gap:16px;margin:16px 0 4px}
+/* The row has nothing to show until there is a query, and search.js hides it
+   with the attribute; the display above would otherwise keep it on screen. */
+.search-meta[hidden]{display:none}
 .search-count{margin:0;font-size:13px;color:var(--text-muted)}
 .search-clear{padding:0;background:none;border:0;font-family:var(--font-core);font-size:13px;color:var(--text-link);cursor:pointer}
 .search-clear:hover{color:var(--text-link-hover);text-decoration:underline}
