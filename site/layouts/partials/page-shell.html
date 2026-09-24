@@ -1,5 +1,6 @@
-{{/* The frame every text-shaped page sits in: breadcrumb, title band, a prose
-     column held to a readable measure, and the rest of the section beside it.
+{{/* The frame every text-shaped page sits in: a breadcrumb and a title, one
+     photo at most, a prose column held to a readable measure, and the
+     section's own navigation and notes in the column beside it.
 
      Takes {page, body}. Body is already-rendered HTML rather than the page's
      own .Content, so the people and archive layouts can pass their generated
@@ -13,24 +14,41 @@
      exactly one link"; the second also matches a sentence with a link in it,
      which would tear the sentence apart. */}}
 {{ $body := replaceRE `<p>(<a href="[^"]*"[^>]*>[^<]*</a>)</p>` `<p class="doc-link">$1</p>` (string .body) | safeHTML }}
+
 {{ $nav := partial "section-nav.html" $page }}
-{{ $hasNav := ne (trim (string $nav) " \n\t") "" }}
-<article class="page">
-  <div class="page-head">
-    <div class="container">
+{{ $blocks := partial "aside-blocks.html" $page }}
+{{ $hasAside := or (ne (trim (string $nav) " \n\t") "") (ne (trim (string $blocks) " \n\t") "") }}
+
+{{/* The grid keeps the 240px sidebar track even when it is empty, so a page
+     with neither a section nor notes is given the single-column shape rather
+     than a column of air. */}}
+<div class="page-layout{{ if not $hasAside }} no-aside{{ end }}">
+  <div class="page-main">
+    <header class="page-title">
       {{ partial "breadcrumbs.html" $page }}
       <h1>{{ $page.Title }}</h1>
-      {{ with $page.Description }}<p class="page-lead">{{ . }}</p>{{ end }}
-    </div>
-    <div class="rainbow-rule"></div>
-  </div>
+    </header>
 
-  <div class="container page-body{{ if not $hasNav }} page-body-wide{{ end }}">
+    {{ with $page.Params.photo }}
+      {{ $img := resources.Get .src }}
+      {{ if $img }}
+        {{ $img = $img.Resize "1500x q80" }}
+        <figure class="figure">
+          <img src="{{ $img.RelPermalink }}" alt="{{ .alt }}" />
+          {{ with .caption }}<figcaption>{{ . }}</figcaption>{{ end }}
+        </figure>
+      {{ else }}
+        {{/* A page names its photo by asset path, and a typo in that path is
+             silent: the figure simply disappears. Stopping the build is the
+             only way the mistake is ever seen. */}}
+        {{ errorf "photo %q not found on %s" .src $page.RelPermalink }}
+      {{ end }}
+    {{ end }}
+
     <div class="prose">
       {{ $body }}
     </div>
-    {{/* Omitted rather than left empty: on a phone the aside sits below the
-         text, and an empty one draws its separating rule under nothing. */}}
-    {{ if $hasNav }}<aside class="page-aside">{{ $nav }}</aside>{{ end }}
   </div>
-</article>
+
+  {{ if $hasAside }}<aside class="page-aside">{{ $nav }}{{ $blocks }}</aside>{{ end }}
+</div>

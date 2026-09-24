@@ -1,21 +1,39 @@
-{{/* The other pages in the same section, as a sidebar list. Rendered only
-     where there is more than one, so a section holding a single page does not
-     get a list of itself. */}}
-{{ $section := .CurrentSection }}
-{{ $siblings := $section.RegularPages }}
-{{/* Skipped in two places. At the root the "section" is the whole language, so
-     its pages are the handful of top-level ones and the list reads as a random
-     assortment. On a section's own index the cards above already are this
-     list, and repeating it directly underneath reads as a mistake. */}}
-{{ if and (gt (len $siblings) 1) (not $section.IsHome) (ne $section.RelPermalink .RelPermalink) }}
-  <nav class="section-nav" aria-label="{{ $section.Title }}">
-    <div class="sidebar-list-title">{{ $section.Title }}</div>
-    <ul class="sidebar-list">
-      {{ range $siblings }}
+{{/* The section a page belongs to, listed beside it.
+
+     The list comes from data/sectionnav.yaml rather than from the content
+     tree, because sections borrow each other's pages — Opinnot is listed under
+     Abeille as well as under Kilta — and because a section can name a page of
+     the member tree that the public build never loads.
+
+     The first entry whose match prefix opens the page's path wins, which is
+     why a subsection is listed above the section containing it. A page that
+     matches nothing gets no list. The Swedish pages live in the Finnish tree,
+     so their language is fi and their section sits among the Finnish ones. */}}
+{{ $page := . }}
+{{ $isFi := eq $page.Language.Lang "fi" }}
+{{ $section := "" }}
+{{ range index hugo.Data.sectionnav $page.Language.Lang }}
+  {{ $entry := . }}
+  {{ range .match }}
+    {{ if and (not $section) (hasPrefix $page.RelPermalink .) }}
+      {{ $section = $entry }}
+    {{ end }}
+  {{ end }}
+{{ end }}
+{{ with $section }}
+  <nav class="section-nav" aria-label="{{ .title }}">
+    <div class="section-nav-title">{{ .title }}</div>
+    <ul>
+      {{ range .items }}
         <li>
-          <a href="{{ .RelPermalink }}"{{ if eq .RelPermalink $.RelPermalink }} class="current" aria-current="page"{{ end }}>
-            <span>{{ .Title }}</span><span aria-hidden="true">→</span>
-          </a>
+          {{ if and .members (not site.Params.members) }}
+            {{/* A page of the member tree, in a build that has no member tree.
+                 Naming the address here would publish it, so the row stays a
+                 label. */}}
+            <span class="m-members">{{ .label }}{{ if $isFi }} (jäsenille){{ else }} (members only){{ end }}</span>
+          {{ else }}
+            <a href="{{ .url }}"{{ if eq .url $page.RelPermalink }} aria-current="page"{{ end }}>{{ .label }}</a>
+          {{ end }}
         </li>
       {{ end }}
     </ul>
