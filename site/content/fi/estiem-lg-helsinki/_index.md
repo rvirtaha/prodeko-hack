@@ -2,6 +2,9 @@
 title: ESTIEM LG Helsinki
 translationKey: estiem
 description: Prodekon ESTIEM-paikallisryhmä ja eurooppalainen tapahtumatoiminta.
+photo:
+  src: images/pages/dock-jump.jpg
+  alt: Haalareihin pukeutunut kiltalainen hyppää laiturilta veteen
 ---
 
 ESTIEM on eurooppalainen tuotantotalouden opiskelijoiden verkosto. Helsingin
