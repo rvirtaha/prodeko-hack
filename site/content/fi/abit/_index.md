@@ -12,12 +12,13 @@ aside:
 
       [abivastaava@prodeko.org](mailto:abivastaava@prodeko.org)
 ---
-
 Tervetuloa Aallon tuotantotalouden opiskelijoiden yhdistyksen Prodekon
 abisivuille. Prodeko on tiivis ja aktiivinen yhteisö, jossa jokaiselle
 löytyy oma paikkansa. Järjestämme jäsenillemme monipuolista ohjelmaa
 yritysvierailuista sitseihin, valmennuksista hengailuiltoihin ja
 viikoittaisesta urheilusta erilaisiin lajikokeiluihin.
+
+**Abipäivä pe 6.11.2026!** Prodeko ja Athene järjestävät Otaniemessä abipäivän, jonka jatkoksi täysi-ikäisille on abisitsit. [Lue lisää ja ilmoittaudu →](/fi/abipaiva-2026/)
 
 Tutustu myös [Prodekon abimentorointiin](/fi/abit/abimentorointi/), lue
 [nykyisten opiskelijoiden polkuja tutalle](/fi/abit/opiskelijoiden-polkuja-tutalle/)
