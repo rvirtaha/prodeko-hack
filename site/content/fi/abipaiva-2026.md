@@ -18,11 +18,11 @@ Tämän jälkeen on vuorossa ohjattu kierros valitsemasi killan (Prodeko tai Ath
 
 ## Abisitsit
 
-![](/uploads/abisitsit-2025-1.jpg) ![](/uploads/abisitsit-2025-2.jpg)
-
 Tähän päättyy päivän kaikilla avoin ohjelma, mutta ei syytä huoleen, sillä järjestämme täysi-ikäisille osallistujille abisitsit abipäivän jatkoksi! Sitsit eli akateemiset pöytäjuhlat ovat opiskelijakulttuurin ydintä, joissa pääset tutustumaan opiskelijaelämään sekä viettämään iltaa tutalaisten, infolaisten ja tepsyjen kanssa. Lisätietoa sitseistä löydät ilmoittautumislomakkeesta.
 
 Sitseille on rajallinen määrä paikkoja. Mikäli ilmoittautuneita on enemmän kuin paikkoja, osallistujat valitaan ilmoittautumislomakkeen motivaatiovastausten perusteella. Ilmoitamme kaikille sitseille hakeneille valinnan tuloksesta.
+
+![](/uploads/abisitsit-2025-1.jpg) ![](/uploads/abisitsit-2025-2.jpg)
 
 ## Ilmoittautumislomake
 
