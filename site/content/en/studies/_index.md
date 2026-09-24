@@ -5,6 +5,11 @@ sourceURL: https://prodeko.org/en/studies/
 description: General information about studying at Aalto University School of Science, and where to go for course registration, materials and advice.
 aliases:
   - /studies/studies/
+aside:
+  - title: Minister of Studies
+    text: |
+      Lauri Pörsti
+      [opintovastaava@prodeko.org](mailto:opintovastaava@prodeko.org)
 ---
 
 The academic year at Aalto University consists of two terms. The autumn term starts at the beginning of September and ends in December; the spring term starts in the middle of January, with a Christmas holiday of a couple of weeks between them. The year is also divided into five study periods, each ending in an exam week. A course lasts anything from one period to a whole semester. Typically there are weekly assignments and an exam at the end, and usually a chance to retake the exam in the next exam week.

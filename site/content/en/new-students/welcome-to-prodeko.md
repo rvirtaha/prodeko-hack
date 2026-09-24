@@ -3,6 +3,16 @@ title: Prodeko for international students
 translationKey: new-students-welcome-to-prodeko
 description: "A guide for international and master's students: orientation week, the captain's contact details, guild information channels and life in Finland."
 sourceURL: https://prodeko.org/en/new-students/welcome-to-prodeko/
+photo:
+  src: images/pages/page-prospective-crop.png
+  alt: A teekkari in cap and overalls giving a thumbs up
+aside:
+  - title: Fuksi captain
+    text: |
+      Elina Lauri
+      [fuksikapteeni@prodeko.org](mailto:fuksikapteeni@prodeko.org)
+      [040 659 2055](tel:+358406592055)
+      Telegram @fuksikapteeni
 ---
 
 Congratulations, you're in the right place! From the right sidebar you can find some useful information about living in Finland and studying IEM in Prodeko - please start from the "**Welcome to Prodeko**" -page. Here, and from the "**Survival Guide**" you can find the most important information!
