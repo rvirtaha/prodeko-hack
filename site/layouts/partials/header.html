@@ -13,7 +13,10 @@
 {{ $memberLabel := cond site.Params.members (cond $isFi "Jäsensivut" "Member pages") (cond $isFi "Kirjaudu" "Log in") }}
 <a class="skip-link" href="#main">{{ if $isFi }}Siirry sisältöön{{ else }}Skip to content{{ end }}</a>
 <header class="site-header" id="site-header">
-  <div class="container bar">
+  {{/* The bar runs the full width of the window — the emblem sits at one edge
+       and the member button at the other — while the panels that drop out of
+       it hold their contents to the page measure. */}}
+  <div class="bar">
     <a class="home" href="{{ "/" | relLangURL }}">
       {{ with resources.Get "images/brand/emblem-blue.svg" }}
         <img src="{{ .RelPermalink }}" width="36" height="36" alt="{{ $.Site.Title }}">

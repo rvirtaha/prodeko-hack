@@ -538,7 +538,7 @@ en:
 
 **Interfaces:**
 - Consumes: Task 3 nav fields; Task 7 classes.
-- Produces: header markup with `.site-header > .bar` (`container`), `.home` emblem link, `ul.nav`, `.nav-search-toggle`, `.side`, `.nav-toggle`; mega panels unchanged in structure.
+- Produces: header markup with `.site-header > .bar` (full width, no `container`), `.home` emblem link, `ul.nav`, `.nav-search-toggle`, `.side`, `.nav-toggle`; mega panels unchanged in structure.
 
 - [ ] **Step 1: Rewrite the bar.** Emblem link: `<a class="home" href="{{ "/" | relLangURL }}"><img src=… images/brand/emblem-blue.svg … height 36 alt="Prodeko"></a>`. Nav items from `navigation.yaml`; current-item test replaces the single HasPrefix with: item is current when any prefix in `.owns | default (slice .url)` prefixes `$.RelPermalink`. Lang switch unchanged partial; the member button becomes `class="btn btn-primary btn-sm"`. Keep the skip link, `$memberHome`/`$memberLabel` logic, and the search toggle (per §2 it sits after the nav items; while the search panel is open, JS gives it the current-item styling — hook exists via `[aria-expanded="true"]` CSS).
 - [ ] **Step 2: Keep the mega-panel and search-panel blocks as they are** apart from class renames Task 7 requires (none — names match). Keep `data-search-members` untouched.
