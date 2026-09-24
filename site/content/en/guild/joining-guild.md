@@ -11,7 +11,7 @@ All undergraduate and master students of Industrial Engineering and Management i
 
 ## Alumni
 
-Prodeko Alumni is an association for alumni of Aalto University's Industrial Engineering and Management programme. The association maintains an alumni network and organises events for its members. There is no membership fee and all graduates of the IEM programme are automatically affiliated to the association. For more information, please contact the Alumni Association Board at alumni@prodeko.org. Read more [here](https://prodeko.org/en/alumni/tietoa-alumnista/). You can apply for membership by sending an email to Akseli Köngäs, the Alumni Coordinator (akseli.kongas@aalto.fi).
+Prodeko Alumni is an association for alumni of Aalto University's Industrial Engineering and Management programme. The association maintains an alumni network and organises events for its members. There is no membership fee and all graduates of the IEM programme are automatically affiliated to the association. For more information, please contact the Alumni Association Board at alumni@prodeko.org. Read more [here](/en/alumni/about-alumni/). You can apply for membership by sending an email to Akseli Köngäs, the Alumni Coordinator (akseli.kongas@aalto.fi).
 
 ## Other members
 
