@@ -3,59 +3,69 @@ title: Prodeko
 translationKey: home
 description: Prodeko is the guild of around 900 Industrial Engineering and Management students at Aalto University in Otaniemi.
 source: raw-website design export, Prodeko-site.dc.html
-heroKicker: "Industrial Engineering and Management · Aalto University"
-heroTitle: Think big. Get things done.
-ctaJoin: Join the guild
-ctaJoinUrl: https://membership.prodeko.org/apply
-ctaCompanies: For companies
-ctaCompaniesUrl: /en/yrityssuhteet/
-announcement:
-  kicker: News
-  title: Welcome, class of 2026
-  body: "Orientation week starts Mon 31 Aug at 9:00 at Otakaari 1. The fuksi guide and the captains' contact details are on the Prospective students page."
-  linkText: Read the fuksi guide
-  url: /en/prospective-students/
-audiences:
-  - kicker: For students
-    title: Everything about guild life
-    body: Committees, the board, the rules, and where to find the guild room key.
-    linkText: The guild
-    url: /en/guild/
-  - kicker: For prospective students
-    title: What IEM is
-    body: How to apply, what happens in your first year and what the overalls mean.
-    linkText: Prospective students
-    url: /en/prospective-students/
-  - kicker: For alumni
-    title: Prodeko Alumni
-    body: The alumni network, the advisory board, Lifelong Learning and Prodeko Ventures. Every graduate is a member automatically.
-    linkText: For alumni
-    url: /en/alumni/
-  - kicker: For companies
-    title: Reach 900 future professionals
-    body: Excursions, case evenings, recruitment messaging and annual partnerships with one contact.
-    linkText: For companies
-    url: /en/yrityssuhteet/
-valuesTitle: Guild values
-valuesSub: Five values, five colours on the overalls.
-values:
-  - name: Think big
-    blurb: "Be bold. Trust yourself and your skills. Take risks, but not blindly — do so with entrepreneurial responsibility, ownership and humility."
-  - name: Get things done
-    blurb: "Take initiative. Have a can-do attitude. Value results, not working hours. Be efficient, but above all be effective — what you do and don't do are equally important."
-  - name: Learn and grow
-    blurb: "Be curious. Keep learning. Embrace imperfection. Know that your qualities aren't fixed — you can grow and develop throughout life."
-  - name: Give back
-    blurb: "Support. Collaborate. Value your community. Don't ask what others can do for you, ask what you can do for others."
-  - name: Be a good person
-    blurb: "Act with integrity. Be worthy of trust. Meet others with kindness. Remember that who you are is more important than what you do."
-bandTitle: Three hundred events a year
-bandSub: Sitsit, excursions, sauna nights, the ski trip and the summer trip. All of them in the calendar.
-partnersTitle: Prodeko Network
-partnersLinkText: All ways to work with us
-partnersLinkUrl: /en/yrityssuhteet/
+heroTitle: Welcome to IEM at Aalto
+aside:
+  - title: Membership
+    text: Membership is 8 € per academic year.
+    button: { label: Join the guild, url: "https://membership.prodeko.org/apply" }
 ---
 
-Prodeko is the guild of around 900 Industrial Engineering and Management
-students in Otaniemi. Three hundred events a year, company relations,
-sports, sitsit and one guild room where the coffee is free.
+## Bringing IEM students together since 1966
+
+Prodeko is the guild of Industrial Engineering and Management students at
+Aalto University, operating alongside the Aalto University Student Union. We
+are a rainbow-coloured bunch of cheerful, enthusiastic people who get things
+done, and we enjoy doing things and spending time together. Together with
+Aalto’s Department of Industrial Engineering and Management and our alumni
+association Prodeko Alumni, we make up the Prodeko community: a unique network
+of diverse people, and a great resource and source of inspiration for many of
+us.
+
+Prodeko was founded in 1966 as a subsection of the Mechanical Engineers’ Guild
+at what was then Helsinki University of Technology, for students majoring in
+industrial engineering and management. In 1989 Prodeko became a guild of its
+own. From its first years it has been an active part of teekkari culture in
+Otaniemi, and of Finnish business life and advocacy.
+
+Besides their studies, Prodeko members share the guild’s values, defined in
+2017. They encourage everyone in the community to learn, grow and think big,
+while helping others and giving back. Read more about [Prodeko’s
+values](/en/guild/values/).
+
+Alongside academic and business activities, honest fun has been part of the
+guild’s everyday life from the start. You can tell us apart from the rest of
+the party crowd by our rainbow-striped overalls and the dizzying pace.
+
+Prodeko brings together Aalto’s IEM students, but anyone interested in Prodeko
+is welcome to join. You can [apply for membership
+here](https://membership.prodeko.org/apply).
+
+## Guild values
+
+Defined in 2017. Five values, five colours on the overalls.
+
+### Think big
+
+Be bold. Trust yourself and your skills. Take risks, but not blindly — do so
+with entrepreneurial responsibility, ownership and humility.
+
+### Get things done
+
+Take initiative. Have a can-do attitude. Value results, not working hours. Be
+efficient, but above all be effective — what you do and don’t do are equally
+important.
+
+### Learn and grow
+
+Be curious. Keep learning. Embrace imperfection. Know that your qualities
+aren’t fixed — you can grow and develop throughout life.
+
+### Give back
+
+Support. Collaborate. Value your community. Don’t ask what others can do for
+you, ask what you can do for others.
+
+### Be a good person
+
+Act with integrity. Be worthy of trust. Meet others with kindness. Remember
+that who you are is more important than what you do.
