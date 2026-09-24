@@ -43,8 +43,8 @@ An investment community founded by alumni to back growth companies started by Pr
 Update your details and the matrikkeli on the alumni site.
 
 <ul class="link-list">
-  <li><a href="https://alumni.prodeko.org"><span class="label"><span class="name">alumni.prodeko.org</span></span><span class="arrow" aria-hidden="true">&rarr;</span></a></li>
+  <li><a href="https://alumni.prodeko.org" target="_blank" rel="noopener"><span class="label"><span class="name">alumni.prodeko.org</span></span><span class="arrow" aria-hidden="true">&rarr;</span></a></li>
   <li><a href="/fi/alumni/tietoa-alumnista/alumnitiedotteet/"><span class="label"><span class="name">Alumni newsletters</span></span><span class="arrow" aria-hidden="true">&rarr;</span></a></li>
-  <li><a href="https://membership.prodeko.org"><span class="label"><span class="name">My member details</span></span><span class="arrow" aria-hidden="true">&rarr;</span></a></li>
+  <li><a href="https://membership.prodeko.org" target="_blank" rel="noopener"><span class="label"><span class="name">My member details</span></span><span class="arrow" aria-hidden="true">&rarr;</span></a></li>
   <li><a href="/en/alumni/about-alumni/matrikkeli-privacy-notice/"><span class="label"><span class="name">Register privacy notice</span></span><span class="arrow" aria-hidden="true">&rarr;</span></a></li>
 </ul>

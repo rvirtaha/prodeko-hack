@@ -44,8 +44,8 @@ Alumnien perustama sijoitusyhteisö, joka tukee prodekolaisten kasvuyrityksiä. 
 Jäsentietojen päivitys ja matrikkeli alumnin sivuilla.
 
 <ul class="link-list">
-  <li><a href="https://alumni.prodeko.org"><span class="label"><span class="name">alumni.prodeko.org</span></span><span class="arrow" aria-hidden="true">&rarr;</span></a></li>
+  <li><a href="https://alumni.prodeko.org" target="_blank" rel="noopener"><span class="label"><span class="name">alumni.prodeko.org</span></span><span class="arrow" aria-hidden="true">&rarr;</span></a></li>
   <li><a href="/fi/alumni/tietoa-alumnista/alumnitiedotteet/"><span class="label"><span class="name">Alumnitiedotteet</span></span><span class="arrow" aria-hidden="true">&rarr;</span></a></li>
-  <li><a href="https://membership.prodeko.org"><span class="label"><span class="name">Omat jäsentiedot</span></span><span class="arrow" aria-hidden="true">&rarr;</span></a></li>
+  <li><a href="https://membership.prodeko.org" target="_blank" rel="noopener"><span class="label"><span class="name">Omat jäsentiedot</span></span><span class="arrow" aria-hidden="true">&rarr;</span></a></li>
   <li><a href="/fi/alumni/tietoa-alumnista/matrikkelin-tietosuojaseloste/"><span class="label"><span class="name">Matrikkelin tietosuojaseloste</span></span><span class="arrow" aria-hidden="true">&rarr;</span></a></li>
 </ul>

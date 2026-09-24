@@ -77,7 +77,7 @@ All undergraduate and master's students of Industrial Engineering and Management
 
 <dl class="def-list">
   <div class="row"><dt>Membership 8 €</dt><dd>Per academic year. Applications open after June for the coming academic year.</dd></div>
-  <div class="row"><dt><a href="https://membership.prodeko.org/apply">Membership application</a></dt><dd>membership.prodeko.org/apply · pay by card.</dd></div>
+  <div class="row"><dt><a href="https://membership.prodeko.org/apply" target="_blank" rel="noopener">Membership application</a></dt><dd>membership.prodeko.org/apply · pay by card.</dd></div>
 </dl>
 
 ## Important links

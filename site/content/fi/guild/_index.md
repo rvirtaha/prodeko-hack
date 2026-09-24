@@ -68,7 +68,7 @@ Varsinaisiksi jäseniksi voidaan hyväksyä jäsenmaksunsa maksaneet Aalto-yliop
 
 <dl class="def-list">
   <div class="row"><dt>Jäsenyys 8 €</dt><dd>Lukuvuosittainen. Haku kesäkuun jälkeen tulevalle lukuvuodelle.</dd></div>
-  <div class="row"><dt><a href="https://membership.prodeko.org/apply">Jäsenhakemus</a></dt><dd>membership.prodeko.org/apply · maksu pankkikortilla.</dd></div>
+  <div class="row"><dt><a href="https://membership.prodeko.org/apply" target="_blank" rel="noopener">Jäsenhakemus</a></dt><dd>membership.prodeko.org/apply · maksu pankkikortilla.</dd></div>
 </dl>
 
 ## Tärkeät linkit
