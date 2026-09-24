@@ -19,8 +19,18 @@
      set in bold so a reader who came for one fact can see in one glance
      whether this is the page that holds it. Only the paragraph the page
      starts with — a page that opens on a heading, a list, a table or a row of
-     documents has no lead. */}}
-{{ $body = replaceRE `\A(\s*)<p>` `${1}<p class="lead">` $body 1 | safeHTML }}
+     documents has no lead.
+
+     A markdown image sits in a paragraph of its own, and the figure the image
+     hook writes carries no sentence, so such a paragraph is passed over: the
+     lead of a page that opens on a picture is the text under the picture, and
+     a page whose picture is followed by a heading has no lead at all. */}}
+{{ $pictures := "" }}
+{{ with findRE `(?s)\A\s*(?:<p>\s*<figure class="content-image">.*?</figure>\s*</p>\s*)+` $body 1 }}
+  {{ $pictures = index . 0 }}
+{{ end }}
+{{ $text := strings.TrimPrefix $pictures $body }}
+{{ $body = printf "%s%s" $pictures (replaceRE `\A(\s*)<p>` `${1}<p class="lead">` $text 1) | safeHTML }}
 
 {{ $nav := partial "section-nav.html" $page }}
 {{ $blocks := partial "aside-blocks.html" $page }}
