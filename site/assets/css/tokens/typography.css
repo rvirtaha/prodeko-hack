@@ -3,45 +3,34 @@
   --font-body:var(--font-core);
   --font-display:var(--font-core);
   --font-mono:ui-monospace,"SFMono-Regular",Menlo,monospace;
-
-  /* Raleway weights actually in use */
-  --weight-light:300;    /* body copy */
-  --weight-regular:400;  /* body copy */
-  --weight-medium:500;   /* headings */
-  --weight-semibold:600; /* headings */
-  --weight-bold:700;     /* slide titles, logos */
-  --weight-extrabold:800;/* logo lockups only */
-
-  /* Kiikkilä Spacing™ — tracking for all-caps labels and banners.
-     ~200/1000 em in normal use, 500/1000 em reserved for logo lockups.
-     Those figures are set for caps at label size, around 11–14px. The same
-     em value on a 44px or 64px heading opens every word into loose letters
-     that have to be read one at a time, so display type takes a trace of
-     tracking instead — enough to keep caps from touching, no more. */
+  --weight-light:300;     /* body copy */
+  --weight-regular:400;   /* body copy, menu links */
+  --weight-medium:500;    /* FAQ questions */
+  --weight-semibold:600;  /* headings, labels */
+  --weight-bold:700;      /* display caps, stats */
+  --weight-extrabold:800; /* logo lockups only */
+  /* Kiikkilä Spacing — tracking for all-caps labels. 0.2em at label size, 0.5em for logo lockups only; display caps take a trace. */
   --track-tight:-0.01em;
   --track-normal:0em;
   --track-display:0.02em;
   --track-caps:0.2em;
   --track-caps-wide:0.32em;
   --track-logo:0.5em;
-
-  /* Type scale (rem, 16px root) */
   --size-3xs:0.6875rem; /* 11px */
   --size-2xs:0.75rem;   /* 12px */
   --size-xs:0.8125rem;  /* 13px */
   --size-sm:0.875rem;   /* 14px */
   --size-md:1rem;       /* 16px */
-  --size-lg:1.125rem;   /* 18px — slide body */
+  --size-lg:1.125rem;   /* 18px */
   --size-xl:1.5rem;     /* 24px */
-  --size-2xl:1.75rem;   /* 28px — slide title */
-  --size-3xl:2.25rem;   /* 36px — section header */
+  --size-2xl:1.75rem;   /* 28px */
+  --size-3xl:2.25rem;   /* 36px */
   --size-4xl:2.625rem;  /* 42px */
-  --size-5xl:3rem;      /* 48px — main point */
-  --size-6xl:4.5rem;
-  --size-7xl:7.5rem;    /* 120px — big number */
-
+  --size-5xl:3rem;      /* 48px */
+  --size-6xl:4.5rem;    /* 72px */
+  --size-7xl:7.5rem;    /* 120px */
   --leading-flat:1;
-  --leading-tight:1.15;  /* slide body, per the master */
+  --leading-tight:1.15;
   --leading-snug:1.3;
   --leading-normal:1.5;
   --leading-loose:1.65;
