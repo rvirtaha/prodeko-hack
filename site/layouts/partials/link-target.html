@@ -2,6 +2,11 @@
      the page it opens has no handle on the one it came from. Internal links,
      `mailto:` and `tel:` stay in the tab the reader is in.
 
+     A link counts as internal when it carries no host of its own, or when the
+     host it carries is the site's own — `https://prodeko.org/fi/` and
+     `www.prodeko.org` lead back here, so they belong in the reader's tab.
+     Every other host, the guild's own subdomains among them, is off the site.
+
      Takes the address. Emits either nothing or ` target="_blank"
      rel="noopener"`, leading space included, so it sits directly after the
      href in the tag. Go's escaper refuses attributes it did not parse itself,
@@ -9,4 +14,8 @@
 
      Every template that writes an <a> from data or frontmatter calls this;
      links written in markdown get it from _markup/render-link.html. */ -}}
-{{- if hasPrefix . "http" }} target="_blank" rel="noopener"{{ end -}}
+{{- if hasPrefix . "http" -}}
+  {{- $host := strings.TrimPrefix "www." (urls.Parse .).Host -}}
+  {{- $own := strings.TrimPrefix "www." (urls.Parse site.BaseURL).Host -}}
+  {{- if ne $host $own }} target="_blank" rel="noopener"{{ end -}}
+{{- end -}}
