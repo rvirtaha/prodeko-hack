@@ -3,14 +3,16 @@
      The logo files are small raster exports — 100 to 209 px wide — and no
      larger original exists, so each one is drawn at half its own pixel size.
      That is the largest it can be and still be sharp on a 2x screen. */}}
-<div class="partners-grid">
+<ul class="partner-logos">
   {{ range hugo.Data.partners }}
     {{ $partner := . }}
     {{ with resources.Get $partner.logo }}
-      <a class="partner-tile" href="{{ $partner.url }}" target="_blank" rel="noopener">
-        <img src="{{ .RelPermalink }}" alt="{{ $partner.name }}"
-             width="{{ div .Width 2 }}" height="{{ div .Height 2 }}" loading="lazy">
-      </a>
+      <li>
+        <a href="{{ $partner.url }}" target="_blank" rel="noopener">
+          <img src="{{ .RelPermalink }}" alt="{{ $partner.name }}"
+               width="{{ div .Width 2 }}" height="{{ div .Height 2 }}" loading="lazy">
+        </a>
+      </li>
     {{ end }}
   {{ end }}
-</div>
+</ul>
