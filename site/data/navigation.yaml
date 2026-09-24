@@ -1,35 +1,54 @@
-# Read by layouts/partials/header.html and footer.html. One list per
-# language. URLs mirror the live prodeko.org exactly (both languages share
-# the "guild" segment), so migrated content needs no redirects.
+# Read by layouts/partials/header.html. One list per language. URLs mirror
+# the live prodeko.org exactly (both languages share the "guild" segment), so
+# migrated content needs no redirects.
 #
-# menuKey, where present, names a key in data/megamenu.yaml: the header
-# shows that item's columns in a mega-menu on hover/click.
+# menuKey names a key in data/megamenu.yaml: the header shows that item's
+# columns in a mega-menu on hover/click.
 #
-# A url may be an external address. The events item is one: the calendar and
-# the sign-up forms live in Ilmokilke, so the bar takes a reader straight
-# there rather than through a page whose only content is a link onward.
-# /fi/tapahtumat/ and /en/events/ remain as addresses for anyone arriving
-# from an old link or from search.
+# owns lists the page prefixes whose pages light this item in the bar. An item
+# without owns lights on its own url alone.
+#
+# mobileChildren lists the item's group rows in the phone menu; an item
+# without mobileChildren is a direct link there.
+#
+# The bar names the five audiences the site speaks to. Events are not among
+# them: the calendar and the sign-up forms live in Ilmokilke, and the footer
+# takes a reader there. /fi/tapahtumat/ and /en/events/ remain as addresses
+# for anyone arriving from an old link or from search.
 fi:
   - title: Kilta
     url: /fi/guild/
     menuKey: guild
+    owns: [/fi/guild/, /fi/opinnot/, /fi/palvelut/, /fi/estiem-lg-helsinki/]
+    mobileChildren:
+      - { label: Kilta, url: /fi/guild/ }
+      - { label: Hallitus ja toimarit, url: /fi/guild/hallitus-ja-toimihenkilot/ }
+      - { label: Opinnot, url: /fi/opinnot/ }
+      - { label: Palvelut, url: /fi/palvelut/ }
   - title: Abeille
     url: /fi/abit/
     menuKey: prospective
+    owns: [/fi/abit/, /sv/]
   - title: Yrityksille
     url: /fi/yrityssuhteet/
     menuKey: corporate
-  - title: Alumni
+  - title: Alumneille
     url: /fi/alumni/
     menuKey: alumni
-  - title: Tapahtumat
-    url: https://ilmo.prodeko.org
+  - title: Fukseille
+    url: /fi/new-students/
+    menuKey: fuksit
 
 en:
   - title: Guild
     url: /en/guild/
     menuKey: guild
+    owns: [/en/guild/, /en/studies/, /en/services/, /en/estiem-lg-helsinki/]
+    mobileChildren:
+      - { label: Guild, url: /en/guild/ }
+      - { label: Board and officials, url: /en/guild/board-and-officials/ }
+      - { label: Studies, url: /en/studies/ }
+      - { label: Services, url: /en/services/ }
   - title: Prospective students
     url: /en/prospective-students/
     menuKey: prospective
@@ -39,5 +58,6 @@ en:
   - title: Alumni
     url: /en/alumni/
     menuKey: alumni
-  - title: Events
-    url: https://ilmo.prodeko.org
+  - title: New students
+    url: /en/new-students/
+    menuKey: fuksit
