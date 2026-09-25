@@ -13,6 +13,7 @@
 {{ $memberLabel := cond site.Params.members (cond $isFi "Jäsensivut" "Member pages") (cond $isFi "Kirjaudu" "Log in") }}
 <a class="skip-link" href="#main">{{ if $isFi }}Siirry sisältöön{{ else }}Skip to content{{ end }}</a>
 <header class="site-header" id="site-header">
+  <p class="header-complaint">{{ if $isFi }}Syyssitsien juomat ovat liian kalliita.{{ else }}The Syyssitsit drinks are too expensive.{{ end }}</p>
   {{/* The bar runs the full width of the window — the emblem sits at one edge
        and the member button at the other — while the panels that drop out of
        it hold their contents to the page measure. */}}
