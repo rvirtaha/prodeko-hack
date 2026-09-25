@@ -3,7 +3,7 @@ title: Prodeko
 translationKey: home
 description: Prodeko is the guild of around 900 Industrial Engineering and Management students at Aalto University in Otaniemi.
 source: raw-website design export, Prodeko-site.dc.html
-heroTitle: Welcome to IEM at Aalto
+heroTitle: The Syyssitsit drinks are too expensive
 aside:
   - title: Membership
     text: Membership is 8 € per academic year.

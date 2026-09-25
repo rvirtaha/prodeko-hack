@@ -4,7 +4,7 @@ source: raw-website design export, Prodeko-site.dc.html
 translationKey: home
 description: Prodeko ry on Aalto-yliopiston tuotantotalouden opiskelijoiden kilta
   ja ainejärjestö.
-heroTitle: Tervetuloa opiskelemaan Aallon tutalle
+heroTitle: Syyssitsien juomat ovat liian kalliita
 aside:
   - title: Jäsenyys
     text: Jäsenyys maksaa 8 € lukuvuodessa.
